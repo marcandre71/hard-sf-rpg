@@ -5,40 +5,107 @@
  * tout l'enregistrement a lieu une fois, sur le hook `init`, avant que
  * les documents du monde ne soient préparés.
  *
- * Enchaînement : publier `CONFIG.SOL`, lier le modèle du Personnage,
- * puis poser la feuille par défaut du type `character`.
+ * Enchaînement : publier `CONFIG.SOL`, lier chaque TypeDataModel, retirer
+ * les feuilles V1 du cœur, poser nos feuilles par défaut, armer le
+ * garde-fou `preCreateItem`.
  */
 import { SOL } from "./config.mjs";
+import { CreatureData, DroneData, NpcData, ShipData, SyntheticData, VehicleData } from "./data/actors.mjs";
+import { ArmorData } from "./data/armor.mjs";
+import { AugmentationData } from "./data/augmentation.mjs";
+import { SoftwareData, SubstanceData } from "./data/base-item.mjs";
 import { CharacterData } from "./data/character.mjs";
+import { GearData } from "./data/gear.mjs";
+import { InjuryData } from "./data/injury.mjs";
+import { BackgroundData, OriginData, ProfessionData, SequelData, ShipModuleData, TalentData } from "./data/provisional.mjs";
+import { SkillData } from "./data/skill.mjs";
+import { WeaponData } from "./data/weapon.mjs";
+import { registerItemGuard } from "./guards.mjs";
+import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
+import { GenericItemSheet } from "./sheets/item-sheet.mjs";
+
+const SYSTEM_ID = "sol-nouvelle-ere";
 
 /**
- * Enregistre la configuration, le modèle de données et la feuille.
- *
- * Appelée par {@link https://foundryvtt.com/api/v14/classes/foundry.helpers.Hooks.html#once Hooks.once}
- * sur `init`. Le message de console est le repère attendu par TESTER.md.
+ * Retire les feuilles Application V1 enregistrées par le cœur.
+ * Sans ça, le sélecteur de feuille propose encore l'ancienne ActorSheet /
+ * ItemSheet, inutilisable avec nos types. Réf. revue étape 1.
+ * On ne retire pas ActorSheetV2 / ItemSheetV2 : ce sont les classes mères
+ * des nôtres, et elles ne sont pas proposées comme feuilles « core » V1.
  *
  * @returns {void}
- * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html
+ */
+function unregisterCoreV1Sheets() {
+  const v1 = foundry.appv1?.sheets;
+  if ( !v1 ) return;
+  if ( v1.ActorSheet ) foundry.documents.collections.Actors.unregisterSheet("core", v1.ActorSheet);
+  if ( v1.ItemSheet ) foundry.documents.collections.Items.unregisterSheet("core", v1.ItemSheet);
+}
+
+/**
+ * Enregistre la configuration, les modèles, les feuilles et le garde-fou.
+ *
+ * @returns {void}
+ * @see https://foundryvtt.com/api/v14/classes/foundry.helpers.Hooks.html#once
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.collections.Actors.html#registerSheet
- * @see https://foundryvtt.com/api/v14/classes/foundry.applications.apps.DocumentSheetConfig.html#registerSheet
  */
 function initializeSystem() {
+  // Repère attendu par TESTER.md. Ne pas changer ce texte sans mettre le guide à jour.
   console.log("Sol, Nouvelle Ère | Initialisation du système");
 
-  // Configuration centrale (caractéristiques, etc.).
   CONFIG.SOL = SOL;
 
-  // Modèle de données du type d'acteur « character ».
-  CONFIG.Actor.dataModels.character = CharacterData;
+  // Modèles d'acteurs. La clé est le type déclaré dans system.json.
+  Object.assign(CONFIG.Actor.dataModels, {
+    character: CharacterData,
+    npc: NpcData,
+    creature: CreatureData,
+    synthetic: SyntheticData,
+    drone: DroneData,
+    vehicle: VehicleData,
+    ship: ShipData
+  });
 
-  // Feuille de personnage par défaut pour le type « character ».
-  // Actors.registerSheet délègue à DocumentSheetConfig.registerSheet.
-  foundry.documents.collections.Actors.registerSheet("sol-nouvelle-ere", CharacterSheet, {
+  // Modèles d'objets.
+  Object.assign(CONFIG.Item.dataModels, {
+    skill: SkillData,
+    talent: TalentData,
+    origin: OriginData,
+    background: BackgroundData,
+    profession: ProfessionData,
+    weapon: WeaponData,
+    armor: ArmorData,
+    gear: GearData,
+    augmentation: AugmentationData,
+    substance: SubstanceData,
+    injury: InjuryData,
+    sequel: SequelData,
+    software: SoftwareData,
+    shipModule: ShipModuleData
+  });
+
+  unregisterCoreV1Sheets();
+
+  foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, CharacterSheet, {
     types: ["character"],
     makeDefault: true,
     label: "SOL.Sheet.Character"
   });
+
+  foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, GenericActorSheet, {
+    types: SOL.actorTypes.filter(type => type !== "character"),
+    makeDefault: true,
+    label: "SOL.Sheet.Actor"
+  });
+
+  foundry.documents.collections.Items.registerSheet(SYSTEM_ID, GenericItemSheet, {
+    types: [...SOL.itemTypes],
+    makeDefault: true,
+    label: "SOL.Sheet.Item"
+  });
+
+  registerItemGuard();
 }
 
 Hooks.once("init", initializeSystem);

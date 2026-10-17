@@ -1,0 +1,22 @@
+{{!--
+  Feuille unique d'objet. Champs du type via field-groups (formGroup).
+  La description HTML est en bas, pour tous les types (consigne étape 2).
+  Nom et valeurs : document._source / system._source.
+--}}
+<section class="sol-sheet">
+  <header class="sol-header">
+    <img class="sol-portrait" src="{{item.img}}" alt="{{docSource.name}}"
+         data-action="editImage" data-edit="img" data-tooltip="{{localize 'SOL.Sheet.EditItemImage'}}">
+    <div class="sol-identity">
+      <p class="sol-type">{{localize typeLabel}}</p>
+      <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
+      <input id="{{rootId}}-name" type="text" name="name" value="{{docSource.name}}">
+    </div>
+  </header>
+
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=groups}}
+
+  {{#if description}}
+    {{formGroup description.field name=description.name value=description.value rootId=description.rootId label=description.label localize=true}}
+  {{/if}}
+</section>

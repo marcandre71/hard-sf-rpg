@@ -1,18 +1,27 @@
 /**
  * Modèle de données du type d'acteur `character` (Personnage).
  *
- * Place dans le système : déclaré comme sous-type dans `system.json`
- * (`documentTypes.Actor.character`) et associé dans `module/sol.mjs` par
- * `CONFIG.Actor.dataModels.character = CharacterData`. Foundry instancie
- * cette classe dans `actor.system`.
+ * Déclaré dans `system.json` (`documentTypes.Actor.character`) et associé
+ * dans `module/sol.mjs` par `CONFIG.Actor.dataModels.character`.
+ * Foundry instancie cette classe dans `actor.system`.
  *
- * Étape 1 : uniquement les caractéristiques listées dans `module/config.mjs`.
- * Stocké pour chacune : `base`, `origin`, `advance`, `temp`.
- * Dérivé, jamais stocké : `value = base + origin + advance + temp`.
+ * Étape 1, inchangée : neuf caractéristiques, chacune avec `base`, `origin`,
+ * `advance`, `temp`. `value` est dérivée, jamais stockée.
+ * Les noms et les bornes viennent de `SOL.characteristicFields`
+ * (pas de nombres en dur ici).
+ *
+ * Étape 2, ajouté (Fiche v0.2 §4) : `identity`, `contacts`, `flaws`,
+ * `biography`, `notes`. Les champs nouveaux ont une valeur `initial` :
+ * un personnage déjà créé (Ilka) n'a pas besoin de migration.
+ * Vice et Lueur n'existent pas (Fiche v0.2 §5 : supprimés le 17/10/2026).
+ *
+ * Hors étape 2, donc absents : valeurs dérivées (seuil de blessure,
+ * tolérance aux g, initiative, Endurance, Sang-froid), ressources, XP, etc.
  */
 import { SOL } from "../config.mjs";
+import { htmlField, numberField, SchemaField, stringField } from "./fields.mjs";
 
-const { NumberField, SchemaField } = foundry.data.fields;
+const { NumberField } = foundry.data.fields;
 
 /**
  * Données `system` du Personnage.
@@ -25,45 +34,85 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
   /**
    * Schéma du champ `system`.
    *
-   * Une entrée {@link SchemaField} par clé de `SOL.characteristics`, chacune
-   * composée de quatre {@link NumberField}. L'ordre des clés suit celui de
-   * la configuration.
-   *
    * @override
-   * @returns {foundry.data.fields.DataSchema} Schéma validé côté client par Foundry.
-   * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html#defineSchema
-   * @see https://foundryvtt.com/api/v14/classes/foundry.data.fields.SchemaField.html
-   * @see https://foundryvtt.com/api/v14/classes/foundry.data.fields.NumberField.html
+   * @returns {foundry.data.fields.DataSchema}
    */
   static defineSchema() {
     const characteristics = {};
     for ( const key of Object.keys(SOL.characteristics) ) {
-      characteristics[key] = new SchemaField({
-        // Base : 25 + points de création (1 à 100).
-        base: new NumberField({ required: true, nullable: false, integer: true, initial: 25, min: 1, max: 100 }),
-        // Modificateur d'origine (lieu de naissance), de -10 à +15.
-        origin: new NumberField({ required: true, nullable: false, integer: true, initial: 0, min: -10, max: 15 }),
-        // Progression de carrière (XP), plafonnée à +10.
-        advance: new NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0, max: 10 }),
-        // Modificateur temporaire (déconditionnement, etc.), sans borne.
-        temp: new NumberField({ required: true, nullable: false, integer: true, initial: 0 })
-      });
+      const fields = {};
+      for ( const [name, cfg] of Object.entries(SOL.characteristicFields) ) {
+        // Bornes lues dans CONFIG.SOL : les changer ici ne suffit pas,
+        // il faut les changer dans characteristicFields.
+        const options = {
+          required: true,
+          nullable: false,
+          integer: true,
+          initial: cfg.initial,
+          label: cfg.label
+        };
+        if ( cfg.min !== undefined ) options.min = cfg.min;
+        if ( cfg.max !== undefined ) options.max = cfg.max;
+        fields[name] = new NumberField(options);
+      }
+      characteristics[key] = new SchemaField(fields);
     }
+
     return {
-      characteristics: new SchemaField(characteristics)
+      // Réf. Fiche v0.2 §4, identité. `gravityNative` min 0, défaut 1.
+      // `height` est une chaîne : l'exemple de la maquette est « 1,86 m ».
+      identity: new SchemaField({
+        concept: stringField("SOL.Character.concept"),
+        birthplace: stringField("SOL.Character.birthplace"),
+        gravityNative: numberField("SOL.Character.gravityNative", {
+          initial: 1,
+          min: 0,
+          step: 0.01,
+          hint: "SOL.Hint.g"
+        }),
+        polity: stringField("SOL.Character.polity"),
+        faction: stringField("SOL.Character.faction"),
+        bloc: stringField("SOL.Character.bloc"),
+        age: numberField("SOL.Character.age", {
+          initial: 25,
+          integer: true,
+          step: 1,
+          hint: "SOL.Hint.years"
+        }),
+        height: stringField("SOL.Character.height"),
+        mass: numberField("SOL.Character.mass", {
+          initial: 70,
+          step: 0.01,
+          hint: "SOL.Hint.kg"
+        })
+      }, { label: "SOL.Character.identity" }),
+
+      characteristics: new SchemaField(characteristics, { label: "SOL.Sheet.Characteristics" }),
+
+      // Texte libre, pas une liste ni un type d'objet.
+      // Décision de Marc (étape 2) : un seul champ, pas le tableau
+      // `{ name, note }` de la Fiche v0.2 §4. Réf. aussi LdR v0.2 §15.
+      contacts: stringField("SOL.Character.contacts"),
+
+      // Réf. Fiche v0.2 §4 et Onglet 1 : « Défauts, texte libre, sans mécanique ».
+      flaws: stringField("SOL.Character.flaws"),
+
+      // Réf. LdR v0.2 §15 (biographie HTML), Fiche v0.2 §4 (`biography`, `notes`).
+      biography: htmlField("SOL.Character.biography"),
+      notes: htmlField("SOL.Character.notes")
     };
   }
 
   /**
    * Calcule la valeur actuelle de chaque caractéristique.
    *
-   * Appelé par Foundry avant `ClientDocument#prepareDerivedData`.
    * `value` n'est pas dans le schéma : il n'est pas persisté.
-   * Non borné pour l'instant (question ouverte : borner à 1-100 ?).
+   * Formule : base + origin + advance + temp. Non bornée
+   * (question ouverte : borner à 1-100 ?).
+   * Réf. Fiche v0.2 §4 « total dérivé ».
    *
    * @override
    * @returns {void}
-   * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html#prepareDerivedData
    */
   prepareDerivedData() {
     super.prepareDerivedData();

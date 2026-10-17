@@ -1,0 +1,24 @@
+{{!--
+  Groupes de champs produits par prepareFieldGroups (module/sheets/prepare-fields.mjs).
+  Chaque ligne est un DataField rendu par formGroup : le type d'input
+  (nombre, case, liste, texte enrichi) vient du schéma, pas du gabarit.
+  localize=true résout les clés i18n posées sur field.label.
+--}}
+{{#each groups as |group|}}
+  {{#if group.label}}
+  <fieldset class="sol-fieldset">
+    <legend>{{localize group.label}}</legend>
+    <div class="sol-fields">
+      {{#each group.rows as |row|}}
+        {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+      {{/each}}
+    </div>
+  </fieldset>
+  {{else}}
+  <div class="sol-fields">
+    {{#each group.rows as |row|}}
+        {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+    {{/each}}
+  </div>
+  {{/if}}
+{{/each}}

@@ -1,92 +1,103 @@
 /**
- * Feuille de personnage (ApplicationV2), étape 1.
+ * Feuille de personnage (ApplicationV2).
  *
- * Place dans le système : enregistrée dans `module/sol.mjs` comme feuille par
- * défaut du type `character`. Elle n'écrit aucune donnée elle-même :
- * `submitOnChange` laisse DocumentSheetV2 enregistrer le formulaire, et la
- * colonne Actuelle est lue depuis `actor.system` (calculée par CharacterData).
+ * Étape 1 : nom, portrait, tableau des neuf caractéristiques.
+ * Étape 2 : identité, contacts, défauts, biographie, notes, liste d'objets.
+ * La colonne Actuelle est lue sur la donnée préparée (`value`).
+ * Les saisies lisent `document._source` (nom) ou `system._source`
+ * (champs stockés), jamais la valeur dérivée.
  *
  * Gabarit : `templates/actor/character-sheet.hbs`.
  */
 import { SOL } from "../config.mjs";
+import { itemListActions, keepItemTypeSelectLocal, prepareItemList } from "./item-list.mjs";
+import { prepareFieldGroups } from "./prepare-fields.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
 /**
- * Feuille minimale : nom, portrait, tableau des neuf caractéristiques.
- *
- * Hérite de {@link https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html ActorSheetV2}
- * enrichi par {@link https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html HandlebarsApplicationMixin}.
- *
- * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DocumentSheetV2.html
+ * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
+ * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
  */
 export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
-  /**
-   * Options de la fenêtre et du formulaire.
-   *
-   * `form.submitOnChange` enregistre chaque saisie dès que le champ perd
-   * le focus ou change, sans bouton de validation.
-   *
-   * @override
-   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html#DEFAULT_OPTIONS
-   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DocumentSheetV2.html
-   */
+  /** @override */
   static DEFAULT_OPTIONS = {
-    classes: ["sol", "actor", "character"],
-    position: { width: 620, height: "auto" },
+    classes: ["sol", "sol-nouvelle-ere", "actor", "character"],
+    position: { width: 720, height: 800 },
     window: { resizable: true },
-    form: { submitOnChange: true }
+    form: { submitOnChange: true },
+    actions: itemListActions
   };
 
-  /**
-   * Parties Handlebars de la feuille. Une seule partie, le gabarit entier.
-   *
-   * Le chemin est relatif au dossier `Data` de Foundry et reprend l'`id`
-   * du système (`sol-nouvelle-ere`), pas le nom du dépôt.
-   *
-   * @override
-   * @see https://foundryvtt.com/api/v14/classes/foundry.HandlebarsApplication.html#PARTS
-   * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
-   */
+  /** @override */
   static PARTS = {
-    sheet: { template: "systems/sol-nouvelle-ere/templates/actor/character-sheet.hbs" }
+    sheet: {
+      template: "systems/sol-nouvelle-ere/templates/actor/character-sheet.hbs",
+      templates: [
+        "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+        "systems/sol-nouvelle-ere/templates/actor/item-list.hbs"
+      ]
+    }
   };
 
   /**
-   * Prépare le contexte transmis au gabarit.
-   *
-   * Au contexte de DocumentSheetV2 (`actor` via `document`, `rootId`, etc.)
-   * on ajoute `system` et `characteristics` : un tableau dans l'ordre de
-   * `SOL.characteristics`, avec les quatre champs stockés, la valeur dérivée
-   * et le chemin de formulaire `system.characteristics.<clé>`.
-   *
    * @override
-   * @param {object} options Options de rendu ApplicationV2.
-   * @returns {Promise<object>} Contexte Handlebars de la feuille.
-   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DocumentSheetV2.html#_prepareContext
-   * @see https://foundryvtt.com/api/v14/classes/foundry.HandlebarsApplication.html#_prepareContext
+   * @param {object} context
+   * @param {object} options
+   * @returns {Promise<void>}
+   */
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+    keepItemTypeSelectLocal(this);
+  }
+
+  /**
+   * @override
+   * @param {object} options
+   * @returns {Promise<object>}
    */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const actor = this.document;
+    const stored = actor.system._source;
     context.actor = actor;
-    context.system = actor.system;
+    context.docSource = actor._source;
+    context.systemSource = stored;
+    context.bounds = SOL.characteristicFields;
     context.characteristics = Object.entries(SOL.characteristics).map(([key, cfg]) => {
-      const c = actor.system.characteristics[key];
+      const source = stored.characteristics[key];
+      const prepared = actor.system.characteristics[key];
       return {
         key,
         label: cfg.label,
         abbr: cfg.abbr,
-        base: c.base,
-        origin: c.origin,
-        advance: c.advance,
-        temp: c.temp,
-        value: c.value,
+        base: source.base,
+        origin: source.origin,
+        advance: source.advance,
+        temp: source.temp,
+        // Seule colonne dérivée : pas un input.
+        value: prepared.value,
         path: `system.characteristics.${key}`
       };
     });
+    context.identityGroups = prepareFieldGroups(actor.system.schema.fields.identity.fields, stored.identity, {
+      prefix: "system.identity",
+      rootId: context.rootId
+    });
+    const labelOf = field => field.label ?? field.options?.label ?? "";
+    context.biography = {
+      field: actor.system.schema.fields.biography,
+      label: labelOf(actor.system.schema.fields.biography),
+      value: stored.biography ?? ""
+    };
+    context.notes = {
+      field: actor.system.schema.fields.notes,
+      label: labelOf(actor.system.schema.fields.notes),
+      value: stored.notes ?? ""
+    };
+    Object.assign(context, prepareItemList(actor));
     return context;
   }
 }

@@ -1,23 +1,68 @@
 {
   "TYPES": {
     "Actor": {
-      "character": "Personnage"
+      "character": "Personnage",
+      "npc": "PNJ",
+      "creature": "Créature",
+      "synthetic": "Synthétique",
+      "drone": "Drone",
+      "vehicle": "Véhicule",
+      "ship": "Vaisseau"
+    },
+    "Item": {
+      "skill": "Compétence",
+      "talent": "Atout",
+      "origin": "Origine",
+      "background": "Milieu",
+      "profession": "Profession",
+      "weapon": "Arme",
+      "armor": "Armure/Vêtement",
+      "gear": "Équipement",
+      "augmentation": "Augmentation",
+      "substance": "Substance",
+      "injury": "Blessure",
+      "sequel": "Séquelle",
+      "software": "Logiciel",
+      "shipModule": "Module de vaisseau"
     }
   },
   "SOL": {
     "Sheet": {
       "Character": "Feuille de personnage (Sol, Nouvelle Ère)",
+      "Actor": "Feuille d'acteur (Sol, Nouvelle Ère)",
+      "Item": "Feuille d'objet (Sol, Nouvelle Ère)",
       "Name": "Nom",
       "EditImage": "Changer le portrait",
+      "EditItemImage": "Changer l'image",
       "Characteristics": "Caractéristiques",
-      "Characteristic": "Caractéristique"
+      "Characteristic": "Caractéristique",
+      "Items": "Objets",
+      "NoItems": "Aucun objet pour l'instant.",
+      "CreateItem": "Créer",
+      "DeleteItem": "Retirer l'objet",
+      "ConfirmDelete": "Retirer « {name} » de cette fiche ?"
+    },
+    "Warning": {
+      "itemNotAllowed": "{itemType} ne peut pas être ajouté à {actor} ({actorType}).",
+      "uniqueItem": "{actor} a déjà un objet « {itemType} ». Un seul est autorisé."
     },
     "Field": {
       "base": "Base",
       "origin": "Origine",
       "advance": "Progression",
       "temp": "Temp.",
-      "value": "Actuelle"
+      "value": "Actuelle",
+      "max": "Maximum",
+      "mass": "Masse",
+      "enc": "Encombrement",
+      "equipped": "Équipé"
+    },
+    "Hint": {
+      "metres": "mètres",
+      "kg": "kg",
+      "g": "g",
+      "hours": "heures",
+      "years": "ans"
     },
     "Characteristic": {
       "for": { "label": "Force", "abbr": "FOR" },
@@ -29,6 +74,181 @@
       "int": { "label": "Intellect", "abbr": "INT" },
       "vol": { "label": "Volonté", "abbr": "VOL" },
       "pre": { "label": "Présence", "abbr": "PRÉ" }
+    },
+    "Character": {
+      "identity": "Identité",
+      "concept": "Concept",
+      "birthplace": "Lieu de naissance",
+      "gravityNative": "Gravité natale",
+      "polity": "État ou statut politique",
+      "faction": "Faction",
+      "bloc": "Bloc",
+      "age": "Âge",
+      "height": "Taille",
+      "mass": "Masse",
+      "contacts": "Contacts",
+      "flaws": "Défauts",
+      "biography": "Biographie",
+      "notes": "Notes"
+    },
+    "Actor": {
+      "description": "Description",
+      "notes": "Notes",
+      "category": "Catégorie"
+    },
+    "Vehicle": {
+      "category": {
+        "terrestrial": "Terrestre",
+        "maritime": "Maritime",
+        "aerial": "Aérien"
+      }
+    },
+    "Ship": {
+      "category": {
+        "ship": "Vaisseau",
+        "station": "Station"
+      }
+    },
+    "Item": {
+      "description": "Description",
+      "effect": "Effet"
+    },
+    "Skill": {
+      "characteristic": "Caractéristique",
+      "training": "Formation",
+      "specialized": "Spécialisée (S)",
+      "specialty": "Spécialité",
+      "domain": {
+        "label": "Domaine",
+        "espace": "Espace et vaisseaux",
+        "technique": "Technique",
+        "sciences": "Sciences et médecine",
+        "combat": "Combat",
+        "corps": "Corps et terrain",
+        "relations": "Relations",
+        "savoirs": "Savoirs"
+      },
+      "untrainedAllowed": "Utilisable sans formation",
+      "used": "Utilisée"
+    },
+    "Weapon": {
+      "skill": "Compétence",
+      "damage": "Dégâts",
+      "range": {
+        "label": "Portée",
+        "short": "Courte",
+        "medium": "Moyenne",
+        "long": "Longue"
+      },
+      "recoil": "Recul",
+      "ammo": "Munitions",
+      "ammoType": {
+        "label": "Type de munitions",
+        "frangible": "Frangible",
+        "piercing": "Perforante",
+        "flechette": "Fléchette",
+        "none": "Aucune"
+      },
+      "burst": "Rafale",
+      "hullSafe": "Sans danger pour la coque"
+    },
+    "Armor": {
+      "protection": "Protection",
+      "pressurized": "Pressurisée",
+      "airReserve": "Réserve d'air",
+      "sealState": {
+        "label": "Joints",
+        "intact": "Intacte",
+        "breached": "Percée"
+      },
+      "penalty": {
+        "label": "Pénalité",
+        "manipulation": "Manipulation",
+        "perception": "Perception"
+      },
+      "dosimeter": "Dosimètre",
+      "radio": "Radio"
+    },
+    "Gear": {
+      "quantity": "Quantité",
+      "reserve": {
+        "label": "Réserve",
+        "type": "Type"
+      },
+      "reserveType": {
+        "energy": "Énergie",
+        "air": "Air",
+        "doses": "Doses"
+      },
+      "toolBonus": "Bonus d'outils"
+    },
+    "Augmentation": {
+      "kind": {
+        "label": "Genre",
+        "therapy": "Thérapie",
+        "prosthesis": "Prothèse",
+        "culturedOrgan": "Organe cultivé",
+        "heritable": "Héréditaire"
+      },
+      "cost": "Coût",
+      "legality": {
+        "label": "Légalité",
+        "earth": "Terre",
+        "mars": "Mars",
+        "elsewhere": "Ailleurs"
+      },
+      "sideEffects": "Effets secondaires"
+    },
+    "Location": {
+      "head": "Tête",
+      "torso": "Torse",
+      "rightArm": "Bras droit",
+      "leftArm": "Bras gauche",
+      "rightLeg": "Jambe droite",
+      "leftLeg": "Jambe gauche"
+    },
+    "Injury": {
+      "location": "Localisation",
+      "severity": {
+        "label": "Gravité",
+        "light": "Légère",
+        "serious": "Grave",
+        "critical": "Critique",
+        "mortal": "Mortelle"
+      },
+      "bleeding": "Saignement",
+      "penalty": "Pénalité",
+      "treated": "Soignée",
+      "healingTime": "Temps de guérison",
+      "source": "Source"
+    },
+    "Talent": {
+      "xpCost": "Coût en XP",
+      "prerequisites": "Prérequis"
+    },
+    "Origin": {
+      "characteristicModifiers": "Modificateurs de caractéristiques",
+      "gToleranceModifier": "Modificateur de tolérance aux g",
+      "culturalSkill": "Compétence culturelle",
+      "trait": "Particularité"
+    },
+    "Background": {
+      "skillBonuses": "Bonus de compétences",
+      "link": "Lien"
+    },
+    "Profession": {
+      "careerSkills": "Compétences de carrière",
+      "startingGear": "Équipement de départ",
+      "network": "Réseau"
+    },
+    "Sequel": {
+      "type": "Type",
+      "permanent": "Permanente"
+    },
+    "ShipModule": {
+      "type": "Type",
+      "state": "État",
+      "effects": "Effets"
     }
   }
 }

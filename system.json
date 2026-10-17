@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 1 : squelette du système (caractéristiques du personnage uniquement).",
-  "version": "0.1.0",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 2 : types d'acteurs et d'objets, feuilles minimales, textes en français.",
+  "version": "0.2.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -21,15 +21,81 @@
       "lang": "fr",
       "name": "Français",
       "path": "lang/fr.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/fr.json"
     }
   ],
   "documentTypes": {
     "Actor": {
       "character": {
-        "htmlFields": []
+        "htmlFields": ["biography", "notes"]
+      },
+      "npc": {
+        "htmlFields": ["description", "notes"]
+      },
+      "creature": {
+        "htmlFields": ["description", "notes"]
+      },
+      "synthetic": {
+        "htmlFields": ["description", "notes"]
+      },
+      "drone": {
+        "htmlFields": ["description", "notes"]
+      },
+      "vehicle": {
+        "htmlFields": ["description"]
+      },
+      "ship": {
+        "htmlFields": ["description"]
       }
     },
-    "Item": {}
+    "Item": {
+      "skill": {
+        "htmlFields": ["description"]
+      },
+      "talent": {
+        "htmlFields": ["description", "effect"]
+      },
+      "origin": {
+        "htmlFields": ["description"]
+      },
+      "background": {
+        "htmlFields": ["description"]
+      },
+      "profession": {
+        "htmlFields": ["description"]
+      },
+      "weapon": {
+        "htmlFields": ["description"]
+      },
+      "armor": {
+        "htmlFields": ["description"]
+      },
+      "gear": {
+        "htmlFields": ["description"]
+      },
+      "augmentation": {
+        "htmlFields": ["description", "effect", "sideEffects"]
+      },
+      "substance": {
+        "htmlFields": ["description"]
+      },
+      "injury": {
+        "htmlFields": ["description"]
+      },
+      "sequel": {
+        "htmlFields": ["description", "effect"]
+      },
+      "software": {
+        "htmlFields": ["description"]
+      },
+      "shipModule": {
+        "htmlFields": ["description", "effects"]
+      }
+    }
   },
   "grid": {
     "distance": 1,

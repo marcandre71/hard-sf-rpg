@@ -1,6 +1,6 @@
-/* Sol, Nouvelle Ère — styles minimaux de la feuille de personnage (étape 1).
-   Chargé par la clé "styles" de system.json. Ne cible que les classes .sol
-   du gabarit templates/actor/character-sheet.hbs. */
+/* Sol, Nouvelle Ère — mise en forme minimale des feuilles (étape 2).
+   Chargé par la clé "styles" de system.json.
+   Ne cible que les classes .sol des gabarits templates/. */
 
 .sol .sol-sheet {
   display: flex;
@@ -31,6 +31,12 @@
   gap: 0.25rem;
 }
 
+.sol .sol-type {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
 .sol .sol-identity input[name="name"] {
   font-size: 1.5rem;
   height: auto;
@@ -41,6 +47,31 @@
   margin: 0;
   font-size: 1.1rem;
   border-bottom: 1px solid var(--color-border, #7a7971);
+}
+
+.sol .sol-block-label {
+  font-weight: bold;
+}
+
+.sol textarea {
+  width: 100%;
+  min-height: 4.5rem;
+  resize: vertical;
+}
+
+.sol fieldset.sol-fieldset {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border, #7a7971);
+}
+
+.sol fieldset.sol-fieldset > legend {
+  font-weight: bold;
+  padding: 0 0.35rem;
+}
+
+.sol .sol-fields .form-group {
+  margin: 0.15rem 0;
 }
 
 .sol table.sol-characteristics {
@@ -75,4 +106,57 @@
 .sol .sol-value {
   font-weight: bold;
   font-size: 1.1rem;
+}
+
+.sol .sol-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sol .sol-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sol .sol-item img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  flex: 0 0 28px;
+  border: none;
+}
+
+.sol button.sol-item-name {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-text-hyperlink);
+}
+
+.sol .sol-item-type {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.sol .sol-empty {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.sol .sol-create-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sol .sol-create-item select {
+  flex: 1;
 }
