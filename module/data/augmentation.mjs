@@ -24,7 +24,8 @@ export class AugmentationData extends BaseItemData {
         choices: SOL.augmentationKinds
       }),
       effect: htmlField("SOL.Item.effect"),
-      cost: numberField("SOL.Augmentation.cost", { initial: 0, step: 1 }),
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      cost: numberField("SOL.Augmentation.cost", { initial: 0, integer: true, step: 1 }),
       legality: new SchemaField({
         earth: stringField("SOL.Augmentation.legality.earth"),
         mars: stringField("SOL.Augmentation.legality.mars"),

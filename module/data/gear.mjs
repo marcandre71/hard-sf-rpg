@@ -15,16 +15,18 @@ export class GearData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      // Décimal : masse, encombrement, réserve (value / max). Entier : quantité, bonus d'outils.
       mass: numberField("SOL.Field.mass", { initial: 0, step: 0.01, hint: "SOL.Hint.kg" }),
       enc: numberField("SOL.Field.enc", { initial: 0, step: 0.01 }),
-      quantity: numberField("SOL.Gear.quantity", { initial: 1, step: 1 }),
+      quantity: numberField("SOL.Gear.quantity", { initial: 1, integer: true, step: 1 }),
       reserve: new SchemaField({
         // Défaut "" (Fiche). Chaîne vide autorisée : pas dans les choix.
         type: stringField("SOL.Gear.reserve.type", { initial: "", blank: true, choices: SOL.reserveTypes }),
         value: numberField("SOL.Field.value", { initial: 0 }),
         max: numberField("SOL.Field.max", { initial: 0 })
       }, { label: "SOL.Gear.reserve.label" }),
-      toolBonus: numberField("SOL.Gear.toolBonus", { initial: 0, step: 1 })
+      toolBonus: numberField("SOL.Gear.toolBonus", { initial: 0, integer: true, step: 1 })
     };
   }
 }

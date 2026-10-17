@@ -56,6 +56,10 @@ function initializeSystem() {
 
   CONFIG.SOL = SOL;
 
+  // Pas de CONFIG.Actor.trackableAttributes : aucune jauge de ressource
+  // n'existe encore (Endurance, Sang-froid ne sont pas des champs).
+  // Rien à afficher dans les barres du pion. Réf. revue étape 2.
+
   // Modèles d'acteurs. La clé est le type déclaré dans system.json.
   Object.assign(CONFIG.Actor.dataModels, {
     character: CharacterData,

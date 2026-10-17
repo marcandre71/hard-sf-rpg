@@ -10,26 +10,39 @@
  * pas de la donnée préparée : un champ dérivé ne doit pas être réécrit
  * dans le formulaire. Réf. revue étape 1.
  */
-const { SchemaField } = foundry.data.fields;
+const { NumberField, SchemaField } = foundry.data.fields;
 
 /**
+ * Libellé i18n du champ (`options.label`, ou le getter `label` s'il existe).
+ *
  * @param {foundry.data.fields.DataField} field
- * @param {string} name Nom complet de l'input (`system.identity.concept`, …).
- * @param {*} value Valeur stockée.
- * @param {string} rootId
- * @returns {{ field: foundry.data.fields.DataField, name: string, value: *, rootId: string }}
+ * @returns {string}
  */
 function fieldLabel(field) {
   return field.label ?? field.options?.label ?? "";
 }
 
+/**
+ * Une ligne de formulaire : champ, nom complet de l'input, valeur stockée.
+ *
+ * `number` force `<input type="number">`. Sans ça, un NumberField qui a
+ * à la fois un min et un max (Formation, 0 à 60) s'affiche en curseur
+ * plus une case. Réf. revue étape 2.
+ *
+ * @param {foundry.data.fields.DataField} field
+ * @param {string} name Nom complet de l'input (`system.identity.concept`, …).
+ * @param {*} value Valeur stockée.
+ * @param {string} rootId
+ * @returns {{ field: foundry.data.fields.DataField, name: string, label: string, value: *, rootId: string, number: boolean }}
+ */
 function row(field, name, value, rootId) {
   return {
     field,
     name,
     label: fieldLabel(field),
     value: value === undefined || value === null ? "" : value,
-    rootId
+    rootId,
+    number: field instanceof NumberField
   };
 }
 

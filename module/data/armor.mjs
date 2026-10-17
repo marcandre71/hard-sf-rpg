@@ -16,14 +16,15 @@ export class ArmorData extends BaseItemData {
   static defineSchema() {
     const protection = {};
     for ( const [key, label] of Object.entries(SOL.bodyLocations) ) {
-      protection[key] = numberField(label, { initial: 0, step: 1 });
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      protection[key] = numberField(label, { initial: 0, integer: true, step: 1 });
     }
 
     return {
       ...super.defineSchema(),
       protection: new SchemaField(protection, { label: "SOL.Armor.protection" }),
       pressurized: boolField("SOL.Armor.pressurized", false),
-      // Heures. Réf. Fiche v0.2 §4 `{ value, max }` ; le LdR disait un simple nombre.
+      // Heures, décimal. Réf. Fiche v0.2 §4 `{ value, max }` ; le LdR disait un simple nombre.
       airReserve: valueMaxField("SOL.Armor.airReserve", { hint: "SOL.Hint.hours" }),
       sealState: stringField("SOL.Armor.sealState.label", {
         initial: "intact",
@@ -31,12 +32,14 @@ export class ArmorData extends BaseItemData {
         choices: SOL.sealStates
       }),
       penalty: new SchemaField({
-        manipulation: numberField("SOL.Armor.penalty.manipulation", { initial: 0, step: 1 }),
-        perception: numberField("SOL.Armor.penalty.perception", { initial: 0, step: 1 })
+        // Entier ou décimal : choix provisoire, à valider par Marc.
+        manipulation: numberField("SOL.Armor.penalty.manipulation", { initial: 0, integer: true, step: 1 }),
+        perception: numberField("SOL.Armor.penalty.perception", { initial: 0, integer: true, step: 1 })
       }, { label: "SOL.Armor.penalty.label" }),
       dosimeter: boolField("SOL.Armor.dosimeter", false),
       radio: boolField("SOL.Armor.radio", false),
-      // Types non écrits dans la Fiche : alignés sur weapon. Voir l'en-tête.
+      // Types non écrits dans la Fiche : alignés sur weapon. Masse et encombrement décimaux.
+      // Entier ou décimal : choix provisoire, à valider par Marc.
       mass: numberField("SOL.Field.mass", { initial: 0, step: 0.01, hint: "SOL.Hint.kg" }),
       enc: numberField("SOL.Field.enc", { initial: 0, step: 0.01 }),
       equipped: boolField("SOL.Field.equipped", false)

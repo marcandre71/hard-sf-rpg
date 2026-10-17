@@ -11,25 +11,6 @@
 const { HTMLField, StringField, NumberField, BooleanField, SchemaField } = foundry.data.fields;
 
 /**
- * Choix d'un {@link StringField} dont les libellés sont des clés i18n.
- *
- * La fonction n'est appelée qu'au rendu (ou à la validation), quand
- * `game.i18n` est disponible. Si ce n'est pas le cas, la clé est renvoyée
- * telle quelle : la valeur stockée reste la clé anglaise, pas le libellé.
- *
- * @param {Record<string, string>} choices Valeur stockée → clé i18n.
- * @returns {() => Record<string, string>}
- */
-export function i18nChoices(choices) {
-  return () => {
-    const localize = globalThis.game?.i18n?.localize;
-    return Object.fromEntries(
-      Object.entries(choices).map(([value, key]) => [value, localize ? localize(key) : key])
-    );
-  };
-}
-
-/**
  * Texte enrichi. Doit aussi figurer dans `htmlFields` de `system.json`
  * pour la sanitation serveur. Réf. Foundry, ServerSanitizationFields.
  *
@@ -41,7 +22,16 @@ export function htmlField(label) {
 }
 
 /**
- * Chaîne. `choices` est un objet valeur → clé i18n (voir {@link i18nChoices}).
+ * Chaîne. `choices` est un objet valeur stockée → clé i18n, recopié tel quel.
+ *
+ * La validation Foundry ne regarde que les clés : elle ne doit jamais
+ * appeler `game.i18n`. Le gabarit traduit les libellés (`formGroup` /
+ * `formInput` avec `localize=true`).
+ *
+ * Ne pas passer une fonction qui fait `const localize = game.i18n.localize` :
+ * la méthode détachée n'a plus `this`, et `this.translations` lève un
+ * TypeError à chaque validation (Véhicule, Vaisseau, Arme, etc.).
+ * Réf. revue étape 2.
  *
  * @param {string} label
  * @param {{ initial?: string, choices?: Record<string, string>, blank?: boolean, hint?: string }} [options]
@@ -50,13 +40,14 @@ export function htmlField(label) {
 export function stringField(label, { initial = "", choices, blank = true, hint } = {}) {
   const field = { required: true, blank, initial, label };
   if ( hint ) field.hint = hint;
-  if ( choices ) field.choices = i18nChoices(choices);
+  if ( choices ) field.choices = { ...choices };
   return new StringField(field);
 }
 
 /**
- * Nombre. `integer: true` n'est posé que lorsque les docs donnent une
- * borne entière ou un pas entier explicite. Pas de min/max inventé.
+ * Nombre. `integer: true` est un choix du modèle (voir chaque appelant) :
+ * un pas de 1 arrondit déjà les décimales, autant le dire dans le schéma.
+ * Pas de min/max inventé au-delà de ce que les docs écrivent.
  *
  * @param {string} label
  * @param {{ initial?: number, min?: number, max?: number, integer?: boolean, step?: number, hint?: string }} [options]

@@ -62,7 +62,7 @@ Vous devez y voir : `Sol, Nouvelle Ère | Initialisation du système`.
 Sur la feuille d'Ilka :
 
 1. Concept : `Ingénieure de remorqueur née à Cérès`.
-2. Lieu de naissance : `Cérès`. Gravité natale : `0,35` (ou `0.35`). Âge : `34`. Taille : `1,86 m`. Masse : `58`.
+2. Lieu de naissance : `Cérès`. Gravité natale : `0,35` (si la virgule est refusée, tapez `0.35`). Âge : `34`. Taille : `1,86 m`. Masse : `58`.
 3. Contacts (texte libre, plusieurs lignes) : un nom, puis à la ligne une note.
 4. Défauts : une phrase.
 5. Biographie : une phrase.
@@ -75,9 +75,13 @@ Sur la feuille d'Ilka :
 
 Les bornes sont : Base 1 à 100, Origine −10 à +15, Progression 0 à 10. Temp. n'a pas de borne.
 
-Tapez Base = `150`, puis Tab. Foundry **ne montre pas d'avertissement** : le nombre est ramené tout seul à la borne la plus proche, donc **100**. Même chose pour Origine = `20` → **15**, Origine = `-30` → **−10**, Progression = `-3` → **0**. La colonne Actuelle suit la valeur corrigée.
+Sur n'importe quelle ligne, tapez Base = `150`, puis Tab. Foundry **ne montre pas d'avertissement** : le nombre est ramené tout seul à la borne la plus proche, donc **100**. Même chose pour Origine = `20` → **15**, Origine = `-30` → **−10**.
 
-C'est le comportement normal du champ numérique : il ramène la valeur, il ne la refuse pas avec un message. Temp. = `-3` doit **rester −3** (la Force actuelle baisse de 3). Remettez ensuite Temp. à 0 et Base / Origine / Progression aux valeurs du tableau, pour ne pas fausser la suite.
+Pour Progression, faites le test sur **VOL** (Volonté). Chez Ilka cette case vaut déjà **1** (pas 0 : sur FOR, taper −3 ne se verrait pas, la case est déjà à 0). Tapez `-3`, puis Tab. Attendu : Progression **0**, et l'Actuelle de VOL passe à **35**. Si la case garde le nombre tapé, fermez et rouvrez la fiche : la valeur enregistrée doit être 0.
+
+C'est le comportement normal du champ numérique : il ramène la valeur, il ne la refuse pas avec un message. Temp. sur FOR = `-3` doit **rester −3** (l'Actuelle de la Force baisse de 3). Remettez ensuite la Temp. de FOR à 0, la Progression de VOL à **1** (Actuelle 36), et Base / Origine aux valeurs du tableau.
+
+Âge, formation, dégâts, portée, protection, quantités et coûts sont des **entiers** : une décimale est ramenée au nombre entier le plus proche. Gravité natale, masse, encombrement, munitions et réserve d'un équipement **gardent la décimale**. C'est un choix provisoire, pas une règle écrite.
 
 ## 7. Créer chaque type d'acteur
 
@@ -100,9 +104,9 @@ Onglet **Objets** (icône de sac) → **Créer un objet**. Le type proposé est 
 
 | Nom | Type | Champ à modifier |
 |---|---|---|
-| `Pilotage` | **Compétence** | Formation : `10`. Domaine : la liste contient « Espace et vaisseaux », « Technique », « Sciences et médecine », « Combat », « Corps et terrain », « Relations », « Savoirs ». |
+| `Pilotage` | **Compétence** | Formation : case numérique (pas un curseur), tapez `10`. Domaine : la liste contient « Espace et vaisseaux », « Technique », « Sciences et médecine », « Combat », « Corps et terrain », « Relations », « Savoirs ». |
 | `Pied marin du vide` | **Atout** | Coût en XP : `15`. |
-| `Ceinture` | **Origine** | Gravité natale : `0,35`. Particularité : un mot. |
+| `Ceinture` | **Origine** | Gravité natale : `0,35` (si la virgule est refusée, tapez `0.35`). Particularité : un mot. |
 | `Famille de sociétaires` | **Milieu** | Lien : un mot. Le type s'appelle **Milieu**, pas « Background ». |
 | `Ingénieure` | **Profession** | Réseau : un mot. |
 | `Pistolet à rivets` | **Arme** | Dégâts : `8`. Type de munitions : Frangible, Perforante, Fléchette, Aucune. Portée : trois cases Courte, Moyenne, Longue. |
@@ -128,7 +132,7 @@ Tous ces objets ont aussi une case **Description** en bas de la feuille.
 ## 10. Refus : Module de vaisseau sur un Personnage
 
 1. L'objet **Propulseur** (Module de vaisseau) est dans l'onglet Objets, depuis l'étape 8. S'il n'y est pas, créez-le.
-2. Glissez-le **sur la feuille d'Ilka** (ou sur son nom dans l'onglet Acteurs).
+2. Glissez-le **sur la feuille d'Ilka** (la fenêtre ouverte). Le déposer sur son nom dans la liste des acteurs ne fait rien : ce n'est pas le test.
 3. Un avertissement jaune apparaît, du genre : `Module de vaisseau ne peut pas être ajouté à Ilka Moravec (Personnage).`
 4. Ilka **n'a pas** gagné cet objet. Propulseur est toujours dans l'onglet Objets.
 

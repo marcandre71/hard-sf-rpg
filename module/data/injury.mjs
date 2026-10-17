@@ -21,7 +21,8 @@ export class InjuryData extends BaseItemData {
       location: stringField("SOL.Injury.location", { initial: "", blank: true, choices: SOL.bodyLocations }),
       severity: stringField("SOL.Injury.severity.label", { initial: "", blank: true, choices: SOL.injurySeverities }),
       bleeding: boolField("SOL.Injury.bleeding", false),
-      penalty: numberField("SOL.Injury.penalty", { initial: 0, step: 1 }),
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      penalty: numberField("SOL.Injury.penalty", { initial: 0, integer: true, step: 1 }),
       treated: boolField("SOL.Injury.treated", false),
       healingTime: stringField("SOL.Injury.healingTime"),
       source: stringField("SOL.Injury.source")

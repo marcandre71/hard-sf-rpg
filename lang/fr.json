@@ -242,11 +242,11 @@
       "network": "Réseau"
     },
     "Sequel": {
-      "type": "Type",
+      "category": "Type",
       "permanent": "Permanente"
     },
     "ShipModule": {
-      "type": "Type",
+      "category": "Type",
       "state": "État",
       "effects": "Effets"
     }

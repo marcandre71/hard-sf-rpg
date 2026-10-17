@@ -37,7 +37,9 @@ module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dat
 module/config.mjs                   Caractéristiques, characteristicFields, choix d'énumération,
                                     actorTypes, itemTypes, allowedItems, uniqueOnCharacter.
 module/guards.mjs                   Hook preCreateItem : refuse un objet interdit, et un
-                                    second origin / background / profession sur un personnage.
+                                    second origin / background / profession sur un personnage
+                                    (y compris deux d'un coup dans le même appel).
+tests/models.test.mjs               Validation des 21 modèles si FOUNDRY_PATH est défini.
 module/data/fields.mjs              Constructeurs de champs (html, string, number, bool).
 module/data/base-item.mjs           Description HTML commune. Substance et Logiciel s'arrêtent là.
 module/data/character.mjs           Personnage : caractéristiques + identité + textes.
@@ -105,6 +107,16 @@ Bornes actuelles (`SOL.characteristicFields`) :
 `value` n'est pas un champ du schéma. `prepareDerivedData` la recalcule : `base + origin + advance + temp`.
 Un `NumberField` hors bornes est **ramené silencieusement** à la borne la plus proche, sans message. Les `min` / `max` du HTML ne font que guider la saisie.
 
+### Entiers et décimaux
+
+Choix provisoire, à valider par Marc (commentaire `// Entier ou décimal : choix provisoire, à valider par Marc` dans les modèles). Un nombre avec `step: 1` arrondit une décimale : ces champs sont donc `integer: true` explicitement.
+
+Entiers : âge ; formation (0 à 60, borne écrite Fiche v0.2 §4) ; dégâts et portée d'une arme ; protection et pénalités d'une armure ; quantité et bonus d'outils ; pénalité d'une blessure ; coût d'une augmentation ; coût en XP d'un atout ; modificateur de tolérance aux g. Les quatre champs de caractéristique le sont aussi (étape 1).
+
+Décimaux : gravité natale, masse, encombrement, munitions (`value` / `max`), réserve d'équipement (`value` / `max`). La réserve d'air d'une combinaison reste décimale (heures).
+
+La feuille passe `type="number"` à chaque nombre. Sans ça, un champ qui a un minimum et un maximum (la Formation) s'affiche en curseur plus une case.
+
 ## Carte des objets autorisés
 
 `SOL.allowedItems` dans `module/config.mjs` est un **choix provisoire à valider par Marc**. Le hook `preCreateItem` s'en sert. Règles posées par la consigne de l'étape 2 :
@@ -113,6 +125,8 @@ Un `NumberField` hors bornes est **ramené silencieusement** à la borne la plus
 - `ship` et `vehicle` : pas de skill, talent, origin, background, profession, injury, sequel, augmentation, substance ;
 - `drone` : pas de origin, background, profession, talent ;
 - origin, background et profession uniquement sur `character`, et au plus un de chaque (ça, c'est écrit : Fiche v0.2 §4).
+
+Le hook compte aussi les objets du même appel (`createEmbeddedDocuments` avec deux Origines) : ils partagent `options`, et `actor.items` ne les contient pas encore. Il ne voit pas les objets embarqués dans un acteur créé, dupliqué ou importé d'un bloc (seul `preCreateActor` est appelé). Il est ignoré si l'appelant passe `noHook: true`.
 
 Tout ce que ces règles n'interdisent pas est autorisé, y compris sur les types dont les docs ne précisent rien (PNJ, Créature, etc.). Ne pas durcir cette carte sans Marc.
 
@@ -142,8 +156,12 @@ node --check module/sheets/item-list.mjs
 node --check module/sheets/character-sheet.mjs
 node --check module/sheets/actor-sheet.mjs
 node --check module/sheets/item-sheet.mjs
+node --check tests/models.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
+node tests/models.test.mjs
 ```
+
+`tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts, avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
 
 Puis le scénario manuel de [TESTER.md](TESTER.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
 

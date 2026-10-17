@@ -17,12 +17,14 @@ export class WeaponData extends BaseItemData {
       ...super.defineSchema(),
       // Nom ou id de compétence. Réf. Fiche v0.2 §4 (String, pas une référence).
       skill: stringField("SOL.Weapon.skill"),
-      damage: numberField("SOL.Weapon.damage", { initial: 0, step: 1 }),
-      // Réf. Fiche v0.2 §4 ⚠. Distances en mètres.
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      // Entier : dégâts et portée (m). Décimal : munitions, masse, encombrement.
+      damage: numberField("SOL.Weapon.damage", { initial: 0, integer: true, step: 1 }),
+      // Réf. Fiche v0.2 §4 ⚠. Distances en mètres, entières (choix provisoire).
       range: new SchemaField({
-        short: numberField("SOL.Weapon.range.short", { initial: 0, step: 0.01, hint: "SOL.Hint.metres" }),
-        medium: numberField("SOL.Weapon.range.medium", { initial: 0, step: 0.01, hint: "SOL.Hint.metres" }),
-        long: numberField("SOL.Weapon.range.long", { initial: 0, step: 0.01, hint: "SOL.Hint.metres" })
+        short: numberField("SOL.Weapon.range.short", { initial: 0, integer: true, step: 1, hint: "SOL.Hint.metres" }),
+        medium: numberField("SOL.Weapon.range.medium", { initial: 0, integer: true, step: 1, hint: "SOL.Hint.metres" }),
+        long: numberField("SOL.Weapon.range.long", { initial: 0, integer: true, step: 1, hint: "SOL.Hint.metres" })
       }, { label: "SOL.Weapon.range.label" }),
       recoil: boolField("SOL.Weapon.recoil", false),
       ammo: valueMaxField("SOL.Weapon.ammo"),

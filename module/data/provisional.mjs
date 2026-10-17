@@ -26,7 +26,8 @@ export class TalentData extends BaseItemData {
     return {
       ...super.defineSchema(),
       // À préciser : types non définis dans LdR v0.2.
-      xpCost: numberField("SOL.Talent.xpCost", { initial: 0, step: 1 }),
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      xpCost: numberField("SOL.Talent.xpCost", { initial: 0, integer: true, step: 1 }),
       // À préciser : types non définis dans LdR v0.2.
       prerequisites: stringField("SOL.Talent.prerequisites"),
       // À préciser : types non définis dans LdR v0.2. Texte seulement (pas d'ActiveEffect).
@@ -53,11 +54,13 @@ export class OriginData extends BaseItemData {
     return {
       ...super.defineSchema(),
       // À préciser : types non définis dans LdR v0.2.
+      // Entier ou décimal : choix provisoire, à valider par Marc. Gravité : décimal.
       gravityNative: numberField("SOL.Character.gravityNative", { initial: 0, step: 0.01, hint: "SOL.Hint.g" }),
       // À préciser : types non définis dans LdR v0.2.
       characteristicModifiers: stringField("SOL.Origin.characteristicModifiers"),
       // À préciser : types non définis dans LdR v0.2.
-      gToleranceModifier: numberField("SOL.Origin.gToleranceModifier", { initial: 0, step: 1 }),
+      // Entier ou décimal : choix provisoire, à valider par Marc.
+      gToleranceModifier: numberField("SOL.Origin.gToleranceModifier", { initial: 0, integer: true, step: 1 }),
       // À préciser : types non définis dans LdR v0.2.
       culturalSkill: stringField("SOL.Origin.culturalSkill"),
       // À préciser : types non définis dans LdR v0.2. Libellé « Particularité » : maquette Onglet 1.
@@ -111,8 +114,9 @@ export class ProfessionData extends BaseItemData {
 /**
  * Séquelle (`sequel`).
  * LdR v0.2 §15 : type (radiation, déconditionnement, trauma), effet, permanent.
- * Les clés anglaises des valeurs de `type` ne sont pas définies : texte libre,
- * pas une liste fermée.
+ * Les clés anglaises des valeurs ne sont pas définies : texte libre,
+ * pas une liste fermée. Le champ s'appelle `category` et non `type`, pour
+ * ne pas le confondre avec le type d'objet Foundry. Le libellé reste « Type ».
  *
  * @extends BaseItemData
  */
@@ -121,8 +125,8 @@ export class SequelData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      // À préciser : types non définis dans LdR v0.2.
-      type: stringField("SOL.Sequel.type"),
+      // À préciser : types non définis dans LdR v0.2. Clé `category` (pas `type`).
+      category: stringField("SOL.Sequel.category"),
       // À préciser : types non définis dans LdR v0.2.
       effect: htmlField("SOL.Item.effect"),
       // À préciser : types non définis dans LdR v0.2. Défaut neutre false.
@@ -135,8 +139,11 @@ export class SequelData extends BaseItemData {
  * Module de vaisseau (`shipModule`). Porté par l'acteur `ship`, pas par
  * le personnage. Réf. LdR v0.2 §15, Fiche v0.2 §4.
  * LdR : type (arme de bord, blindage, propulsion…), état, effets.
- * Clés anglaises des valeurs non définies : `type` et `state` sont du texte.
- * `state` est le nom anglais provisoire de « état ».
+ * Clés anglaises des valeurs non définies : `category` et `state` sont du texte.
+ * `category` remplace `type` pour ne pas le confondre avec le type d'objet
+ * Foundry. Le libellé reste « Type ». `state` est le nom anglais provisoire
+ * de « état ». Pas de migrateData pour l'instant (revue étape 2 : pas encore
+ * nécessaire), bien que `type` ait été publié une fois dans 5fa744e.
  *
  * @extends BaseItemData
  */
@@ -145,8 +152,8 @@ export class ShipModuleData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      // À préciser : types non définis dans LdR v0.2.
-      type: stringField("SOL.ShipModule.type"),
+      // À préciser : types non définis dans LdR v0.2. Clé `category` (pas `type`).
+      category: stringField("SOL.ShipModule.category"),
       // À préciser : types non définis dans LdR v0.2. Clé « state » pour « état ».
       state: stringField("SOL.ShipModule.state"),
       // À préciser : types non définis dans LdR v0.2.

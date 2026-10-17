@@ -64,6 +64,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       identity: new SchemaField({
         concept: stringField("SOL.Character.concept"),
         birthplace: stringField("SOL.Character.birthplace"),
+        // Entier ou décimal : choix provisoire, à valider par Marc.
+        // Décimal : gravité natale (g) et masse (kg). Entier : âge.
         gravityNative: numberField("SOL.Character.gravityNative", {
           initial: 1,
           min: 0,
@@ -75,6 +77,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         bloc: stringField("SOL.Character.bloc"),
         age: numberField("SOL.Character.age", {
           initial: 25,
+          integer: true,
           step: 1,
           hint: "SOL.Hint.years"
         }),
