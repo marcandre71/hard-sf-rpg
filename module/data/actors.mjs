@@ -33,9 +33,10 @@ function describedActorSchema() {
 
 /**
  * PNJ. Même schéma que le personnage. Réf. consigne étape 3.
- * L'étape 2 ne stockait que description et notes : `migrateData` recopie
- * la description dans la biographie. Les caractéristiques absentes prennent
- * le défaut du schéma (Base 25).
+ * L'étape 2 ne stockait que description et notes, sans biography :
+ * `migrateData` ne recopie que cette forme-là, et retire toujours
+ * `description`. Les caractéristiques absentes prennent le défaut du
+ * schéma (Base 25).
  *
  * @extends PersonData
  */

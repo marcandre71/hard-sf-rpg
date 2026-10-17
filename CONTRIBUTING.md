@@ -45,7 +45,8 @@ tests/models.test.mjs               Validation des 21 modèles si FOUNDRY_PATH e
 module/data/fields.mjs              Constructeurs de champs (html, string, number, bool).
 module/data/base-item.mjs           Description HTML commune. Substance et Logiciel s'arrêtent là.
 module/data/person.mjs              Schéma commun Personnage et PNJ.
-module/data/npc-migrate.mjs         PNJ étape 2 : description → biography si biography est vide.
+module/data/npc-migrate.mjs         PNJ étape 2 seulement (description + notes, sans biography).
+module/npc-ready-migration.mjs      Une fois par monde (MJ, migrationVersion) : retire system.description.
 module/data/character.mjs           Personnage : étend PersonData, pas de migration.
 module/data/actors.mjs              PNJ (migrateData), Créature, Synthétique, Drone, Véhicule, Vaisseau.
 module/data/skill.mjs               Compétence. Le score n'est pas calculé.
@@ -87,7 +88,7 @@ Les choix d'une liste (domaine, munition, genre d'augmentation, catégorie…) v
 ## Conventions de nommage
 
 - **Clés de code en anglais** : `character`, `ship`, `talent`, `background`, `base`, `origin`, `advance`, `temp`, `value`. Pas d'accent ni d'espace dans une clé stockée. Les docs utilisent ces clés (`ship`, pas `starship` ; `talent`, pas `asset` ; `background` pour le Milieu).
-- **Libellés en français via `lang/fr.json`** uniquement. Le code et les gabarits passent par `{{localize}}` ou par une clé (`SOL.Sheet.Character`, `TYPES.Actor.character`). On n'écrit pas de français en dur dans un `.mjs`, un `.hbs` ou un `.css` (les commentaires, si).
+- **Libellés en français via `lang/fr.json`** uniquement. Le code et les gabarits passent par `{{localize}}` ou par une clé (`SOL.Sheet.Person`, `TYPES.Actor.character`). On n'écrit pas de français en dur dans un `.mjs`, un `.hbs` ou un `.css` (les commentaires, si).
 - **Caractéristiques et leurs bornes** : `SOL.characteristics`, `SOL.characteristicFields` et `SOL.characteristicValueBounds` dans `module/config.mjs`. Le modèle et la feuille lisent ces objets. Ne pas recopier `1`, `60`, `0`, `100`, `-10`, `15` dans le gabarit ni dans `defineSchema`.
 - **Commentaires en français**, avec la source de la règle quand elle existe : `// Réf. LdR v0.2 §15`, `// Réf. Fiche v0.2 §4`. Un champ dont le type n'est pas écrit dans les docs porte `// À préciser : types non définis dans LdR v0.2`.
 - Identifiant du système, scope de `registerSheet` et nom du dossier Foundry : `sol-nouvelle-ere`.
@@ -100,7 +101,7 @@ Renommer ou supprimer une clé **déjà stockée** (une caractéristique, `base`
 
 Ajouter un champ avec une valeur `initial` ne demande pas de migration : Foundry complète les documents existants au chargement. C'est le cas des champs d'identité ajoutés à l'étape 2 sur le Personnage de l'étape 1, et des caractéristiques d'un PNJ de l'étape 2 (Base 25, les autres à 0) quand il passe au schéma partagé.
 
-PNJ, étape 3 : `NpcData.migrateData` appelle `migrateNpcSource`. L'étape 2 ne stockait que `description` et `notes`. Si `biography` est vide, `description` y est recopiée, puis la clé `description` est retirée. Les notes ne bougent pas. Une biography déjà remplie n'est pas écrasée. `htmlFields` du PNJ dans `system.json` est `biography` et `notes`, et non plus `description`.
+PNJ, étape 3 : `NpcData.migrateData` appelle `migrateNpcSource`. On ne recopie `description` dans `biography` que si la source a `description` et `notes`, et pas encore de clé `biography` (fiche étape 2). Une mise à jour partielle qui n'a que `description` ne crée pas de biographie. La clé `description` est toujours retirée de l'objet traité. `migrateData` ne réécrit pas à lui seul la base : au `ready`, le MJ le fait une fois (`migrationVersion`, `system.biography` et `system.-=description`) pour les PNJ de `game.actors` qui ont encore la clé. `htmlFields` du PNJ dans `system.json` est `biography` et `notes`, et non plus `description`.
 
 Bornes actuelles (`SOL.characteristicFields`) :
 
@@ -154,6 +155,7 @@ node --check module/data/fields.mjs
 node --check module/data/base-item.mjs
 node --check module/data/person.mjs
 node --check module/data/npc-migrate.mjs
+node --check module/npc-ready-migration.mjs
 node --check module/data/character.mjs
 node --check module/data/actors.mjs
 node --check module/data/skill.mjs

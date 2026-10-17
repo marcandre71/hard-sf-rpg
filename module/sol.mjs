@@ -21,6 +21,7 @@ import { BackgroundData, OriginData, ProfessionData, SequelData, ShipModuleData,
 import { SkillData } from "./data/skill.mjs";
 import { WeaponData } from "./data/weapon.mjs";
 import { registerItemGuard } from "./guards.mjs";
+import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
 import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
@@ -111,6 +112,7 @@ function initializeSystem() {
   });
 
   registerItemGuard();
+  registerNpcReadyMigration(SYSTEM_ID);
 }
 
 Hooks.once("init", initializeSystem);

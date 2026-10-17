@@ -57,7 +57,7 @@ L'en-tête est toujours visible après ces créations.
 1. Allez sur **Roleplay**.
 2. Changez l'Âge (un nombre différent de celui affiché), puis cliquez ailleurs.
 3. L'onglet reste **Roleplay**. L'âge modifié est toujours affiché.
-4. Fermez la feuille, rouvrez-la : l'âge est conservé. L'onglet de départ est de nouveau Principal (le souvenir de l'onglet vaut tant que la feuille n'est pas fermée).
+4. Fermez la feuille, rouvrez-la : l'âge est conservé. En rouvrant, la fiche revient sur le dernier onglet utilisé ; après F5 elle revient sur Principal.
 
 ## 6. PNJ
 

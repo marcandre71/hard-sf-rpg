@@ -2,20 +2,15 @@
    Chargé par la clé "styles" de system.json.
    Tout est sous .sol-nouvelle-ere (classe de la fenêtre). Pas de police externe. */
 
-/* Feuilles d'acteur : l'en-tête reste visible, le corps défile.
-   Le formulaire Foundry est le fils de .window-content.
-   Pas sur la feuille d'objet (classe .item), qui défile entière. */
-.sol-nouvelle-ere.actor .window-content {
-  overflow: hidden;
-}
-
-.sol-nouvelle-ere.actor .window-content > form {
+/* AppV2 : la fenêtre elle-même est le <form>. Les parts sont directement
+   dans .window-content (pas un formulaire enfant). Une fenêtre trop petite
+   fait défiler ce contenu. */
+.sol-nouvelle-ere .window-content {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
   gap: 0.5rem;
+  min-height: 0;
+  overflow: auto;
 }
 
 .sol-nouvelle-ere.actor .sol-sheet {

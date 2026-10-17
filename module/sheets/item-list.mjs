@@ -206,10 +206,19 @@ async function deleteItem(event, target) {
  * @returns {Promise<void>}
  */
 async function createItem(event, target) {
-  const type = target.dataset.itemType || target.closest("[data-item-type]")?.dataset.itemType;
+  // Un double-clic enverrait deux créations. Le second clic a detail > 1.
+  if ( event?.detail > 1 ) return;
+  const button = target.closest("button") ?? target;
+  if ( button.disabled ) return;
+  const type = button.dataset.itemType || target.dataset.itemType;
   if ( !type ) return;
   const allowed = CONFIG.SOL.allowedItems[this.document.type] ?? [];
   if ( !allowed.includes(type) ) return;
-  const name = game.i18n.localize(`TYPES.Item.${type}`);
-  await this.document.createEmbeddedDocuments("Item", [{ name, type }]);
+  button.disabled = true;
+  try {
+    const name = game.i18n.localize(`TYPES.Item.${type}`);
+    await this.document.createEmbeddedDocuments("Item", [{ name, type }]);
+  } finally {
+    button.disabled = false;
+  }
 }

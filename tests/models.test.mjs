@@ -22,18 +22,49 @@ import { migrateNpcSource } from "../module/data/npc-migrate.mjs";
 
 /**
  * La migration du PNJ ne dépend pas de Foundry : on la joue toujours.
- * description de l'étape 2 devient biography ; les notes restent.
+ * Seulement une fiche étape 2 (description + notes, sans biography).
+ *
+ * @param {object} input
+ * @param {{ biography?: string, notes?: string, hasBiography: boolean }} expected
+ * @param {string} message
+ * @returns {void}
  */
-const migratedNpc = migrateNpcSource({ description: "<p>Texte</p>", notes: "<p>Note</p>" });
-if ( migratedNpc.biography !== "<p>Texte</p>" || migratedNpc.notes !== "<p>Note</p>" || ("description" in migratedNpc) ) {
-  console.error("migrateNpcSource n'a pas déplacé description vers biography.");
-  process.exit(1);
+function checkNpcMigration(input, expected, message) {
+  const result = migrateNpcSource({ ...input });
+  const hasBiography = "biography" in result;
+  const biographyOk = hasBiography === expected.hasBiography
+    && result.biography === expected.biography;
+  if ( !biographyOk || ("description" in result) || result.notes !== expected.notes ) {
+    console.error(message, result);
+    process.exit(1);
+  }
 }
-const keptNpc = migrateNpcSource({ description: "ancien", biography: "déjà", notes: "n" });
-if ( keptNpc.biography !== "déjà" || keptNpc.notes !== "n" || ("description" in keptNpc) ) {
-  console.error("migrateNpcSource ne doit pas écraser une biography déjà remplie.");
-  process.exit(1);
-}
+
+checkNpcMigration(
+  { description: "x" },
+  { hasBiography: false, notes: undefined },
+  "{description} seul ne doit pas créer biography"
+);
+checkNpcMigration(
+  { description: "x", notes: "", biography: "" },
+  { biography: "", notes: "", hasBiography: true },
+  "biography vide déjà présente doit le rester"
+);
+checkNpcMigration(
+  { description: "x", notes: "" },
+  { biography: "x", notes: "", hasBiography: true },
+  "fiche étape 2 : description doit devenir biography"
+);
+checkNpcMigration(
+  { description: "<p>Texte</p>", notes: "<p>Note</p>" },
+  { biography: "<p>Texte</p>", notes: "<p>Note</p>", hasBiography: true },
+  "notes HTML conservées"
+);
+checkNpcMigration(
+  { description: "ancien", biography: "déjà", notes: "n" },
+  { biography: "déjà", notes: "n", hasBiography: true },
+  "biography déjà remplie ne doit pas être écrasée"
+);
 
 /**
  * Arrêt propre : Foundry n'est pas là, ce n'est pas un échec du système.
