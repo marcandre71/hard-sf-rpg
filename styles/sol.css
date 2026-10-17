@@ -1,20 +1,74 @@
-/* Sol, Nouvelle Ère — mise en forme minimale des feuilles (étape 2).
+/* Sol, Nouvelle Ère — feuilles, étape 3.
    Chargé par la clé "styles" de system.json.
-   Ne cible que les classes .sol des gabarits templates/. */
+   Tout est sous .sol-nouvelle-ere (classe de la fenêtre). Pas de police externe. */
 
-.sol .sol-sheet {
+/* Feuilles d'acteur : l'en-tête reste visible, le corps défile.
+   Le formulaire Foundry est le fils de .window-content.
+   Pas sur la feuille d'objet (classe .item), qui défile entière. */
+.sol-nouvelle-ere.actor .window-content {
+  overflow: hidden;
+}
+
+.sol-nouvelle-ere.actor .window-content > form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  gap: 0.5rem;
+}
+
+.sol-nouvelle-ere.actor .sol-sheet {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.sol-nouvelle-ere .sol-sheet,
+.sol-nouvelle-ere .sol-tab {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.sol .sol-header {
+/* Onglet inactif : le cœur pose la classe active via tab.cssClass.
+   On le redit ici pour que la feuille reste lisible si le style du cœur change. */
+.sol-nouvelle-ere section.tab[data-tab]:not(.active) {
+  display: none;
+}
+
+.sol-nouvelle-ere section.tab.active {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.sol-nouvelle-ere nav.tabs {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.25rem;
+  margin: 0;
+  border-bottom: 1px solid var(--color-border, #7a7971);
+}
+
+.sol-nouvelle-ere nav.tabs a {
+  padding: 0.35rem 0.75rem;
+  text-decoration: none;
+}
+
+.sol-nouvelle-ere nav.tabs a.active {
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-text-hyperlink, #4b4a44);
+}
+
+.sol-nouvelle-ere .sol-header {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex: 0 0 auto;
 }
 
-.sol .sol-portrait {
+.sol-nouvelle-ere .sol-portrait {
   width: 96px;
   height: 96px;
   object-fit: cover;
@@ -24,91 +78,103 @@
   flex: 0 0 96px;
 }
 
-.sol .sol-identity {
+.sol-nouvelle-ere .sol-identity {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.sol .sol-type {
+.sol-nouvelle-ere .sol-type {
   margin: 0;
   font-size: 0.85rem;
   opacity: 0.85;
 }
 
-.sol .sol-identity input[name="name"] {
+.sol-nouvelle-ere .sol-identity input[name="name"] {
   font-size: 1.5rem;
   height: auto;
   padding: 0.25rem 0.5rem;
 }
 
-.sol .sol-section-title {
+.sol-nouvelle-ere .sol-section-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   border-bottom: 1px solid var(--color-border, #7a7971);
 }
 
-.sol .sol-block-label {
+.sol-nouvelle-ere .sol-block-label {
   font-weight: bold;
 }
 
-.sol textarea {
+.sol-nouvelle-ere textarea {
   width: 100%;
   min-height: 4.5rem;
   resize: vertical;
 }
 
-.sol fieldset.sol-fieldset {
+.sol-nouvelle-ere fieldset.sol-fieldset {
   margin: 0;
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--color-border, #7a7971);
 }
 
-.sol fieldset.sol-fieldset > legend {
+.sol-nouvelle-ere fieldset.sol-fieldset > legend {
   font-weight: bold;
   padding: 0 0.35rem;
 }
 
-.sol .sol-fields .form-group {
+.sol-nouvelle-ere .sol-fields .form-group {
   margin: 0.15rem 0;
 }
 
-.sol table.sol-characteristics {
+.sol-nouvelle-ere table.sol-characteristics {
   width: 100%;
   border-collapse: collapse;
   margin: 0;
 }
 
-.sol table.sol-characteristics th,
-.sol table.sol-characteristics td {
+.sol-nouvelle-ere table.sol-characteristics th,
+.sol-nouvelle-ere table.sol-characteristics td {
   padding: 0.2rem 0.35rem;
   text-align: center;
   vertical-align: middle;
 }
 
-.sol table.sol-characteristics .sol-col-name {
+.sol-nouvelle-ere table.sol-characteristics .sol-col-name {
   text-align: left;
   white-space: nowrap;
 }
 
-.sol .sol-abbr {
+.sol-nouvelle-ere .sol-abbr {
   display: inline-block;
   min-width: 2.75rem;
   font-weight: bold;
 }
 
-.sol table.sol-characteristics input[type="number"] {
+.sol-nouvelle-ere table.sol-characteristics input[type="number"] {
   width: 4rem;
   text-align: center;
 }
 
-.sol .sol-value {
+.sol-nouvelle-ere .sol-value {
   font-weight: bold;
   font-size: 1.1rem;
 }
 
-.sol .sol-items {
+.sol-nouvelle-ere .sol-slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.sol-nouvelle-ere .sol-item-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sol-nouvelle-ere .sol-items {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -117,13 +183,13 @@
   gap: 0.25rem;
 }
 
-.sol .sol-item {
+.sol-nouvelle-ere .sol-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.sol .sol-item img {
+.sol-nouvelle-ere .sol-item img {
   width: 28px;
   height: 28px;
   object-fit: cover;
@@ -131,7 +197,7 @@
   border: none;
 }
 
-.sol button.sol-item-name {
+.sol-nouvelle-ere button.sol-item-name {
   flex: 1;
   background: none;
   border: none;
@@ -141,22 +207,32 @@
   color: var(--color-text-hyperlink);
 }
 
-.sol .sol-item-type {
-  font-size: 0.85rem;
-  opacity: 0.8;
+.sol-nouvelle-ere .sol-item-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.9rem;
 }
 
-.sol .sol-empty {
+.sol-nouvelle-ere .sol-item-field-label {
+  opacity: 0.75;
+}
+
+.sol-nouvelle-ere .sol-item-edit,
+.sol-nouvelle-ere .sol-item-delete {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+}
+
+.sol-nouvelle-ere .sol-empty {
   margin: 0;
   opacity: 0.8;
 }
 
-.sol .sol-create-item {
+.sol-nouvelle-ere .sol-create-item {
   display: flex;
   gap: 0.5rem;
   align-items: center;
-}
-
-.sol .sol-create-item select {
-  flex: 1;
 }

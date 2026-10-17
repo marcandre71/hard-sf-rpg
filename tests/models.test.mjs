@@ -18,6 +18,22 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { migrateNpcSource } from "../module/data/npc-migrate.mjs";
+
+/**
+ * La migration du PNJ ne dépend pas de Foundry : on la joue toujours.
+ * description de l'étape 2 devient biography ; les notes restent.
+ */
+const migratedNpc = migrateNpcSource({ description: "<p>Texte</p>", notes: "<p>Note</p>" });
+if ( migratedNpc.biography !== "<p>Texte</p>" || migratedNpc.notes !== "<p>Note</p>" || ("description" in migratedNpc) ) {
+  console.error("migrateNpcSource n'a pas déplacé description vers biography.");
+  process.exit(1);
+}
+const keptNpc = migrateNpcSource({ description: "ancien", biography: "déjà", notes: "n" });
+if ( keptNpc.biography !== "déjà" || keptNpc.notes !== "n" || ("description" in keptNpc) ) {
+  console.error("migrateNpcSource ne doit pas écraser une biography déjà remplie.");
+  process.exit(1);
+}
 
 /**
  * Arrêt propre : Foundry n'est pas là, ce n'est pas un échec du système.

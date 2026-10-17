@@ -91,14 +91,15 @@ function initializeSystem() {
 
   unregisterCoreV1Sheets();
 
+  // Même feuille pour le personnage et le PNJ (onglets). Réf. consigne étape 3.
   foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, CharacterSheet, {
-    types: ["character"],
+    types: ["character", "npc"],
     makeDefault: true,
-    label: "SOL.Sheet.Character"
+    label: "SOL.Sheet.Person"
   });
 
   foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, GenericActorSheet, {
-    types: SOL.actorTypes.filter(type => type !== "character"),
+    types: SOL.actorTypes.filter(type => type !== "character" && type !== "npc"),
     makeDefault: true,
     label: "SOL.Sheet.Actor"
   });

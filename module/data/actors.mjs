@@ -1,7 +1,11 @@
 /**
  * Modèles des acteurs autres que le Personnage.
  *
- * PNJ, Créature, Synthétique et Drone : les docs ne donnent pas de champs
+ * Le PNJ reprend le schéma du personnage (`PersonData`) : même feuille,
+ * mêmes caractéristiques. Réf. consigne étape 3. Le LdR v0.2 §15 ne
+ * détaille pas ces champs pour le PNJ ; on ne calcule rien de plus.
+ *
+ * Créature, Synthétique et Drone : les docs ne donnent pas de champs
  * (LdR v0.2 §15 « champs à définir » pour la créature ; description qualitative
  * seulement pour les autres). On ne stocke que description et notes.
  * Aucune caractéristique, aucun score : ce serait inventer une règle.
@@ -11,6 +15,8 @@
  * (LdR v0.2 §15) n'ont ni type ni défaut : ils ne sont pas créés ici.
  */
 import { SOL } from "../config.mjs";
+import { migrateNpcSource } from "./npc-migrate.mjs";
+import { PersonData } from "./person.mjs";
 import { htmlField, stringField } from "./fields.mjs";
 
 /**
@@ -26,15 +32,22 @@ function describedActorSchema() {
 }
 
 /**
- * PNJ. Réf. LdR v0.2 §15. Champs chiffrés : non définis dans les docs.
+ * PNJ. Même schéma que le personnage. Réf. consigne étape 3.
+ * L'étape 2 ne stockait que description et notes : `migrateData` recopie
+ * la description dans la biographie. Les caractéristiques absentes prennent
+ * le défaut du schéma (Base 25).
  *
- * @extends foundry.abstract.TypeDataModel
+ * @extends PersonData
  */
-export class NpcData extends foundry.abstract.TypeDataModel {
-  /** @override */
-  static defineSchema() {
-    // Champs non définis dans LdR v0.2 §15 : description et notes seulement.
-    return describedActorSchema();
+export class NpcData extends PersonData {
+  /**
+   * @override
+   * @param {object} source
+   * @returns {object}
+   */
+  static migrateData(source) {
+    migrateNpcSource(source);
+    return super.migrateData(source);
   }
 }
 

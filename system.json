@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 2 : types d'acteurs et d'objets, feuilles minimales, textes en français.",
-  "version": "0.2.0",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 3 : mise en page des feuilles (onglets), textes en français.",
+  "version": "0.3.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -34,7 +34,7 @@
         "htmlFields": ["biography", "notes"]
       },
       "npc": {
-        "htmlFields": ["description", "notes"]
+        "htmlFields": ["biography", "notes"]
       },
       "creature": {
         "htmlFields": ["description", "notes"]

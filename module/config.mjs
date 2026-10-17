@@ -63,9 +63,8 @@ const ITEM_TYPES = [
 const CHARACTER_ITEMS = without(ITEM_TYPES, ["shipModule"]);
 
 /**
- * Exclus du synthétique, en plus de l'écart avec le personnage.
- * Détail encore provisoire (décision Marc 17/10/2026 : « la plupart »
- * des objets du personnage, cette liste d'exclusion reste à confirmer).
+ * Exclus du synthétique, en plus du module de vaisseau.
+ * Décision Marc 17/10/2026.
  *
  * @type {string[]}
  */
@@ -146,10 +145,9 @@ export const SOL = {
     npc: CHARACTER_ITEMS,
     // Pas faits pour être équipés.
     creature: ["weapon", "armor", "injury", "talent"],
-    // « La plupart » des objets du personnage. Exclusion provisoire :
-    // origin, background, profession, substance (SYNTHETIC_EXCLUDED).
+    // Décision Marc 17/10/2026. Exclusion : origin, background, profession, substance.
     synthetic: without(CHARACTER_ITEMS, SYNTHETIC_EXCLUDED),
-    // Surtout armes et armures. gear, software, injury : détail provisoire.
+    // Décision Marc 17/10/2026.
     drone: ["weapon", "armor", "gear", "software", "injury"],
     vehicle: ["weapon", "armor", "gear", "software"],
     ship: ["weapon", "armor", "gear", "software", "shipModule"]

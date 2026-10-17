@@ -1,0 +1,9 @@
+{{!--
+  Onglet Inventaire. Une section par type, bouton Créer de ce type.
+  Les champs de la ligne sont en lecture seule. Réf. consigne étape 3.
+--}}
+<section class="tab sol-tab {{tab.cssClass}}" data-group="main" data-tab="inventory">
+  {{#each inventorySections as |section|}}
+    {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=section}}
+  {{/each}}
+</section>

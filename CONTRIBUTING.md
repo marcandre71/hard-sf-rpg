@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.2.0** : tous les types de documents validés, feuilles minimales, rien de plus.
+L'étape en cours est la **0.3.0** : mise en page des feuilles seulement. Pas de jets, pas d'automatisation, pas de règle nouvelle.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,7 +16,7 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre de l'étape 2 (ne pas les ajouter) : jets de dés, valeurs dérivées (seuil de blessure, tolérance aux g, initiative, Endurance, Sang-froid, encombrement, mouvement), Active Effects, compendiums, automation des origines (remplir les caractéristiques toutes seules). Vice et Lueur n'existent pas : ne pas les réintroduire.
+Hors périmètre (ne pas les ajouter) : jets de dés, valeurs dérivées autres que l'Actuelle des caractéristiques (seuil de blessure, tolérance aux g, initiative, Endurance, Sang-froid, encombrement, mouvement), Active Effects, compendiums, automation des origines (remplir les caractéristiques toutes seules), score de compétence. Vice et Lueur n'existent pas : ne pas les réintroduire. L'étape 3 est la mise en page seulement.
 
 ## Où sont les règles du jeu
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.2.0, compatibilité 14,
+system.json                         Manifeste : id, version 0.3.0, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields pour chaque HTMLField.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -44,8 +44,10 @@ module/guards.mjs                   Hook preCreateItem : refuse un objet interdi
 tests/models.test.mjs               Validation des 21 modèles si FOUNDRY_PATH est défini.
 module/data/fields.mjs              Constructeurs de champs (html, string, number, bool).
 module/data/base-item.mjs           Description HTML commune. Substance et Logiciel s'arrêtent là.
-module/data/character.mjs           Personnage : caractéristiques + identité + textes.
-module/data/actors.mjs              PNJ, Créature, Synthétique, Drone, Véhicule, Vaisseau.
+module/data/person.mjs              Schéma commun Personnage et PNJ.
+module/data/npc-migrate.mjs         PNJ étape 2 : description → biography si biography est vide.
+module/data/character.mjs           Personnage : étend PersonData, pas de migration.
+module/data/actors.mjs              PNJ (migrateData), Créature, Synthétique, Drone, Véhicule, Vaisseau.
 module/data/skill.mjs               Compétence. Le score n'est pas calculé.
 module/data/weapon.mjs              Arme portative. Portée = palier short / medium / long.
 module/data/armor.mjs               Armure/Vêtement.
@@ -54,16 +56,17 @@ module/data/augmentation.mjs        Augmentation (genre : thérapie, prothèse, 
 module/data/injury.mjs              Blessure.
 module/data/provisional.mjs         Atout, Origine, Milieu, Profession, Séquelle, Module de vaisseau.
                                     Champs en String / Number / HTML, défauts neutres.
-module/sheets/character-sheet.mjs   Feuille du Personnage.
-module/sheets/actor-sheet.mjs       Feuille générique des autres acteurs.
+module/sheets/character-sheet.mjs   Feuille à onglets du Personnage et du PNJ (groupe main).
+module/sheets/actor-sheet.mjs       Feuille générique des autres acteurs, objets groupés par type.
 module/sheets/item-sheet.mjs        Une feuille pour tous les objets (formGroup sur le schéma).
 module/sheets/prepare-fields.mjs    Schéma → lignes de formulaire, valeurs lues dans _source.
 module/sheets/item-list.mjs         Liste d'objets embarqués (créer, ouvrir, retirer).
 templates/                          Gabarits. Pas de français en dur : {{localize}}.
 lang/fr.json                        Tous les libellés, y compris TYPES.Actor et TYPES.Item.
-styles/sol.css                      Préfixe .sol uniquement.
+styles/sol.css                      Préfixe .sol-nouvelle-ere uniquement.
 README.md                           Présentation, périmètre, installation.
-TESTER.md                           Scénario de test manuel.
+TESTER.md                           Scénario de test manuel de l'étape en cours.
+docs/tests/etape-2.md               Scénario de l'étape 2, conservé.
 CONTRIBUTING.md                     Ce guide.
 ```
 
@@ -76,7 +79,7 @@ CONTRIBUTING.md                     Ce guide.
 3. L'enregistrer dans `CONFIG.Actor.dataModels` ou `CONFIG.Item.dataModels` (`module/sol.mjs`).
 4. Ajouter la clé à `SOL.actorTypes` ou `SOL.itemTypes`, et mettre à jour `SOL.allowedItems` si l'objet n'est pas permis partout.
 5. Libellé français dans `lang/fr.json` sous `TYPES.Actor` ou `TYPES.Item`, et les libellés de champs sous `SOL.*`.
-6. Les feuilles génériques (`GenericActorSheet`, `GenericItemSheet`) reprennent les champs du schéma toutes seules. Le Personnage a sa feuille dédiée : un champ nouveau s'y ajoute à la main.
+6. Les feuilles génériques (`GenericActorSheet`, `GenericItemSheet`) reprennent les champs du schéma toutes seules. Le Personnage et le PNJ partagent `CharacterSheet` : un champ nouveau du schéma commun s'y place dans l'onglet qui convient.
 7. Une ligne dans TESTER.md : créer le type, vérifier le libellé français, modifier un champ, rouvrir.
 
 Les choix d'une liste (domaine, munition, genre d'augmentation, catégorie…) vivent dans `module/config.mjs`, valeurs anglaises (ou celles écrites dans la Fiche) et libellés = clés i18n. Pas de tableau de choix recopié dans un gabarit.
@@ -95,7 +98,9 @@ Les choix d'une liste (domaine, munition, genre d'augmentation, catégorie…) v
 
 Renommer ou supprimer une clé **déjà stockée** (une caractéristique, `base` / `origin` / `advance` / `temp`, un champ d'identité, un type de document) exige une méthode statique `migrateData(source)` sur le TypeDataModel. Sans elle, les fiches déjà créées gardent l'ancienne clé et affichent le défaut du nouveau nom.
 
-Ajouter un champ avec une valeur `initial` ne demande pas de migration : Foundry complète les documents existants au chargement. C'est le cas des champs d'identité ajoutés à l'étape 2 sur le Personnage de l'étape 1.
+Ajouter un champ avec une valeur `initial` ne demande pas de migration : Foundry complète les documents existants au chargement. C'est le cas des champs d'identité ajoutés à l'étape 2 sur le Personnage de l'étape 1, et des caractéristiques d'un PNJ de l'étape 2 (Base 25, les autres à 0) quand il passe au schéma partagé.
+
+PNJ, étape 3 : `NpcData.migrateData` appelle `migrateNpcSource`. L'étape 2 ne stockait que `description` et `notes`. Si `biography` est vide, `description` y est recopiée, puis la clé `description` est retirée. Les notes ne bougent pas. Une biography déjà remplie n'est pas écrasée. `htmlFields` du PNJ dans `system.json` est `biography` et `notes`, et non plus `description`.
 
 Bornes actuelles (`SOL.characteristicFields`) :
 
@@ -127,8 +132,8 @@ La feuille passe `type="number"` à chaque nombre. Sans ça, un champ qui a un m
 
 - `character` et `npc` : tous les objets sauf `shipModule`. Un seul `origin`, un seul `background`, une seule `profession` (`uniqueOnCharacter`, acteurs dans `uniqueItemActors`). Réf. Fiche v0.2 §4 pour le personnage.
 - `creature` : `weapon`, `armor`, `injury`, `talent` (pas faits pour être équipés).
-- `synthetic` : les objets du personnage sauf `origin`, `background`, `profession`, `substance`. Cette liste d'exclusion est encore un détail provisoire.
-- `drone` : `weapon`, `armor`, `gear`, `software`, `injury`. Surtout armes et armures ; `gear`, `software` et `injury` restent un détail provisoire.
+- `synthetic` : les objets du personnage sauf `origin`, `background`, `profession`, `substance`. Décision Marc 17/10/2026.
+- `drone` : `weapon`, `armor`, `gear`, `software`, `injury`. Décision Marc 17/10/2026.
 - `vehicle` : `weapon`, `armor`, `gear`, `software`. `ship` : les mêmes, plus `shipModule`. Inchangé.
 
 Le hook compte aussi les objets du même appel (`createEmbeddedDocuments` avec deux Origines) : ils partagent `options`, et `actor.items` ne les contient pas encore. `seen.add` a lieu avant l'acceptation finale : si un autre hook refuse la première Origine, la deuxième du lot est quand même refusée (cas rare, accepté). Il ne voit pas les objets embarqués dans un acteur créé, dupliqué ou importé d'un bloc (seul `preCreateActor` est appelé). Il est ignoré si l'appelant passe `noHook: true`.
@@ -147,6 +152,8 @@ node --check module/config.mjs
 node --check module/guards.mjs
 node --check module/data/fields.mjs
 node --check module/data/base-item.mjs
+node --check module/data/person.mjs
+node --check module/data/npc-migrate.mjs
 node --check module/data/character.mjs
 node --check module/data/actors.mjs
 node --check module/data/skill.mjs
@@ -168,7 +175,11 @@ node tests/models.test.mjs
 
 `tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts (`validate()` doit renvoyer `true`), avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Si `FOUNDRY_PATH` est défini mais que le code commun ne se charge pas, le script s'arrête avec le code 1. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
 
-Puis le scénario manuel de [TESTER.md](TESTER.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
+Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
+
+## Feuille à onglets (étape 3)
+
+`CharacterSheet` est enregistrée pour `character` et `npc`. `static TABS.main` décrit Principal, Inventaire et Roleplay. `tabGroups = { main: "principal" }` est la valeur de départ ; `changeTab` la remplace, donc un rendu après une saisie garde l'onglet. Chaque onglet est une part dont la racine a `class="tab {{tab.cssClass}}"`, `data-group="main"` et `data-tab`. L'en-tête est une part à part, toujours visible. Le gabarit de navigation est celui du cœur : `templates/generic/tab-navigation.hbs`.
 
 ## API Foundry utilisées (v14)
 
@@ -178,6 +189,7 @@ Documentation officielle, version 14 :
 - [NumberField](https://foundryvtt.com/api/v14/classes/foundry.data.fields.NumberField.html), [StringField](https://foundryvtt.com/api/v14/classes/foundry.data.fields.StringField.html), [HTMLField](https://foundryvtt.com/api/v14/classes/foundry.data.fields.HTMLField.html), [SchemaField](https://foundryvtt.com/api/v14/classes/foundry.data.fields.SchemaField.html)
 - [ActorSheetV2](https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html) et [ItemSheetV2](https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ItemSheetV2.html)
 - [HandlebarsApplicationMixin](https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html) et [PARTS](https://foundryvtt.com/api/v14/classes/foundry.HandlebarsApplication.html#PARTS)
+- [ApplicationV2](https://foundryvtt.com/api/v14/classes/foundry.applications.api.ApplicationV2.html) — `TABS`, `tabGroups`, `_prepareTabs`, `changeTab`. Navigation : `templates/generic/tab-navigation.hbs`
 - [formGroup](https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.formGroup.html)
 - [Actors.registerSheet](https://foundryvtt.com/api/v14/classes/foundry.documents.collections.Actors.html#registerSheet) / `unregisterSheet` (feuilles V1 : `foundry.appv1.sheets.ActorSheet` et `ItemSheet`)
 - [Hooks](https://foundryvtt.com/api/v14/classes/foundry.helpers.Hooks.html) — `init`, `preCreateItem`

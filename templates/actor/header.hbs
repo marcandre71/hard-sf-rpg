@@ -1,0 +1,13 @@
+{{!--
+  En-tête commun aux trois onglets (portrait, nom, type).
+  Le nom est lu dans document._source. Réf. consigne étape 3.
+--}}
+<header class="sol-header">
+  <img class="sol-portrait" src="{{actor.img}}" alt="{{docSource.name}}"
+       data-action="editImage" data-edit="img" data-tooltip="{{localize 'SOL.Sheet.EditImage'}}">
+  <div class="sol-identity">
+    <p class="sol-type">{{localize typeLabel}}</p>
+    <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
+    <input id="{{rootId}}-name" type="text" name="name" value="{{docSource.name}}">
+  </div>
+</header>

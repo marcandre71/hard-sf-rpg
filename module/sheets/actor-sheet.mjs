@@ -1,14 +1,15 @@
 /**
- * Feuille minimale commune aux acteurs autres que le Personnage
- * (PNJ, Créature, Synthétique, Drone, Véhicule, Vaisseau).
+ * Feuille minimale des acteurs qui ne sont ni Personnage ni PNJ
+ * (Créature, Synthétique, Drone, Véhicule, Vaisseau).
  *
  * Nom, image, champs du modèle (catégorie, description, notes) via
- * `{{formGroup}}`, puis la liste des objets embarqués.
- * Pas de caractéristiques : les docs n'en donnent pas pour ces types.
+ * `{{formGroup}}`, puis les objets groupés par type (même partiel
+ * que la feuille du personnage). Pas de caractéristiques : les docs
+ * n'en donnent pas pour ces types. Réf. LdR v0.2 §15, consigne étape 3.
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  */
-import { itemListActions, keepItemTypeSelectLocal, prepareItemList } from "./item-list.mjs";
+import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -20,7 +21,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["sol", "sol-nouvelle-ere", "actor"],
-    position: { width: 640, height: 720 },
+    position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
     actions: itemListActions
@@ -32,21 +33,10 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       template: "systems/sol-nouvelle-ere/templates/actor/actor-sheet.hbs",
       templates: [
         "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
-        "systems/sol-nouvelle-ere/templates/actor/item-list.hbs"
+        "systems/sol-nouvelle-ere/templates/actor/item-section.hbs"
       ]
     }
   };
-
-  /**
-   * @override
-   * @param {object} context
-   * @param {object} options
-   * @returns {Promise<void>}
-   */
-  async _onRender(context, options) {
-    await super._onRender(context, options);
-    keepItemTypeSelectLocal(this);
-  }
 
   /**
    * @override
@@ -65,7 +55,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       prefix: "system",
       rootId: context.rootId
     });
-    Object.assign(context, prepareItemList(actor));
+    context.sections = prepareSections(actor);
     return context;
   }
 }

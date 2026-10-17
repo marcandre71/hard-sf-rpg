@@ -1,0 +1,17 @@
+{{!--
+  Onglet Roleplay. Taille, masse, âge, lieu de naissance, gravité natale,
+  contacts, défauts, biographie, notes. Réf. consigne étape 3, Fiche v0.2 §4.
+  Contacts et Défauts : zones de texte (StringField). Biographie et notes : HTML.
+--}}
+<section class="tab sol-tab {{tab.cssClass}}" data-group="main" data-tab="roleplay">
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityRoleplay}}
+
+  <label class="sol-block-label" for="{{rootId}}-contacts">{{localize "SOL.Character.contacts"}}</label>
+  <textarea id="{{rootId}}-contacts" name="system.contacts" rows="4">{{systemSource.contacts}}</textarea>
+
+  <label class="sol-block-label" for="{{rootId}}-flaws">{{localize "SOL.Character.flaws"}}</label>
+  <textarea id="{{rootId}}-flaws" name="system.flaws" rows="4">{{systemSource.flaws}}</textarea>
+
+  {{formGroup biography.field name="system.biography" value=biography.value rootId=rootId label=biography.label localize=true}}
+  {{formGroup notes.field name="system.notes" value=notes.value rootId=rootId label=notes.label localize=true}}
+</section>

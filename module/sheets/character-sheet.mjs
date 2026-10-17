@@ -1,26 +1,67 @@
 /**
- * Feuille de personnage (ApplicationV2).
+ * Feuille du Personnage et du PNJ (ApplicationV2).
  *
- * Étape 1 : nom, portrait, tableau des neuf caractéristiques.
- * Étape 2 : identité, contacts, défauts, biographie, notes, liste d'objets.
+ * Trois onglets, en-tête commun (portrait, nom, type) :
+ * - principal : identité courte, Origine / Milieu / Profession,
+ *   caractéristiques, compétences, atouts, état physique ;
+ * - inventory : armes, armures, équipement, augmentations, substances, logiciels ;
+ * - roleplay : taille, masse, âge, lieu de naissance, gravité, contacts,
+ *   défauts, biographie, notes.
+ *
+ * Pas de jets, pas de score de compétence. Réf. consigne étape 3.
  * La colonne Actuelle est lue sur la donnée préparée (`value`).
- * Les saisies lisent `document._source` (nom) ou `system._source`
- * (champs stockés), jamais la valeur dérivée.
+ * Les saisies lisent `document._source` ou `system._source`.
  *
- * Gabarit : `templates/actor/character-sheet.hbs`.
+ * Onglets : `static TABS` / `static PARTS`, groupe `main`.
+ * `tabGroups.main` mémorise l'onglet actif entre deux rendus
+ * (un champ modifié ne ramène pas à Principal).
+ * Navigation : gabarit du cœur `templates/generic/tab-navigation.hbs`.
+ *
+ * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.ApplicationV2.html
+ * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
+ * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
  */
 import { SOL } from "../config.mjs";
-import { itemListActions, keepItemTypeSelectLocal, prepareItemList } from "./item-list.mjs";
+import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
+/** Groupe d'onglets. La clé est celle de `static TABS`. */
+const TAB_GROUP = "main";
+
+/** Identité de l'onglet Principal, dans l'ordre d'affichage. */
+const PRINCIPAL_IDENTITY = ["concept", "faction", "polity", "bloc"];
+
+/** Identité de l'onglet Roleplay, dans l'ordre d'affichage. */
+const ROLEPLAY_IDENTITY = ["height", "mass", "age", "birthplace", "gravityNative"];
+
+/** Emplacements uniques, onglet Principal. */
+const SLOT_TYPES = ["origin", "background", "profession"];
+
+/** Listes de l'onglet Principal, sous les caractéristiques. */
+const PRINCIPAL_LISTS = ["skill", "talent", "injury", "sequel"];
+
+/** Listes de l'onglet Inventaire. */
+const INVENTORY_TYPES = ["weapon", "armor", "gear", "augmentation", "substance", "software"];
+
+const PARTIALS = [
+  "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+  "systems/sol-nouvelle-ere/templates/actor/item-section.hbs"
+];
+
 /**
- * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
- * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
+ * @see https://foundryvtt.com/api/v14/interfaces/foundry.applications.types.ApplicationTabsConfiguration.html
  */
 export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+
+  /**
+   * Onglet affiché au premier rendu. `changeTab` met à jour cette valeur,
+   * et le rendu suivant relit `tabGroups` : l'onglet reste.
+   * Réf. ApplicationV2#tabGroups.
+   */
+  tabGroups = { [TAB_GROUP]: "principal" };
 
   /** @override */
   static DEFAULT_OPTIONS = {
@@ -31,27 +72,52 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     actions: itemListActions
   };
 
-  /** @override */
-  static PARTS = {
-    sheet: {
-      template: "systems/sol-nouvelle-ere/templates/actor/character-sheet.hbs",
-      templates: [
-        "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
-        "systems/sol-nouvelle-ere/templates/actor/item-list.hbs"
-      ]
+  /**
+   * Un seul groupe. `_prepareContext` du cœur prépare aussi `context.tabs`
+   * dans ce cas ; on le refait explicitement pour le groupe `main`.
+   *
+   * @override
+   */
+  static TABS = {
+    [TAB_GROUP]: {
+      tabs: [
+        { id: "principal", label: "SOL.Tab.principal" },
+        { id: "inventory", label: "SOL.Tab.inventory" },
+        { id: "roleplay", label: "SOL.Tab.roleplay" }
+      ],
+      initial: "principal"
     }
   };
 
   /**
+   * En-tête et navigation toujours rendus. Chaque onglet est une part
+   * dont la racine porte `data-group` et `data-tab`.
+   *
    * @override
-   * @param {object} context
-   * @param {object} options
-   * @returns {Promise<void>}
    */
-  async _onRender(context, options) {
-    await super._onRender(context, options);
-    keepItemTypeSelectLocal(this);
-  }
+  static PARTS = {
+    header: {
+      template: "systems/sol-nouvelle-ere/templates/actor/header.hbs"
+    },
+    tabs: {
+      template: "templates/generic/tab-navigation.hbs"
+    },
+    principal: {
+      template: "systems/sol-nouvelle-ere/templates/actor/tab-principal.hbs",
+      scrollable: [""],
+      templates: PARTIALS
+    },
+    inventory: {
+      template: "systems/sol-nouvelle-ere/templates/actor/tab-inventory.hbs",
+      scrollable: [""],
+      templates: PARTIALS
+    },
+    roleplay: {
+      template: "systems/sol-nouvelle-ere/templates/actor/tab-roleplay.hbs",
+      scrollable: [""],
+      templates: PARTIALS
+    }
+  };
 
   /**
    * @override
@@ -61,31 +127,40 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const actor = this.document;
-    const stored = actor.system._source;
+    const stored = actor.system._source ?? {};
     context.actor = actor;
     context.docSource = actor._source;
     context.systemSource = stored;
+    context.typeLabel = `TYPES.Actor.${actor.type}`;
     context.bounds = SOL.characteristicFields;
     context.characteristics = Object.entries(SOL.characteristics).map(([key, cfg]) => {
-      const source = stored.characteristics[key];
+      const source = stored.characteristics?.[key] ?? {};
       const prepared = actor.system.characteristics[key];
       return {
         key,
         label: cfg.label,
         abbr: cfg.abbr,
-        base: source.base,
-        origin: source.origin,
-        advance: source.advance,
-        temp: source.temp,
+        base: source.base ?? SOL.characteristicFields.base.initial,
+        origin: source.origin ?? SOL.characteristicFields.origin.initial,
+        advance: source.advance ?? SOL.characteristicFields.advance.initial,
+        temp: source.temp ?? SOL.characteristicFields.temp.initial,
         // Seule colonne dérivée : pas un input.
         value: prepared.value,
         path: `system.characteristics.${key}`
       };
     });
-    context.identityGroups = prepareFieldGroups(actor.system.schema.fields.identity.fields, stored.identity, {
+
+    const identityFields = actor.system.schema.fields.identity.fields;
+    const identitySource = stored.identity ?? {};
+    context.identityMain = prepareFieldGroups(pickFields(identityFields, PRINCIPAL_IDENTITY), identitySource, {
       prefix: "system.identity",
       rootId: context.rootId
     });
+    context.identityRoleplay = prepareFieldGroups(pickFields(identityFields, ROLEPLAY_IDENTITY), identitySource, {
+      prefix: "system.identity",
+      rootId: context.rootId
+    });
+
     const labelOf = field => field.label ?? field.options?.label ?? "";
     context.biography = {
       field: actor.system.schema.fields.biography,
@@ -97,7 +172,53 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       label: labelOf(actor.system.schema.fields.notes),
       value: stored.notes ?? ""
     };
-    Object.assign(context, prepareItemList(actor));
+
+    const byType = Object.fromEntries(
+      prepareSections(actor, [...SLOT_TYPES, ...PRINCIPAL_LISTS, ...INVENTORY_TYPES]).map(section => [section.type, section])
+    );
+    context.slotSections = SLOT_TYPES.map(type => byType[type]).filter(Boolean);
+    context.skillSection = byType.skill;
+    context.talentSection = byType.talent;
+    context.injurySection = byType.injury;
+    context.sequelSection = byType.sequel;
+    context.inventorySections = INVENTORY_TYPES.map(type => byType[type]).filter(Boolean);
+
+    // Groupe `main`. Le cœur le fait aussi s'il n'y a qu'un groupe ;
+    // on le pose ici pour que le gabarit de navigation ait `tabs` et `group`.
+    context.group = TAB_GROUP;
+    context.tabs = this._prepareTabs(TAB_GROUP);
     return context;
   }
+
+  /**
+   * Chaque part d'onglet reçoit `tab` (classe `active` ou non).
+   * Réf. https://foundryvtt.com/api/v14/classes/foundry.applications.api.ApplicationV2.html
+   *
+   * @override
+   * @param {string} partId
+   * @param {object} context
+   * @param {object} options
+   * @returns {Promise<object>}
+   */
+  async _preparePartContext(partId, context, options) {
+    const part = await super._preparePartContext(partId, context, options);
+    if ( part.tabs?.[partId] ) part.tab = part.tabs[partId];
+    if ( partId === "tabs" ) part.group = TAB_GROUP;
+    return part;
+  }
+}
+
+/**
+ * Sous-ensemble du schéma, dans l'ordre des clés demandées.
+ *
+ * @param {Record<string, foundry.data.fields.DataField>} schemaFields
+ * @param {string[]} keys
+ * @returns {Record<string, foundry.data.fields.DataField>}
+ */
+function pickFields(schemaFields, keys) {
+  const picked = {};
+  for ( const key of keys ) {
+    if ( schemaFields[key] ) picked[key] = schemaFields[key];
+  }
+  return picked;
 }

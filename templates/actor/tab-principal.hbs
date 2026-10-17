@@ -1,0 +1,53 @@
+{{!--
+  Onglet Principal. data-group / data-tab / tab.cssClass : onglets ApplicationV2.
+  Caractéristiques : saisies dans _source, Actuelle dérivée (pas un input).
+  Compétence : nom, abréviation, formation. Pas de score.
+  Réf. consigne étape 3, Fiche v0.2 §4. Pas de Vice ni de Lueur (Fiche v0.2 §5).
+--}}
+<section class="tab sol-tab {{tab.cssClass}}" data-group="main" data-tab="principal">
+  <h2 class="sol-section-title">{{localize "SOL.Character.identity"}}</h2>
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityMain}}
+
+  <div class="sol-slots">
+    {{#each slotSections as |section|}}
+      {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=section}}
+    {{/each}}
+  </div>
+
+  <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
+  <table class="sol-characteristics">
+    <thead>
+      <tr>
+        <th class="sol-col-name">{{localize "SOL.Sheet.Characteristic"}}</th>
+        <th>{{localize bounds.base.label}}</th>
+        <th>{{localize bounds.origin.label}}</th>
+        <th>{{localize bounds.advance.label}}</th>
+        <th>{{localize bounds.temp.label}}</th>
+        <th>{{localize "SOL.Field.value"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each characteristics as |c|}}
+      <tr data-characteristic="{{c.key}}">
+        <td class="sol-col-name">
+          <span class="sol-abbr">{{localize c.abbr}}</span>
+          <span class="sol-label">{{localize c.label}}</span>
+        </td>
+        {{!-- min/max lus dans characteristicFields. temp n'a pas de borne (Fiche v0.2 §4). --}}
+        <td><input type="number" name="{{c.path}}.base" value="{{c.base}}" min="{{../bounds.base.min}}" max="{{../bounds.base.max}}" step="1"></td>
+        <td><input type="number" name="{{c.path}}.origin" value="{{c.origin}}" min="{{../bounds.origin.min}}" max="{{../bounds.origin.max}}" step="1"></td>
+        <td><input type="number" name="{{c.path}}.advance" value="{{c.advance}}" min="{{../bounds.advance.min}}" max="{{../bounds.advance.max}}" step="1"></td>
+        <td><input type="number" name="{{c.path}}.temp" value="{{c.temp}}" step="1"></td>
+        <td class="sol-value"><output>{{c.value}}</output></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=skillSection}}
+  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=talentSection}}
+
+  <h2 class="sol-section-title">{{localize "SOL.Section.physical"}}</h2>
+  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=injurySection}}
+  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=sequelSection}}
+</section>

@@ -12,15 +12,15 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : étape 2 (version 0.2.0)
+## État du système : étape 3 (version 0.3.0)
 
-On avance pas à pas (« ne pas brûler les étapes »). Cette étape déclare **tous les types validés**, avec un modèle de données minimal et une feuille simple. L'interface est en français.
+On avance pas à pas (« ne pas brûler les étapes »). L'étape 2 (types, modèles, feuilles minimales) est validée. Cette étape ne change que la **mise en page** : la feuille du Personnage et du PNJ a trois onglets (Principal, Inventaire, Roleplay). Pas de jets de dés, pas d'automatisation, pas de règle nouvelle. L'interface est en français.
 
 Acteurs : **Personnage** (`character`), **PNJ** (`npc`), **Créature** (`creature`), **Synthétique** (`synthetic`), **Drone** (`drone`), **Véhicule** (`vehicle`), **Vaisseau** (`ship`).
 
 Objets : **Compétence** (`skill`), **Atout** (`talent`), **Origine** (`origin`), **Milieu** (`background`), **Profession** (`profession`), **Arme** (`weapon`), **Armure/Vêtement** (`armor`), **Équipement** (`gear`), **Augmentation** (`augmentation`), **Substance** (`substance`), **Blessure** (`injury`), **Séquelle** (`sequel`), **Logiciel** (`software`), **Module de vaisseau** (`shipModule`).
 
-Le Personnage garde ses 9 caractéristiques (Base, Origine, Progression, Temp., Actuelle calculée) et gagne l'identité, les contacts, les défauts, la biographie et les notes. Chaque acteur liste ses objets. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
+Le Personnage et le PNJ partagent la même feuille et les mêmes champs (caractéristiques, identité, textes). Les autres acteurs gardent une feuille simple, avec leurs objets groupés par type. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
 
 Pas encore inclus : jets de dés, valeurs dérivées (seuil de blessure, tolérance aux g, initiative, Endurance, Sang-froid), effets automatiques, compendiums.
 
@@ -44,7 +44,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.2.0.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.3.0.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).

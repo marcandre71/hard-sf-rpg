@@ -1,6 +1,7 @@
 {{!--
-  Feuille générique (PNJ, Créature, Synthétique, Drone, Véhicule, Vaisseau).
+  Feuille générique (Créature, Synthétique, Drone, Véhicule, Vaisseau).
   Les champs viennent du schéma du type. Nom lu dans document._source.
+  Objets groupés par type, même partiel que le personnage.
   Réf. LdR v0.2 §15 : pas d'autres champs que ceux du modèle.
 --}}
 <section class="sol-sheet">
@@ -15,5 +16,10 @@
   </header>
 
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=groups}}
-  {{> "systems/sol-nouvelle-ere/templates/actor/item-list.hbs"}}
+
+  <div class="sol-item-groups">
+    {{#each sections as |section|}}
+      {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=section}}
+    {{/each}}
+  </div>
 </section>
