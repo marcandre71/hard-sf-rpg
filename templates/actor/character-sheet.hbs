@@ -2,8 +2,10 @@
   Feuille de personnage, étape 2.
   Nom et champs stockés : document._source / system._source
   (docSource, systemSource, characteristics.*.base…).
-  Colonne Actuelle : valeur dérivée, pas un input.
-  Bornes des caractéristiques : CONFIG.SOL.characteristicFields (bounds).
+  Colonne Actuelle : valeur dérivée, pas un input. Bornée 0 à 100
+  (CONFIG.SOL.characteristicValueBounds). Décision Marc 17/10/2026.
+  Bornes des champs stockés : CONFIG.SOL.characteristicFields (bounds).
+  Base : 1 à 60.
   Identité, biographie, notes : formGroup sur les champs du schéma.
   Contacts et Défauts : zones de texte (StringField, plusieurs lignes).
   Réf. Fiche v0.2 §4. Pas de Vice ni de Lueur (Fiche v0.2 §5).

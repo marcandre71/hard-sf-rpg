@@ -9,6 +9,7 @@
  * On suit cette liste de la Fiche pour origin, et la liste du LdR pour
  * les autres. Pas d'ActiveEffect, pas de calcul.
  */
+import { SOL } from "../config.mjs";
 import { BaseItemData } from "./base-item.mjs";
 import { boolField, htmlField, numberField, stringField } from "./fields.mjs";
 
@@ -26,7 +27,7 @@ export class TalentData extends BaseItemData {
     return {
       ...super.defineSchema(),
       // À préciser : types non définis dans LdR v0.2.
-      // Entier ou décimal : choix provisoire, à valider par Marc.
+      // Décision Marc 17/10/2026 : le coût en XP est un entier.
       xpCost: numberField("SOL.Talent.xpCost", { initial: 0, integer: true, step: 1 }),
       // À préciser : types non définis dans LdR v0.2.
       prerequisites: stringField("SOL.Talent.prerequisites"),
@@ -39,8 +40,10 @@ export class TalentData extends BaseItemData {
 /**
  * Origine (`origin`).
  *
- * Champs retenus par la Fiche v0.2 §4 : gravityNative, characteristicModifiers,
+ * Champs retenus par la Fiche v0.2 §4 : characteristicModifiers,
  * gToleranceModifier, culturalSkill, trait.
+ * Décision Marc 17/10/2026 : pas de `gravityNative` ici. La gravité natale
+ * fait foi sur le personnage (`identity.gravityNative`). Rien à migrer.
  * Le LdR v0.2 §15 disait skillBonuses et traits à la place de culturalSkill
  * et trait : on ne crée pas les deux jeux de champs.
  * `characteristicModifiers` est une chaîne libre : la structure (quelle
@@ -53,9 +56,6 @@ export class OriginData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      // À préciser : types non définis dans LdR v0.2.
-      // Entier ou décimal : choix provisoire, à valider par Marc. Gravité : décimal.
-      gravityNative: numberField("SOL.Character.gravityNative", { initial: 0, step: 0.01, hint: "SOL.Hint.g" }),
       // À préciser : types non définis dans LdR v0.2.
       characteristicModifiers: stringField("SOL.Origin.characteristicModifiers"),
       // À préciser : types non définis dans LdR v0.2.
@@ -114,9 +114,9 @@ export class ProfessionData extends BaseItemData {
 /**
  * Séquelle (`sequel`).
  * LdR v0.2 §15 : type (radiation, déconditionnement, trauma), effet, permanent.
- * Les clés anglaises des valeurs ne sont pas définies : texte libre,
- * pas une liste fermée. Le champ s'appelle `category` et non `type`, pour
- * ne pas le confondre avec le type d'objet Foundry. Le libellé reste « Type ».
+ * Décision Marc 17/10/2026 : liste fermée. Chaque séquelle reste son objet.
+ * Le champ s'appelle `category` et non `type`, pour ne pas le confondre
+ * avec le type d'objet Foundry. Le libellé reste « Type ».
  *
  * @extends BaseItemData
  */
@@ -125,8 +125,14 @@ export class SequelData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      // À préciser : types non définis dans LdR v0.2. Clé `category` (pas `type`).
-      category: stringField("SOL.Sequel.category"),
+      // Décision Marc 17/10/2026. Réf. LdR v0.2 §15. Clé `category` (pas `type`).
+      // Défaut « radiation ». Pas de migrateData : un texte libre déjà saisi
+      // n'a pas de correspondance sûre avec la liste.
+      category: stringField("SOL.Sequel.category.label", {
+        initial: "radiation",
+        blank: false,
+        choices: SOL.sequelCategories
+      }),
       // À préciser : types non définis dans LdR v0.2.
       effect: htmlField("SOL.Item.effect"),
       // À préciser : types non définis dans LdR v0.2. Défaut neutre false.

@@ -16,7 +16,7 @@ export class ArmorData extends BaseItemData {
   static defineSchema() {
     const protection = {};
     for ( const [key, label] of Object.entries(SOL.bodyLocations) ) {
-      // Entier ou décimal : choix provisoire, à valider par Marc.
+      // Décision Marc 17/10/2026 : les protections sont des entiers.
       protection[key] = numberField(label, { initial: 0, integer: true, step: 1 });
     }
 

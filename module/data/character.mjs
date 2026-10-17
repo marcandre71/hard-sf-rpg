@@ -64,8 +64,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
       identity: new SchemaField({
         concept: stringField("SOL.Character.concept"),
         birthplace: stringField("SOL.Character.birthplace"),
-        // Entier ou décimal : choix provisoire, à valider par Marc.
-        // Décimal : gravité natale (g) et masse (kg). Entier : âge.
+        // Décision Marc 17/10/2026 : cette case fait foi (pas de gravité
+        // sur l'objet Origine). Décimale, en g.
         gravityNative: numberField("SOL.Character.gravityNative", {
           initial: 1,
           min: 0,
@@ -75,6 +75,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         polity: stringField("SOL.Character.polity"),
         faction: stringField("SOL.Character.faction"),
         bloc: stringField("SOL.Character.bloc"),
+        // Décision Marc 17/10/2026 : l'âge est un entier.
         age: numberField("SOL.Character.age", {
           initial: 25,
           integer: true,
@@ -82,6 +83,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
           hint: "SOL.Hint.years"
         }),
         height: stringField("SOL.Character.height"),
+        // Entier ou décimal : choix provisoire, à valider par Marc. Masse en kg, décimale.
         mass: numberField("SOL.Character.mass", {
           initial: 70,
           step: 0.01,
@@ -109,18 +111,25 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
    * Calcule la valeur actuelle de chaque caractéristique.
    *
    * `value` n'est pas dans le schéma : il n'est pas persisté.
-   * Formule : base + origin + advance + temp. Non bornée
-   * (question ouverte : borner à 1-100 ?).
-   * Réf. Fiche v0.2 §4 « total dérivé ».
+   * Formule : base + origin + advance + temp, puis bornée par
+   * `SOL.characteristicValueBounds` (0 à 100). Les champs stockés
+   * ne sont pas modifiés.
+   * Réf. Fiche v0.2 §4 « total dérivé ». Décision Marc 17/10/2026.
    *
    * @override
    * @returns {void}
    */
   prepareDerivedData() {
     super.prepareDerivedData();
+    const { min, max } = SOL.characteristicValueBounds;
     for ( const key of Object.keys(SOL.characteristics) ) {
       const c = this.characteristics[key];
-      c.value = c.base + c.origin + c.advance + c.temp;
+      const sum = c.base + c.origin + c.advance + c.temp;
+      // Décision Marc 17/10/2026 : valeur Actuelle bornée 0 à 100.
+      // Math.clamp existe dans Foundry v13/v14. Repli min/max si absent.
+      c.value = typeof Math.clamp === "function"
+        ? Math.clamp(sum, min, max)
+        : Math.min(max, Math.max(min, sum));
     }
   }
 }

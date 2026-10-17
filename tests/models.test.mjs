@@ -5,7 +5,8 @@
  * Foundry n'est pas dans ce dépôt, et on ne le télécharge pas.
  * Sans la variable d'environnement FOUNDRY_PATH (dossier d'installation
  * FoundryVTT, celui qui contient resources/app), le script s'arrête
- * tout de suite avec le code 0.
+ * tout de suite avec le code 0. Si FOUNDRY_PATH est défini mais que
+ * rien ne se charge, le script s'arrête avec le code 1.
  *
  *   FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs
  *
@@ -42,6 +43,7 @@ if ( !foundryRoot ) {
  */
 const CANDIDATES = [
   "dist/data/foundry.mjs",
+  "common/server.mjs",
   "common/data/module.mjs",
   "common/data/fields.mjs",
   "client/data/module.mjs"
@@ -61,7 +63,11 @@ async function tryLoadFoundry(root) {
       const file = path.join(base, relative);
       if ( !existsSync(file) ) continue;
       try {
-        await import(pathToFileURL(file).href);
+        const mod = await import(pathToFileURL(file).href);
+        if ( mod?.data?.fields && mod?.abstract ) {
+          globalThis.foundry ??= mod;
+          globalThis.CONST ??= mod.CONST;
+        }
       } catch (error) {
         console.log(`tests/models.test.mjs : import impossible (${file}) : ${error.message}`);
       }
@@ -72,7 +78,8 @@ async function tryLoadFoundry(root) {
 }
 
 if ( !(await tryLoadFoundry(foundryRoot)) ) {
-  skip("code commun Foundry introuvable sous FOUNDRY_PATH");
+  console.error("tests/models.test.mjs : FOUNDRY_PATH est défini mais le code commun Foundry n'a pas pu être chargé.");
+  process.exit(1);
 }
 
 const i18n = {
@@ -145,8 +152,7 @@ function walkChoices(fields, label) {
 function checkModel(Model, label) {
   const data = Model.cleanData({});
   const model = new Model(data);
-  const failure = model.validate();
-  if ( failure ) throw new Error(`${label} : validation refusée (${failure.message ?? failure})`);
+  if ( model.validate() !== true ) throw new Error(`${label} : validation refusée`);
   walkChoices(model.schema.fields, label);
   return model;
 }

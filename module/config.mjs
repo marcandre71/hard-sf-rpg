@@ -55,22 +55,21 @@ const ITEM_TYPES = [
 ];
 
 /**
- * Objets interdits sur un vaisseau ou un véhicule.
- * Consigne de l'étape 2 — pas une table du LdR. À valider par Marc.
+ * Objets du personnage : tous, sauf le module de vaisseau.
+ * Le PNJ a exactement la même liste. Décision Marc 17/10/2026.
  *
  * @type {string[]}
  */
-const NOT_ON_SHIP_OR_VEHICLE = [
-  "skill",
-  "talent",
-  "origin",
-  "background",
-  "profession",
-  "injury",
-  "sequel",
-  "augmentation",
-  "substance"
-];
+const CHARACTER_ITEMS = without(ITEM_TYPES, ["shipModule"]);
+
+/**
+ * Exclus du synthétique, en plus de l'écart avec le personnage.
+ * Détail encore provisoire (décision Marc 17/10/2026 : « la plupart »
+ * des objets du personnage, cette liste d'exclusion reste à confirmer).
+ *
+ * @type {string[]}
+ */
+const SYNTHETIC_EXCLUDED = ["origin", "background", "profession", "substance"];
 
 /**
  * Registre du système.
@@ -98,16 +97,22 @@ export const SOL = {
   /**
    * Champs stockés de chaque caractéristique, et leurs bornes.
    * `value` (Actuelle) n'est pas ici : elle est dérivée, jamais stockée.
-   * Réf. Fiche v0.2 §4 ; bornes de `base` aussi au LdR v0.2 §9 (1 à 100,
-   * 60 max avant origine — le plafond de 60 n'est pas appliqué ici).
+   * Réf. Fiche v0.2 §4. Décision Marc 17/10/2026 : `base` plafonne à 60
+   * (LdR v0.2 §9, 60 max avant origine). Le défaut reste 25.
    * `temp` n'a pas de borne dans les docs.
    */
   characteristicFields: {
-    base: { label: "SOL.Field.base", initial: 25, min: 1, max: 100 },
+    base: { label: "SOL.Field.base", initial: 25, min: 1, max: 60 },
     origin: { label: "SOL.Field.origin", initial: 0, min: -10, max: 15 },
     advance: { label: "SOL.Field.advance", initial: 0, min: 0, max: 10 },
     temp: { label: "SOL.Field.temp", initial: 0 }
   },
+
+  /**
+   * Bornes de l'Actuelle dérivée. Ne modifie pas les champs stockés.
+   * Décision Marc 17/10/2026.
+   */
+  characteristicValueBounds: { min: 0, max: 100 },
 
   /** Types d'acteurs déclarés. Réf. LdR v0.2 §15, Fiche v0.2 §4. */
   actorTypes: ["character", "npc", "creature", "synthetic", "drone", "vehicle", "ship"],
@@ -116,34 +121,38 @@ export const SOL = {
   itemTypes: ITEM_TYPES,
 
   /**
-   * Au plus un de chaque sur un personnage.
-   * Réf. Fiche v0.2 §4 : « origin, background, profession : objets embarqués
-   * uniques (un seul de chaque type) ».
+   * Au plus un de chaque.
+   * Réf. Fiche v0.2 §4 pour le personnage. Décision Marc 17/10/2026 :
+   * le PNJ suit la même règle (voir `uniqueItemActors`).
    */
   uniqueOnCharacter: ["origin", "background", "profession"],
 
   /**
-   * Objets qu'un type d'acteur a le droit de porter.
-   *
-   * Carte provisoire, à valider par Marc. Ce n'est pas une matrice écrite
-   * dans le LdR v0.2. Règles appliquées (consigne de l'étape 2) :
-   * - `shipModule` uniquement sur `ship` (Fiche v0.2 §4, LdR v0.2 §15) ;
-   * - `ship` et `vehicle` ne portent pas skill, talent, origin, background,
-   *   profession, injury, sequel, augmentation, substance ;
-   * - `drone` ne porte pas origin, background, profession, talent ;
-   * - origin, background, profession uniquement sur `character`.
-   * Le reste (ce que npc, créature, synthétique, drone, véhicule et vaisseau
-   * peuvent encore porter) n'est pas détaillé dans les docs : on autorise
-   * tout ce que les règles ci-dessus n'interdisent pas.
+   * Acteurs sur lesquels `uniqueOnCharacter` s'applique.
+   * Décision Marc 17/10/2026.
+   */
+  uniqueItemActors: ["character", "npc"],
+
+  /**
+   * Objets qu'un type d'acteur a le droit de porter. Listes d'autorisation,
+   * une par type. Décision Marc 17/10/2026.
+   * `shipModule` reste réservé au vaisseau (Fiche v0.2 §4, LdR v0.2 §15).
+   * Véhicule et vaisseau : listes inchangées (arme, armure, équipement,
+   * logiciel, et module pour le vaisseau).
    */
   allowedItems: {
-    character: without(ITEM_TYPES, ["shipModule"]),
-    npc: without(ITEM_TYPES, ["origin", "background", "profession", "shipModule"]),
-    creature: without(ITEM_TYPES, ["origin", "background", "profession", "shipModule"]),
-    synthetic: without(ITEM_TYPES, ["origin", "background", "profession", "shipModule"]),
-    drone: without(ITEM_TYPES, ["origin", "background", "profession", "talent", "shipModule"]),
-    vehicle: without(ITEM_TYPES, [...NOT_ON_SHIP_OR_VEHICLE, "shipModule"]),
-    ship: without(ITEM_TYPES, NOT_ON_SHIP_OR_VEHICLE)
+    character: CHARACTER_ITEMS,
+    // Mêmes objets que le personnage, unicité comprise.
+    npc: CHARACTER_ITEMS,
+    // Pas faits pour être équipés.
+    creature: ["weapon", "armor", "injury", "talent"],
+    // « La plupart » des objets du personnage. Exclusion provisoire :
+    // origin, background, profession, substance (SYNTHETIC_EXCLUDED).
+    synthetic: without(CHARACTER_ITEMS, SYNTHETIC_EXCLUDED),
+    // Surtout armes et armures. gear, software, injury : détail provisoire.
+    drone: ["weapon", "armor", "gear", "software", "injury"],
+    vehicle: ["weapon", "armor", "gear", "software"],
+    ship: ["weapon", "armor", "gear", "software", "shipModule"]
   },
 
   /**
@@ -171,6 +180,17 @@ export const SOL = {
     piercing: "SOL.Weapon.ammoType.piercing",
     flechette: "SOL.Weapon.ammoType.flechette",
     none: "SOL.Weapon.ammoType.none"
+  },
+
+  /**
+   * Portée d'une arme portative, en paliers.
+   * Décision Marc 17/10/2026. Réf. LdR v0.2 §15 (courte, moyenne, longue).
+   * La distance en mètres n'est pas stockée : elle se note dans la description.
+   */
+  weaponRanges: {
+    short: "SOL.Weapon.range.short",
+    medium: "SOL.Weapon.range.medium",
+    long: "SOL.Weapon.range.long"
   },
 
   /** Joints de combinaison. Valeurs : Fiche v0.2 §4 (`intact`, `breached`). */
@@ -224,6 +244,17 @@ export const SOL = {
     serious: "SOL.Injury.severity.serious",
     critical: "SOL.Injury.severity.critical",
     mortal: "SOL.Injury.severity.mortal"
+  },
+
+  /**
+   * Type de séquelle. Chaque séquelle reste un objet à part.
+   * Décision Marc 17/10/2026. Réf. LdR v0.2 §15
+   * (radiation, déconditionnement, trauma).
+   */
+  sequelCategories: {
+    radiation: "SOL.Sequel.category.radiation",
+    deconditioning: "SOL.Sequel.category.deconditioning",
+    trauma: "SOL.Sequel.category.trauma"
   },
 
   /**

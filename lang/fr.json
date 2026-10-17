@@ -58,7 +58,6 @@
       "equipped": "Équipé"
     },
     "Hint": {
-      "metres": "mètres",
       "kg": "kg",
       "g": "g",
       "hours": "heures",
@@ -242,7 +241,12 @@
       "network": "Réseau"
     },
     "Sequel": {
-      "category": "Type",
+      "category": {
+        "label": "Type",
+        "radiation": "Radiation",
+        "deconditioning": "Déconditionnement",
+        "trauma": "Trauma"
+      },
       "permanent": "Permanente"
     },
     "ShipModule": {

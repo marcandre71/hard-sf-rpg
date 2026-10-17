@@ -34,8 +34,10 @@ system.json                         Manifeste : id, version 0.2.0, compatibilit�
                                     documentTypes avec htmlFields pour chaque HTMLField.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
                                     retrait des feuilles V1 du cœur, registerSheet, garde-fou.
-module/config.mjs                   Caractéristiques, characteristicFields, choix d'énumération,
-                                    actorTypes, itemTypes, allowedItems, uniqueOnCharacter.
+module/config.mjs                   Caractéristiques, characteristicFields (base max 60),
+                                    characteristicValueBounds (Actuelle 0 à 100),
+                                    choix d'énumération, actorTypes, itemTypes,
+                                    allowedItems, uniqueOnCharacter, uniqueItemActors.
 module/guards.mjs                   Hook preCreateItem : refuse un objet interdit, et un
                                     second origin / background / profession sur un personnage
                                     (y compris deux d'un coup dans le même appel).
@@ -45,7 +47,7 @@ module/data/base-item.mjs           Description HTML commune. Substance et Logic
 module/data/character.mjs           Personnage : caractéristiques + identité + textes.
 module/data/actors.mjs              PNJ, Créature, Synthétique, Drone, Véhicule, Vaisseau.
 module/data/skill.mjs               Compétence. Le score n'est pas calculé.
-module/data/weapon.mjs              Arme portative. Portée = { short, medium, long } en mètres.
+module/data/weapon.mjs              Arme portative. Portée = palier short / medium / long.
 module/data/armor.mjs               Armure/Vêtement.
 module/data/gear.mjs                Équipement.
 module/data/augmentation.mjs        Augmentation (genre : thérapie, prothèse, organe cultivé, héréditaire).
@@ -83,7 +85,7 @@ Les choix d'une liste (domaine, munition, genre d'augmentation, catégorie…) v
 
 - **Clés de code en anglais** : `character`, `ship`, `talent`, `background`, `base`, `origin`, `advance`, `temp`, `value`. Pas d'accent ni d'espace dans une clé stockée. Les docs utilisent ces clés (`ship`, pas `starship` ; `talent`, pas `asset` ; `background` pour le Milieu).
 - **Libellés en français via `lang/fr.json`** uniquement. Le code et les gabarits passent par `{{localize}}` ou par une clé (`SOL.Sheet.Character`, `TYPES.Actor.character`). On n'écrit pas de français en dur dans un `.mjs`, un `.hbs` ou un `.css` (les commentaires, si).
-- **Caractéristiques et leurs bornes** : `SOL.characteristics` et `SOL.characteristicFields` dans `module/config.mjs`. Le modèle et la feuille lisent ces objets. Ne pas recopier `1`, `100`, `-10`, `15` dans le gabarit ni dans `defineSchema`.
+- **Caractéristiques et leurs bornes** : `SOL.characteristics`, `SOL.characteristicFields` et `SOL.characteristicValueBounds` dans `module/config.mjs`. Le modèle et la feuille lisent ces objets. Ne pas recopier `1`, `60`, `0`, `100`, `-10`, `15` dans le gabarit ni dans `defineSchema`.
 - **Commentaires en français**, avec la source de la règle quand elle existe : `// Réf. LdR v0.2 §15`, `// Réf. Fiche v0.2 §4`. Un champ dont le type n'est pas écrit dans les docs porte `// À préciser : types non définis dans LdR v0.2`.
 - Identifiant du système, scope de `registerSheet` et nom du dossier Foundry : `sol-nouvelle-ere`.
 - Classes CSS de fenêtre : `sol`, `sol-nouvelle-ere`, puis `actor` / `item`.
@@ -99,36 +101,39 @@ Bornes actuelles (`SOL.characteristicFields`) :
 
 | Champ | Initial | Minimum | Maximum |
 |---|---|---|---|
-| `base` | 25 | 1 | 100 |
+| `base` | 25 | 1 | 60 |
 | `origin` | 0 | −10 | 15 |
 | `advance` | 0 | 0 | 10 |
 | `temp` | 0 | aucune | aucune |
 
-`value` n'est pas un champ du schéma. `prepareDerivedData` la recalcule : `base + origin + advance + temp`.
+Décision Marc 17/10/2026 : `base` plafonne à 60 (LdR v0.2 §9, 60 max avant origine). Le défaut reste 25.
+
+`value` n'est pas un champ du schéma. `prepareDerivedData` la recalcule puis la borne avec `SOL.characteristicValueBounds` : `Math.clamp(base + origin + advance + temp, 0, 100)`. Les champs stockés ne sont pas modifiés par ce plafond. Décision Marc 17/10/2026.
 Un `NumberField` hors bornes est **ramené silencieusement** à la borne la plus proche, sans message. Les `min` / `max` du HTML ne font que guider la saisie.
 
 ### Entiers et décimaux
 
-Choix provisoire, à valider par Marc (commentaire `// Entier ou décimal : choix provisoire, à valider par Marc` dans les modèles). Un nombre avec `step: 1` arrondit une décimale : ces champs sont donc `integer: true` explicitement.
+Décision Marc 17/10/2026 : dégâts, quantités, protections, coûts et âge sont des entiers (`integer: true`). Un nombre avec `step: 1` arrondit déjà une décimale.
 
-Entiers : âge ; formation (0 à 60, borne écrite Fiche v0.2 §4) ; dégâts et portée d'une arme ; protection et pénalités d'une armure ; quantité et bonus d'outils ; pénalité d'une blessure ; coût d'une augmentation ; coût en XP d'un atout ; modificateur de tolérance aux g. Les quatre champs de caractéristique le sont aussi (étape 1).
+Entiers aussi, sans nouvelle décision : formation (0 à 60, borne écrite Fiche v0.2 §4) ; pénalités d'armure et de blessure ; bonus d'outils ; modificateur de tolérance aux g ; les quatre champs de caractéristique. La portée d'une arme n'est plus un nombre : c'est un palier (`short`, `medium`, `long`).
 
-Décimaux : gravité natale, masse, encombrement, munitions (`value` / `max`), réserve d'équipement (`value` / `max`). La réserve d'air d'une combinaison reste décimale (heures).
+Décimaux, encore provisoires là où le commentaire le dit : gravité natale du personnage (pas sur l'objet Origine), masse, encombrement, munitions (`value` / `max`), réserve d'équipement (`value` / `max`), réserve d'air (heures).
 
 La feuille passe `type="number"` à chaque nombre. Sans ça, un champ qui a un minimum et un maximum (la Formation) s'affiche en curseur plus une case.
 
 ## Carte des objets autorisés
 
-`SOL.allowedItems` dans `module/config.mjs` est un **choix provisoire à valider par Marc**. Le hook `preCreateItem` s'en sert. Règles posées par la consigne de l'étape 2 :
+`SOL.allowedItems` dans `module/config.mjs` est une liste d'autorisation par type d'acteur. Décision Marc 17/10/2026. Le hook `preCreateItem` s'en sert.
 
-- `shipModule` uniquement sur `ship` ;
-- `ship` et `vehicle` : pas de skill, talent, origin, background, profession, injury, sequel, augmentation, substance ;
-- `drone` : pas de origin, background, profession, talent ;
-- origin, background et profession uniquement sur `character`, et au plus un de chaque (ça, c'est écrit : Fiche v0.2 §4).
+- `character` et `npc` : tous les objets sauf `shipModule`. Un seul `origin`, un seul `background`, une seule `profession` (`uniqueOnCharacter`, acteurs dans `uniqueItemActors`). Réf. Fiche v0.2 §4 pour le personnage.
+- `creature` : `weapon`, `armor`, `injury`, `talent` (pas faits pour être équipés).
+- `synthetic` : les objets du personnage sauf `origin`, `background`, `profession`, `substance`. Cette liste d'exclusion est encore un détail provisoire.
+- `drone` : `weapon`, `armor`, `gear`, `software`, `injury`. Surtout armes et armures ; `gear`, `software` et `injury` restent un détail provisoire.
+- `vehicle` : `weapon`, `armor`, `gear`, `software`. `ship` : les mêmes, plus `shipModule`. Inchangé.
 
-Le hook compte aussi les objets du même appel (`createEmbeddedDocuments` avec deux Origines) : ils partagent `options`, et `actor.items` ne les contient pas encore. Il ne voit pas les objets embarqués dans un acteur créé, dupliqué ou importé d'un bloc (seul `preCreateActor` est appelé). Il est ignoré si l'appelant passe `noHook: true`.
+Le hook compte aussi les objets du même appel (`createEmbeddedDocuments` avec deux Origines) : ils partagent `options`, et `actor.items` ne les contient pas encore. `seen.add` a lieu avant l'acceptation finale : si un autre hook refuse la première Origine, la deuxième du lot est quand même refusée (cas rare, accepté). Il ne voit pas les objets embarqués dans un acteur créé, dupliqué ou importé d'un bloc (seul `preCreateActor` est appelé). Il est ignoré si l'appelant passe `noHook: true`.
 
-Tout ce que ces règles n'interdisent pas est autorisé, y compris sur les types dont les docs ne précisent rien (PNJ, Créature, etc.). Ne pas durcir cette carte sans Marc.
+La gravité natale fait foi sur `character.identity.gravityNative`. L'objet Origine n'a pas ce champ (rien à migrer). La séquelle a une liste fermée `radiation` / `deconditioning` / `trauma` (LdR v0.2 §15) ; chaque séquelle reste un objet. La portée d'une arme est un palier, pas des mètres ; `migrateData` ramène un ancien objet `{ short, medium, long }` à `short`.
 
 ## Tester sous Foundry v14
 
@@ -161,7 +166,7 @@ node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f 
 node tests/models.test.mjs
 ```
 
-`tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts, avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
+`tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts (`validate()` doit renvoyer `true`), avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Si `FOUNDRY_PATH` est défini mais que le code commun ne se charge pas, le script s'arrête avec le code 1. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
 
 Puis le scénario manuel de [TESTER.md](TESTER.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
 

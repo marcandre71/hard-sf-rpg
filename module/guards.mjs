@@ -7,9 +7,9 @@
  *
  * Deux contrôles :
  * 1. le type doit être dans `CONFIG.SOL.allowedItems` pour cet acteur
- *    (carte provisoire, à valider par Marc — voir `module/config.mjs`) ;
- * 2. sur un personnage, un seul origin, un seul background, une seule
- *    profession (Fiche v0.2 §4).
+ *    (décision Marc 17/10/2026 — voir `module/config.mjs`) ;
+ * 2. sur un personnage ou un PNJ, un seul origin, un seul background,
+ *    une seule profession (Fiche v0.2 §4 ; le PNJ : décision Marc 17/10/2026).
  *
  * Le second contrôle suit aussi le lot en cours (`createEmbeddedDocuments`
  * avec deux Origines d'un coup) : les objets du même appel partagent
@@ -65,8 +65,8 @@ function onPreCreateItem(item, data, options, userId) {
     return false;
   }
 
-  // Réf. Fiche v0.2 §4 : un seul de chaque sur le personnage.
-  if ( actor.type === "character" && CONFIG.SOL.uniqueOnCharacter.includes(item.type) ) {
+  // Réf. Fiche v0.2 §4. Décision Marc 17/10/2026 : personnage et PNJ.
+  if ( CONFIG.SOL.uniqueItemActors.includes(actor.type) && CONFIG.SOL.uniqueOnCharacter.includes(item.type) ) {
     const key = `${actor.uuid}.${item.type}`;
     const seen = batchSeen(options);
     const already = actor.items.some(other => other.type === item.type) || seen.has(key);
@@ -74,6 +74,9 @@ function onPreCreateItem(item, data, options, userId) {
       notify(userId, "SOL.Warning.uniqueItem", { actor: actor.name, itemType });
       return false;
     }
+    // seen.add a lieu avant l'acceptation finale du document. Si un autre
+    // hook refuse la première Origine, la deuxième du même lot est quand
+    // même refusée. Cas rare, accepté pour l'instant.
     seen.add(key);
   }
 }

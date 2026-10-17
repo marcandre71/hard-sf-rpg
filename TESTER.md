@@ -73,15 +73,23 @@ Sur la feuille d'Ilka :
 
 ## 6. Valeur hors limites (pas de message d'erreur)
 
-Les bornes sont : Base 1 à 100, Origine −10 à +15, Progression 0 à 10. Temp. n'a pas de borne.
+Bornes **stockées** : Base 1 à 60, Origine −10 à +15, Progression 0 à 10. Temp. n'a pas de borne. L'**Actuelle** est calculée (Base + Origine + Progression + Temp.) puis ramenée entre **0 et 100**. Foundry **ne montre pas d'avertissement** : il ramène le nombre tout seul. Si la case garde le nombre tapé, fermez et rouvrez la fiche.
 
-Sur n'importe quelle ligne, tapez Base = `150`, puis Tab. Foundry **ne montre pas d'avertissement** : le nombre est ramené tout seul à la borne la plus proche, donc **100**. Même chose pour Origine = `20` → **15**, Origine = `-30` → **−10**.
+Tout se fait sur la ligne **FOR**, sauf la Progression (sur **VOL**). Départ d'Ilka : FOR Base 30, Origine −5, Progression 0, Temp. 0, Actuelle 25. VOL Base 35, Origine 0, Progression 1, Temp. 0, Actuelle 36. Ne testez pas l'Origine sur ADA : elle y vaut déjà +15, le plafond, et le changement ne se verrait pas.
 
-Pour Progression, faites le test sur **VOL** (Volonté). Chez Ilka cette case vaut déjà **1** (pas 0 : sur FOR, taper −3 ne se verrait pas, la case est déjà à 0). Tapez `-3`, puis Tab. Attendu : Progression **0**, et l'Actuelle de VOL passe à **35**. Si la case garde le nombre tapé, fermez et rouvrez la fiche : la valeur enregistrée doit être 0.
+1. Ligne **FOR**, Base = `80`, puis Tab. Attendu : Base **60** (pas 80, pas 100), Actuelle **55** (60 − 5).
+2. Remettez la Base de FOR à `30`. Actuelle **25**.
+3. Ligne **FOR**, Origine = `20`. Attendu : Origine **15**, Actuelle **45** (30 + 15).
+4. Toujours FOR, Origine = `-30`. Attendu : Origine **−10**, Actuelle **20** (30 − 10).
+5. Remettez l'Origine de FOR à `-5`. Actuelle **25**.
+6. Ligne **VOL**, Progression = `-3`. Attendu : Progression **0**, Actuelle de VOL **35**.
+7. Remettez la Progression de VOL à `1`. Actuelle de VOL **36**.
+8. Ligne **FOR**, Temp. = `-3`. Elle **reste −3**. Actuelle de FOR **22** (25 − 3).
+9. Temp. de FOR = `80`. Elle reste 80. Actuelle **100** (30 − 5 + 80 = 105, ramenée à 100).
+10. Temp. de FOR = `-40`. Elle reste −40. Actuelle **0** (30 − 5 − 40 = −25, ramenée à 0).
+11. Remettez la Temp. de FOR à `0`. Actuelle **25**. Le tableau est celui de l'étape 4.
 
-C'est le comportement normal du champ numérique : il ramène la valeur, il ne la refuse pas avec un message. Temp. sur FOR = `-3` doit **rester −3** (l'Actuelle de la Force baisse de 3). Remettez ensuite la Temp. de FOR à 0, la Progression de VOL à **1** (Actuelle 36), et Base / Origine aux valeurs du tableau.
-
-Âge, formation, dégâts, portée, protection, quantités et coûts sont des **entiers** : une décimale est ramenée au nombre entier le plus proche. Gravité natale, masse, encombrement, munitions et réserve d'un équipement **gardent la décimale**. C'est un choix provisoire, pas une règle écrite.
+Âge, dégâts, protection, quantités et coûts sont des **entiers** : une décimale est ramenée au nombre entier. La Formation aussi (0 à 60). La portée d'une arme n'est pas un nombre. Gravité natale (sur le personnage), masse, encombrement, munitions et réserve d'un équipement **gardent la décimale**.
 
 ## 7. Créer chaque type d'acteur
 
@@ -104,18 +112,18 @@ Onglet **Objets** (icône de sac) → **Créer un objet**. Le type proposé est 
 
 | Nom | Type | Champ à modifier |
 |---|---|---|
-| `Pilotage` | **Compétence** | Formation : case numérique (pas un curseur), tapez `10`. Domaine : la liste contient « Espace et vaisseaux », « Technique », « Sciences et médecine », « Combat », « Corps et terrain », « Relations », « Savoirs ». |
+| `Pilotage` | **Compétence** | Formation : case numérique (pas un curseur), tapez `10`. Domaine : la liste contient « Espace et vaisseaux », « Technique », « Sciences et médecine », « Combat », « Corps et terrain », « Relations », « Savoirs ». Le défaut est Technique : choisissez **Combat**. |
 | `Pied marin du vide` | **Atout** | Coût en XP : `15`. |
-| `Ceinture` | **Origine** | Gravité natale : `0,35` (si la virgule est refusée, tapez `0.35`). Particularité : un mot. |
+| `Ceinture` | **Origine** | Particularité : un mot. Il n'y a **pas** de case Gravité natale (elle est seulement sur le personnage). |
 | `Famille de sociétaires` | **Milieu** | Lien : un mot. Le type s'appelle **Milieu**, pas « Background ». |
 | `Ingénieure` | **Profession** | Réseau : un mot. |
-| `Pistolet à rivets` | **Arme** | Dégâts : `8`. Type de munitions : Frangible, Perforante, Fléchette, Aucune. Portée : trois cases Courte, Moyenne, Longue. |
-| `Combinaison souple` | **Armure/Vêtement** | Protection : Tête, Torse, Bras droit, Bras gauche, Jambe droite, Jambe gauche. Joints : Intacte ou Percée. |
-| `Kit d'ingénieure` | **Équipement** | Quantité : `1`. Bonus d'outils : `10`. |
-| `Thérapie ADN` | **Augmentation** | Genre : Thérapie, Prothèse, Organe cultivé, Héréditaire. |
+| `Pistolet à rivets` | **Arme** | Dégâts : `8`. Portée : une liste Courte, Moyenne, Longue (défaut Courte) — choisissez **Longue**. Dans Description, notez une distance indicative, par exemple `30 m`. Type de munitions : Frangible, Perforante, Fléchette, Aucune. |
+| `Combinaison souple` | **Armure/Vêtement** | Protection Tête : tapez `2` (le défaut est 0). Joints : Intacte ou Percée — choisissez **Percée**. |
+| `Kit d'ingénieure` | **Équipement** | Quantité : `2` (le défaut est déjà 1). Bonus d'outils : `10`. |
+| `Thérapie ADN` | **Augmentation** | Genre : Thérapie, Prothèse, Organe cultivé, Héréditaire. Le défaut est Thérapie : choisissez **Prothèse**. |
 | `Médicament` | **Substance** | Description seulement. |
-| `Brûlure` | **Blessure** | Localisation (Tête, Torse, bras, jambes) et Gravité (Légère, Grave, Critique, Mortelle). |
-| `Os fragiles` | **Séquelle** | Type : un mot. Case Permanente. |
+| `Brûlure` | **Blessure** | Localisation : choisissez **Torse**. Gravité : Légère, Grave, Critique, Mortelle — choisissez **Grave**. |
+| `Os fragiles` | **Séquelle** | Type : liste Radiation, Déconditionnement, Trauma (défaut Radiation). Choisissez **Déconditionnement**. Cochez Permanente. |
 | `Greffier` | **Logiciel** | Description seulement. |
 | `Propulseur` | **Module de vaisseau** | Type : un mot. État : un mot. |
 
@@ -128,6 +136,13 @@ Tous ces objets ont aussi une case **Description** en bas de la feuille.
 3. Une ligne « Compétence » apparaît. Cliquez son nom, mettez Formation à `20`, fermez la feuille de la compétence.
 4. Fermez Ilka, rouvrez-la : la compétence est toujours là.
 5. La liste **Créer** d'Ilka ne propose **pas** « Module de vaisseau ».
+6. La même liste, selon l'acteur :
+   - **Ilka** et **Cobaye PNJ** : les mêmes types, y compris Origine, Milieu et Profession. Pas de Module de vaisseau.
+   - **Cobaye Créature** : seulement Arme, Armure/Vêtement, Blessure, Atout.
+   - **Cobaye Synthétique** : comme Ilka, sauf Origine, Milieu, Profession et Substance.
+   - **Cobaye Drone** : Arme, Armure/Vêtement, Équipement, Logiciel, Blessure.
+   - **Cobaye Véhicule** : Arme, Armure/Vêtement, Équipement, Logiciel.
+   - **Cobaye Vaisseau** : les mêmes que le véhicule, plus Module de vaisseau.
 
 ## 10. Refus : Module de vaisseau sur un Personnage
 
@@ -142,6 +157,7 @@ Tous ces objets ont aussi une case **Description** en bas de la feuille.
 2. Créez une **deuxième** Origine de la même façon.
 3. Avertissement exact : `Ilka Moravec a déjà un objet « Origine ». Un seul est autorisé.` La deuxième n'est pas ajoutée.
 4. Même principe pour **Milieu** et **Profession** (inutile de tout refaire si Origine a fonctionné ; une vérification rapide suffit).
+5. Sur **Cobaye PNJ**, créez une Origine, puis une deuxième : elle est refusée de la même façon (le nom du PNJ remplace celui d'Ilka dans l'avertissement).
 
 ## 12. Liste de contrôle
 
@@ -149,12 +165,13 @@ Tous ces objets ont aussi une case **Description** en bas de la feuille.
 - [ ] La console montre `Sol, Nouvelle Ère | Initialisation du système`.
 - [ ] Ilka est un **Personnage**, son tableau de caractéristiques est celui de l'étape 1 (ou celui saisi à l'étape 4).
 - [ ] Les nouveaux champs d'identité s'enregistrent et survivent à F5.
-- [ ] Une valeur hors limites est ramenée sans message (Base 150 → 100).
+- [ ] Une valeur hors limites est ramenée sans message (FOR Base 80 → 60 ; Actuelle jamais sous 0 ni au-dessus de 100).
 - [ ] Les six autres types d'acteurs se créent avec leur nom français, sans caractéristiques inventées.
 - [ ] Véhicule : Terrestre / Maritime / Aérien. Vaisseau : Vaisseau / Station.
 - [ ] Les quatorze types d'objets se créent avec leur nom français (Atout, Milieu, Armure/Vêtement, Module de vaisseau…).
 - [ ] Glisser un Module de vaisseau sur Ilka est refusé, avec un avertissement.
-- [ ] Une deuxième Origine sur Ilka est refusée.
+- [ ] Une deuxième Origine sur Ilka est refusée, et aussi sur le PNJ.
+- [ ] Les listes **Créer** (créature, synthétique, drone, véhicule, vaisseau) sont celles de l'étape 9.
 - [ ] **Aucune ligne rouge** dans la console pendant tout le test.
 
 ## 13. Si quelque chose ne va pas
