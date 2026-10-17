@@ -27,6 +27,10 @@
     }
   },
   "SOL": {
+    "Migration": {
+      "done": "Biographie enregistrée pour {count} PNJ.",
+      "failed": "La migration des biographies de PNJ a échoué. Elle sera retentée au prochain chargement."
+    },
     "Sheet": {
       "Actor": "Feuille d'acteur (Sol, Nouvelle Ère)",
       "Item": "Feuille d'objet (Sol, Nouvelle Ère)",

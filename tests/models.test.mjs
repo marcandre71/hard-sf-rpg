@@ -234,6 +234,10 @@ if ( models.length !== 21 ) {
 }
 
 try {
+  const migratedNpc = new NpcData({ description: "x", notes: "" });
+  if ( ("description" in migratedNpc._source) || migratedNpc._source.biography !== "x" ) {
+    throw new Error("NpcData : _source ne doit plus avoir description, et biography doit valoir « x »");
+  }
   for ( const [label, Model] of models ) checkModel(Model, label);
   const sequel = checkModel(SequelData, "sequel");
   const shipModule = checkModel(ShipModuleData, "shipModule");

@@ -3,9 +3,12 @@
    Tout est sous .sol-nouvelle-ere (classe de la fenêtre). Pas de police externe. */
 
 /* AppV2 : la fenêtre elle-même est le <form>. Les parts sont directement
-   dans .window-content (pas un formulaire enfant). Une fenêtre trop petite
-   fait défiler ce contenu. */
-.sol-nouvelle-ere .window-content {
+   dans .window-content. Feuilles d'acteur seulement : classes
+   sol-nouvelle-ere et actor (DEFAULT_OPTIONS de CharacterSheet et
+   GenericActorSheet). Une fenêtre trop petite fait défiler ce contenu.
+   La feuille d'objet (classe item) n'a pas les onglets : le défilement
+   du cœur suffit. */
+.sol-nouvelle-ere.actor .window-content {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

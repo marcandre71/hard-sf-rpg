@@ -46,7 +46,7 @@ module/data/fields.mjs              Constructeurs de champs (html, string, numbe
 module/data/base-item.mjs           Description HTML commune. Substance et Logiciel s'arrêtent là.
 module/data/person.mjs              Schéma commun Personnage et PNJ.
 module/data/npc-migrate.mjs         PNJ étape 2 seulement (description + notes, sans biography).
-module/npc-ready-migration.mjs      Une fois par monde (MJ, migrationVersion) : retire system.description.
+module/npc-ready-migration.mjs      Une fois par monde (MJ actif, migrationVersion 2) : réécrit system.biography.
 module/data/character.mjs           Personnage : étend PersonData, pas de migration.
 module/data/actors.mjs              PNJ (migrateData), Créature, Synthétique, Drone, Véhicule, Vaisseau.
 module/data/skill.mjs               Compétence. Le score n'est pas calculé.
@@ -101,7 +101,7 @@ Renommer ou supprimer une clé **déjà stockée** (une caractéristique, `base`
 
 Ajouter un champ avec une valeur `initial` ne demande pas de migration : Foundry complète les documents existants au chargement. C'est le cas des champs d'identité ajoutés à l'étape 2 sur le Personnage de l'étape 1, et des caractéristiques d'un PNJ de l'étape 2 (Base 25, les autres à 0) quand il passe au schéma partagé.
 
-PNJ, étape 3 : `NpcData.migrateData` appelle `migrateNpcSource`. On ne recopie `description` dans `biography` que si la source a `description` et `notes`, et pas encore de clé `biography` (fiche étape 2). Une mise à jour partielle qui n'a que `description` ne crée pas de biographie. La clé `description` est toujours retirée de l'objet traité. `migrateData` ne réécrit pas à lui seul la base : au `ready`, le MJ le fait une fois (`migrationVersion`, `system.biography` et `system.-=description`) pour les PNJ de `game.actors` qui ont encore la clé. `htmlFields` du PNJ dans `system.json` est `biography` et `notes`, et non plus `description`.
+PNJ, étape 3 : `NpcData.migrateData` appelle `migrateNpcSource`. On ne recopie `description` dans `biography` que si la source a `description` et `notes`, et pas encore de clé `biography` (fiche étape 2). Une mise à jour partielle qui n'a que `description` ne crée pas de biographie. La clé `description` est toujours retirée de l'objet traité. `migrateData` ne réécrit pas à lui seul la base. Au chargement, `_initializeSource` a déjà migré `_source` : `description` n'y est plus. Au `ready`, le MJ actif force donc l'écriture de `system.biography` (`Actor.implementation.updateDocuments`, `diff: false`) pour les PNJ de `game.actors` qui ont une biographie. On n'efface pas `description` en base. Le réglage `migrationVersion` passe à 2 seulement si cette écriture réussit (le palier 1 ne réécrivait rien). `htmlFields` du PNJ dans `system.json` est `biography` et `notes`, et non plus `description`.
 
 Bornes actuelles (`SOL.characteristicFields`) :
 
