@@ -1,0 +1,45 @@
+{
+  "id": "sol-nouvelle-ere",
+  "title": "Sol, Nouvelle Ère",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 1 : squelette du système (caractéristiques du personnage uniquement).",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "Marc-André Potheret",
+      "url": "https://github.com/marcandre71/hard-sf-rpg"
+    }
+  ],
+  "url": "https://github.com/marcandre71/hard-sf-rpg",
+  "esmodules": ["module/sol.mjs"],
+  "styles": ["styles/sol.css"],
+  "languages": [
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": []
+      }
+    },
+    "Item": {}
+  },
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "socket": false,
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "hbs", "json"],
+      "paths": ["styles", "templates", "lang"]
+    }
+  }
+}

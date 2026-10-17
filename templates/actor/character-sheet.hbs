@@ -1,0 +1,46 @@
+{{!--
+  Feuille de personnage, étape 1 : nom, portrait, tableau des 9 caractéristiques.
+  Contexte fourni par CharacterSheet#_prepareContext (module/sheets/character-sheet.mjs).
+  data-action="editImage" est l'action portrait de DocumentSheetV2.
+  Les libellés passent par {{localize}} et lang/fr.json — pas de français en dur ici.
+--}}
+<section class="sol-sheet">
+  <header class="sol-header">
+    <img class="sol-portrait" src="{{actor.img}}" alt="{{actor.name}}"
+         data-action="editImage" data-edit="img" data-tooltip="{{localize 'SOL.Sheet.EditImage'}}">
+    <div class="sol-identity">
+      <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
+      <input id="{{rootId}}-name" type="text" name="name" value="{{actor.name}}"
+             placeholder="{{localize 'SOL.Sheet.Name'}}">
+    </div>
+  </header>
+
+  <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
+  <table class="sol-characteristics">
+    <thead>
+      <tr>
+        <th class="sol-col-name">{{localize "SOL.Sheet.Characteristic"}}</th>
+        <th>{{localize "SOL.Field.base"}}</th>
+        <th>{{localize "SOL.Field.origin"}}</th>
+        <th>{{localize "SOL.Field.advance"}}</th>
+        <th>{{localize "SOL.Field.temp"}}</th>
+        <th>{{localize "SOL.Field.value"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each characteristics as |c|}}
+      <tr data-characteristic="{{c.key}}">
+        <td class="sol-col-name">
+          <span class="sol-abbr">{{localize c.abbr}}</span>
+          <span class="sol-label">{{localize c.label}}</span>
+        </td>
+        <td><input type="number" name="{{c.path}}.base" value="{{c.base}}" min="1" max="100" step="1"></td>
+        <td><input type="number" name="{{c.path}}.origin" value="{{c.origin}}" min="-10" max="15" step="1"></td>
+        <td><input type="number" name="{{c.path}}.advance" value="{{c.advance}}" min="0" max="10" step="1"></td>
+        <td><input type="number" name="{{c.path}}.temp" value="{{c.temp}}" step="1"></td>
+        <td class="sol-value"><output>{{c.value}}</output></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</section>

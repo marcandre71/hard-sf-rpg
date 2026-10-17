@@ -1,0 +1,78 @@
+/* Sol, Nouvelle Ère — styles minimaux de la feuille de personnage (étape 1).
+   Chargé par la clé "styles" de system.json. Ne cible que les classes .sol
+   du gabarit templates/actor/character-sheet.hbs. */
+
+.sol .sol-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sol .sol-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sol .sol-portrait {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border: 1px solid var(--color-border, #7a7971);
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 0 0 96px;
+}
+
+.sol .sol-identity {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sol .sol-identity input[name="name"] {
+  font-size: 1.5rem;
+  height: auto;
+  padding: 0.25rem 0.5rem;
+}
+
+.sol .sol-section-title {
+  margin: 0;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--color-border, #7a7971);
+}
+
+.sol table.sol-characteristics {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.sol table.sol-characteristics th,
+.sol table.sol-characteristics td {
+  padding: 0.2rem 0.35rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.sol table.sol-characteristics .sol-col-name {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.sol .sol-abbr {
+  display: inline-block;
+  min-width: 2.75rem;
+  font-weight: bold;
+}
+
+.sol table.sol-characteristics input[type="number"] {
+  width: 4rem;
+  text-align: center;
+}
+
+.sol .sol-value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}

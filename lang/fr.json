@@ -1,0 +1,34 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Personnage"
+    }
+  },
+  "SOL": {
+    "Sheet": {
+      "Character": "Feuille de personnage (Sol, Nouvelle Ère)",
+      "Name": "Nom",
+      "EditImage": "Changer le portrait",
+      "Characteristics": "Caractéristiques",
+      "Characteristic": "Caractéristique"
+    },
+    "Field": {
+      "base": "Base",
+      "origin": "Origine",
+      "advance": "Progression",
+      "temp": "Temp.",
+      "value": "Actuelle"
+    },
+    "Characteristic": {
+      "for": { "label": "Force", "abbr": "FOR" },
+      "con": { "label": "Constitution", "abbr": "CON" },
+      "coo": { "label": "Coordination", "abbr": "COO" },
+      "ref": { "label": "Réflexes", "abbr": "RÉF" },
+      "ada": { "label": "Adaptation spatiale", "abbr": "ADA" },
+      "per": { "label": "Perception", "abbr": "PER" },
+      "int": { "label": "Intellect", "abbr": "INT" },
+      "vol": { "label": "Volonté", "abbr": "VOL" },
+      "pre": { "label": "Présence", "abbr": "PRÉ" }
+    }
+  }
+}

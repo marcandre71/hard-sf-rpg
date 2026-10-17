@@ -1,0 +1,13 @@
+# Systèmes d'exploitation / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dépendances et builds éventuels
+node_modules/
+dist/
+*.zip
+
+# Journaux
+*.log
