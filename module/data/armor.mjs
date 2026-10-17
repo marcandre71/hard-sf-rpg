@@ -16,7 +16,7 @@ export class ArmorData extends BaseItemData {
   static defineSchema() {
     const protection = {};
     for ( const [key, label] of Object.entries(SOL.bodyLocations) ) {
-      protection[key] = numberField(label, { initial: 0, integer: true, step: 1 });
+      protection[key] = numberField(label, { initial: 0, step: 1 });
     }
 
     return {
@@ -31,8 +31,8 @@ export class ArmorData extends BaseItemData {
         choices: SOL.sealStates
       }),
       penalty: new SchemaField({
-        manipulation: numberField("SOL.Armor.penalty.manipulation", { initial: 0, integer: true, step: 1 }),
-        perception: numberField("SOL.Armor.penalty.perception", { initial: 0, integer: true, step: 1 })
+        manipulation: numberField("SOL.Armor.penalty.manipulation", { initial: 0, step: 1 }),
+        perception: numberField("SOL.Armor.penalty.perception", { initial: 0, step: 1 })
       }, { label: "SOL.Armor.penalty.label" }),
       dosimeter: boolField("SOL.Armor.dosimeter", false),
       radio: boolField("SOL.Armor.radio", false),

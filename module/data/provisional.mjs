@@ -26,7 +26,7 @@ export class TalentData extends BaseItemData {
     return {
       ...super.defineSchema(),
       // À préciser : types non définis dans LdR v0.2.
-      xpCost: numberField("SOL.Talent.xpCost", { initial: 0, integer: true, step: 1 }),
+      xpCost: numberField("SOL.Talent.xpCost", { initial: 0, step: 1 }),
       // À préciser : types non définis dans LdR v0.2.
       prerequisites: stringField("SOL.Talent.prerequisites"),
       // À préciser : types non définis dans LdR v0.2. Texte seulement (pas d'ActiveEffect).

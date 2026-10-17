@@ -25,7 +25,7 @@ export class WeaponData extends BaseItemData {
         long: numberField("SOL.Weapon.range.long", { initial: 0, step: 0.01, hint: "SOL.Hint.metres" })
       }, { label: "SOL.Weapon.range.label" }),
       recoil: boolField("SOL.Weapon.recoil", false),
-      ammo: valueMaxField("SOL.Weapon.ammo", { integer: true }),
+      ammo: valueMaxField("SOL.Weapon.ammo"),
       ammoType: stringField("SOL.Weapon.ammoType.label", {
         initial: "frangible",
         blank: false,

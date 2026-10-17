@@ -75,7 +75,6 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         bloc: stringField("SOL.Character.bloc"),
         age: numberField("SOL.Character.age", {
           initial: 25,
-          integer: true,
           step: 1,
           hint: "SOL.Hint.years"
         }),
