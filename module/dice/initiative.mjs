@@ -162,10 +162,9 @@ export function interruptTiming(index, turn) {
 }
 
 /**
- * « Se replacer » suit la même règle que l'interruption.
+ * Index actuel de « se replacer », même règle que l'interruption.
+ * Le rang d'arrivée est décidé par `repositionPlacement`.
  * // À confirmer par Marc : effet immédiat ou au round suivant.
- * Actif ou déjà joué : le nouveau rang est stocké (`pendingInitiative`)
- * et posé au round suivant. Pas encore joué : écriture immédiate.
  *
  * @param {number} index
  * @param {number|null|undefined} turn
@@ -173,6 +172,91 @@ export function interruptTiming(index, turn) {
  */
 export function repositionTiming(index, turn) {
   return interruptTiming(index, turn);
+}
+
+/**
+ * Index qu'aurait `id` si son initiative devenait `initiative`.
+ *
+ * @param {Array<{ id: string, initiative: number|null }>} sorted
+ * @param {string} id
+ * @param {number} initiative
+ * @returns {number}
+ */
+export function indexAfterRoll(sorted, id, initiative) {
+  const next = sortByInitiative(sorted.map(entry => (
+    entry.id === id ? { id, initiative } : { id: entry.id, initiative: entry.initiative }
+  )));
+  return next.findIndex(entry => entry.id === id);
+}
+
+/**
+ * « Se replacer », et « Relancer » du cœur en cours de round.
+ * // À confirmer par Marc : effet immédiat ou au round suivant.
+ * Actif ou déjà joué : au round suivant.
+ * Pas encore joué, mais le nouveau rang tombe sur le tour actif ou
+ * avant : au round suivant, sinon il prend le tour et l'actif rejoue.
+ * Sinon : tout de suite.
+ *
+ * @param {number} currentIndex
+ * @param {number} newIndex
+ * @param {number|null|undefined} turn
+ * @returns {"defer"|"now"}
+ */
+export function repositionPlacement(currentIndex, newIndex, turn) {
+  if ( repositionTiming(currentIndex, turn) === "defer" ) return "defer";
+  if ( typeof turn !== "number" || !Number.isFinite(turn) ) return "now";
+  if ( typeof newIndex !== "number" || newIndex < 0 ) return "now";
+  return newIndex <= turn ? "defer" : "now";
+}
+
+/** Portée des drapeaux d'initiative sur le combattant. */
+export const INITIATIVE_FLAG_SCOPE = "sol-nouvelle-ere";
+
+/**
+ * Ce que `resetAll` doit retirer. Le cœur (v13) écrit le combat
+ * avec `diff: false` : `Combatant._preUpdate` ne tourne pas, et un
+ * `pendingInitiative` resté en place reposerait l'ancien jet.
+ *
+ * @returns {{ deferStep: false, deferEnd: false, delete: string[] }}
+ */
+export function flagsClearedByReset() {
+  return {
+    deferStep: false,
+    deferEnd: false,
+    delete: ["rank", "pendingInitiative"]
+  };
+}
+
+/**
+ * Suppression d'une clé de drapeau.
+ * v14 : la valeur est `foundry.data.operators.ForcedDeletion`
+ * (`-=` est déprécié, issue 13090, encore accepté jusqu'en v16).
+ * Sans opérateur : repli v13 `-=`.
+ *
+ * @param {string} key
+ * @param {object|null|undefined} operator
+ * @returns {object}
+ */
+export function flagDeletionUpdate(key, operator) {
+  if ( operator ) return { [`flags.${INITIATIVE_FLAG_SCOPE}.${key}`]: operator };
+  return { [`flags.${INITIATIVE_FLAG_SCOPE}.-=${key}`]: null };
+}
+
+/**
+ * Écriture des drapeaux pour `resetAll`, avant `super`.
+ *
+ * @param {object|null|undefined} operator `ForcedDeletion`, ou null en v13.
+ * @returns {object}
+ */
+export function resetAllFlagUpdate(operator) {
+  const spec = flagsClearedByReset();
+  /** @type {object} */
+  const data = {
+    [`flags.${INITIATIVE_FLAG_SCOPE}.deferStep`]: spec.deferStep,
+    [`flags.${INITIATIVE_FLAG_SCOPE}.deferEnd`]: spec.deferEnd
+  };
+  for ( const key of spec.delete ) Object.assign(data, flagDeletionUpdate(key, operator));
+  return data;
 }
 
 /**
@@ -246,8 +330,8 @@ export function resolveDeferred(sorted) {
   order = sortByInitiative(order);
 
   const stepIds = new Set(sorted.filter(entry => entry.deferStep).map(entry => entry.id));
-  for ( let i = order.length - 1; i >= 0; i -= 1 ) {
-    const id = order[i].id;
+  // Copie figée : le tri après chaque recul ne doit pas changer qui est traité.
+  for ( const id of order.map(entry => entry.id).reverse() ) {
     if ( !stepIds.has(id) ) continue;
     const changes = stepBack(order, id);
     if ( !changes ) continue;
@@ -331,11 +415,16 @@ export function stepBack(sorted, id) {
   const next = sorted[index + 1].initiative;
   if ( !isRank(current) || !isRank(next) ) return null;
   if ( current !== next ) {
-    const higher = Math.max(current, next);
-    const lower = Math.min(current, next);
+    // Échanger les deux nombres ferait entrer le suivant dans le groupe
+    // d'égalité de ceux qui précèdent. Le tri par id le remonterait
+    // alors de plusieurs places. On les pose juste sous la valeur
+    // actuelle, dans l'écart avec le combattant d'après.
+    const after = sorted[index + 2]?.initiative;
+    const gap = isRank(after) ? current - after : 1;
+    const step = gap > 0 ? Math.min(0.001, gap / 3) : 0.001;
     return [
-      { id: sorted[index + 1].id, initiative: higher },
-      { id, initiative: lower }
+      { id: sorted[index + 1].id, initiative: current - step },
+      { id, initiative: current - 2 * step }
     ];
   }
 

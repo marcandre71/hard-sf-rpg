@@ -10,9 +10,13 @@ import {
   compareByFoundryInitiative,
   deferToEnd,
   encodeInitiative,
+  flagDeletionUpdate,
+  indexAfterRoll,
   INITIATIVE_SUCCESS_BASE,
   interruptTiming,
+  repositionPlacement,
   repositionTiming,
+  resetAllFlagUpdate,
   resolveDeferred,
   reflexScore,
   severityDefers,
@@ -327,6 +331,121 @@ check("pendingInitiative puis fin d'ordre, une seule passe", () => {
     initiative: updates.find(update => update.id === entry.id)?.initiative ?? entry.initiative
   })));
   assert.deepEqual(again, []);
+});
+
+check("recul : égalité devant, le suivant ne remonte pas", () => {
+  const sorted = [
+    { id: "m1", initiative: 40 },
+    { id: "m2", initiative: 40 },
+    { id: "P", initiative: 30 }
+  ];
+  const changes = stepBack(sorted, "m2");
+  assert.deepEqual(orderAfter(sorted, changes), ["m1", "P", "m2"]);
+  assert.deepEqual(changes.map(change => change.id).sort(), ["P", "m2"]);
+});
+
+check("recul : fin d'un groupe d'égalité, les précédents restent", () => {
+  const sorted = [
+    { id: "B2", initiative: 40 },
+    { id: "a1", initiative: 40 },
+    { id: "c3", initiative: 40 },
+    { id: "e5", initiative: 40 },
+    { id: "D4", initiative: 30 }
+  ];
+  const changes = stepBack(sorted, "e5");
+  assert.deepEqual(orderAfter(sorted, changes), ["B2", "a1", "c3", "D4", "e5"]);
+  assert.deepEqual(changes.map(change => change.id).sort(), ["D4", "e5"]);
+});
+
+/**
+ * @param {number} seed
+ * @returns {() => number}
+ */
+function mulberry32(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(state ^ (state >>> 15), 1 | state);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * @param {Array<{ id: string, initiative: number }>} sorted
+ * @param {Array<{ id: string, initiative?: number }>} updates
+ * @returns {string[]}
+ */
+function orderFromUpdates(sorted, updates) {
+  const values = new Map(sorted.map(entry => [entry.id, entry.initiative]));
+  for ( const update of updates ) {
+    if ( typeof update.initiative === "number" ) values.set(update.id, update.initiative);
+  }
+  return sortByInitiative([...values].map(([id, initiative]) => ({ id, initiative })))
+    .map(entry => entry.id);
+}
+
+check("égalités aléatoires : aucun tiers ne change de place", () => {
+  const random = mulberry32(0x5e7);
+  for ( let n = 0; n < 80; n += 1 ) {
+    const count = 3 + Math.floor(random() * 6);
+    const sorted = [];
+    for ( let i = 0; i < count; i += 1 ) {
+      const tied = i > 0 && random() < 0.65;
+      sorted.push({
+        id: `n${n}i${i}`,
+        initiative: tied ? sorted[i - 1].initiative : 50 - i
+      });
+    }
+    const index = Math.floor(random() * (count - 1));
+    const id = sorted[index].id;
+    const nextId = sorted[index + 1].id;
+    const changes = stepBack(sorted, id);
+    const expected = sorted.map(entry => entry.id);
+    expected[index] = nextId;
+    expected[index + 1] = id;
+    assert.deepEqual(orderAfter(sorted, changes), expected);
+    if ( sorted[index].initiative !== sorted[index + 1].initiative ) {
+      assert.deepEqual(changes.map(change => change.id).sort(), [id, nextId].sort());
+    }
+    const flagged = sorted.map(entry => ({ ...entry, deferStep: entry.id === id }));
+    assert.deepEqual(orderFromUpdates(sorted, resolveDeferred(flagged)), expected);
+  }
+});
+
+check("se replacer devant l'actif : au round suivant", () => {
+  const order = [
+    { id: "A", initiative: 30 },
+    { id: "B", initiative: 20 },
+    { id: "C", initiative: 10 },
+    { id: "D", initiative: 5 }
+  ];
+  const ahead = indexAfterRoll(order, "C", 40);
+  assert.equal(ahead, 0);
+  assert.equal(repositionPlacement(2, ahead, 0), "defer");
+  const behind = indexAfterRoll(order, "C", 15);
+  assert.equal(behind, 2);
+  assert.equal(repositionPlacement(2, behind, 0), "now");
+});
+
+check("resetAll retire rank, pending, recul et fin d'ordre", () => {
+  const marker = { op: "ForcedDeletion" };
+  const v14 = resetAllFlagUpdate(marker);
+  assert.equal(v14["flags.sol-nouvelle-ere.deferStep"], false);
+  assert.equal(v14["flags.sol-nouvelle-ere.deferEnd"], false);
+  assert.equal(v14["flags.sol-nouvelle-ere.rank"], marker);
+  assert.equal(v14["flags.sol-nouvelle-ere.pendingInitiative"], marker);
+  assert.equal(v14["flags.sol-nouvelle-ere.-=rank"], undefined);
+  const v13 = resetAllFlagUpdate(null);
+  assert.equal(v13["flags.sol-nouvelle-ere.-=rank"], null);
+  assert.equal(v13["flags.sol-nouvelle-ere.-=pendingInitiative"], null);
+  assert.equal(v13["flags.sol-nouvelle-ere.rank"], undefined);
+  assert.deepEqual(flagDeletionUpdate("rank", null), { "flags.sol-nouvelle-ere.-=rank": null });
+  const cleared = [
+    { id: "a", initiative: null, deferStep: false, deferEnd: false, pendingInitiative: null },
+    { id: "b", initiative: 5 }
+  ];
+  assert.deepEqual(resolveDeferred(cleared), []);
 });
 
 check("modes de carte v13 et v14", () => {

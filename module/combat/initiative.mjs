@@ -18,10 +18,12 @@
  *
  * Les déplacements reportés partent dans `nextRound`, avant `super`,
  * quand le client est le MJ actif : une seule écriture, avant que le
- * nouveau round ne désigne l'ancien premier. Si c'est un joueur qui
- * passe le round, `_onStartRound` (MJ désigné, après l'écriture) sert
- * de secours. Les drapeaux sont retirés dans la même écriture : pas
- * de second passage.
+ * nouveau round ne désigne l'ancien premier. `turnEvents: false` évite
+ * un début ou une fin de tour en trop. Si c'est un joueur qui passe le
+ * round, `_onStartRound` (MJ désigné, après l'écriture) sert de secours,
+ * sans `turnEvents: false`. Les drapeaux sont retirés dans la même
+ * écriture : un second passage est vide. Sans MJ connecté, Foundry
+ * n'appelle pas `_onStartRound` : les drapeaux attendent son retour.
  *
  * `Combatant._preUpdateOperation` conserve le combattant actif quand
  * l'initiative change. Pour garder l'index du tour, on passe
@@ -39,8 +41,12 @@ import { SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import {
   encodeInitiative,
+  flagDeletionUpdate,
+  indexAfterRoll,
+  INITIATIVE_FLAG_SCOPE,
   interruptTiming,
-  repositionTiming,
+  repositionPlacement,
+  resetAllFlagUpdate,
   resolveDeferred,
   reflexScore,
   shouldClearRank,
@@ -50,13 +56,13 @@ import {
 } from "../dice/initiative.mjs";
 import { rollChoice } from "../dice/roll-dialog.mjs";
 
-const SYSTEM_ID = "sol-nouvelle-ere";
+const SYSTEM_ID = INITIATIVE_FLAG_SCOPE;
 
 /** Marque une écriture du système : le drapeau `rank` n'est pas effacé. */
 const SYSTEM_WRITE = "solInitiativeWrite";
 
-/** Ce client a déjà appliqué les déplacements dans `nextRound`. */
-const deferredApplied = new WeakSet();
+/** Posé dans `preUpdateActiveEffect`, lu dans `updateActiveEffect`. */
+const STUNNED_ADDED = "solStunnedAdded";
 
 /** Condition Sonné. Réf. LdR v0.2 §7. L'effet est un rappel, pas une règle jouée par le logiciel. */
 export const STUNNED = "sol-nouvelle-ere.stunned";
@@ -144,6 +150,29 @@ function keepTurn(combat) {
 }
 
 /**
+ * v14 : `foundry.data.operators.ForcedDeletion.create()` (doc v14,
+ * `-=` déprécié, issue 13090). Sinon le singleton `_del`. Sinon null :
+ * `flagDeletionUpdate` retombe sur `-=`.
+ *
+ * @returns {object|null}
+ */
+function deletionOperator() {
+  const ForcedDeletion = globalThis.foundry?.data?.operators?.ForcedDeletion;
+  if ( typeof ForcedDeletion?.create === "function" ) return ForcedDeletion.create();
+  if ( globalThis._del ) return globalThis._del;
+  if ( typeof ForcedDeletion === "function" ) return new ForcedDeletion();
+  return null;
+}
+
+/**
+ * @param {string} key
+ * @returns {object}
+ */
+function withoutFlag(key) {
+  return flagDeletionUpdate(key, deletionOperator());
+}
+
+/**
  * @param {Combat} combat
  * @returns {Array<{ id: string, initiative: number|null }>}
  */
@@ -159,9 +188,10 @@ function turnOrder(combat) {
  * Ne fait rien s'il n'y a aucun drapeau : le second passage est vide.
  *
  * @param {Combat} combat
+ * @param {{ turnEvents?: boolean }} [options] `turnEvents: false` dans `nextRound` seulement.
  * @returns {Promise<void>}
  */
-async function applyDeferred(combat) {
+async function applyDeferred(combat, { turnEvents = true } = {}) {
   if ( !game.user.isActiveGM ) return;
   const sorted = combat.turns.map(combatant => ({
     id: combatant.id,
@@ -177,15 +207,15 @@ async function applyDeferred(combat) {
     const data = { _id: entry.id };
     if ( entry.clearStep ) data[`flags.${SYSTEM_ID}.deferStep`] = false;
     if ( entry.clearEnd ) data[`flags.${SYSTEM_ID}.deferEnd`] = false;
-    if ( entry.clearPending ) data[`flags.${SYSTEM_ID}.-=pendingInitiative`] = null;
+    if ( entry.clearPending ) Object.assign(data, withoutFlag("pendingInitiative"));
     if ( entry.rank ) data[`flags.${SYSTEM_ID}.rank`] = entry.rank;
     if ( typeof entry.initiative === "number" ) data.initiative = entry.initiative;
     return data;
   });
-  await combat.updateEmbeddedDocuments("Combatant", updates, {
-    ...keepTurn(combat),
-    [SYSTEM_WRITE]: true
-  });
+  /** @type {object} */
+  const operation = { ...keepTurn(combat), [SYSTEM_WRITE]: true };
+  if ( turnEvents === false ) operation.turnEvents = false;
+  await combat.updateEmbeddedDocuments("Combatant", updates, operation);
 }
 
 /**
@@ -246,8 +276,7 @@ export class SolCombatant extends Combatant {
       systemWrite: options?.[SYSTEM_WRITE] === true,
       setsRank: updateSetsRank(changes)
     }) ) {
-      changes[`flags.${SYSTEM_ID}.-=rank`] = null;
-      changes[`flags.${SYSTEM_ID}.-=pendingInitiative`] = null;
+      Object.assign(changes, withoutFlag("rank"), withoutFlag("pendingInitiative"));
     }
     return super._preUpdate(changes, options, user);
   }
@@ -330,10 +359,15 @@ export class SolCombat extends Combat {
         ref
       });
       const rank = { success: outcome.success, dr: outcome.dr, de: outcome.de, ref };
-      const index = this.turns.findIndex(entry => entry.id === id);
+      const order = turnOrder(this);
+      const index = order.findIndex(entry => entry.id === id);
+      const newIndex = indexAfterRoll(order, id, initiative);
+      // « Se replacer », ou « Relancer » du cœur pendant le round.
       // À confirmer par Marc : effet immédiat ou au round suivant.
-      const deferPlace = options.reposition === true
-        && repositionTiming(index, this.turn) === "defer";
+      const likeReposition = options.reposition === true
+        || (this.started === true && list.length === 1);
+      const deferPlace = likeReposition
+        && repositionPlacement(index, newIndex, this.turn) === "defer";
       if ( deferPlace ) {
         updates.push({
           _id: id,
@@ -344,20 +378,22 @@ export class SolCombat extends Combat {
           _id: id,
           initiative,
           [`flags.${SYSTEM_ID}.rank`]: rank,
-          [`flags.${SYSTEM_ID}.-=pendingInitiative`]: null
+          ...withoutFlag("pendingInitiative")
         });
       }
     }
     if ( updates.length ) {
       const wroteInitiative = updates.some(update => Object.prototype.hasOwnProperty.call(update, "initiative"));
-      // updateTurn false, ou « se replacer » immédiat : garder l'index.
+      const likeReposition = options.reposition === true
+        || (this.started === true && list.length === 1);
+      // updateTurn false, ou remplacement immédiat : garder l'index.
       // Sinon le cœur suit le combattant.
-      const keepIndex = options.updateTurn === false || (options.reposition === true && wroteInitiative);
+      const keepIndex = options.updateTurn === false || (likeReposition && wroteInitiative);
       await this.updateEmbeddedDocuments("Combatant", updates, {
         ...(keepIndex ? keepTurn(this) : {}),
         [SYSTEM_WRITE]: true
       });
-      if ( wroteInitiative && options.reposition !== true && options.updateTurn !== false && previousId ) {
+      if ( wroteInitiative && !likeReposition && options.updateTurn !== false && previousId ) {
         const turn = this.turns.findIndex(entry => entry.id === previousId);
         if ( turn >= 0 && turn !== this.turn ) await this.update({ turn });
       }
@@ -366,24 +402,38 @@ export class SolCombat extends Combat {
   }
 
   /**
+   * Le cœur (v13) écrit `{ combatants }` avec `diff: false`.
+   * `Combatant._preUpdate` ne tourne pas : on retire les drapeaux avant.
+   *
+   * @override
+   * @param {{ updateTurn?: boolean }} [options]
+   * @returns {Promise<Combat>}
+   * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html#resetAll
+   */
+  async resetAll(options) {
+    const data = resetAllFlagUpdate(deletionOperator());
+    const updates = this.combatants.map(combatant => ({ _id: combatant.id, ...data }));
+    if ( updates.length ) await this.updateEmbeddedDocuments("Combatant", updates);
+    return super.resetAll(options);
+  }
+
+  /**
    * Déplacements reportés avant le nouveau round, chez le MJ actif.
-   * Une seule écriture : l'ancien premier n'est pas réactivé.
-   * Réf. LdR v0.2 §7.
+   * Une seule écriture, sans événement de tour : l'ancien premier
+   * n'est pas réactivé. Réf. LdR v0.2 §7.
    *
    * @override
    * @returns {Promise<Combat>}
    */
   async nextRound() {
-    if ( game.user.isActiveGM ) {
-      await applyDeferred(this);
-      deferredApplied.add(this);
-    }
+    if ( game.user.isActiveGM ) await applyDeferred(this, { turnEvents: false });
     return super.nextRound();
   }
 
   /**
    * Secours : un joueur a passé le round, le MJ actif n'a pas écrit
    * dans `nextRound`. Les drapeaux déjà retirés ne produisent rien.
+   * Sans MJ connecté, ce hook n'est pas appelé : les drapeaux attendent.
    * Réf. LdR v0.2 §7.
    *
    * @override
@@ -393,7 +443,6 @@ export class SolCombat extends Combat {
    */
   async _onStartRound(context) {
     await super._onStartRound(context);
-    if ( deferredApplied.delete(this) ) return;
     await applyDeferred(this);
   }
 }
@@ -517,16 +566,29 @@ function onStunned(effect) {
  *
  * @param {ActiveEffect} effect
  * @param {object} changes
+ * @param {object} options
  * @returns {void}
  */
-function onStunnedPreUpdate(effect, changes) {
+function onStunnedPreUpdate(effect, changes, options) {
   if ( effectHasStatus(effect, STUNNED) ) return;
   const statuses = changes?.statuses;
   const added = typeof statuses?.has === "function"
     ? statuses.has(STUNNED)
     : Array.isArray(statuses) && statuses.includes(STUNNED);
-  if ( !added ) return;
-  // L'effet n'a pas encore le statut : preUpdate voit l'ancien état.
+  if ( !added || !options ) return;
+  // preUpdate ne tourne que chez le demandeur. La marque part avec
+  // l'opération : updateActiveEffect la lit sur tous les clients.
+  options[STUNNED_ADDED] = true;
+}
+
+/**
+ * @param {ActiveEffect} effect
+ * @param {object} changes
+ * @param {object} options
+ * @returns {void}
+ */
+function onStunnedUpdate(effect, changes, options) {
+  if ( options?.[STUNNED_ADDED] !== true ) return;
   flagStunned(effect.parent);
 }
 
@@ -548,5 +610,6 @@ export function registerInitiative() {
   );
   Hooks.on("createActiveEffect", onStunned);
   Hooks.on("preUpdateActiveEffect", onStunnedPreUpdate);
+  Hooks.on("updateActiveEffect", onStunnedUpdate);
   Hooks.once("ready", localizeStunnedHint);
 }
