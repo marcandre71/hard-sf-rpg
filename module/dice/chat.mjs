@@ -30,10 +30,16 @@ const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
  * @returns {object}
  */
 function applyClientVisibility(chatData) {
-  if ( typeof ChatMessage.applyMode === "function" ) return ChatMessage.applyMode(chatData);
+  // applyMode et applyRollMode modifient chatData. On ne se fie pas à leur
+  // valeur de retour : on renvoie l'objet qu'on leur a passé.
+  if ( typeof ChatMessage.applyMode === "function" ) {
+    ChatMessage.applyMode(chatData);
+    return chatData;
+  }
   const hasRollMode = game.settings.settings.has("core.rollMode");
   if ( hasRollMode && typeof ChatMessage.applyRollMode === "function" ) {
-    return ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+    ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+    return chatData;
   }
   return chatData;
 }

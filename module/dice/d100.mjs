@@ -85,6 +85,7 @@ function isDouble(die) {
  * un double > score modifié est un échec critique.
  * Décision Marc 18/10/2026 : le double se compare au score modifié.
  * Décision Marc 18/10/2026 : DR et DE ne descendent pas sous 0.
+ * Décision Marc 18/10/2026 : 18 % de critiques par jet (01–05, 96–00, doubles 11–88), voulu.
  *
  * @param {number} die
  * @param {number} target

@@ -251,7 +251,7 @@ async function toggleEquipped(event, target) {
   const id = target.closest("[data-item-id]")?.dataset.itemId;
   const item = this.document.items.get(id);
   if ( !item || item.type !== "weapon" ) return;
-  await item.update({ "system.equipped": !item.system.equipped });
+  await item.update({ "system.equipped": Boolean(input.checked) });
 }
 
 /**

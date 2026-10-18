@@ -36,7 +36,7 @@ Ouvrez **Ilka Moravec**, onglet **Principal**.
 - **DR** (degrés de réussite) si ça réussit, **DE** (degrés d'échec) sinon. Un 0 est une réussite de justesse, ou un échec sans gravité.
 
 4. Relancez FOR. Choisissez **Extrême (−40)** et mettez le modificateur à **−20**. Le total affiché doit être **−50** (plafonné), pas −60. Lancez. La carte reprend Extrême, modificateur −20, total −50, et un score visé égal à l'Actuelle moins 50.
-5. En bas de la discussion, ouvrez le menu du mode de message et choisissez **Jet privé (MJ)**. Relancez FOR. La carte n'est visible que pour le MJ. Remettez **Public** ensuite.
+5. Un MJ seul voit toujours sa propre carte : cela ne prouve pas que les joueurs ne la voient pas. Dans le menu de visibilité des jets en bas du chat, choisissez le mode réservé au MJ, puis relancez FOR. Vérifiez avec un compte joueur connecté dans un autre navigateur, ou que la carte est marquée comme jet privé (icône ou mention). Remettez ensuite le mode public.
 
 ## 3. Compétence
 
@@ -65,7 +65,7 @@ Ouvrez **Cobaye PNJ** (ou créez un acteur **PNJ**). Dans le tableau, mettez la 
 - [ ] Version **0.4.0**, aucune ligne rouge dans la console.
 - [ ] FOR en Normale envoie une carte lisible. Annuler n'envoie rien.
 - [ ] Extrême et modificateur −20 : total **−50** dans la fenêtre et sur la carte.
-- [ ] Mode **Jet privé (MJ)** (menu en bas du chat) : la carte n'est visible que du MJ.
+- [ ] Menu de visibilité des jets en bas du chat, mode réservé au MJ : un joueur dans un autre navigateur ne voit pas la carte, ou la carte est marquée comme jet privé (icône ou mention). Un MJ seul la voit toujours.
 - [ ] Pilotage, formation requise, formation 0 : COO 45 → score **23**.
 - [ ] Une compétence de l'étape 2 qui avait (S) coché s'ouvre avec **Formation requise** coché.
 - [ ] Sans « Utilisable sans formation », le jet est refusé.
