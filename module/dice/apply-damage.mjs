@@ -71,11 +71,6 @@ function registerStatuses() {
 }
 
 /**
- * @param {ChatMessage} message
- * @param {HTMLElement} html
- * @returns {void}
- */
-/**
  * Le HTML stocké est celui du jet. Le texte « déjà appliqué » est posé
  * au rendu, quand le drapeau existe.
  *

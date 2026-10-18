@@ -251,7 +251,7 @@ npm install --no-save @foundryvtt/foundryvtt-cli
 node packs/build.mjs
 ```
 
-`packs/build.mjs` appelle `compilePack` pour chaque dossier de `packs/_source`. On commit les JSON et le LevelDB (CURRENT, MANIFEST, `.ldb`, `.log` de la base). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée. `.gitattributes` marque `packs/**` en `binary` pour que `autocrlf` sous Windows ne réécrive pas CURRENT, MANIFEST, `.ldb` ni `.log`. La ligne suivante, `packs/_source/** text eol=lf`, gagne pour les JSON. `packs/build.mjs` reste du texte.
+`packs/build.mjs` appelle `compilePack` pour chaque dossier de `packs/_source`. On commit les JSON et le LevelDB (CURRENT, MANIFEST, `.ldb`, `.log` de la base). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée. `.gitattributes` marque `packs/**` en `binary` pour que `autocrlf` sous Windows ne réécrive pas CURRENT, MANIFEST, `.ldb` ni `.log`. `binary` pose aussi `-diff` et `-merge`, que `text` ne retire pas. Les lignes suivantes rétablissent le texte : `packs/_source/** text eol=lf diff merge` et `packs/build.mjs text eol=lf diff merge`.
 
 Rempli depuis le LdR v0.2, sans valeur inventée : Compétences (§4, une entrée par spécialité listée), Origines, Milieux, Professions (§9), Armes et Armures (§7). Le texte qui n'a pas de champ va dans `description`. Les champs non écrits restent au défaut du modèle. Vides : Atouts, Équipement, Augmentations, Substances, Logiciels, Modules de vaisseau, Séquelles, Univers et factions, Tables. Les tables du §15 (localisation, séquelles de radiation) ne sont pas créées.
 
