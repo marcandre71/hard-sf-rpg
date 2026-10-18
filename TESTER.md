@@ -1,7 +1,7 @@
 # Tester le système « Sol, Nouvelle Ère » (étape 5)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 15 minutes.
-Version attendue : **0.5.1**.
+Version attendue : **0.5.2**.
 
 La procédure de l'étape 4 (versions 0.4.0 et 0.4.1, déjà validée) est dans [docs/tests/etape-4.md](docs/tests/etape-4.md).
 
@@ -12,7 +12,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
 3. Téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.1**.
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.2**.
 5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'ancienne place. Dans la console, collez `game.settings.set("core", "compendiumConfiguration", {})`, validez, puis rechargez la page **deux fois** (attendez la fin du premier rechargement).
@@ -33,14 +33,14 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
    - Si la zone n'est pas le **torse**, annulez et relancez. Une réussite critique ne permet pas de choisir la zone : c'est toujours celle écrite sur la carte.
    - Il faut aussi que la carte affiche **Dégâts : 12** (l'arme 10, plus 2 de DR). Sinon annulez et relancez.
 5. La fenêtre doit afficher, pour cette cible : zone **Torse**, dégâts bruts **12**, armure **3**, dégâts nets **9**, Seuil **7**, gravité **Grave**, brèche **Oui**.
-6. Cliquez **Appliquer**. Sur la cible : une blessure **Grave — Torse**, saignement coché, pénalité **−20**. L'armure a les joints **Percée**. Le jeton a la condition **Combinaison percée**.
-7. Une carte de résultat apparaît : cible, torse, dégâts nets 9, Grave, brèche Oui, et un rappel pour le test de Volonté. Le bouton **Test de Volonté** ouvre la fenêtre de jet habituelle. Vous pouvez annuler.
-8. Rouvrez la fenêtre d'application et cliquez **Annuler** : rien de plus n'est créé.
+6. Cliquez **Appliquer**. Sur la cible : une blessure **Grave — Torse**, saignement coché, pénalité **−20**. L'armure a les joints **Percée**. Le jeton a les conditions **Combinaison percée** et **Saignement**.
+7. Une carte de résultat apparaît : cible, torse, dégâts nets 9, Grave, brèche Oui, et un rappel pour le test de Volonté. Le bouton **Test de Volonté** ouvre la fenêtre de jet habituelle pour le propriétaire de la cible, ou le MJ. Un autre joueur ne le voit pas. Vous pouvez annuler.
+8. Le bouton de la carte d'attaque affiche maintenant **Dégâts déjà appliqués**. Cliquez-le : la question est « Dégâts déjà appliqués, recommencer ? ». Cliquez **Annuler** : pas de seconde blessure.
 
 ## 4. Dégâts absorbés
 
 1. Rouvrez l'armure. Remettez les joints sur **Intacte**. Protection du **torse** : **30**. Elle reste équipée.
-2. Relancez l'arme jusqu'à une réussite au **torse** (ou une critique, et choisissez Torse). Les dégâts affichés sur la carte sont inférieurs à 30.
+2. Relancez l'arme jusqu'à une réussite au **torse**. Les dégâts affichés sur la carte sont inférieurs à 30.
 3. La fenêtre doit afficher des dégâts nets **0 ou moins**, gravité **Aucune blessure**, brèche **Non**.
 4. Confirmez. Pas de nouvelle blessure. Les joints restent **Intacte**.
 
@@ -64,12 +64,12 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 
 ## 8. Liste de contrôle
 
-- [ ] Version **0.5.1**, aucune ligne rouge dans la console.
+- [ ] Version **0.5.2**, aucune ligne rouge dans la console.
 - [ ] Ligne de résultat de la carte : tester en interface claire ET sombre, la ligne doit rester lisible.
 - [ ] Armure pressurisée, torse 3, équipée. Carabine 10 + DR 2, Seuil 7 : nets **9**, **Grave**, brèche **Oui**.
-- [ ] Blessure créée, joints **Percée**, condition **Combinaison percée**.
+- [ ] Blessure créée, joints **Percée**, conditions **Combinaison percée** et **Saignement**.
 - [ ] Dégâts nets à 0 ou moins : pas de blessure, pas de nouvelle brèche.
-- [ ] **Annuler** n'écrit rien.
+- [ ] Après application, le bouton dit que les dégâts sont déjà appliqués. Un second clic demande confirmation ; **Annuler** n'écrit rien de plus.
 - [ ] Un joueur ne voit pas le bouton **Appliquer les dégâts**.
 - [ ] Une créature est refusée, avec un message clair.
 - [ ] Compétences, origines, milieux, professions, armes et armures contiennent les entrées du livre. Les autres compendiums sont vides.

@@ -22,7 +22,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
  */
-import { SOL } from "../config.mjs";
+import { characteristicRollLabel, SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
@@ -226,9 +226,10 @@ async function rollCharacteristic(event, target) {
   const key = target.closest("[data-characteristic]")?.dataset.characteristic;
   const cfg = SOL.characteristics[key];
   if ( !cfg ) return;
+  const label = characteristicRollLabel(cfg, text => game.i18n.localize(text));
+  if ( !label ) return;
   const actor = this.document;
   const score = actor.system.characteristics[key]?.value ?? 0;
-  const label = `${game.i18n.localize(cfg.abbr)} — ${game.i18n.localize(cfg.label)}`;
   await performRoll({ actor, label, score, type: "characteristic" });
 }
 

@@ -2,7 +2,7 @@
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
   "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 5 : application des dégâts, compendiums remplis depuis le LdR v0.2.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

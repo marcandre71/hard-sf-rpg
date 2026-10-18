@@ -13,7 +13,7 @@
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect
  */
-import { SOL } from "../config.mjs";
+import { characteristicRollLabel, SOL } from "../config.mjs";
 import {
   cardReminders,
   consequenceKey,
@@ -28,11 +28,9 @@ import { performRoll } from "./chat.mjs";
 const SYSTEM_ID = "sol-nouvelle-ere";
 const CARD = "systems/sol-nouvelle-ere/templates/chat/damage-card.hbs";
 
-/**
- * Identifiant de la condition. `name` est une clé i18n : Foundry la
- * traduit en créant l'effet. L'icône est un SVG du cœur.
- */
+/** Conditions. `name` reste une clé i18n : Foundry la traduit en créant l'effet. */
 const SUIT_BREACH = "sol-nouvelle-ere.suitBreach";
+const BLEEDING = "sol-nouvelle-ere.bleeding";
 
 /** Messages déjà en cours : un double clic n'ouvre pas deux fenêtres. */
 const busy = new Set();
@@ -43,25 +41,44 @@ const busy = new Set();
  * dit encore « array ». On enregistre des deux façons, selon ce que
  * le cœur a réellement posé.
  *
+ * `name` est la clé i18n, pas le français. `init` tourne avant le
+ * chargement des traductions : `localize` ici renverrait la clé.
+ * Foundry traduit `name` en créant l'effet.
+ *
+ * @param {string} id
+ * @param {string} name
+ * @param {string} img
  * @returns {void}
  */
-function registerSuitBreach() {
-  const effect = {
-    id: SUIT_BREACH,
-    // Traduit ici : le libellé affiché sur le jeton est le français, pas la clé.
-    name: game.i18n.localize("SOL.Status.suitBreach"),
-    img: "icons/svg/hazard.svg"
-  };
+function registerStatus(id, name, img) {
+  const effect = { id, name, img };
   CONFIG.statusEffects ??= {};
   const effects = CONFIG.statusEffects;
   if ( Array.isArray(effects) ) {
-    if ( !effects.some(entry => entry.id === SUIT_BREACH) ) effects.push(effect);
+    if ( !effects.some(entry => entry.id === id) ) effects.push(effect);
     return;
   }
-  effects[SUIT_BREACH] = effect;
+  effects[id] = effect;
 }
 
 /**
+ * @returns {void}
+ */
+function registerStatuses() {
+  registerStatus(SUIT_BREACH, "SOL.Status.suitBreach", "icons/svg/hazard.svg");
+  // Réf. LdR v0.2 §11. Pas d'automatisation de l'Endurance.
+  registerStatus(BLEEDING, "SOL.Status.bleeding", "icons/svg/blood.svg");
+}
+
+/**
+ * @param {ChatMessage} message
+ * @param {HTMLElement} html
+ * @returns {void}
+ */
+/**
+ * Le HTML stocké est celui du jet. Le texte « déjà appliqué » est posé
+ * au rendu, quand le drapeau existe.
+ *
  * @param {ChatMessage} message
  * @param {HTMLElement} html
  * @returns {void}
@@ -71,32 +88,52 @@ function onChatCard(message, html) {
   if ( apply ) {
     // Visible pour le MJ seulement. Le clic est revérifié dans le handler.
     if ( !game.user.isGM ) apply.remove();
-    else if ( apply.dataset.solBound !== "1" ) {
-      apply.dataset.solBound = "1";
-      apply.addEventListener("click", event => {
-        event.preventDefault();
-        if ( event.detail > 1 ) return;
-        void applyDamage(message, apply);
-      });
+    else {
+      if ( message.getFlag(SYSTEM_ID, "applied") === true ) {
+        apply.textContent = game.i18n.localize("SOL.Damage.applied");
+      }
+      if ( apply.dataset.solBound !== "1" ) {
+        apply.dataset.solBound = "1";
+        apply.addEventListener("click", event => {
+          event.preventDefault();
+          if ( event.detail > 1 ) return;
+          void applyDamage(message, apply);
+        });
+      }
     }
   }
 
   const followup = html.querySelector("[data-action=sol-roll-followup]");
-  if ( followup && followup.dataset.solBound !== "1" ) {
-    followup.dataset.solBound = "1";
-    followup.addEventListener("click", event => {
-      event.preventDefault();
-      if ( event.detail > 1 ) return;
-      void rollFollowup(message, followup);
-    });
+  if ( followup ) {
+    const uuid = message.getFlag(SYSTEM_ID, "actorUuid");
+    // Propriétaire de la cible, ou MJ. Le clic est revérifié.
+    if ( !followupAllowed(uuid) ) followup.remove();
+    else if ( followup.dataset.solBound !== "1" ) {
+      followup.dataset.solBound = "1";
+      followup.addEventListener("click", event => {
+        event.preventDefault();
+        if ( event.detail > 1 ) return;
+        void rollFollowup(message, followup);
+      });
+    }
   }
+}
+
+/**
+ * @param {unknown} uuid
+ * @returns {boolean}
+ */
+function followupAllowed(uuid) {
+  if ( game.user.isGM ) return true;
+  if ( typeof uuid !== "string" ) return false;
+  return foundry.utils.fromUuidSync(uuid)?.isOwner === true;
 }
 
 /**
  * @returns {void}
  */
 export function registerDamage() {
-  registerSuitBreach();
+  registerStatuses();
   Hooks.on("renderChatMessageHTML", onChatCard);
 }
 
@@ -122,7 +159,9 @@ function readAttack(message) {
 
 /**
  * Cibles du MJ : jetons ciblés, sinon jetons sélectionnés.
- * Deux jetons du même acteur ne comptent qu'une fois.
+ * Deux jetons liés partagent `actor.uuid` : une seule cible.
+ * Deux jetons non liés du même acteur de base ont chacun un uuid :
+ * chacun est touché. `actor.id` les confondrait.
  *
  * @returns {Token[]}
  */
@@ -133,9 +172,9 @@ function candidateTokens() {
   /** @type {Token[]} */
   const unique = [];
   for ( const token of tokens ) {
-    const id = token.actor?.id;
-    if ( !id || seen.has(id) ) continue;
-    seen.add(id);
+    const uuid = token.actor?.uuid;
+    if ( !uuid || seen.has(uuid) ) continue;
+    seen.add(uuid);
     unique.push(token);
   }
   return unique;
@@ -342,6 +381,10 @@ async function applyOne(target, zone, attack, source) {
       type: "injury",
       system
     }]);
+    // Réf. LdR v0.2 §11. Pas d'automatisation de l'Endurance.
+    if ( strike.bleeding && !hasStatus(actor, BLEEDING) ) {
+      await actor.toggleStatusEffect(BLEEDING, { active: true });
+    }
   }
 
   if ( strike.breach ) {
@@ -424,20 +467,57 @@ async function applyDamage(message, button) {
   busy.add(message.id);
   button.disabled = true;
   try {
+    if ( message.getFlag(SYSTEM_ID, "applied") === true ) {
+      const again = await confirmReapply();
+      if ( !again ) return;
+    }
     const zone = await askDamage(attack, targets);
     if ( !zone ) return;
+    let applied = false;
     for ( const target of targets ) {
       try {
         await applyOne(target, zone, attack, message);
+        applied = true;
       } catch (error) {
         console.error(error);
         ui.notifications.error(game.i18n.format("SOL.Damage.failed", { name: target.name }));
       }
     }
+    if ( applied ) {
+      await message.setFlag(SYSTEM_ID, "applied", true);
+      button.textContent = game.i18n.localize("SOL.Damage.applied");
+    }
   } finally {
     busy.delete(message.id);
     button.disabled = false;
   }
+}
+
+/**
+ * Un second clic demande confirmation. Annuler n'écrit rien.
+ *
+ * @returns {Promise<boolean>}
+ */
+async function confirmReapply() {
+  const question = game.i18n.localize("SOL.Damage.reapply");
+  const result = await foundry.applications.api.DialogV2.wait({
+    window: { title: question },
+    classes: ["sol", "sol-nouvelle-ere", "sol-damage-dialog"],
+    content: `<p>${escape(question)}</p>`,
+    buttons: [
+      {
+        action: "again",
+        label: game.i18n.localize("SOL.Damage.again")
+      },
+      {
+        action: "cancel",
+        label: game.i18n.localize("SOL.Damage.cancel"),
+        default: true
+      }
+    ],
+    rejectClose: false
+  });
+  return result === "again";
 }
 
 /**
@@ -453,6 +533,10 @@ async function rollFollowup(message, button) {
   const key = message.getFlag(SYSTEM_ID, "characteristic");
   const uuid = message.getFlag(SYSTEM_ID, "actorUuid");
   if ( (key !== "vol" && key !== "con") || typeof uuid !== "string" ) return;
+  if ( !followupAllowed(uuid) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Damage.followupDenied"));
+    return;
+  }
   const actor = await foundry.utils.fromUuid(uuid);
   if ( !actor ) {
     ui.notifications.warn(game.i18n.localize("SOL.Damage.missingActor"));
@@ -463,12 +547,14 @@ async function rollFollowup(message, button) {
     ui.notifications.warn(game.i18n.format("SOL.Damage.noCharacteristic", { name: actor.name }));
     return;
   }
+  const label = characteristicRollLabel(SOL.characteristics[key], text => game.i18n.localize(text));
+  if ( !label ) return;
   busy.add(message.id);
   button.disabled = true;
   try {
     await performRoll({
       actor,
-      label: game.i18n.localize(SOL.characteristics[key]),
+      label,
       score,
       type: "characteristic"
     });

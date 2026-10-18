@@ -318,3 +318,20 @@ export function characteristicFieldsFor(actorType) {
     base: { ...SOL.characteristicFields.base, max: SOL.characteristicValueBounds.max }
   };
 }
+
+/**
+ * Libellé d'un jet de caractéristique : « VOL — Volonté ».
+ * `cfg` est `{ label, abbr }`, deux clés i18n. `localize` reçoit une
+ * chaîne. Lui passer l'objet lève TypeError : on refuse avant.
+ *
+ * @param {{ label?: unknown, abbr?: unknown }|null|undefined} cfg
+ * @param {(key: string) => string} localize
+ * @returns {string|null}
+ */
+export function characteristicRollLabel(cfg, localize) {
+  if ( typeof localize !== "function" ) return null;
+  const abbr = cfg?.abbr;
+  const label = cfg?.label;
+  if ( typeof abbr !== "string" || typeof label !== "string" ) return null;
+  return `${localize(abbr)} — ${localize(label)}`;
+}

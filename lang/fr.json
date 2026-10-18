@@ -187,10 +187,14 @@
       "noWeaponSkill": "Arme sans compétence."
     },
     "Status": {
-      "suitBreach": "Combinaison percée"
+      "suitBreach": "Combinaison percée",
+      "bleeding": "Saignement"
     },
     "Damage": {
       "apply": "Appliquer les dégâts",
+      "applied": "Dégâts déjà appliqués",
+      "reapply": "Dégâts déjà appliqués, recommencer ?",
+      "again": "Recommencer",
       "confirm": "Appliquer",
       "cancel": "Annuler",
       "title": "Appliquer les dégâts",
@@ -214,6 +218,7 @@
       "notAllowed": "{name} ne peut pas recevoir de blessure.",
       "failed": "Les dégâts n'ont pas pu être appliqués à {name}.",
       "missingActor": "La cible n'est plus là.",
+      "followupDenied": "Seul le propriétaire de la cible, ou le MJ, peut lancer ce test.",
       "noCharacteristic": "{name} n'a pas cette caractéristique.",
       "followup": {
         "vol": "Test de Volonté",

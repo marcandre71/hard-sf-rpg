@@ -4,7 +4,7 @@
  * Réf. LdR v0.2 §2, §4, §5, §7. Décisions Marc 18/10/2026.
  */
 import assert from "node:assert/strict";
-import { characteristicFieldsFor } from "../module/config.mjs";
+import { characteristicFieldsFor, characteristicRollLabel, SOL } from "../module/config.mjs";
 import {
   cappedModifier,
   formatModifier,
@@ -184,6 +184,23 @@ check("Base du PNJ", () => {
   assert.equal(npc.min, character.min);
   assert.equal(npc.max, 100);
   assert.equal(characteristicFieldsFor("character").base.max, 60);
+});
+
+check("libellé VOL/CON", () => {
+  const localize = key => {
+    if ( typeof key !== "string" ) throw new TypeError("localize attend une chaîne");
+    if ( key === "SOL.Characteristic.vol.abbr" ) return "VOL";
+    if ( key === "SOL.Characteristic.vol.label" ) return "Volonté";
+    if ( key === "SOL.Characteristic.con.abbr" ) return "CON";
+    if ( key === "SOL.Characteristic.con.label" ) return "Constitution";
+    return key;
+  };
+  assert.throws(() => localize(SOL.characteristics.vol), TypeError);
+  assert.equal(characteristicRollLabel(SOL.characteristics.vol, localize), "VOL — Volonté");
+  assert.equal(characteristicRollLabel(SOL.characteristics.con, localize), "CON — Constitution");
+  assert.equal(characteristicRollLabel(SOL.characteristics.vol, null), null);
+  assert.equal(characteristicRollLabel(null, localize), null);
+  assert.equal(characteristicRollLabel({ label: 1, abbr: "VOL" }, localize), null);
 });
 
 console.log("tests/d100.test.mjs : ok");

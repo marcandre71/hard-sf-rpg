@@ -1,0 +1,6 @@
+# LevelDB (CURRENT, MANIFEST, .ldb, .log) : binaire, pas de conversion CRLF sous Windows.
+packs/** binary
+# Les JSON sources restent du texte, fins de ligne LF. Cette ligne gagne sur la précédente.
+packs/_source/** text eol=lf
+# Le script de construction n'est pas une base LevelDB.
+packs/build.mjs text eol=lf

@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.5.1** : le MJ applique les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Pas d'automatisation des origines, ni de l'Endurance.
+L'étape en cours est la **0.5.2** : le MJ applique les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Pas d'automatisation des origines, ni de l'Endurance.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,7 +16,7 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques et le score de compétence (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), initiative glissante, Active Effects autres que la condition « Combinaison percée », automation des origines. Le Seuil de blessure n'est pas une colonne de la feuille : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
+Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques et le score de compétence (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), initiative glissante, Active Effects autres que les conditions « Combinaison percée » et « Saignement », automation des origines. Le Seuil de blessure n'est pas une colonne de la feuille : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
 
 ## Où sont les règles du jeu
 
@@ -29,12 +29,13 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.5.1, compatibilité 14,
+system.json                         Manifeste : id, version 0.5.2, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
                                     retrait des feuilles V1 du cœur, registerSheet, garde-fou.
-module/config.mjs                   Caractéristiques, characteristicFields (base max 60 ;
+module/config.mjs                   Caractéristiques, characteristicRollLabel,
+                                    characteristicFields (base max 60 ;
                                     PNJ : characteristicFieldsFor, base max 100),
                                     characteristicValueBounds (Actuelle 0 à 100),
                                     difficulties (huit niveaux, §5), weaponSkillDefaults,
@@ -227,11 +228,13 @@ Seuil = `ceil((FOR + CON) / 10)` sur les valeurs actuelles. Seuls Personnage et 
 
 Gravité : < SB légère (−10), SB à 2 SB − 1 grave (−20, `bleeding`), 2 SB à 3 SB − 1 critique, ≥ 3 SB mortelle. Décision Marc 18/10/2026 : critique et mortelle n'ont pas de pénalité chiffrée. La conséquence est écrite dans `description`. Le MJ et les joueurs réagissent à la main.
 
-Brèche : une blessure (nets > 0) qui traverse une armure équipée `pressurized` couvrant la zone. À confirmer par Marc : la zone est couverte dès que la clé existe, y compris à 0. `sealState` passe à `breached`. La condition `sol-nouvelle-ere.suitBreach` est enregistrée dans `CONFIG.statusEffects` (`name` français, `img` = `icons/svg/hazard.svg`, icône du cœur). Pas d'horloge de décompression. La tête suit la même règle, sans second mécanisme.
+Brèche : une blessure (nets > 0) qui traverse une armure équipée `pressurized` couvrant la zone. À confirmer par Marc : la zone est couverte dès que la clé existe, y compris à 0. `sealState` passe à `breached`. La condition `sol-nouvelle-ere.suitBreach` est enregistrée dans `CONFIG.statusEffects` (`name` = clé i18n `SOL.Status.suitBreach`, `img` = `icons/svg/hazard.svg`, icône du cœur). `init` tourne avant les traductions : on n'appelle pas `localize` à l'enregistrement. Foundry traduit `name` en créant l'effet. Pas d'horloge de décompression. La tête suit la même règle, sans second mécanisme.
+
+Réf. LdR v0.2 §11 : une blessure grave pose aussi la condition `sol-nouvelle-ere.bleeding` (`name` = `SOL.Status.bleeding`, `img` = `icons/svg/blood.svg`) si elle n'est pas déjà active. L'Endurance (−1 par tour) n'est pas automatisée.
 
 Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) sont du texte sur la carte de résultat. Décision Marc 18/10/2026 : rien n'est automatisé, ni l'Endurance, ni l'initiative. À confirmer par Marc : le rappel « réserve d'air » n'apparaît que si une blessure est créée. La fenêtre d'application n'a pas de liste de zones : la zone est celle du dé.
 
-Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose la condition, poste `templates/chat/damage-card.hbs`. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`. Un double clic est ignoré le temps que la fenêtre est ouverte.
+Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Déduplication par `token.actor.uuid` : deux jetons liés du même acteur ne comptent qu'une fois ; deux jetons non liés du même acteur de base sont chacun touchés. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose les conditions, poste `templates/chat/damage-card.hbs`. Si au moins une cible a réussi, le message d'attaque reçoit le drapeau `applied`. Le bouton affiche alors « Dégâts déjà appliqués » (le HTML stocké date du jet : le texte est mis à jour dans le hook). Un nouveau clic ouvre un `DialogV2` « Dégâts déjà appliqués, recommencer ? ». Annuler cette question n'écrit rien. Une fenêtre de dégâts annulée ne pose pas le drapeau. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`, avec `characteristicRollLabel` (`abbr` et `label`, jamais l'objet). Le bouton n'est visible et utilisable que par le propriétaire de la cible (`fromUuidSync(uuid)?.isOwner`) ou le MJ. Un double clic est ignoré le temps que la fenêtre est ouverte.
 
 ## Compendiums (étape 5, contenu 0.5.1)
 
@@ -248,9 +251,11 @@ npm install --no-save @foundryvtt/foundryvtt-cli
 node packs/build.mjs
 ```
 
-`packs/build.mjs` appelle `compilePack` pour chaque dossier de `packs/_source`. On commit les JSON et le LevelDB (CURRENT, MANIFEST, `.ldb`, `.log` de la base). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée.
+`packs/build.mjs` appelle `compilePack` pour chaque dossier de `packs/_source`. On commit les JSON et le LevelDB (CURRENT, MANIFEST, `.ldb`, `.log` de la base). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée. `.gitattributes` marque `packs/**` en `binary` pour que `autocrlf` sous Windows ne réécrive pas CURRENT, MANIFEST, `.ldb` ni `.log`. La ligne suivante, `packs/_source/** text eol=lf`, gagne pour les JSON. `packs/build.mjs` reste du texte.
 
 Rempli depuis le LdR v0.2, sans valeur inventée : Compétences (§4, une entrée par spécialité listée), Origines, Milieux, Professions (§9), Armes et Armures (§7). Le texte qui n'a pas de champ va dans `description`. Les champs non écrits restent au défaut du modèle. Vides : Atouts, Équipement, Augmentations, Substances, Logiciels, Modules de vaisseau, Séquelles, Univers et factions, Tables. Les tables du §15 (localisation, séquelles de radiation) ne sont pas créées.
+
+Les milieux et les professions citent des noms de compétences parentes qui n'existent dans le compendium que comme spécialités : Pilotage, Réacteurs et propulsion, Médecine, Sciences de la vie, Sciences physiques. « Sciences (au choix) » (milieu Élite académique) ne correspond à aucune entrée. C'est fidèle au LdR : on ne réécrit pas ces listes. L'automatisation future des bonus devra les résoudre.
 
 Ajouter un objet (Marc, dans Foundry) : ouvrir le compendium, le déverrouiller, créer l'objet ou le glisser, reverrouiller, puis `fvtt package unpack` vers `packs/_source/<pack>` pour que le JSON suive. Ajouter un objet (agent) : un JSON de plus dans `packs/_source/<pack>/`, puis `node packs/build.mjs`. Ne pas inventer un champ que le LdR ne donne pas.
 
