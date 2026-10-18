@@ -36,14 +36,16 @@ Ouvrez **Ilka Moravec**, onglet **Principal**.
 - **DR** (degrés de réussite) si ça réussit, **DE** (degrés d'échec) sinon. Un 0 est une réussite de justesse, ou un échec sans gravité.
 
 4. Relancez FOR. Choisissez **Extrême (−40)** et mettez le modificateur à **−20**. Le total affiché doit être **−50** (plafonné), pas −60. Lancez. La carte reprend Extrême, modificateur −20, total −50, et un score visé égal à l'Actuelle moins 50.
+5. En bas de la discussion, ouvrez le menu du mode de message et choisissez **Jet privé (MJ)**. Relancez FOR. La carte n'est visible que pour le MJ. Remettez **Public** ensuite.
 
 ## 3. Compétence
 
 1. Dans **Compétences**, **Créer**. Ouvrez l'objet (clic sur le nom, pas sur le dé).
 2. Nommez-le **Pilotage**. Caractéristique : **Coordination**. Formation : **0**. Cochez **Formation requise (F)**. Laissez **Utilisable sans formation** coché. Fermez la feuille de l'objet.
-3. Sur la ligne, le score est la moitié de l'Actuelle de COO, arrondie au supérieur. Exemple : COO 51 → score 26. COO 50 → score 25.
-4. Cliquez le **dé** à côté du nom (le nom, lui, rouvre l'objet). La fenêtre montre ce score. Vous pouvez annuler.
+3. Sur Ilka, l'Actuelle de COO est **45**. Le score de Pilotage (formation requise, formation 0) est la moitié arrondie au supérieur : **23**.
+4. Cliquez le **dé** à côté du nom (le nom, lui, rouvre l'objet). La fenêtre montre **23**. Vous pouvez annuler.
 5. Rouvrez Pilotage, décochez **Utilisable sans formation**, fermez. La ligne affiche **Impossible**. Le dé prévient et **n'envoie pas** de carte.
+6. Si une compétence créée à l'étape 2 avait **Spécialisée (S)** coché, rouvrez-la : **Formation requise (F)** est coché à la place.
 
 ## 4. Arme
 
@@ -63,7 +65,9 @@ Ouvrez **Cobaye PNJ** (ou créez un acteur **PNJ**). Dans le tableau, mettez la 
 - [ ] Version **0.4.0**, aucune ligne rouge dans la console.
 - [ ] FOR en Normale envoie une carte lisible. Annuler n'envoie rien.
 - [ ] Extrême et modificateur −20 : total **−50** dans la fenêtre et sur la carte.
-- [ ] Pilotage, formation requise, formation 0 : score = moitié de COO, arrondie au-dessus.
+- [ ] Mode **Jet privé (MJ)** (menu en bas du chat) : la carte n'est visible que du MJ.
+- [ ] Pilotage, formation requise, formation 0 : COO 45 → score **23**.
+- [ ] Une compétence de l'étape 2 qui avait (S) coché s'ouvre avec **Formation requise** coché.
 - [ ] Sans « Utilisable sans formation », le jet est refusé.
 - [ ] Arme équipée « Armes de poing » : en cas de réussite, localisation et dégâts sur la carte.
 - [ ] Base d'un PNJ à **80**.

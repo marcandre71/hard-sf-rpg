@@ -245,10 +245,13 @@ async function createItem(event, target) {
  */
 async function toggleEquipped(event, target) {
   const input = target.closest("input") ?? target;
+  // Le `change` de la case ne doit pas soumettre le formulaire de l'acteur
+  // (la case n'a pas de `name` : ce serait une mise à jour vide).
+  input.addEventListener("change", change => change.stopPropagation(), { once: true });
   const id = target.closest("[data-item-id]")?.dataset.itemId;
   const item = this.document.items.get(id);
   if ( !item || item.type !== "weapon" ) return;
-  await item.update({ "system.equipped": Boolean(input.checked) });
+  await item.update({ "system.equipped": !item.system.equipped });
 }
 
 /**
@@ -260,6 +263,7 @@ async function toggleEquipped(event, target) {
  * @returns {Promise<void>}
  */
 async function rollItem(event, target) {
+  if ( event?.detail > 1 ) return;
   const actor = this.document;
   const id = target.closest("[data-item-id]")?.dataset.itemId;
   const item = actor.items.get(id);
@@ -272,11 +276,16 @@ async function rollItem(event, target) {
       ui.notifications.warn(game.i18n.localize("SOL.Roll.impossible"));
       return;
     }
-    await performRoll({ actor, label: item.name, score: rated.score });
+    await performRoll({ actor, label: item.name, score: rated.score, type: "skill" });
     return;
   }
 
   if ( item.type !== "weapon" || !item.system.equipped ) return;
+  const skillName = String(item.system.skill ?? "").trim();
+  if ( !skillName ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Roll.noWeaponSkill"));
+    return;
+  }
   const skills = actor.items.filter(entry => entry.type === "skill");
   const rated = weaponAttackScore(actor.system.characteristics, item.system.skill, skills);
   if ( rated.unknown ) {
@@ -291,6 +300,7 @@ async function rollItem(event, target) {
     actor,
     label: `${item.name} — ${rated.label}`,
     score: rated.score,
-    weapon: item
+    weapon: item,
+    type: "weapon"
   });
 }

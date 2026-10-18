@@ -39,7 +39,6 @@
       "EditItemImage": "Changer l'image",
       "Characteristics": "Caractéristiques",
       "Characteristic": "Caractéristique",
-      "Items": "Objets",
       "NoItems": "Aucun objet pour l'instant.",
       "Person": "Feuille de personnage ou de PNJ (Sol, Nouvelle Ère)",
       "CreateItem": "Créer",
@@ -185,7 +184,8 @@
       "damage": "Dégâts",
       "chooseZone": "Réussite critique : la zone peut être choisie",
       "impossible": "Cette compétence ne peut pas être tentée sans formation.",
-      "unknownSkill": "Aucune compétence « {name} » sur cette fiche, et ce nom n'est pas une arme de poing, d'épaule ou de corps-à-corps."
+      "unknownSkill": "Aucune compétence « {name} » sur cette fiche, et ce nom n'est pas une arme de poing, d'épaule ou de corps-à-corps.",
+      "noWeaponSkill": "Arme sans compétence."
     },
     "Skill": {
       "characteristic": "Caractéristique",

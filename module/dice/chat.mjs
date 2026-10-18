@@ -16,29 +16,26 @@ import { askRoll } from "./roll-dialog.mjs";
 const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
 
 /**
- * Mode de visibilité courant.
- * `core.rollMode` est la valeur choisie ; `CONFIG.Dice.rollModes` en
- * liste les clés. En v14, `ChatMessage.applyMode` attend `public`,
- * `gm`, `blind` ou `self`. `Roll._mapLegacyRollMode` traduit les
- * anciennes clés (`publicroll`, …) tant qu'elle existe.
+ * Visibilité de la carte : le mode choisi dans le menu du chat.
  *
- * @returns {string|undefined}
+ * v14, foundryvtt#8856 : le réglage s'appelle `core.messageMode`.
+ * `ChatMessage.applyMode(data)` sans second argument reprend ce réglage
+ * (doc : « otherwise apply the default mode stored in client settings »).
+ * `game.settings.get("core", "rollMode")` lève : le réglage n'existe plus.
+ *
+ * v13 : `applyMode` n'existe pas. On retombe sur `applyRollMode` seulement
+ * si le réglage `core.rollMode` est encore enregistré.
+ *
+ * @param {object} chatData
+ * @returns {object}
  */
-function currentMessageMode() {
-  const stored = game.settings.get("core", "rollMode");
-  // Clés historiques de CONFIG.Dice.rollModes, et clés v14 de applyMode.
-  const modes = {
-    publicroll: "public",
-    gmroll: "gm",
-    blindroll: "blind",
-    selfroll: "self",
-    public: "public",
-    gm: "gm",
-    blind: "blind",
-    self: "self"
-  };
-  if ( stored && modes[stored] ) return modes[stored];
-  return stored || undefined;
+function applyClientVisibility(chatData) {
+  if ( typeof ChatMessage.applyMode === "function" ) return ChatMessage.applyMode(chatData);
+  const hasRollMode = game.settings.settings.has("core.rollMode");
+  if ( hasRollMode && typeof ChatMessage.applyRollMode === "function" ) {
+    return ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+  }
+  return chatData;
 }
 
 /**
@@ -58,9 +55,10 @@ function resultKey(critical, success) {
  * @param {string} params.label Ce qui est testé.
  * @param {number} params.score Score avant difficulté.
  * @param {Item|null} [params.weapon] Arme : localisation et dégâts si réussite.
+ * @param {"characteristic"|"skill"|"weapon"} [params.type] Pour l'étape dégâts.
  * @returns {Promise<void>}
  */
-export async function performRoll({ actor, label, score, weapon = null }) {
+export async function performRoll({ actor, label, score, weapon = null, type = "characteristic" }) {
   const choice = await askRoll({ title: label, score });
   if ( !choice ) return;
 
@@ -96,9 +94,11 @@ export async function performRoll({ actor, label, score, weapon = null }) {
     chooseZone: false
   };
 
+  /** @type {string|null} */
+  let locationKey = null;
   if ( weapon && outcome.success ) {
-    const zone = hitLocation(outcome.die);
-    card.location = game.i18n.localize(SOL.bodyLocations[zone]);
+    locationKey = hitLocation(outcome.die);
+    card.location = game.i18n.localize(SOL.bodyLocations[locationKey]);
     // Réf. LdR v0.2 §7 : dégâts fixes de l'arme + DR. Pas de dé de dégâts.
     card.damage = Number(weapon.system.damage ?? 0) + outcome.dr;
     // Décision Marc 18/10/2026 : texte seulement, pas de choix de zone.
@@ -106,10 +106,25 @@ export async function performRoll({ actor, label, score, weapon = null }) {
   }
 
   const content = await foundry.applications.handlebars.renderTemplate(CARD, card);
-  const messageData = ChatMessage.applyMode({
+  // flags : l'étape suivante lira la zone et les dégâts sans reparser la carte.
+  const messageData = applyClientVisibility({
     speaker: ChatMessage.getSpeaker({ actor }),
     rolls: [roll],
-    content
-  }, currentMessageMode());
+    content,
+    sound: CONFIG.sounds.dice,
+    flags: {
+      "sol-nouvelle-ere": {
+        type,
+        target: choice.target,
+        die: outcome.die,
+        success: outcome.success,
+        critical: outcome.critical,
+        dr: outcome.dr,
+        de: outcome.de,
+        location: locationKey,
+        damage: card.damage
+      }
+    }
+  });
   await ChatMessage.create(messageData);
 }

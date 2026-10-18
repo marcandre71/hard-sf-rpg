@@ -10,7 +10,7 @@
  * clé restante est ignorée au chargement.
  *
  * Le palier 1 (commit eed2d54) cherchait encore `description` dans
- * `_source` et `system.-=description` (retiré en v14). Il ne réécrivait
+ * `_source` et `system.-=description` (`-=` déprécié jusqu'en v16). Il ne réécrivait
  * rien, mais posait déjà `migrationVersion` à 1. Ce passage vise donc 2.
  *
  * Gardé par le réglage de monde `migrationVersion` (nombre, pas affiché

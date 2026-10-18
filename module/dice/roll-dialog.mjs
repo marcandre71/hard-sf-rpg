@@ -22,7 +22,8 @@ function readForm(form, score) {
   const difficultyKey = form.elements.difficulty?.value || "normal";
   const cfg = SOL.difficulties[difficultyKey] ?? SOL.difficulties.normal;
   const raw = Number(form.elements.modifier?.value);
-  const free = Number.isFinite(raw) ? raw : 0;
+  // Décision Marc 18/10/2026 : le modificateur libre est un entier.
+  const free = Number.isFinite(raw) ? Math.trunc(raw) : 0;
   const modifier = cappedModifier(cfg.modifier, free);
   return {
     difficultyKey,
@@ -69,7 +70,7 @@ export async function askRoll({ title, score }) {
         <select name="difficulty">${options}</select>
       </label>
       <label>${escape(game.i18n.localize("SOL.Roll.free"))}
-        <input type="number" name="modifier" value="0" step="any">
+        <input type="number" name="modifier" value="0" step="1">
       </label>
       <p class="sol-roll-total">${escape(game.i18n.localize("SOL.Roll.total"))}
         <strong data-total>0</strong></p>

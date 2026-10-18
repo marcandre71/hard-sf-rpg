@@ -18,6 +18,8 @@
         <i class="fa-solid fa-dice-d20"></i>
       </button>
       {{/if}}
+      {{!-- Pas de name : sinon submitOnChange enverrait une mise à jour vide
+            sur l'acteur. data-action écrit system.equipped de l'objet. --}}
       {{#if item.showEquipped}}
       <label class="sol-equipped">
         <input type="checkbox" data-action="toggleEquipped" {{#if item.equipped}}checked{{/if}}>

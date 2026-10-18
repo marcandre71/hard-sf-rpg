@@ -55,6 +55,7 @@ export class SkillData extends BaseItemData {
    * @returns {object}
    */
   static migrateData(source) {
+    // Décision Marc 18/10/2026 : l'ancien marqueur (S) devient Formation requise (F).
     if ( source && typeof source === "object" ) {
       if ( ("specialized" in source) && !("trainingRequired" in source) ) {
         source.trainingRequired = Boolean(source.specialized);

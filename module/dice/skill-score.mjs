@@ -25,6 +25,7 @@ export function skillScore(characteristics, skill) {
     if ( skill.untrainedAllowed === false ) return { impossible: true, score: null, halved: false };
     return { impossible: false, score: Math.ceil(value / 2), halved: true };
   }
+  // Décision Marc 18/10/2026 : le score n'est pas plafonné (il peut dépasser 100 ; le surplus donne des DR).
   return { impossible: false, score: value + training, halved: false };
 }
 

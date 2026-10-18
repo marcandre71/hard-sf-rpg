@@ -222,13 +222,14 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
  * @returns {Promise<void>}
  */
 async function rollCharacteristic(event, target) {
+  if ( event?.detail > 1 ) return;
   const key = target.closest("[data-characteristic]")?.dataset.characteristic;
   const cfg = SOL.characteristics[key];
   if ( !cfg ) return;
   const actor = this.document;
   const score = actor.system.characteristics[key]?.value ?? 0;
   const label = `${game.i18n.localize(cfg.abbr)} — ${game.i18n.localize(cfg.label)}`;
-  await performRoll({ actor, label, score });
+  await performRoll({ actor, label, score, type: "characteristic" });
 }
 
 /**
