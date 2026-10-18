@@ -275,6 +275,16 @@ Surprise, round 1 : `_onStartTurn` (MJ actif) lit `surprisedTurnIndex`. Si le co
 
 `rollInitiative` avec `updateTurn: false` passe aussi `{ combatTurn: this.turn }`. La carte de Vigilance reçoit `messageMode` et `messageOptions`. Un combattant `hidden` force le mode `gm` (chuchoté aux MJ). Le tracker (`_prepareTurnContext`) affiche `flags.sol-nouvelle-ere.rank` (« 2 DR · RÉF 57 », « 2 DR crit. · RÉF 57 », « 3 DE ») seulement si `Number.isFinite(combatant.initiative)`. Effacer l'initiative ou taper un nombre à la main retire `rank` dans `SolCombatant._preUpdate`. `resetAll` du cœur (v13 : `Combat.update({combatants}, {diff: false})`) n'appelle pas `_preUpdate` : `SolCombat.resetAll` retire `rank` et `pendingInitiative` et pose `deferStep` et `deferEnd` à false avant `super`. La suppression de clé est `foundry.data.operators.ForcedDeletion` ([doc v14](https://foundryvtt.com/api/v14/classes/foundry.data.operators.ForcedDeletion.html), `-=` déprécié jusqu'en v16) avec repli `-=` si l'opérateur est absent. Une écriture du système (`solInitiativeWrite`, ou une écriture qui pose `rank`) garde le rang : recul et fin d'ordre ne l'effacent pas. Avec l'objet Vigilance, le score est `skillScore` (PER + formation).
 
+## TODO 0.6.0
+
+À ne pas faire avant. Notes de relecture de la 0.5.11 :
+
+- Un combattant Sonné avant le combat sans initiative lancée reçoit une initiative fictive au démarrage : garder le drapeau tant que l'initiative n'est pas un nombre.
+- Signature `_onStartTurn(combatant, context)`.
+- `clearSurprise` est appelé avant `super.nextRound()`.
+- En v14, `name` reste présent à côté de `label` dans les entrées de menu.
+- La clé `SOL.Initiative.noPerception` n'est plus utilisée.
+
 ## Compendiums (étape 5, contenu 0.5.1)
 
 Déclarés dans `system.json`, format v14 [`PackageCompendiumData`](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackageCompendiumData.html) : `name`, `label`, `path`, `type`, `system`. Le `path` est un dossier dont le nom est le `name`. `system` est obligatoire pour les Items ; on le met aussi sur le journal et les tables.

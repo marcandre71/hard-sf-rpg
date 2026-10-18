@@ -585,6 +585,56 @@ check("surprise : round 1, on saute jusqu'au prochain non surpris", () => {
   assert.equal(surprisedTurnIndex([{ id: "a", surprised: true }], 0, 1), null);
 });
 
+/**
+ * Même branche que `SolCombat._onStartTurn` : `surprisedTurnIndex` vaut
+ * null et le courant est surpris au round 1, on passe le round.
+ *
+ * @param {Array<{ id: string, surprised?: boolean }>} entries
+ * @param {number} [limit]
+ * @returns {string[]}
+ */
+function surpriseLog(entries, limit = 3) {
+  const log = [];
+  let round = 1;
+  let turn = 0;
+  for ( let step = 0; step < 12 && log.length < limit; step += 1 ) {
+    const next = surprisedTurnIndex(entries, turn, round);
+    if ( next === null ) {
+      if ( (round === 1) && entries[turn]?.surprised ) {
+        round = 2;
+        turn = 0;
+        continue;
+      }
+      log.push(`R${round}:${entries[turn].id}`);
+      turn += 1;
+      if ( turn >= entries.length ) {
+        round += 1;
+        turn = 0;
+      }
+      continue;
+    }
+    turn = next;
+  }
+  return log;
+}
+
+check("dernier surpris : R1 sur les autres, puis R2 au premier", () => {
+  assert.deepEqual(surpriseLog([
+    { id: "A", surprised: false },
+    { id: "B", surprised: false },
+    { id: "C", surprised: true }
+  ]), ["R1:A", "R1:B", "R2:A"]);
+});
+
+check("tous surpris : round 2 tout de suite", () => {
+  const log = surpriseLog([
+    { id: "A", surprised: true },
+    { id: "B", surprised: true },
+    { id: "C", surprised: true }
+  ], 1);
+  assert.deepEqual(log, ["R2:A"]);
+});
+
 check("sonné avant le combat : fin d'ordre si l'initiative est un nombre", () => {
   const sorted = [
     { id: "a", initiative: 30, stunned: true },

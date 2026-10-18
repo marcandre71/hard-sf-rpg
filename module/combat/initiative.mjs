@@ -582,7 +582,7 @@ export class SolCombat extends Combat {
       surprised: actorHasStatus(combatant.actor, SURPRISED)
     }));
     const next = surprisedTurnIndex(entries, this.turn, this.round);
-    if ( next === null ) return;
+    if ( next === null ) { if ( (this.round === 1) && entries[this.turn]?.surprised ) await this.nextRound(); return; }
     await this.update({ turn: next });
   }
 }
