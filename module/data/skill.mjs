@@ -1,13 +1,10 @@
 /**
  * Compétence (`skill`).
  *
- * Réf. Fiche v0.2 §4 (champs et défauts) et LdR v0.2 §15 (même liste, sans
- * `untrainedAllowed` ni `used`, qui viennent de la Fiche seule).
- *
- * Le score n'est pas calculé à l'étape 2. Formule prévue, pour plus tard
- * (Fiche v0.2 §4) : total de la caractéristique + training, ou
- * ceil(total / 2) si specialized et training = 0. La caractéristique liée
- * vit sur l'acteur ; la calculer ici lierait l'objet au porteur.
+ * Réf. LdR v0.2 §4 et §15, Fiche v0.2 §4.
+ * Score (caractéristique + formation, ou moitié si (F) sans formation) :
+ * `module/dice/skill-score.mjs`. Il a besoin de l'acteur, donc il n'est
+ * pas calculé dans ce modèle.
  */
 import { SOL } from "../config.mjs";
 import { BaseItemData } from "./base-item.mjs";
@@ -31,15 +28,39 @@ export class SkillData extends BaseItemData {
       }),
       // 0 à 60. Réf. Fiche v0.2 §4, LdR v0.2 §15.
       training: numberField("SOL.Skill.training", { initial: 0, min: 0, max: 60, integer: true, step: 1 }),
-      specialized: boolField("SOL.Skill.specialized", false),
+      // Marqueur (F). Réf. LdR v0.2 §4 et §15.
+      trainingRequired: boolField("SOL.Skill.trainingRequired", false),
+      // Faux seulement quand la description interdit le jet sans formation.
+      untrainedAllowed: boolField("SOL.Skill.untrainedAllowed", true),
+      // Marqueur (Sp). Réf. LdR v0.2 §4. Chaque spécialité reste un objet.
+      perSpecialty: boolField("SOL.Skill.perSpecialty", false),
+      // Spécialité, ou spécificité libre de Culture. Réf. LdR v0.2 §4.
       specialty: stringField("SOL.Skill.specialty"),
       domain: stringField("SOL.Skill.domain.label", {
         initial: "technique",
         blank: false,
         choices: SOL.skillDomains
       }),
-      untrainedAllowed: boolField("SOL.Skill.untrainedAllowed", true),
       used: boolField("SOL.Skill.used", false)
     };
+  }
+
+  /**
+   * L'étape 2 stockait `specialized` (ancien marqueur S).
+   * On le recopie dans `trainingRequired` (marqueur F), puis on retire
+   * l'ancienne clé pour qu'elle ne soit plus relue.
+   * Réf. LdR v0.2 §4, consigne étape 4.
+   *
+   * @param {object} source
+   * @returns {object}
+   */
+  static migrateData(source) {
+    if ( source && typeof source === "object" ) {
+      if ( ("specialized" in source) && !("trainingRequired" in source) ) {
+        source.trainingRequired = Boolean(source.specialized);
+      }
+      delete source.specialized;
+    }
+    return super.migrateData(source);
   }
 }

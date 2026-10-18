@@ -14,7 +14,7 @@
  * description demandée par la consigne de l'étape 2. Masse, delta-v, etc.
  * (LdR v0.2 §15) n'ont ni type ni défaut : ils ne sont pas créés ici.
  */
-import { SOL } from "../config.mjs";
+import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { migrateNpcSource } from "./npc-migrate.mjs";
 import { PersonData } from "./person.mjs";
 import { htmlField, stringField } from "./fields.mjs";
@@ -41,6 +41,17 @@ function describedActorSchema() {
  * @extends PersonData
  */
 export class NpcData extends PersonData {
+  /**
+   * Base 1 à 100. Le personnage reste plafonné à 60.
+   * Décision Marc 18/10/2026. Même minimum que `characteristicFields`.
+   *
+   * @override
+   * @returns {typeof SOL.characteristicFields}
+   */
+  static characteristicFieldBounds() {
+    return characteristicFieldsFor("npc");
+  }
+
   /**
    * @override
    * @param {object} source

@@ -1,78 +1,69 @@
-# Tester le système « Sol, Nouvelle Ère » (étape 3)
+# Tester le système « Sol, Nouvelle Ère » (étape 4)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 10 à 15 minutes.
-Version attendue : **0.3.0**.
+Version attendue : **0.4.0**.
 
-La procédure de l'étape 2 (version 0.2.0, déjà validée) est dans [docs/tests/etape-2.md](docs/tests/etape-2.md).
+La procédure de l'étape 3 (version 0.3.0, déjà validée) est dans [docs/tests/etape-3.md](docs/tests/etape-3.md).
 
-Gardez la console ouverte (étape 2) pendant tout le test. À la fin, elle ne doit contenir **aucune ligne rouge**.
+Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À la fin, elle ne doit contenir **aucune ligne rouge**.
 
 ## 1. Mettre à jour
 
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
-3. **Avec git** : dans ce dossier, lancez `git pull`.
-   **Sans git** : téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.3.0**.
+3. Téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.4.0**.
+5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
-## 2. Console
+## 2. Jet de caractéristique
 
-Ouvrez le monde de l'étape 2. **F12**, onglet **Console**.
-Vous devez y voir : `Sol, Nouvelle Ère | Initialisation du système`.
+Ouvrez **Ilka Moravec**, onglet **Principal**.
 
-## 3. Ilka : trois onglets
+1. Cliquez sur **FOR** (le nom Force, avec le dé). Une fenêtre s'ouvre : le score affiché est l'Actuelle de FOR.
+2. Laissez **Normale (0)** et le modificateur à **0**. Le total affiché est **0**. Cliquez **Lancer**.
+3. Une carte apparaît dans la discussion. **Annuler** dans la fenêtre ne doit rien envoyer : rouvrez le jet et cliquez Annuler pour le vérifier.
 
-Ouvrez **Ilka Moravec**. L'en-tête (portrait, nom, type **Personnage**) reste visible quel que soit l'onglet.
+### Lire la carte
 
-### Principal
+- La première ligne est ce qui a été testé (ici FOR).
+- **Score** : l'Actuelle, avant la difficulté.
+- **Difficulté** : le libellé et son modificateur (Normale, 0).
+- **Modificateur** : le nombre libre saisi (0).
+- **Total** : difficulté + modificateur, jamais en dessous de −50 ni au-dessus de +50.
+- **Score visé** : score + total.
+- **Dé** : deux chiffres. **00** veut dire 100.
+- Le résultat est **Réussite**, **Échec**, **Réussite critique** ou **Échec critique**.
+- **DR** (degrés de réussite) si ça réussit, **DE** (degrés d'échec) sinon. Un 0 est une réussite de justesse, ou un échec sans gravité.
 
-- Identité : Concept, Faction, État ou statut politique, Bloc.
-- Trois emplacements : **Origine**, **Milieu**, **Profession**. Vides : une phrase du genre « Aucune origine. » et un bouton **Créer**. Remplis : le nom (cliquable), un bouton modifier, un bouton retirer.
-- Le tableau des caractéristiques est **celui de l'étape 2** (FOR Base 30, etc.). On peut encore y écrire. La colonne Actuelle n'est pas une case.
-- **Compétences** : nom, abréviation (FOR, INT…), Formation. Pas de score calculé.
-- **Atouts**.
-- **État physique** : **Blessures** et **Séquelles**.
+4. Relancez FOR. Choisissez **Extrême (−40)** et mettez le modificateur à **−20**. Le total affiché doit être **−50** (plafonné), pas −60. Lancez. La carte reprend Extrême, modificateur −20, total −50, et un score visé égal à l'Actuelle moins 50.
 
-Atouts, Origine, Milieu, Profession, Blessures et Séquelles sont sur **Principal**, pas dans l'inventaire.
+## 3. Compétence
 
-### Inventaire
+1. Dans **Compétences**, **Créer**. Ouvrez l'objet (clic sur le nom, pas sur le dé).
+2. Nommez-le **Pilotage**. Caractéristique : **Coordination**. Formation : **0**. Cochez **Formation requise (F)**. Laissez **Utilisable sans formation** coché. Fermez la feuille de l'objet.
+3. Sur la ligne, le score est la moitié de l'Actuelle de COO, arrondie au supérieur. Exemple : COO 51 → score 26. COO 50 → score 25.
+4. Cliquez le **dé** à côté du nom (le nom, lui, rouvre l'objet). La fenêtre montre ce score. Vous pouvez annuler.
+5. Rouvrez Pilotage, décochez **Utilisable sans formation**, fermez. La ligne affiche **Impossible**. Le dé prévient et **n'envoie pas** de carte.
 
-Listes séparées : **Armes** (dégâts et portée en lecture seule), **Armures/Vêtements** (protection du torse), **Équipement** (quantité), **Augmentations**, **Substances**, **Logiciels**. Chaque liste a son bouton **Créer**.
+## 4. Arme
 
-### Roleplay
+1. Onglet **Inventaire**, liste **Armes**, **Créer**.
+2. Sur la feuille de l'arme : Compétence = `Armes de poing` (cette écriture), Dégâts = un nombre, par exemple 6. Fermez.
+3. Sur la ligne, cochez **Équipé**. Le dé n'est là qu'une fois la case cochée. Décochez pour le voir disparaître, puis recochez.
+4. Cliquez le dé. Le score est l'Actuelle de COO (Ilka n'a pas de compétence nommée Armes de poing : on utilise COO). Lancez en **Normale**.
+5. **Échec** : la carte a un DE, pas de zone. Relancez jusqu'à une **Réussite**.
+6. **Réussite** : la carte ajoute une **Localisation** (tête, bras, torse ou jambe) et des **Dégâts** = dégâts de l'arme + DR. Une **Réussite critique** ajoute la phrase « Réussite critique : la zone peut être choisie ». Rien n'est appliqué à une cible : pas d'armure, pas de blessure créée.
 
-Taille, Masse, Âge, Lieu de naissance, Gravité natale, Contacts, Défauts, Biographie, Notes.
-Ce qu'Ilka avait déjà dans ces cases (concept mis à part, qui est sur Principal) est encore là.
+## 5. PNJ
 
-## 4. Créer un objet par section
+Ouvrez **Cobaye PNJ** (ou créez un acteur **PNJ**). Dans le tableau, mettez la **Base** de FOR à **80**. Elle reste 80 (sur un Personnage, la Base s'arrête à 60).
 
-Sur Ilka, pour chaque liste ou emplacement vide, cliquez **Créer** (un objet de ce type apparaît ; le nom ouvre sa feuille).
+## 6. Liste de contrôle
 
-Si l'étape 2 a déjà posé une Origine, un Milieu, une Profession ou une Compétence, c'est bon : ne créez pas un deuxième exemplaire d'Origine, de Milieu ou de Profession (un seul est autorisé). Les autres listes acceptent un objet de plus.
-
-L'en-tête est toujours visible après ces créations.
-
-## 5. L'onglet ne saute pas
-
-1. Allez sur **Roleplay**.
-2. Changez l'Âge (un nombre différent de celui affiché), puis cliquez ailleurs.
-3. L'onglet reste **Roleplay**. L'âge modifié est toujours affiché.
-4. Fermez la feuille, rouvrez-la : l'âge est conservé. En rouvrant, la fiche revient sur le dernier onglet utilisé ; après F5 elle revient sur Principal.
-
-## 6. PNJ
-
-1. Ouvrez **Cobaye PNJ** (créé à l'étape 2). Même feuille qu'Ilka : trois onglets, en-tête **PNJ**, tableau de caractéristiques.
-2. Les caractéristiques sont aux défauts : Base **25**, Actuelle **25** (ce PNJ n'avait pas de tableau avant).
-3. Onglet **Roleplay**, case **Biographie** : la phrase que vous aviez écrite dans Description à l'étape 2 est là. Elle n'a pas disparu.
-4. S'il n'y a pas de Cobaye PNJ : créez un acteur **PNJ**, vérifiez les trois onglets et les caractéristiques à 25.
-
-## 7. Liste de contrôle
-
-- [ ] Version **0.3.0**, console : `Sol, Nouvelle Ère | Initialisation du système`.
-- [ ] Ilka : onglets Principal, Inventaire, Roleplay. L'en-tête reste visible.
-- [ ] Principal : Origine, Milieu, Profession, caractéristiques, Compétences, Atouts, Blessures, Séquelles.
-- [ ] Inventaire : Armes, Armures/Vêtements, Équipement, Augmentations, Substances, Logiciels.
-- [ ] Un **Créer** par section vide ajoute le bon type.
-- [ ] Changer l'âge sur Roleplay ne ramène pas à Principal.
-- [ ] Le PNJ a la même feuille. L'ancienne description est dans Biographie.
-- [ ] **Aucune ligne rouge** dans la console.
+- [ ] Version **0.4.0**, aucune ligne rouge dans la console.
+- [ ] FOR en Normale envoie une carte lisible. Annuler n'envoie rien.
+- [ ] Extrême et modificateur −20 : total **−50** dans la fenêtre et sur la carte.
+- [ ] Pilotage, formation requise, formation 0 : score = moitié de COO, arrondie au-dessus.
+- [ ] Sans « Utilisable sans formation », le jet est refusé.
+- [ ] Arme équipée « Armes de poing » : en cas de réussite, localisation et dégâts sur la carte.
+- [ ] Base d'un PNJ à **80**.

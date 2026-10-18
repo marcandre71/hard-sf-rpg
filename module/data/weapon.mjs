@@ -16,7 +16,8 @@ export class WeaponData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      // Nom ou id de compétence. Réf. Fiche v0.2 §4 (String, pas une référence).
+      // Nom de la compétence sur l'acteur (pas un id).
+      // Décision Marc 18/10/2026. Réf. Fiche v0.2 §4 (String).
       skill: stringField("SOL.Weapon.skill"),
       // Décision Marc 17/10/2026 : les dégâts sont un entier.
       damage: numberField("SOL.Weapon.damage", { initial: 0, integer: true, step: 1 }),

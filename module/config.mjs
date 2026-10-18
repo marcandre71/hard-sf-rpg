@@ -113,6 +113,32 @@ export const SOL = {
    */
   characteristicValueBounds: { min: 0, max: 100 },
 
+  /**
+   * Huit difficultés. Réf. LdR v0.2 §5. Défaut : `normal` (0).
+   * `label` est une clé i18n.
+   */
+  difficulties: {
+    veryEasy: { modifier: 30, label: "SOL.Difficulty.veryEasy" },
+    easy: { modifier: 20, label: "SOL.Difficulty.easy" },
+    simple: { modifier: 10, label: "SOL.Difficulty.simple" },
+    normal: { modifier: 0, label: "SOL.Difficulty.normal" },
+    tricky: { modifier: -10, label: "SOL.Difficulty.tricky" },
+    hard: { modifier: -20, label: "SOL.Difficulty.hard" },
+    veryHard: { modifier: -30, label: "SOL.Difficulty.veryHard" },
+    extreme: { modifier: -40, label: "SOL.Difficulty.extreme" }
+  },
+
+  /**
+   * Compétence d'arme absente de la fiche : caractéristique de repli.
+   * Décision Marc 18/10/2026. La clé est le nom français, la valeur une
+   * caractéristique. Ces compétences ne sont pas (F). Réf. LdR v0.2 §4.
+   */
+  weaponSkillDefaults: {
+    "Armes de poing": "coo",
+    "Armes d'épaule": "coo",
+    "Corps-à-corps": "for"
+  },
+
   /** Types d'acteurs déclarés. Réf. LdR v0.2 §15, Fiche v0.2 §4. */
   actorTypes: ["character", "npc", "creature", "synthetic", "drone", "vehicle", "ship"],
 
@@ -276,3 +302,19 @@ export const SOL = {
     station: "SOL.Ship.category.station"
   }
 };
+
+/**
+ * Bornes des champs stockés d'une caractéristique.
+ * Le personnage garde `base` à 60. Le PNJ va jusqu'à 100, même minimum.
+ * Décision Marc 18/10/2026. Ne modifie pas l'objet partagé.
+ *
+ * @param {"character"|"npc"|string} actorType
+ * @returns {typeof SOL.characteristicFields}
+ */
+export function characteristicFieldsFor(actorType) {
+  if ( actorType !== "npc" ) return SOL.characteristicFields;
+  return {
+    ...SOL.characteristicFields,
+    base: { ...SOL.characteristicFields.base, max: SOL.characteristicValueBounds.max }
+  };
+}

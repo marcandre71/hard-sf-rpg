@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : étape 3 (version 0.3.0)
+## État du système : étape 4 (version 0.4.0)
 
-On avance pas à pas (« ne pas brûler les étapes »). L'étape 2 (types, modèles, feuilles minimales) est validée. Cette étape ne change que la **mise en page** : la feuille du Personnage et du PNJ a trois onglets (Principal, Inventaire, Roleplay). Pas de jets de dés, pas d'automatisation, pas de règle nouvelle. L'interface est en français.
+On avance pas à pas (« ne pas brûler les étapes »). L'étape 3 (feuille à onglets) est validée. Cette étape rend la feuille **interactive** : jet de caractéristique, de compétence et d'arme, avec carte de discussion. Pas d'application des dégâts à une cible (armure, seuil de blessure, blessure créée). L'interface est en français.
 
 Acteurs : **Personnage** (`character`), **PNJ** (`npc`), **Créature** (`creature`), **Synthétique** (`synthetic`), **Drone** (`drone`), **Véhicule** (`vehicle`), **Vaisseau** (`ship`).
 
@@ -22,7 +22,7 @@ Objets : **Compétence** (`skill`), **Atout** (`talent`), **Origine** (`origin`)
 
 Le Personnage et le PNJ partagent la même feuille et les mêmes champs (caractéristiques, identité, textes). Les autres acteurs gardent une feuille simple, avec leurs objets groupés par type. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
 
-Pas encore inclus : jets de dés, valeurs dérivées (seuil de blessure, tolérance aux g, initiative, Endurance, Sang-froid), effets automatiques, compendiums.
+Pas encore inclus : seuil de blessure, tolérance aux g, Endurance, Sang-froid, application des dégâts, initiative glissante, effets automatiques, compendiums. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026.
 
 Compatibilité : **FoundryVTT version 14** (cible : version 14 Stable, build 369 ; `compatibility.minimum` et `compatibility.verified` = `"14"`).
 
@@ -44,7 +44,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.3.0.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.4.0.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -54,8 +54,9 @@ Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRI
 ```
 system.json                         manifeste (types, htmlFields, langues fr et en)
 module/sol.mjs                      point d'entrée (hook « init »)
-module/config.mjs                   caractéristiques, choix, objets autorisés par acteur
+module/config.mjs                   caractéristiques, choix, difficultés, objets autorisés
 module/guards.mjs                   refus des objets interdits (preCreateItem)
+module/dice/                        jet D100 (règles pures), fenêtre et carte de discussion
 module/data/                        un modèle par type (base commune des objets)
 module/sheets/character-sheet.mjs   feuille du Personnage
 module/sheets/actor-sheet.mjs       feuille des autres acteurs

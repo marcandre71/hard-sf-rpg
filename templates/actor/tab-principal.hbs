@@ -1,7 +1,8 @@
 {{!--
   Onglet Principal. data-group / data-tab / tab.cssClass : onglets ApplicationV2.
   Caractéristiques : saisies dans _source, Actuelle dérivée (pas un input).
-  Compétence : nom, abréviation, formation. Pas de score.
+  Compétence : nom, abréviation, formation, score. Le libellé de
+  caractéristique lance le jet. Réf. LdR v0.2 §4.
   Réf. consigne étape 3, Fiche v0.2 §4. Pas de Vice ni de Lueur (Fiche v0.2 §5).
 --}}
 <section class="tab sol-tab {{tab.cssClass}}" data-group="main" data-tab="principal">
@@ -30,8 +31,11 @@
       {{#each characteristics as |c|}}
       <tr data-characteristic="{{c.key}}">
         <td class="sol-col-name">
-          <span class="sol-abbr">{{localize c.abbr}}</span>
-          <span class="sol-label">{{localize c.label}}</span>
+          <button type="button" class="sol-roll-characteristic" data-action="rollCharacteristic" data-characteristic="{{c.key}}">
+            <i class="fa-solid fa-dice-d20"></i>
+            <span class="sol-abbr">{{localize c.abbr}}</span>
+            <span class="sol-label">{{localize c.label}}</span>
+          </button>
         </td>
         {{!-- min/max lus dans characteristicFields. temp n'a pas de borne (Fiche v0.2 §4). --}}
         <td><input type="number" name="{{c.path}}.base" value="{{c.base}}" min="{{../bounds.base.min}}" max="{{../bounds.base.max}}" step="1"></td>

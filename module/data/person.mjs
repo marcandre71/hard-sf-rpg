@@ -13,10 +13,12 @@
  * Identité, contacts, défauts, biographie, notes : Fiche v0.2 §4.
  * Vice et Lueur n'existent pas (Fiche v0.2 §5 : supprimés le 17/10/2026).
  *
- * Hors périmètre : jets, autres valeurs dérivées (seuil de blessure,
- * tolérance aux g, initiative, Endurance, Sang-froid), ressources, XP.
+ * Hors périmètre ici : autres valeurs dérivées (seuil de blessure,
+ * tolérance aux g, Endurance, Sang-froid), ressources, XP.
+ * Décision Marc 18/10/2026 : pas de valeur dérivée Initiative (RÉF/10).
+ * L'initiative glissante (test de Vigilance, LdR v0.2 §7) viendra plus tard.
  */
-import { SOL } from "../config.mjs";
+import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { htmlField, numberField, SchemaField, stringField } from "./fields.mjs";
 
 const { NumberField } = foundry.data.fields;
@@ -30,16 +32,27 @@ const { NumberField } = foundry.data.fields;
 export class PersonData extends foundry.abstract.TypeDataModel {
 
   /**
+   * Bornes des champs stockés. Le PNJ redéfinit cette méthode :
+   * sa Base va jusqu'à 100. Décision Marc 18/10/2026.
+   *
+   * @returns {typeof SOL.characteristicFields}
+   */
+  static characteristicFieldBounds() {
+    return characteristicFieldsFor("character");
+  }
+
+  /**
    * Schéma du champ `system`.
    *
    * @override
    * @returns {foundry.data.fields.DataSchema}
    */
   static defineSchema() {
+    const bounds = this.characteristicFieldBounds();
     const characteristics = {};
     for ( const key of Object.keys(SOL.characteristics) ) {
       const fields = {};
-      for ( const [name, cfg] of Object.entries(SOL.characteristicFields) ) {
+      for ( const [name, cfg] of Object.entries(bounds) ) {
         // Bornes lues dans CONFIG.SOL : les changer ici ne suffit pas,
         // il faut les changer dans characteristicFields.
         const options = {

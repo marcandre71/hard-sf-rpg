@@ -1,7 +1,7 @@
 # Tester l'étape 2 (archive)
 
 Cette procédure correspond à la **version 0.2.0**, déjà validée par Marc.
-Le système en cours est l'étape 3 : suivre [TESTER.md](../../TESTER.md).
+Les procédures plus récentes sont dans [etape-3.md](etape-3.md) (version 0.3.0) et [TESTER.md](../../TESTER.md).
 Ce fichier est conservé pour ne pas perdre le scénario de l'étape 2.
 Sur une 0.3.0, le PNJ n'a plus de champ Description (il est dans Biographie) et la feuille du personnage est en onglets : ne pas rejouer ce scénario tel quel sur la version actuelle.
 

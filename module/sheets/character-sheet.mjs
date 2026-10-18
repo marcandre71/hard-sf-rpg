@@ -8,7 +8,8 @@
  * - roleplay : taille, masse, âge, lieu de naissance, gravité, contacts,
  *   défauts, biographie, notes.
  *
- * Pas de jets, pas de score de compétence. Réf. consigne étape 3.
+ * Un clic sur le libellé d'une caractéristique lance un D100.
+ * Réf. LdR v0.2 §15, consigne étape 4.
  * La colonne Actuelle est lue sur la donnée préparée (`value`).
  * Les saisies lisent `document._source` ou `system._source`.
  *
@@ -22,6 +23,7 @@
  * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
  */
 import { SOL } from "../config.mjs";
+import { performRoll } from "../dice/chat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
@@ -69,7 +71,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: itemListActions
+    actions: { ...itemListActions, rollCharacteristic }
   };
 
   /**
@@ -132,7 +134,9 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.docSource = actor._source;
     context.systemSource = stored;
     context.typeLabel = `TYPES.Actor.${actor.type}`;
-    context.bounds = SOL.characteristicFields;
+    // Personnage : base max 60. PNJ : base max 100. Décision Marc 18/10/2026.
+    const fieldBounds = actor.system.constructor.characteristicFieldBounds();
+    context.bounds = fieldBounds;
     context.characteristics = Object.entries(SOL.characteristics).map(([key, cfg]) => {
       const source = stored.characteristics?.[key] ?? {};
       const prepared = actor.system.characteristics[key];
@@ -140,10 +144,10 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         key,
         label: cfg.label,
         abbr: cfg.abbr,
-        base: source.base ?? SOL.characteristicFields.base.initial,
-        origin: source.origin ?? SOL.characteristicFields.origin.initial,
-        advance: source.advance ?? SOL.characteristicFields.advance.initial,
-        temp: source.temp ?? SOL.characteristicFields.temp.initial,
+        base: source.base ?? fieldBounds.base.initial,
+        origin: source.origin ?? fieldBounds.origin.initial,
+        advance: source.advance ?? fieldBounds.advance.initial,
+        temp: source.temp ?? fieldBounds.temp.initial,
         // Seule colonne dérivée : pas un input.
         value: prepared.value,
         path: `system.characteristics.${key}`
@@ -206,6 +210,25 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if ( partId === "tabs" ) part.group = TAB_GROUP;
     return part;
   }
+}
+
+/**
+ * Jet de caractéristique. Le score est l'Actuelle, avant difficulté.
+ * Réf. LdR v0.2 §2 et §15.
+ *
+ * @this {CharacterSheet}
+ * @param {PointerEvent} event
+ * @param {HTMLElement} target
+ * @returns {Promise<void>}
+ */
+async function rollCharacteristic(event, target) {
+  const key = target.closest("[data-characteristic]")?.dataset.characteristic;
+  const cfg = SOL.characteristics[key];
+  if ( !cfg ) return;
+  const actor = this.document;
+  const score = actor.system.characteristics[key]?.value ?? 0;
+  const label = `${game.i18n.localize(cfg.abbr)} — ${game.i18n.localize(cfg.label)}`;
+  await performRoll({ actor, label, score });
 }
 
 /**

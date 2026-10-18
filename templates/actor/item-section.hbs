@@ -13,6 +13,17 @@
     <li class="sol-item draggable" data-item-id="{{item.id}}" data-item-type="{{item.type}}">
       <img src="{{item.img}}" alt="">
       <button type="button" class="sol-item-name" data-action="openItem">{{item.name}}</button>
+      {{#if item.canRoll}}
+      <button type="button" class="sol-item-roll" data-action="rollItem" data-tooltip="{{localize 'SOL.Roll.roll'}}">
+        <i class="fa-solid fa-dice-d20"></i>
+      </button>
+      {{/if}}
+      {{#if item.showEquipped}}
+      <label class="sol-equipped">
+        <input type="checkbox" data-action="toggleEquipped" {{#if item.equipped}}checked{{/if}}>
+        {{localize "SOL.Field.equipped"}}
+      </label>
+      {{/if}}
       {{#if item.fields.length}}
       <span class="sol-item-fields">
         {{#each item.fields as |field|}}

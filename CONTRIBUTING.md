@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.3.0** : mise en page des feuilles seulement. Pas de jets, pas d'automatisation, pas de règle nouvelle.
+L'étape en cours est la **0.4.0** : jets de dés sur la feuille du Personnage et du PNJ. Pas d'application des dégâts, pas d'automatisation des origines.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,7 +16,7 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre (ne pas les ajouter) : jets de dés, valeurs dérivées autres que l'Actuelle des caractéristiques (seuil de blessure, tolérance aux g, initiative, Endurance, Sang-froid, encombrement, mouvement), Active Effects, compendiums, automation des origines (remplir les caractéristiques toutes seules), score de compétence. Vice et Lueur n'existent pas : ne pas les réintroduire. L'étape 3 est la mise en page seulement.
+Hors périmètre (ne pas les ajouter) : valeurs dérivées autres que l'Actuelle des caractéristiques et le score de compétence (seuil de blessure, tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), application d'une attaque (armure, création de Blessure), initiative glissante, Active Effects, compendiums, automation des origines. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
 
 ## Où sont les règles du jeu
 
@@ -29,15 +29,21 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.3.0, compatibilité 14,
+system.json                         Manifeste : id, version 0.4.0, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields pour chaque HTMLField.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
                                     retrait des feuilles V1 du cœur, registerSheet, garde-fou.
-module/config.mjs                   Caractéristiques, characteristicFields (base max 60),
+module/config.mjs                   Caractéristiques, characteristicFields (base max 60 ;
+                                    PNJ : characteristicFieldsFor, base max 100),
                                     characteristicValueBounds (Actuelle 0 à 100),
+                                    difficulties (huit niveaux, §5), weaponSkillDefaults,
                                     choix d'énumération, actorTypes, itemTypes,
                                     allowedItems, uniqueOnCharacter, uniqueItemActors.
+module/dice/d100.mjs                Règles du D100, sans Foundry. Test : tests/d100.test.mjs.
+module/dice/skill-score.mjs         Score de compétence et nom de compétence d'une arme.
+module/dice/roll-dialog.mjs         DialogV2 : difficulté, modificateur libre, total borné.
+module/dice/chat.mjs                Roll 1d100, ChatMessage, gabarit templates/chat/roll-card.hbs.
 module/guards.mjs                   Hook preCreateItem : refuse un objet interdit, et un
                                     second origin / background / profession sur un personnage
                                     (y compris deux d'un coup dans le même appel).
@@ -112,7 +118,7 @@ Bornes actuelles (`SOL.characteristicFields`) :
 | `advance` | 0 | 0 | 10 |
 | `temp` | 0 | aucune | aucune |
 
-Décision Marc 17/10/2026 : `base` plafonne à 60 (LdR v0.2 §9, 60 max avant origine). Le défaut reste 25.
+Décision Marc 17/10/2026 : `base` du personnage plafonne à 60 (LdR v0.2 §9, 60 max avant origine). Le défaut reste 25. Décision Marc 18/10/2026 : la Base d'un PNJ va de 1 à 100 (`NpcData.characteristicFieldBounds`, `characteristicFieldsFor("npc")`). Le minimum reste celui du personnage.
 
 `value` n'est pas un champ du schéma. `prepareDerivedData` la recalcule puis la borne avec `SOL.characteristicValueBounds` : `Math.clamp(base + origin + advance + temp, 0, 100)`. Les champs stockés ne sont pas modifiés par ce plafond. Décision Marc 17/10/2026.
 Un `NumberField` hors bornes est **ramené silencieusement** à la borne la plus proche, sans message. Les `min` / `max` du HTML ne font que guider la saisie.
@@ -170,14 +176,34 @@ node --check module/sheets/item-list.mjs
 node --check module/sheets/character-sheet.mjs
 node --check module/sheets/actor-sheet.mjs
 node --check module/sheets/item-sheet.mjs
+node --check module/dice/d100.mjs
+node --check module/dice/skill-score.mjs
+node --check module/dice/roll-dialog.mjs
+node --check module/dice/chat.mjs
 node --check tests/models.test.mjs
+node --check tests/d100.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
+node tests/d100.test.mjs
 node tests/models.test.mjs
 ```
 
 `tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts (`validate()` doit renvoyer `true`), avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Si `FOUNDRY_PATH` est défini mais que le code commun ne se charge pas, le script s'arrête avec le code 1. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
 
-Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
+Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md), l'étape 3 dans [docs/tests/etape-3.md](docs/tests/etape-3.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
+
+## Jets (étape 4)
+
+`module/dice/d100.mjs` ne charge pas Foundry. `tests/d100.test.mjs` se lance avec `node` seul. On n'y recopie pas une formule ailleurs : la feuille et `chat.mjs` appellent ces fonctions.
+
+Score de compétence (`skill-score.mjs`, Réf. LdR v0.2 §4) : caractéristique actuelle + formation. Si `trainingRequired` et formation 0, moitié arrondie au supérieur quand `untrainedAllowed` est vrai, sinon le jet est refusé. Décision Marc 18/10/2026 : la moitié est calculée avant la difficulté. `SkillData.migrateData` recopie `specialized` dans `trainingRequired`.
+
+Difficultés : `SOL.difficulties`, défaut `normal`. Le total difficulté + modificateur libre est borné à ±50 (`cappedModifier`). Le score visé n'est pas reborné. Décision Marc 18/10/2026.
+
+Arme : `weapon.system.skill` est le nom d'une compétence de l'acteur (casse ignorée). Sinon `SOL.weaponSkillDefaults` (Armes de poing et d'épaule → COO, Corps-à-corps → FOR), et ces compétences ne sont pas (F). Nom inconnu : avertissement, pas de jet. Le dé n'est affiché que si `equipped` est vrai. Réussite : localisation par inversion des chiffres, dégâts = dégâts de l'arme + DR. Réussite critique : le texte « la zone peut être choisie », sans interface pour la choisir. Décision Marc 18/10/2026. Pas d'armure ni de Blessure à cette étape.
+
+`performRoll` (`chat.mjs`) ouvre `DialogV2.wait`. Annuler ne lance pas le dé. Le dé est `new Roll("1d100")`, puis `ChatMessage.create` avec `rolls` et `ChatMessage.getSpeaker({ actor })`. `ChatMessage.applyMode` reçoit le mode courant (`game.settings` `core.rollMode`, clés de `CONFIG.Dice.rollModes`). Le gabarit est `templates/chat/roll-card.hbs`.
+
+Pour ajouter un type de jet : calculer un score (helper existant, ou nouveau fichier sans Foundry s'il y a une formule), ajouter un bouton `data-action`, appeler `performRoll`. Une difficulté nouvelle se déclare dans `SOL.difficulties` et `lang/fr.json`, pas dans le gabarit. Une ligne nouvelle sur la carte se prépare dans `chat.mjs` et s'affiche dans `roll-card.hbs`. Ne pas dupliquer `resolveD100`.
 
 ## Feuille à onglets (étape 3)
 
@@ -195,5 +221,9 @@ Documentation officielle, version 14 :
 - [formGroup](https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.formGroup.html)
 - [Actors.registerSheet](https://foundryvtt.com/api/v14/classes/foundry.documents.collections.Actors.html#registerSheet) / `unregisterSheet` (feuilles V1 : `foundry.appv1.sheets.ActorSheet` et `ItemSheet`)
 - [Hooks](https://foundryvtt.com/api/v14/classes/foundry.helpers.Hooks.html) — `init`, `preCreateItem`
+- [DialogV2.wait](https://foundryvtt.com/api/v14/classes/foundry.applications.api.DialogV2.html) — fenêtre de jet
+- [Roll](https://foundryvtt.com/api/v14/classes/foundry.dice.Roll.html) — `new Roll("1d100")`, `evaluate`
+- [ChatMessage](https://foundryvtt.com/api/v14/classes/foundry.documents.ChatMessage.html) — `create`, `getSpeaker`, `applyMode`
+- [renderTemplate](https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.renderTemplate.html)
 
 Articles utiles : [System Data Models](https://foundryvtt.com/article/system-data-models/), [Localization](https://foundryvtt.com/article/localization/).

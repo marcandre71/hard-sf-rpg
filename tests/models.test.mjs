@@ -18,6 +18,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { characteristicFieldsFor } from "../module/config.mjs";
 import { migrateNpcSource } from "../module/data/npc-migrate.mjs";
 
 /**
@@ -65,6 +66,17 @@ checkNpcMigration(
   { biography: "déjà", notes: "n", hasBiography: true },
   "biography déjà remplie ne doit pas être écrasée"
 );
+
+const characterBase = characteristicFieldsFor("character").base;
+const npcBase = characteristicFieldsFor("npc").base;
+if ( characterBase.max !== 60 || characterBase.min !== 1 || npcBase.min !== 1 || npcBase.max !== 100 ) {
+  console.error("Base personnage 1–60, Base PNJ 1–100.", { characterBase, npcBase });
+  process.exit(1);
+}
+if ( characteristicFieldsFor("character").base.max !== 60 ) {
+  console.error("Les bornes du PNJ ont modifié celles du personnage.");
+  process.exit(1);
+}
 
 /**
  * Arrêt propre : Foundry n'est pas là, ce n'est pas un échec du système.
@@ -237,6 +249,15 @@ try {
   const migratedNpc = new NpcData({ description: "x", notes: "" });
   if ( ("description" in migratedNpc._source) || migratedNpc._source.biography !== "x" ) {
     throw new Error("NpcData : _source ne doit plus avoir description, et biography doit valoir « x »");
+  }
+  const npcBaseMax = new NpcData({}).schema.fields.characteristics.fields.for.fields.base.max;
+  const characterBaseMax = new CharacterData({}).schema.fields.characteristics.fields.for.fields.base.max;
+  if ( npcBaseMax !== 100 || characterBaseMax !== 60 ) {
+    throw new Error(`Base : personnage ${characterBaseMax}, PNJ ${npcBaseMax}`);
+  }
+  const migratedSkill = new SkillData({ specialized: true, training: 0 });
+  if ( migratedSkill._source.trainingRequired !== true || ("specialized" in migratedSkill._source) ) {
+    throw new Error("specialized doit devenir trainingRequired");
   }
   for ( const [label, Model] of models ) checkModel(Model, label);
   const sequel = checkModel(SequelData, "sequel");

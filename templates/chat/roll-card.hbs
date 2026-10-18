@@ -1,0 +1,26 @@
+{{!--
+  Carte de jet D100. Les textes sont déjà traduits dans module/dice/chat.mjs
+  (résultat, zone). Les libellés de ligne passent par localize.
+  Pas d'armure, pas de Seuil de blessure, pas de Blessure créée.
+  Réf. LdR v0.2 §2 et §7.
+--}}
+<article class="sol-nouvelle-ere sol-roll-card">
+  <h4 class="sol-roll-title">{{label}}</h4>
+  <ul class="sol-roll-lines">
+    <li>{{localize "SOL.Roll.score"}} : {{score}}</li>
+    <li>{{localize "SOL.Roll.difficulty"}} : {{difficultyLabel}} ({{difficultyModifier}})</li>
+    <li>{{localize "SOL.Roll.free"}} : {{free}}</li>
+    <li>{{localize "SOL.Roll.total"}} : {{total}}</li>
+    <li>{{localize "SOL.Roll.target"}} : {{target}}</li>
+    <li>{{localize "SOL.Roll.die"}} : {{die}}</li>
+    <li class="sol-roll-result sol-roll-{{resultClass}}">{{result}}</li>
+    <li>{{degreeLabel}} : {{degree}}</li>
+    {{#if location}}
+    <li>{{localize "SOL.Roll.location"}} : {{location}}</li>
+    <li>{{localize "SOL.Roll.damage"}} : {{damage}}</li>
+    {{/if}}
+  </ul>
+  {{#if chooseZone}}
+  <p class="sol-roll-choose">{{localize "SOL.Roll.chooseZone"}}</p>
+  {{/if}}
+</article>

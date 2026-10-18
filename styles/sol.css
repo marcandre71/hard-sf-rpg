@@ -160,6 +160,69 @@
   font-size: 1.1rem;
 }
 
+.sol-nouvelle-ere button.sol-roll-characteristic,
+.sol-nouvelle-ere button.sol-item-roll {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-text-hyperlink);
+}
+
+.sol-nouvelle-ere button.sol-roll-characteristic {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.sol-nouvelle-ere button.sol-item-roll,
+.sol-nouvelle-ere .sol-item-edit,
+.sol-nouvelle-ere .sol-item-delete {
+  flex: 0 0 auto;
+}
+
+.sol-nouvelle-ere .sol-equipped {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  font-size: 0.9rem;
+}
+
+.sol-nouvelle-ere.sol-roll-dialog .sol-roll-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sol-nouvelle-ere.sol-roll-dialog .sol-roll-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sol-nouvelle-ere.sol-roll-card {
+  display: block;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-roll-title {
+  margin: 0 0 0.35rem;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-roll-lines {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-roll-critical-success {
+  font-weight: bold;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-roll-critical-failure {
+  font-weight: bold;
+}
+
 .sol-nouvelle-ere .sol-slots {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -216,6 +279,7 @@
   opacity: 0.75;
 }
 
+.sol-nouvelle-ere .sol-item-roll,
 .sol-nouvelle-ere .sol-item-edit,
 .sol-nouvelle-ere .sol-item-delete {
   flex: 0 0 auto;

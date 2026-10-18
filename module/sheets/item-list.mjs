@@ -3,8 +3,8 @@
  *
  * Une section = un type : titre, lignes (nom cliquable, 1 à 3 champs
  * en lecture seule, modifier, retirer), bouton « Créer » de ce type.
- * Le score d'une compétence n'est pas calculé. Réf. consigne étape 3,
- * Fiche v0.2 §4.
+ * Le score d'une compétence est calculé pour l'affichage et le jet.
+ * Réf. LdR v0.2 §4, Fiche v0.2 §4.
  *
  * Glisser-déposer : ActorSheetV2 traite les éléments `.draggable` qui ont
  * `data-item-id`. Le refus d'un type interdit est fait dans
@@ -13,6 +13,8 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  */
 import { SOL } from "../config.mjs";
+import { performRoll } from "../dice/chat.mjs";
+import { skillScore, weaponAttackScore } from "../dice/skill-score.mjs";
 
 /**
  * Titre de section et phrase vide, par type d'objet.
@@ -59,11 +61,16 @@ function itemFields(item) {
   const source = item.system._source ?? {};
   switch ( item.type ) {
     case "skill": {
-      // Pas de score : nom, abréviation de caractéristique, formation. Réf. consigne étape 3.
+      // Réf. LdR v0.2 §4. Moitié avant la difficulté : module/dice/skill-score.mjs.
       const abbrKey = SOL.characteristics[source.characteristic]?.abbr;
+      const rated = skillScore(item.actor?.system?.characteristics, item.system);
+      const scoreValue = rated.impossible
+        ? game.i18n.localize("SOL.Skill.impossible")
+        : rated.score;
       return [
         { label: "SOL.Skill.characteristic", value: abbrKey ? game.i18n.localize(abbrKey) : "" },
-        { label: "SOL.Skill.training", value: source.training ?? 0 }
+        { label: "SOL.Skill.training", value: source.training ?? 0 },
+        { label: "SOL.Skill.score", value: scoreValue }
       ];
     }
     case "talent":
@@ -104,13 +111,19 @@ function itemFields(item) {
  * @param {Item} item
  * @returns {{ id: string, name: string, img: string, type: string, fields: { label: string, value: string|number }[] }}
  */
-function presentItem(item) {
+function presentItem(item, actor) {
+  const rollable = actor.type === "character" || actor.type === "npc";
+  const equipped = item.type === "weapon" && Boolean(item.system.equipped);
   return {
     id: item.id,
     name: item.name,
     img: item.img,
     type: item.type,
-    fields: itemFields(item)
+    fields: itemFields(item),
+    // Case Équipé sur la ligne d'arme. Le dé n'apparaît que si elle est cochée.
+    showEquipped: rollable && item.type === "weapon",
+    equipped,
+    canRoll: rollable && (item.type === "skill" || (item.type === "weapon" && equipped))
   };
 }
 
@@ -131,7 +144,7 @@ export function prepareSections(actor, types = SOL.itemTypes) {
   const grouped = new Map();
   for ( const item of actor.items ) {
     const list = grouped.get(item.type) ?? [];
-    list.push(presentItem(item));
+    list.push(presentItem(item, actor));
     grouped.set(item.type, list);
   }
   for ( const list of grouped.values() ) {
@@ -161,7 +174,7 @@ export function prepareSections(actor, types = SOL.itemTypes) {
  * Actions `data-action` des gabarits de liste.
  * Foundry appelle ces fonctions avec la feuille comme `this`.
  */
-export const itemListActions = { openItem, deleteItem, createItem };
+export const itemListActions = { openItem, deleteItem, createItem, rollItem, toggleEquipped };
 
 /**
  * Ouvre la feuille de l'objet cliqué (le nom, ou le bouton Modifier).
@@ -221,4 +234,63 @@ async function createItem(event, target) {
   } finally {
     button.disabled = false;
   }
+}
+
+/**
+ * Case Équipé d'une arme, sur la ligne d'inventaire.
+ *
+ * @param {PointerEvent} event
+ * @param {HTMLElement} target
+ * @returns {Promise<void>}
+ */
+async function toggleEquipped(event, target) {
+  const input = target.closest("input") ?? target;
+  const id = target.closest("[data-item-id]")?.dataset.itemId;
+  const item = this.document.items.get(id);
+  if ( !item || item.type !== "weapon" ) return;
+  await item.update({ "system.equipped": Boolean(input.checked) });
+}
+
+/**
+ * Jet de compétence, ou jet d'arme si elle est équipée.
+ * Le nom de la ligne reste `openItem`. Réf. LdR v0.2 §4 et §7.
+ *
+ * @param {PointerEvent} event
+ * @param {HTMLElement} target
+ * @returns {Promise<void>}
+ */
+async function rollItem(event, target) {
+  const actor = this.document;
+  const id = target.closest("[data-item-id]")?.dataset.itemId;
+  const item = actor.items.get(id);
+  if ( !item ) return;
+  if ( actor.type !== "character" && actor.type !== "npc" ) return;
+
+  if ( item.type === "skill" ) {
+    const rated = skillScore(actor.system.characteristics, item.system);
+    if ( rated.impossible ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Roll.impossible"));
+      return;
+    }
+    await performRoll({ actor, label: item.name, score: rated.score });
+    return;
+  }
+
+  if ( item.type !== "weapon" || !item.system.equipped ) return;
+  const skills = actor.items.filter(entry => entry.type === "skill");
+  const rated = weaponAttackScore(actor.system.characteristics, item.system.skill, skills);
+  if ( rated.unknown ) {
+    ui.notifications.warn(game.i18n.format("SOL.Roll.unknownSkill", { name: item.system.skill ?? "" }));
+    return;
+  }
+  if ( rated.impossible ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Roll.impossible"));
+    return;
+  }
+  await performRoll({
+    actor,
+    label: `${item.name} — ${rated.label}`,
+    score: rated.score,
+    weapon: item
+  });
 }
