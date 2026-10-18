@@ -182,7 +182,6 @@
       "de": "DE",
       "location": "Localisation",
       "damage": "Dégâts",
-      "chooseZone": "Réussite critique : la zone peut être choisie",
       "impossible": "Cette compétence ne peut pas être tentée sans formation.",
       "unknownSkill": "Aucune compétence « {name} » sur cette fiche, et ce nom n'est pas une arme de poing, d'épaule ou de corps-à-corps.",
       "noWeaponSkill": "Arme sans compétence."

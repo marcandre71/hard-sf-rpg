@@ -128,6 +128,8 @@ export function resolveD100(die, target) {
  * Zone touchée en inversant les deux chiffres du dé.
  * 100 s'écrit « 00 ». Décision Marc 18/10/2026 : « 00 » inversé reste 100,
  * donc la jambe gauche. « 10 » devient « 01 » (tête).
+ * Décision Marc 18/10/2026 : une réussite critique ne change pas cette
+ * zone, et ne permet pas de la choisir.
  * Clés : celles de `SOL.bodyLocations`. Réf. LdR v0.2 §7.
  *
  * @param {number} die

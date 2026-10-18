@@ -208,7 +208,7 @@ Difficultés : `SOL.difficulties`, défaut `normal`. Le total difficulté + modi
 
 Décision Marc 18/10/2026 : 18 % de critiques par jet (01–05, 96–00, doubles 11–88), voulu.
 
-Arme : `weapon.system.skill` est le nom d'une compétence de l'acteur (casse ignorée). Sinon `SOL.weaponSkillDefaults` (Armes de poing et d'épaule → COO, Corps-à-corps → FOR), et ces compétences ne sont pas (F). Nom inconnu : avertissement, pas de jet. Le dé n'est affiché que si `equipped` est vrai. Réussite : localisation par inversion des chiffres, dégâts = dégâts de l'arme + DR. Réussite critique : le texte « la zone peut être choisie ». Décision Marc 18/10/2026. Le choix se fait dans la fenêtre d'application, pas sur la carte.
+Arme : `weapon.system.skill` est le nom d'une compétence de l'acteur (casse ignorée). Sinon `SOL.weaponSkillDefaults` (Armes de poing et d'épaule → COO, Corps-à-corps → FOR), et ces compétences ne sont pas (F). Nom inconnu : avertissement, pas de jet. Le dé n'est affiché que si `equipped` est vrai. Réussite : localisation par inversion des chiffres, dégâts = dégâts de l'arme + DR. Décision Marc 18/10/2026 : une réussite critique ne permet pas de choisir la zone. La phrase « la zone peut être choisie » n'est pas affichée.
 
 `performRoll` (`chat.mjs`) ouvre `DialogV2.wait`. Annuler ne lance pas le dé. Le modificateur libre est un entier (`step="1"`, `Math.trunc`). Décision Marc 18/10/2026. Le dé est `new Roll("1d100")`, puis `ChatMessage.create` avec `rolls`, `sound: CONFIG.sounds.dice`, `ChatMessage.getSpeaker({ actor })` et `flags["sol-nouvelle-ere"]` (type, score visé, dé, réussite, critique, DR, DE, zone, dégâts = arme + DR, libellé). Le gabarit est `templates/chat/roll-card.hbs`. Une réussite d'arme y ajoute le bouton « Appliquer les dégâts ». Les cartes déjà postées en 0.4 n'ont pas ces drapeaux dans le HTML : pas de bouton.
 
@@ -220,15 +220,15 @@ Pour ajouter un type de jet : calculer un score (helper existant, ou nouveau fic
 
 `module/dice/damage.mjs` ne charge pas Foundry. `tests/damage.test.mjs` se lance avec `node` seul. Réf. LdR v0.2 §7.
 
-Dégâts nets = (dégâts de l'arme + DR) − somme des `protection[zone]` des armures **équipées**. Décision Marc 18/10/2026 : nets ≤ 0, ni blessure ni brèche. À confirmer par Marc : les couches s'additionnent. Aucun acteur n'a d'armure par zone hors objets `armor` (vérifié : Personnage, PNJ, Créature, Synthétique, Drone).
+Dégâts nets = (dégâts de l'arme + DR) − somme des `protection[zone]` des armures **équipées**. Décision Marc 18/10/2026 : les couches s'additionnent. Décision Marc 18/10/2026 : nets ≤ 0, ni blessure ni brèche. Aucun acteur n'a d'armure par zone hors objets `armor` (vérifié : Personnage, PNJ, Créature, Synthétique, Drone).
 
 Seuil = `ceil((FOR + CON) / 10)` sur les valeurs actuelles. Seuls Personnage et PNJ ont ces caractéristiques. Créature, synthétique et drone peuvent porter une blessure (`allowedItems`) mais n'ont pas de Seuil : l'application est refusée, avec un avertissement, rien n'est écrit. À confirmer par Marc : un Seuil inférieur à 1 est aussi refusé.
 
-Gravité : < SB légère (−10), SB à 2 SB − 1 grave (−20, `bleeding`), 2 SB à 3 SB − 1 critique, ≥ 3 SB mortelle. À confirmer par Marc : critique et mortelle ont une pénalité 0, et la conséquence est écrite dans `description`.
+Gravité : < SB légère (−10), SB à 2 SB − 1 grave (−20, `bleeding`), 2 SB à 3 SB − 1 critique, ≥ 3 SB mortelle. Décision Marc 18/10/2026 : critique et mortelle n'ont pas de pénalité chiffrée. La conséquence est écrite dans `description`. Le MJ et les joueurs réagissent à la main.
 
 Brèche : une blessure (nets > 0) qui traverse une armure équipée `pressurized` couvrant la zone. À confirmer par Marc : la zone est couverte dès que la clé existe, y compris à 0. `sealState` passe à `breached`. La condition `sol-nouvelle-ere.suitBreach` est enregistrée dans `CONFIG.statusEffects` (`name` français, `img` = `icons/svg/hazard.svg`, icône du cœur). Pas d'horloge de décompression. La tête suit la même règle, sans second mécanisme.
 
-Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) sont du texte sur la carte de résultat. Rien n'est automatisé, ni l'Endurance, ni l'initiative. À confirmer par Marc : le rappel « réserve d'air » n'apparaît que si une blessure est créée.
+Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) sont du texte sur la carte de résultat. Décision Marc 18/10/2026 : rien n'est automatisé, ni l'Endurance, ni l'initiative. À confirmer par Marc : le rappel « réserve d'air » n'apparaît que si une blessure est créée. La fenêtre d'application n'a pas de liste de zones : la zone est celle du dé.
 
 Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose la condition, poste `templates/chat/damage-card.hbs`. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`. Un double clic est ignoré le temps que la fenêtre est ouverte.
 

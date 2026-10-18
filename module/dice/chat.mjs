@@ -97,7 +97,6 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     degree: outcome.success ? outcome.dr : outcome.de,
     location: "",
     damage: null,
-    chooseZone: false,
     canApply: false
   };
 
@@ -108,9 +107,8 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     card.location = game.i18n.localize(SOL.bodyLocations[locationKey]);
     // Réf. LdR v0.2 §7 : dégâts fixes de l'arme + DR. Pas de dé de dégâts.
     card.damage = Number(weapon.system.damage ?? 0) + outcome.dr;
-    // Décision Marc 18/10/2026 : texte seulement. Le choix de zone est
-    // dans la fenêtre d'application, réservée au MJ.
-    if ( outcome.critical === "success" ) card.chooseZone = true;
+    // Décision Marc 18/10/2026 : la zone reste celle du dé inversé,
+    // même en réussite critique. Pas de phrase, pas de choix.
     card.canApply = Number.isFinite(card.damage);
   }
 

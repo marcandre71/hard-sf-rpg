@@ -248,16 +248,10 @@ function dialogRoot(first, second) {
  */
 async function askDamage(attack, targets) {
   const escapeHtml = escape;
-  const zoneOptions = Object.keys(SOL.bodyLocations).map(key => {
-    const selected = key === attack.location ? " selected" : "";
-    const text = game.i18n.localize(SOL.bodyLocations[key]);
-    return `<option value="${key}"${selected}>${escapeHtml(text)}</option>`;
-  }).join("");
-  const zoneControl = attack.attackerCritical
-    ? `<label>${escapeHtml(game.i18n.localize("SOL.Damage.zone"))}
-        <select name="zone">${zoneOptions}</select></label>`
-    : `<p>${escapeHtml(game.i18n.localize("SOL.Damage.zone"))}
-        <strong>${escapeHtml(game.i18n.localize(SOL.bodyLocations[attack.location]))}</strong></p>
+  // Décision Marc 18/10/2026 : pas de liste. La zone est celle du dé.
+  const zoneLabel = escapeHtml(game.i18n.localize(SOL.bodyLocations[attack.location]));
+  const zoneControl = `<p>${escapeHtml(game.i18n.localize("SOL.Damage.zone"))}
+        <strong>${zoneLabel}</strong></p>
         <input type="hidden" name="zone" value="${attack.location}">`;
 
   const result = await foundry.applications.api.DialogV2.wait({
@@ -283,14 +277,10 @@ async function askDamage(attack, targets) {
       const preview = root?.querySelector("[data-preview]");
       const form = root?.querySelector("form") ?? root;
       if ( !preview || !form ) return;
-      const paint = () => {
-        const zone = form.elements?.zone?.value;
-        if ( typeof zone === "string" && zone in SOL.bodyLocations ) {
-          preview.innerHTML = previewTable(zone, targets);
-        }
-      };
-      form.querySelector("[name=zone]")?.addEventListener("change", paint);
-      paint();
+      const zone = form.elements?.zone?.value;
+      if ( typeof zone === "string" && zone in SOL.bodyLocations ) {
+        preview.innerHTML = previewTable(zone, targets);
+      }
     }
   });
 

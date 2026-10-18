@@ -1,18 +1,20 @@
 /**
  * Dégâts, Seuil de blessure, gravité et brèche. Sans Foundry.
  *
- * Réf. LdR v0.2 §7. Décision Marc 18/10/2026 : des dégâts nets ≤ 0
- * ne créent ni blessure ni brèche.
+ * Réf. LdR v0.2 §7.
+ * Décision Marc 18/10/2026 : des dégâts nets ≤ 0 ne créent ni blessure
+ * ni brèche. Les protections de toutes les armures équipées de la zone
+ * s'additionnent. Critique et mortelle : pas de pénalité chiffrée, la
+ * conséquence est le texte de la blessure, le MJ et les joueurs
+ * réagissent à la main. Les effets de zone sont des rappels, sans
+ * automatisation.
  *
- * À confirmer par Marc : les protections de toutes les armures équipées
- * de la zone s'additionnent. Une armure pressurisée équipée « couvre »
- * la zone dès que cette zone est une clé de `protection`, même à 0.
- * Tête et autres zones suivent la même règle de brèche (pas de second
- * mécanisme). Pénalité 0 pour critique et mortelle : la conséquence
- * est un texte, pas un malus chiffré.
+ * À confirmer par Marc : une armure pressurisée équipée « couvre » la
+ * zone dès que cette zone est une clé de `protection`, même à 0. La
+ * tête suit la même règle de brèche.
  */
 
-/** Pénalité stockée sur la blessure. Critique et mortelle : 0. */
+/** Pénalité stockée sur la blessure. Décision Marc 18/10/2026 : critique et mortelle à 0. */
 export const INJURY_PENALTY = {
   light: -10,
   serious: -20,
@@ -152,9 +154,10 @@ const ARMS = new Set(["rightArm", "leftArm"]);
 const LEGS = new Set(["rightLeg", "leftLeg"]);
 
 /**
- * Rappels affichés sur la carte de résultat. Aucune automatisation.
- * Le rappel « réserve d'air » n'est posé que si une blessure est créée.
- * À confirmer par Marc.
+ * Rappels affichés sur la carte de résultat.
+ * Décision Marc 18/10/2026 : texte seulement, rien n'est automatisé.
+ * À confirmer par Marc : le rappel « réserve d'air » n'apparaît que
+ * si une blessure est créée.
  *
  * @param {object} input
  * @param {string|null} input.severity

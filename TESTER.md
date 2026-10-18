@@ -30,7 +30,7 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 2. Sur Ilka, lancez l'arme en **Normale** jusqu'à une **Réussite**.
 3. La carte a un bouton **Appliquer les dégâts**. S'il n'y est pas, la carte est un échec, ou c'est une vieille carte d'avant cette version : relancez. La ligne de résultat : tester en interface claire ET sombre, la ligne doit rester lisible.
 4. Cliquez le bouton.
-   - **Réussite simple** dont la zone n'est pas le torse : annulez et relancez. Il faut le **torse**, ou une **réussite critique** (la fenêtre permet alors de choisir **Torse**).
+   - Si la zone n'est pas le **torse**, annulez et relancez. Une réussite critique ne permet pas de choisir la zone : c'est toujours celle écrite sur la carte.
    - Il faut aussi que la carte affiche **Dégâts : 12** (l'arme 10, plus 2 de DR). Sinon annulez et relancez.
 5. La fenêtre doit afficher, pour cette cible : zone **Torse**, dégâts bruts **12**, armure **3**, dégâts nets **9**, Seuil **7**, gravité **Grave**, brèche **Oui**.
 6. Cliquez **Appliquer**. Sur la cible : une blessure **Grave — Torse**, saignement coché, pénalité **−20**. L'armure a les joints **Percée**. Le jeton a la condition **Combinaison percée**.
