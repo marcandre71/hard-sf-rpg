@@ -7,15 +7,22 @@
  */
 import assert from "node:assert/strict";
 import {
+  compareByFoundryInitiative,
   deferToEnd,
   encodeInitiative,
   INITIATIVE_SUCCESS_BASE,
   interruptTiming,
+  repositionTiming,
+  resolveDeferred,
   reflexScore,
   severityDefers,
+  shouldClearRank,
+  showRankLabel,
+  sortByInitiative,
   stepBack,
   vigilanceBaseScore
 } from "../module/dice/initiative.mjs";
+import { mapMessageMode } from "../module/dice/chat.mjs";
 
 /**
  * @param {string} label
@@ -37,10 +44,10 @@ function check(label, fn) {
  * @returns {string[]}
  */
 function orderByRank(ranks) {
-  return ranks
-    .map(rank => ({ id: rank.id, key: encodeInitiative(rank) }))
-    .sort((a, b) => b.key - a.key || a.id.localeCompare(b.id))
-    .map(entry => entry.id);
+  return sortByInitiative(ranks.map(rank => ({
+    id: rank.id,
+    initiative: encodeInitiative(rank)
+  }))).map(entry => entry.id);
 }
 
 /**
@@ -51,9 +58,8 @@ function orderByRank(ranks) {
 function orderAfter(sorted, changes) {
   const values = new Map(sorted.map(entry => [entry.id, entry.initiative]));
   for ( const change of changes ?? [] ) values.set(change.id, change.initiative);
-  return [...values.entries()]
-    .sort((a, b) => Number(b[1]) - Number(a[1]) || String(a[0]).localeCompare(String(b[0])))
-    .map(entry => entry[0]);
+  return sortByInitiative([...values.entries()].map(([id, initiative]) => ({ id, initiative })))
+    .map(entry => entry.id);
 }
 
 check("DR décroissants, RÉF à égalité de DR", () => {
@@ -234,6 +240,107 @@ check("égalité : une place, sans sauter le suivant", () => {
   assert.ok(values.get("b") > values.get("a"));
   assert.ok(values.get("a") > values.get("c"));
   assert.ok(values.get("c") > 1);
+});
+
+check("se replacer, actif : au round suivant", () => {
+  // A, B, C. B est actif (index 1, turn 1) et se replace.
+  assert.equal(repositionTiming(1, 1), "defer");
+});
+
+check("se replacer, déjà joué : au round suivant", () => {
+  // B est actif. A (index 0) a déjà joué et se replace.
+  assert.equal(repositionTiming(0, 1), "defer");
+});
+
+check("se replacer, pas encore joué : tout de suite", () => {
+  // B est actif. C (index 2) n'a pas joué et se replace.
+  assert.equal(repositionTiming(2, 1), "now");
+});
+
+check("égalité d'initiative : identifiant par code de caractère", () => {
+  const order = sortByInitiative([
+    { id: "é", initiative: 5 },
+    { id: "z", initiative: 5 },
+    { id: "m", initiative: 9 }
+  ]);
+  assert.deepEqual(order.map(entry => entry.id), ["m", "z", "é"]);
+  assert.equal(compareByFoundryInitiative(
+    { id: "é", initiative: 5 },
+    { id: "z", initiative: 5 }
+  ), 1);
+  assert.ok("é" > "z");
+});
+
+check("effacer rank : initiative vide ou saisie à la main", () => {
+  assert.equal(shouldClearRank(true, {}), true);
+  assert.equal(shouldClearRank(true, { systemWrite: true }), false);
+  assert.equal(shouldClearRank(true, { setsRank: true }), false);
+  assert.equal(shouldClearRank(false, {}), false);
+  assert.equal(showRankLabel(null, { success: true }), false);
+  assert.equal(showRankLabel(1_002_057, { success: true }), true);
+  assert.equal(showRankLabel(4, null), false);
+});
+
+check("se replacer reporté : le nouveau rang prend sa place au passage", () => {
+  const sorted = [
+    { id: "a", initiative: 10 },
+    {
+      id: "b",
+      initiative: 8,
+      pendingInitiative: { initiative: 3, rank: { success: false, dr: 0, de: 2, ref: 0 } }
+    },
+    { id: "c", initiative: 6 }
+  ];
+  const updates = resolveDeferred(sorted);
+  const values = new Map(sorted.map(entry => [entry.id, entry.initiative]));
+  for ( const update of updates ) {
+    if ( typeof update.initiative === "number" ) values.set(update.id, update.initiative);
+  }
+  const order = sortByInitiative([...values].map(([id, initiative]) => ({ id, initiative })));
+  assert.deepEqual(order.map(entry => entry.id), ["a", "c", "b"]);
+  const b = updates.find(update => update.id === "b");
+  assert.equal(b.clearPending, true);
+  assert.equal(b.rank.de, 2);
+});
+
+check("pendingInitiative puis fin d'ordre, une seule passe", () => {
+  const sorted = [
+    {
+      id: "a",
+      initiative: 10,
+      deferEnd: true,
+      pendingInitiative: { initiative: 50, rank: { success: true, dr: 2, de: 0, ref: 1 } }
+    },
+    { id: "b", initiative: 8 },
+    { id: "c", initiative: 6 }
+  ];
+  const updates = resolveDeferred(sorted);
+  const a = updates.find(update => update.id === "a");
+  assert.equal(a.clearEnd, true);
+  assert.equal(a.clearPending, true);
+  assert.equal(a.rank.dr, 2);
+  assert.ok(a.initiative < 6);
+  const again = resolveDeferred(sorted.map(entry => ({
+    ...entry,
+    deferEnd: false,
+    pendingInitiative: null,
+    initiative: updates.find(update => update.id === entry.id)?.initiative ?? entry.initiative
+  })));
+  assert.deepEqual(again, []);
+});
+
+check("modes de carte v13 et v14", () => {
+  assert.equal(mapMessageMode("public", "v13"), "publicroll");
+  assert.equal(mapMessageMode("gm", "v13"), "gmroll");
+  assert.equal(mapMessageMode("blind", "v13"), "blindroll");
+  assert.equal(mapMessageMode("self", "v13"), "selfroll");
+  assert.equal(mapMessageMode("publicroll", "v14"), "public");
+  assert.equal(mapMessageMode("gmroll", "v14"), "gm");
+  assert.equal(mapMessageMode("blindroll", "v14"), "blind");
+  assert.equal(mapMessageMode("selfroll", "v14"), "self");
+  assert.equal(mapMessageMode("public", "v14"), "public");
+  assert.equal(mapMessageMode("gmroll", "v13"), "gmroll");
+  assert.equal(mapMessageMode(null, "v14"), null);
 });
 
 console.log("initiative.test.mjs : ok");

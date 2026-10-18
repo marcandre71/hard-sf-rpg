@@ -4,9 +4,9 @@ import { findSkillByName, skillScore } from "./skill-score.mjs";
  * Classement de l'initiative glissante. Sans Foundry.
  *
  * Réf. LdR v0.2 §7 « Le tour et l'initiative ».
- * Décision Marc 18/10/2026 : les réussites passent avant les échecs.
+ * Réf. LdR v0.2 §7 : les réussites passent avant les échecs.
  * Parmi les échecs, le moins de degrés d'échec joue d'abord.
- * Une égalité de degré se départage à la RÉF la plus élevée.
+ * Décision Marc 18/10/2026. Une égalité de degré se départage à la RÉF la plus élevée.
  * L'avantage ne donne aucun bonus.
  *
  * Foundry trie les combattants par initiative décroissante
@@ -121,7 +121,7 @@ export function severityDefers(severity) {
  * et celui de ceux qui partent, sont conservés.
  * `sorted` est déjà trié : index 0 joue en premier.
  * Renvoie seulement les initiatives à écrire pour les déplacés.
- * // À confirmer par Marc : plusieurs départs le même round gardent
+ * Réf. LdR v0.2 §7 : plusieurs départs le même round gardent
  * leur ordre relatif. Si tout le monde part, rien ne change.
  *
  * @param {Array<{ id: string, initiative: number|null }>} sorted
@@ -159,6 +159,148 @@ export function interruptTiming(index, turn) {
   if ( typeof index !== "number" || index < 0 ) return "now";
   if ( typeof turn !== "number" || !Number.isFinite(turn) ) return "now";
   return index <= turn ? "defer" : "now";
+}
+
+/**
+ * « Se replacer » suit la même règle que l'interruption.
+ * // À confirmer par Marc : effet immédiat ou au round suivant.
+ * Actif ou déjà joué : le nouveau rang est stocké (`pendingInitiative`)
+ * et posé au round suivant. Pas encore joué : écriture immédiate.
+ *
+ * @param {number} index
+ * @param {number|null|undefined} turn
+ * @returns {"defer"|"now"}
+ */
+export function repositionTiming(index, turn) {
+  return interruptTiming(index, turn);
+}
+
+/**
+ * Tri du cœur : initiative décroissante, puis `a.id > b.id`
+ * par code de caractère. Pas `localeCompare`.
+ *
+ * @param {{ id: string, initiative: number|null }} a
+ * @param {{ id: string, initiative: number|null }} b
+ * @returns {number}
+ */
+export function compareByFoundryInitiative(a, b) {
+  const av = typeof a.initiative === "number" && Number.isFinite(a.initiative)
+    ? a.initiative
+    : Number.NEGATIVE_INFINITY;
+  const bv = typeof b.initiative === "number" && Number.isFinite(b.initiative)
+    ? b.initiative
+    : Number.NEGATIVE_INFINITY;
+  return (bv - av) || (a.id > b.id ? 1 : -1);
+}
+
+/**
+ * @param {Array<{ id: string, initiative: number|null }>} entries
+ * @returns {Array<{ id: string, initiative: number|null }>}
+ */
+export function sortByInitiative(entries) {
+  return entries.slice().sort(compareByFoundryInitiative);
+}
+
+/**
+ * Faut-il retirer le drapeau `rank`.
+ * Un jet du système, ou une écriture qui pose `rank`, le garde.
+ * Initiative effacée, ou nombre saisi à la main : on l'enlève.
+ *
+ * @param {boolean} initiativeChanged
+ * @param {{ systemWrite?: boolean, setsRank?: boolean }} [context]
+ * @returns {boolean}
+ */
+export function shouldClearRank(initiativeChanged, { systemWrite = false, setsRank = false } = {}) {
+  if ( !initiativeChanged ) return false;
+  if ( systemWrite || setsRank ) return false;
+  return true;
+}
+
+/**
+ * Le libellé « 2 DR · RÉF 57 » ne s'affiche que si l'initiative est un nombre.
+ *
+ * @param {unknown} initiative
+ * @param {{ success?: boolean }|null|undefined} rank
+ * @returns {boolean}
+ */
+export function showRankLabel(initiative, rank) {
+  if ( typeof initiative !== "number" || !Number.isFinite(initiative) ) return false;
+  return Boolean(rank && typeof rank.success === "boolean");
+}
+
+/**
+ * Une passe : nouveau rang en attente, puis reculs, puis fin d'ordre.
+ * Réf. LdR v0.2 §7. Renvoie les écritures à fusionner.
+ *
+ * @param {Array<{ id: string, initiative: number|null, deferStep?: boolean, deferEnd?: boolean, pendingInitiative?: { initiative?: number, rank?: object }|null }>} sorted
+ * @returns {Array<{ id: string, initiative?: number, clearStep?: boolean, clearEnd?: boolean, clearPending?: boolean, rank?: object }>}
+ */
+export function resolveDeferred(sorted) {
+  let order = sorted.map(entry => {
+    const pending = entry.pendingInitiative?.initiative;
+    const initiative = typeof pending === "number" && Number.isFinite(pending)
+      ? pending
+      : entry.initiative;
+    return { id: entry.id, initiative };
+  });
+  order = sortByInitiative(order);
+
+  const stepIds = new Set(sorted.filter(entry => entry.deferStep).map(entry => entry.id));
+  for ( let i = order.length - 1; i >= 0; i -= 1 ) {
+    const id = order[i].id;
+    if ( !stepIds.has(id) ) continue;
+    const changes = stepBack(order, id);
+    if ( !changes ) continue;
+    const byId = new Map(changes.map(change => [change.id, change.initiative]));
+    order = sortByInitiative(order.map(entry => byId.has(entry.id)
+      ? { ...entry, initiative: byId.get(entry.id) }
+      : entry));
+  }
+
+  const endIds = sorted.filter(entry => entry.deferEnd).map(entry => entry.id);
+  const moved = deferToEnd(order, endIds);
+  if ( moved.length ) {
+    const byId = new Map(moved.map(change => [change.id, change.initiative]));
+    order = order.map(entry => byId.has(entry.id)
+      ? { ...entry, initiative: byId.get(entry.id) }
+      : entry);
+  }
+
+  const original = new Map(sorted.map(entry => [entry.id, entry.initiative]));
+  const nextById = new Map(order.map(entry => [entry.id, entry.initiative]));
+  /** @type {Map<string, object>} */
+  const updates = new Map();
+  for ( const entry of sorted ) {
+    /** @type {object} */
+    const data = { id: entry.id };
+    let touched = false;
+    if ( entry.deferStep ) {
+      data.clearStep = true;
+      touched = true;
+    }
+    if ( entry.deferEnd ) {
+      data.clearEnd = true;
+      touched = true;
+    }
+    if ( entry.pendingInitiative ) {
+      data.clearPending = true;
+      if ( entry.pendingInitiative.rank ) data.rank = entry.pendingInitiative.rank;
+      touched = true;
+    }
+    const next = nextById.get(entry.id);
+    if ( typeof next === "number" && next !== original.get(entry.id) ) {
+      data.initiative = next;
+      touched = true;
+    }
+    if ( touched ) updates.set(entry.id, data);
+  }
+  for ( const entry of order ) {
+    if ( updates.has(entry.id) ) continue;
+    if ( typeof entry.initiative === "number" && entry.initiative !== original.get(entry.id) ) {
+      updates.set(entry.id, { id: entry.id, initiative: entry.initiative });
+    }
+  }
+  return [...updates.values()];
 }
 
 /**

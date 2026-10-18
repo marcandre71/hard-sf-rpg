@@ -16,11 +16,12 @@
  * On ne lance plus cette formule : `SolCombat.rollInitiative` fait le D100.
  * La formule `"0"` n'est qu'un garde-fou si un autre appel l'évalue.
  *
- * La fin d'ordre et le recul reporté s'écrivent dans `_onStartRound`.
- * Doc v14 : cette méthode tourne après la mise à jour du round, et
- * seulement chez le MJ désigné. `nextRound` sur le client du joueur
- * qui termine le round ne doit pas l'appliquer : ce client n'est pas MJ,
- * le drapeau resterait, et le déplacement arriverait un round trop tard.
+ * Les déplacements reportés partent dans `nextRound`, avant `super`,
+ * quand le client est le MJ actif : une seule écriture, avant que le
+ * nouveau round ne désigne l'ancien premier. Si c'est un joueur qui
+ * passe le round, `_onStartRound` (MJ désigné, après l'écriture) sert
+ * de secours. Les drapeaux sont retirés dans la même écriture : pas
+ * de second passage.
  *
  * `Combatant._preUpdateOperation` conserve le combattant actif quand
  * l'initiative change. Pour garder l'index du tour, on passe
@@ -37,16 +38,25 @@
 import { SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import {
-  deferToEnd,
   encodeInitiative,
   interruptTiming,
+  repositionTiming,
+  resolveDeferred,
   reflexScore,
+  shouldClearRank,
+  showRankLabel,
   stepBack,
   vigilanceBaseScore
 } from "../dice/initiative.mjs";
 import { rollChoice } from "../dice/roll-dialog.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
+
+/** Marque une écriture du système : le drapeau `rank` n'est pas effacé. */
+const SYSTEM_WRITE = "solInitiativeWrite";
+
+/** Ce client a déjà appliqué les déplacements dans `nextRound`. */
+const deferredApplied = new WeakSet();
 
 /** Condition Sonné. Réf. LdR v0.2 §7. L'effet est un rappel, pas une règle jouée par le logiciel. */
 export const STUNNED = "sol-nouvelle-ere.stunned";
@@ -105,11 +115,13 @@ function effectHasStatus(effect, id) {
  * // À confirmer par Marc : hors du combat en cours, on ne pose rien.
  *
  * @param {Actor|null|undefined} actor
+ * @param {{ automatic?: boolean }} [options] `automatic` : seulement le MJ actif.
+ * Une action directe (apply-damage) accepte n'importe quel MJ.
  * @returns {Promise<void>}
  */
-export async function markDeferEnd(actor) {
-  // Un seul MJ écrit. Plusieurs MJ ne posent pas le drapeau deux fois.
-  if ( !game.user.isActiveGM || !actor ) return;
+export async function markDeferEnd(actor, { automatic = false } = {}) {
+  const allowed = automatic ? game.user.isActiveGM : game.user.isGM;
+  if ( !allowed || !actor ) return;
   const combat = game.combat;
   if ( !combat ) return;
   const updates = combat.combatants
@@ -121,10 +133,6 @@ export async function markDeferEnd(actor) {
   if ( updates.length ) await combat.updateEmbeddedDocuments("Combatant", updates);
 }
 
-/**
- * @param {Combat} combat
- * @returns {Promise<void>}
- */
 /**
  * Garde l'index du tour. `0` est un index valide : on le passe tel quel.
  *
@@ -147,71 +155,37 @@ function turnOrder(combat) {
 }
 
 /**
- * Reculs reportés, du dernier vers le premier, puis tri.
- * Chaque drapeau est retiré, même si le combattant est déjà dernier.
+ * Fin d'ordre, reculs et « se replacer » en attente, une seule écriture.
+ * Ne fait rien s'il n'y a aucun drapeau : le second passage est vide.
  *
  * @param {Combat} combat
  * @returns {Promise<void>}
  */
-async function applyDeferredSteps(combat) {
+async function applyDeferred(combat) {
   if ( !game.user.isActiveGM ) return;
-  const ids = combat.turns
-    .filter(combatant => combatant.getFlag(SYSTEM_ID, "deferStep") === true)
-    .map(combatant => combatant.id);
-  if ( !ids.length ) return;
-  const pending = new Set(ids);
-  let sorted = turnOrder(combat);
-  const original = new Map(sorted.map(entry => [entry.id, entry.initiative]));
-  for ( let i = sorted.length - 1; i >= 0; i -= 1 ) {
-    const id = sorted[i].id;
-    if ( !pending.has(id) ) continue;
-    const changes = stepBack(sorted, id);
-    if ( !changes ) continue;
-    const byId = new Map(changes.map(change => [change.id, change.initiative]));
-    sorted = sorted.map(entry => byId.has(entry.id)
-      ? { ...entry, initiative: byId.get(entry.id) }
-      : entry);
-    sorted.sort((a, b) => {
-      const av = typeof a.initiative === "number" ? a.initiative : Number.NEGATIVE_INFINITY;
-      const bv = typeof b.initiative === "number" ? b.initiative : Number.NEGATIVE_INFINITY;
-      return bv - av || String(a.id).localeCompare(String(b.id));
-    });
-  }
-  /** @type {Map<string, object>} */
-  const updates = new Map();
-  for ( const id of ids ) {
-    updates.set(id, { _id: id, [`flags.${SYSTEM_ID}.deferStep`]: false });
-  }
-  for ( const entry of sorted ) {
-    if ( entry.initiative === original.get(entry.id) ) continue;
-    if ( typeof entry.initiative !== "number" ) continue;
-    const data = updates.get(entry.id) ?? { _id: entry.id };
-    data.initiative = entry.initiative;
-    updates.set(entry.id, data);
-  }
-  await combat.updateEmbeddedDocuments("Combatant", [...updates.values()], keepTurn(combat));
-}
-
-/**
- * @param {Combat} combat
- * @returns {Promise<void>}
- */
-async function applyDeferredEnds(combat) {
-  if ( !game.user.isActiveGM ) return;
-  const ids = combat.combatants
-    .filter(combatant => combatant.getFlag(SYSTEM_ID, "deferEnd") === true)
-    .map(combatant => combatant.id);
-  if ( !ids.length ) return;
-  const sorted = turnOrder(combat);
-  const moved = deferToEnd(sorted, ids);
-  const byId = new Map(moved.map(entry => [entry.id, entry.initiative]));
-  const updates = ids.map(id => {
+  const sorted = combat.turns.map(combatant => ({
+    id: combatant.id,
+    initiative: typeof combatant.initiative === "number" ? combatant.initiative : null,
+    deferStep: combatant.getFlag(SYSTEM_ID, "deferStep") === true,
+    deferEnd: combatant.getFlag(SYSTEM_ID, "deferEnd") === true,
+    pendingInitiative: combatant.getFlag(SYSTEM_ID, "pendingInitiative") ?? null
+  }));
+  const resolved = resolveDeferred(sorted);
+  if ( !resolved.length ) return;
+  const updates = resolved.map(entry => {
     /** @type {object} */
-    const data = { _id: id, [`flags.${SYSTEM_ID}.deferEnd`]: false };
-    if ( byId.has(id) ) data.initiative = byId.get(id);
+    const data = { _id: entry.id };
+    if ( entry.clearStep ) data[`flags.${SYSTEM_ID}.deferStep`] = false;
+    if ( entry.clearEnd ) data[`flags.${SYSTEM_ID}.deferEnd`] = false;
+    if ( entry.clearPending ) data[`flags.${SYSTEM_ID}.-=pendingInitiative`] = null;
+    if ( entry.rank ) data[`flags.${SYSTEM_ID}.rank`] = entry.rank;
+    if ( typeof entry.initiative === "number" ) data.initiative = entry.initiative;
     return data;
   });
-  await combat.updateEmbeddedDocuments("Combatant", updates, keepTurn(combat));
+  await combat.updateEmbeddedDocuments("Combatant", updates, {
+    ...keepTurn(combat),
+    [SYSTEM_WRITE]: true
+  });
 }
 
 /**
@@ -230,6 +204,22 @@ function combatantIdFrom(li) {
   return host?.dataset.combatantId ?? null;
 }
 
+/**
+ * L'écriture pose-t-elle le drapeau `rank` (jet du système) ?
+ *
+ * @param {object} changes
+ * @returns {boolean}
+ */
+function updateSetsRank(changes) {
+  if ( !changes || typeof changes !== "object" ) return false;
+  if ( Object.prototype.hasOwnProperty.call(changes, `flags.${SYSTEM_ID}.rank`) ) return true;
+  if ( Object.prototype.hasOwnProperty.call(changes, `flags.${SYSTEM_ID}.pendingInitiative`) ) return true;
+  const scoped = changes.flags?.[SYSTEM_ID];
+  if ( !scoped || typeof scoped !== "object" ) return false;
+  return Object.prototype.hasOwnProperty.call(scoped, "rank")
+    || Object.prototype.hasOwnProperty.call(scoped, "pendingInitiative");
+}
+
 export class SolCombatant extends Combatant {
   /**
    * Garde-fou. Le jet réel ne passe pas par cette formule.
@@ -238,6 +228,28 @@ export class SolCombatant extends Combatant {
    */
   _getInitiativeFormula() {
     return "0";
+  }
+
+  /**
+   * Efface `rank` si l'initiative change hors d'un jet du système
+   * (effacement, ou nombre saisi à la main).
+   *
+   * @override
+   * @param {object} changes
+   * @param {object} options
+   * @param {User} user
+   * @returns {Promise<boolean|void>}
+   */
+  async _preUpdate(changes, options, user) {
+    const initiativeChanged = Boolean(changes) && Object.prototype.hasOwnProperty.call(changes, "initiative");
+    if ( shouldClearRank(initiativeChanged, {
+      systemWrite: options?.[SYSTEM_WRITE] === true,
+      setsRank: updateSetsRank(changes)
+    }) ) {
+      changes[`flags.${SYSTEM_ID}.-=rank`] = null;
+      changes[`flags.${SYSTEM_ID}.-=pendingInitiative`] = null;
+    }
+    return super._preUpdate(changes, options, user);
   }
 
   /**
@@ -311,27 +323,41 @@ export class SolCombat extends Combat {
       });
       if ( !outcome ) continue;
       const ref = reflexScore(actor.system?.characteristics);
-      updates.push({
-        _id: id,
-        initiative: encodeInitiative({
-          success: outcome.success,
-          dr: outcome.dr,
-          de: outcome.de,
-          ref
-        }),
-        [`flags.${SYSTEM_ID}.rank`]: {
-          success: outcome.success,
-          dr: outcome.dr,
-          de: outcome.de,
-          ref
-        }
+      const initiative = encodeInitiative({
+        success: outcome.success,
+        dr: outcome.dr,
+        de: outcome.de,
+        ref
       });
+      const rank = { success: outcome.success, dr: outcome.dr, de: outcome.de, ref };
+      const index = this.turns.findIndex(entry => entry.id === id);
+      // À confirmer par Marc : effet immédiat ou au round suivant.
+      const deferPlace = options.reposition === true
+        && repositionTiming(index, this.turn) === "defer";
+      if ( deferPlace ) {
+        updates.push({
+          _id: id,
+          [`flags.${SYSTEM_ID}.pendingInitiative`]: { initiative, rank }
+        });
+      } else {
+        updates.push({
+          _id: id,
+          initiative,
+          [`flags.${SYSTEM_ID}.rank`]: rank,
+          [`flags.${SYSTEM_ID}.-=pendingInitiative`]: null
+        });
+      }
     }
     if ( updates.length ) {
-      // updateTurn false : garder l'index. Sinon le cœur suit le combattant.
-      const operation = options.updateTurn === false ? keepTurn(this) : {};
-      await this.updateEmbeddedDocuments("Combatant", updates, operation);
-      if ( options.updateTurn !== false && previousId ) {
+      const wroteInitiative = updates.some(update => Object.prototype.hasOwnProperty.call(update, "initiative"));
+      // updateTurn false, ou « se replacer » immédiat : garder l'index.
+      // Sinon le cœur suit le combattant.
+      const keepIndex = options.updateTurn === false || (options.reposition === true && wroteInitiative);
+      await this.updateEmbeddedDocuments("Combatant", updates, {
+        ...(keepIndex ? keepTurn(this) : {}),
+        [SYSTEM_WRITE]: true
+      });
+      if ( wroteInitiative && options.reposition !== true && options.updateTurn !== false && previousId ) {
         const turn = this.turns.findIndex(entry => entry.id === previousId);
         if ( turn >= 0 && turn !== this.turn ) await this.update({ turn });
       }
@@ -340,9 +366,24 @@ export class SolCombat extends Combat {
   }
 
   /**
-   * Début de round, chez le MJ désigné, après l'écriture du round.
-   * On ne relance pas la Vigilance : l'ordre est conservé, puis
-   * les reculs et les fins d'ordre reportés sont appliqués.
+   * Déplacements reportés avant le nouveau round, chez le MJ actif.
+   * Une seule écriture : l'ancien premier n'est pas réactivé.
+   * Réf. LdR v0.2 §7.
+   *
+   * @override
+   * @returns {Promise<Combat>}
+   */
+  async nextRound() {
+    if ( game.user.isActiveGM ) {
+      await applyDeferred(this);
+      deferredApplied.add(this);
+    }
+    return super.nextRound();
+  }
+
+  /**
+   * Secours : un joueur a passé le round, le MJ actif n'a pas écrit
+   * dans `nextRound`. Les drapeaux déjà retirés ne produisent rien.
    * Réf. LdR v0.2 §7.
    *
    * @override
@@ -352,8 +393,8 @@ export class SolCombat extends Combat {
    */
   async _onStartRound(context) {
     await super._onStartRound(context);
-    await applyDeferredSteps(this);
-    await applyDeferredEnds(this);
+    if ( deferredApplied.delete(this) ) return;
+    await applyDeferred(this);
   }
 }
 
@@ -372,7 +413,7 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
         callback: li => {
           const id = combatantIdFrom(li);
           const combat = game.combat;
-          if ( !id || !combat || !game.user.isActiveGM ) return;
+          if ( !id || !combat || !game.user.isGM ) return;
           const index = combat.turns.findIndex(combatant => combatant.id === id);
           if ( index < 0 ) return;
           // À confirmer par Marc : effet immédiat ou au round suivant.
@@ -388,7 +429,7 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
           void combat.updateEmbeddedDocuments("Combatant", changes.map(change => ({
             _id: change.id,
             initiative: change.initiative
-          })), keepTurn(combat));
+          })), { ...keepTurn(combat), [SYSTEM_WRITE]: true });
         }
       },
       {
@@ -422,8 +463,8 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
    */
   async _prepareTurnContext(combat, combatant, index) {
     const context = await super._prepareTurnContext(combat, combatant, index);
-    const label = rankLabel(combatant.getFlag(SYSTEM_ID, "rank"));
-    if ( label ) context.initiative = label;
+    const rank = combatant.getFlag(SYSTEM_ID, "rank");
+    if ( showRankLabel(combatant.initiative, rank) ) context.initiative = rankLabel(rank);
     return context;
   }
 }
@@ -449,10 +490,17 @@ function rankLabel(rank) {
  */
 function noteStunned(effect) {
   if ( !effectHasStatus(effect, STUNNED) ) return;
-  const actor = effect.parent;
+  flagStunned(effect.parent);
+}
+
+/**
+ * @param {Actor|null|undefined} actor
+ * @returns {void}
+ */
+function flagStunned(actor) {
   // À confirmer par Marc : retirer Sonné avant le round suivant
   // n'annule pas la fin d'ordre déjà marquée.
-  if ( actor ) void markDeferEnd(actor);
+  if ( actor ) void markDeferEnd(actor, { automatic: true });
 }
 
 /**
@@ -464,19 +512,22 @@ function onStunned(effect) {
 }
 
 /**
- * Sonné ajouté à un effet déjà là (pas seulement à la création).
+ * Sonné ajouté à un effet déjà là. S'il y était déjà, on ne repose pas
+ * la fin d'ordre. `preUpdateActiveEffect` voit encore l'ancien état.
  *
  * @param {ActiveEffect} effect
  * @param {object} changes
  * @returns {void}
  */
-function onStunnedUpdate(effect, changes) {
+function onStunnedPreUpdate(effect, changes) {
+  if ( effectHasStatus(effect, STUNNED) ) return;
   const statuses = changes?.statuses;
   const added = typeof statuses?.has === "function"
     ? statuses.has(STUNNED)
     : Array.isArray(statuses) && statuses.includes(STUNNED);
   if ( !added ) return;
-  noteStunned(effect);
+  // L'effet n'a pas encore le statut : preUpdate voit l'ancien état.
+  flagStunned(effect.parent);
 }
 
 /**
@@ -496,6 +547,6 @@ export function registerInitiative() {
     "SOL.Status.stunnedHint"
   );
   Hooks.on("createActiveEffect", onStunned);
-  Hooks.on("updateActiveEffect", onStunnedUpdate);
+  Hooks.on("preUpdateActiveEffect", onStunnedPreUpdate);
   Hooks.once("ready", localizeStunnedHint);
 }

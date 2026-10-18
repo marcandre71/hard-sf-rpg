@@ -15,6 +15,24 @@ import { askRoll } from "./roll-dialog.mjs";
 
 const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
 
+/** Clés v13 (`publicroll`) et v14 (`public`). */
+const TO_V14 = { publicroll: "public", gmroll: "gm", blindroll: "blind", selfroll: "self" };
+const TO_V13 = { public: "publicroll", gm: "gmroll", blind: "blindroll", self: "selfroll" };
+
+/**
+ * Correspondance des modes de carte. Sans ça, `public` en v13
+ * (`applyRollMode`) part en chuchotement aux MJ.
+ *
+ * @param {string|null|undefined} mode
+ * @param {"v13"|"v14"} target
+ * @returns {string|null}
+ */
+export function mapMessageMode(mode, target) {
+  if ( typeof mode !== "string" || !mode ) return null;
+  const table = target === "v13" ? TO_V13 : TO_V14;
+  return table[mode] ?? mode;
+}
+
 /**
  * Visibilité de la carte : le mode choisi dans le menu du chat.
  *
@@ -35,12 +53,14 @@ function applyClientVisibility(chatData, mode = null) {
   // valeur de retour : on renvoie l'objet qu'on leur a passé.
   // Doc v14 : applyMode(chatData, mode). `gm` chuchote aux MJ.
   if ( typeof ChatMessage.applyMode === "function" ) {
-    if ( mode ) ChatMessage.applyMode(chatData, mode);
+    const mapped = mapMessageMode(mode, "v14");
+    if ( mapped ) ChatMessage.applyMode(chatData, mapped);
     else ChatMessage.applyMode(chatData);
     return chatData;
   }
   const hasRollMode = game.settings.settings.has("core.rollMode");
-  const rollMode = mode ?? (hasRollMode ? game.settings.get("core", "rollMode") : null);
+  const rollMode = mapMessageMode(mode, "v13")
+    ?? (hasRollMode ? game.settings.get("core", "rollMode") : null);
   if ( rollMode && typeof ChatMessage.applyRollMode === "function" ) {
     ChatMessage.applyRollMode(chatData, rollMode);
     return chatData;
@@ -152,8 +172,8 @@ export async function performRoll({
   delete extra.messageMode;
   delete extra.rollMode;
   // flags : apply-damage.mjs lit la zone et les dégâts sans reparser la carte.
-  const messageData = {
-    ...extra,
+  // mergeObject garde les autres drapeaux de messageOptions.
+  const messageData = foundry.utils.mergeObject(extra, {
     speaker: ChatMessage.getSpeaker({ actor }),
     rolls: [roll],
     content,
@@ -173,7 +193,7 @@ export async function performRoll({
         label
       }
     }
-  };
+  }, { inplace: false });
   const mode = requestedMode({ messageMode, messageOptions });
   const alreadyHidden = Array.isArray(extra.whisper) || typeof extra.blind === "boolean";
   if ( mode || !alreadyHidden ) applyClientVisibility(messageData, mode);

@@ -1,7 +1,7 @@
-# Tester le système « Sol, Nouvelle Ère » (0.5.6, initiative)
+# Tester le système « Sol, Nouvelle Ère » (0.5.7, initiative)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 15 minutes.
-Version attendue : **0.5.6**.
+Version attendue : **0.5.7**.
 
 La procédure des dégâts (versions 0.5.0 à 0.5.4) est dans [docs/tests/etape-5.md](docs/tests/etape-5.md).
 
@@ -12,7 +12,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
 3. Mettez le dossier à jour (`git pull`, ou remplacez le contenu par le ZIP). Le fichier `system.json` doit rester directement dans ce dossier.
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.6**.
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.7**.
 5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 ## 2. Deux combattants
@@ -35,7 +35,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Sur le personnage qui joue en premier : Base de **FOR** à **30**, Base de **CON** à **40** (Origine, acquis et temporaire à 0). Le Seuil vaut **4**.
 2. Armure équipée, protection du **torse** à **6**.
 3. Une arme à **10** dégâts, lancée en réussite, zone **torse**, dégâts affichés **10, 11, 12 ou 13** (DR 0 à 3). Appliquez : la gravité est **Grave**.
-4. Passez au round suivant. Si vous avez un compte joueur, c'est lui qui clique : le déplacement a quand même lieu au début du nouveau round, pas un round plus tard. Ce personnage est **en bas** de l'ordre. Pas de nouveau jet de Vigilance. Le tour en cours reste le premier de la liste.
+4. Passez au round suivant. Ce personnage est **en bas** de l'ordre, dans le même geste que le nouveau round : il ne redevient pas actif une seconde (pas de « à vous », pas de surbrillance qui saute). Pas de nouveau jet de Vigilance. Le tour en cours reste le premier de la liste. Si c'est un compte **joueur** qui clique, le déplacement a quand même lieu au début du nouveau round, pas un round plus tard.
 5. Sur l'autre combattant, clic droit sur le jeton, conditions, **Sonné**. Le texte rappelle : pas d'action ce tour, une réaction reste possible. Rien ne bloque le tour : c'est un rappel.
 6. Passez au round suivant. Le sonné passe **en bas**. Les autres ne bougent pas entre eux.
 
@@ -45,8 +45,11 @@ Il faut au moins trois combattants, et le combat **démarré**. Avant le début,
 
 1. Le premier est en surbrillance. Clic droit sur un combattant **plus bas, qui n'a pas encore joué** et qui n'est pas le dernier. **Interrompu : recule d'une place**. Il échange tout de suite avec le suivant. La surbrillance reste sur la même personne. Pas de carte de dés.
 2. Clic droit sur la personne **en surbrillance** (ou sur quelqu'un au-dessus, déjà joué). **Interrompu**. L'ordre ne change pas tout de suite. Passez au round suivant : il a reculé d'une place. Personne n'a sauté son tour, et personne n'a rejoué.
-3. Le même menu, **Se replacer** (MJ, ou le joueur propriétaire). La fenêtre de Vigilance s'ouvre. La carte dit que **l'action de ce tour est sacrifiée**. Sa place suit le nouveau jet.
-4. Sur le **dernier** de la liste, **Interrompu** ne change rien.
+3. **Se replacer** (MJ, ou le joueur propriétaire) sur quelqu'un **qui n'a pas encore joué**. La fenêtre de Vigilance s'ouvre. La carte dit que **l'action de ce tour est sacrifiée**. Sa place suit le nouveau jet tout de suite. La surbrillance ne change pas de personne.
+4. **Se replacer** sur la personne **en surbrillance**, ou sur quelqu'un **déjà joué** (au-dessus). La carte apparaît, l'ordre **ne change pas** ce round. Passez au round suivant : il prend la place du nouveau jet. Personne ne rejoue, personne n'est sauté.
+5. Sur le **dernier** de la liste, **Interrompu** ne change rien.
+6. **Effacer l'initiative** d'une ligne qui affiche « 2 DR » : le libellé disparaît, le bouton de dé revient. Si le MJ tape un nombre à la main dans la case, l'ancien « 2 DR » disparaît aussi.
+7. Avec **deux MJ**, le second (pas celui qui a la main) voit **Interrompu** et ça recule bien. Une blessure grave appliquée par ce second MJ envoie quand même en fin d'ordre au round suivant.
 
 ## 6. Véhicule
 
@@ -55,12 +58,14 @@ Il faut au moins trois combattants, et le combat **démarré**. Avant le début,
 
 ## 7. Liste de contrôle
 
-- [ ] Version **0.5.6**, aucune ligne rouge. Plus d'erreur « StringTerm undefined ».
+- [ ] Version **0.5.7**, aucune ligne rouge. Plus d'erreur « StringTerm undefined ».
 - [ ] Personnage, PNJ, créature, synthétique et drone peuvent lancer. Véhicule et vaisseau : avertissement, pas de plantage.
 - [ ] Carte de Vigilance. Réussites au-dessus des échecs. Le tracker affiche « 2 DR · RÉF 57 » ou « 3 DE », pas le code de tri. Pas de bonus.
 - [ ] Un PNJ caché : la carte est chuchotée au MJ.
 - [ ] Round suivant : même ordre, pas de nouveau jet.
 - [ ] Blessure grave (ou pire) : en bas au début du round suivant, même si c'est un joueur qui change de round. **Sonné** : pareil, et le tour n'est pas bloqué.
 - [ ] **Interrompu** sur quelqu'un qui n'a pas encore joué : tout de suite, la surbrillance ne bouge pas. Sur l'actif ou un déjà joué : au round suivant, sans tour sauté ni rejoué.
-- [ ] **Se replacer** seulement une fois le combat démarré (propriétaire ou MJ). La carte rappelle l'action sacrifiée.
+- [ ] **Se replacer** seulement une fois le combat démarré (propriétaire ou MJ). La carte rappelle l'action sacrifiée. Pas encore joué : tout de suite, la surbrillance ne bouge pas. Actif ou déjà joué : au round suivant, sans tour sauté ni rejoué.
+- [ ] Effacer l'initiative, ou taper un nombre à la main, retire le libellé « 2 DR » et le bouton de dé revient si la case est vide.
+- [ ] Un second MJ peut interrompre, et sa blessure grave pose la fin d'ordre.
 - [ ] « Tout lancer » et « lancer les PNJ » posent des cartes, sans erreur rouge.
