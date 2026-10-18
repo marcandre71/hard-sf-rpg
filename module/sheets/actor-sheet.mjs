@@ -11,8 +11,9 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
-import { FOR_CON_KEYS } from "../data/for-con-migrate.mjs";
+import { FOR_CON_KEYS } from "../data/actors.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
+import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
@@ -28,7 +29,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: itemListActions
+    actions: { ...itemListActions, rollCharacteristic }
   };
 
   /** @override */
@@ -37,6 +38,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       template: "systems/sol-nouvelle-ere/templates/actor/actor-sheet.hbs",
       templates: [
         "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+        "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs",
         "systems/sol-nouvelle-ere/templates/actor/item-section.hbs"
       ]
     }

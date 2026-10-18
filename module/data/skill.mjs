@@ -56,10 +56,10 @@ export class SkillData extends BaseItemData {
    */
   static migrateData(source) {
     // Décision Marc 18/10/2026 : l'ancien marqueur (S) devient Formation requise (F).
-    if ( source && typeof source === "object" ) {
-      if ( ("specialized" in source) && !("trainingRequired" in source) ) {
-        source.trainingRequired = Boolean(source.specialized);
-      }
+    // Seulement si `specialized` est dans la source. Un diff sans cette clé
+    // ne reçoit pas `trainingRequired` : le schéma a déjà son défaut.
+    if ( source && typeof source === "object" && ("specialized" in source) ) {
+      if ( !("trainingRequired" in source) ) source.trainingRequired = Boolean(source.specialized);
       delete source.specialized;
     }
     return super.migrateData(source);

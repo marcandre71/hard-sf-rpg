@@ -15,10 +15,12 @@
  * (LdR v0.2 §15) n'ont ni type ni défaut : ils ne sont pas créés ici.
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
-import { FOR_CON_KEYS, migrateForConSource } from "./for-con-migrate.mjs";
 import { migrateNpcSource } from "./npc-migrate.mjs";
 import { characteristicSchema, deriveCharacteristicValues, PersonData } from "./person.mjs";
 import { htmlField, stringField } from "./fields.mjs";
+
+/** FOR et CON seulement. Pas les sept autres caractéristiques du personnage. */
+export const FOR_CON_KEYS = ["for", "con"];
 
 /**
  * Schéma commun : description + notes, toutes deux HTML.
@@ -67,6 +69,10 @@ export class NpcData extends PersonData {
 /**
  * Description, notes, FOR et CON. Bornes du PNJ.
  * Décision Marc 18/10/2026.
+ * Pas de `migrateData` : un diff client passe par `migrateData` (v13
+ * `client-backend.mjs`, inchangé en v14). Y injecter les défauts écrase
+ * une Force déjà saisie. Le nettoyage du schéma pose `initial` sur une
+ * fiche ancienne qui n'a pas encore ces champs.
  *
  * @extends foundry.abstract.TypeDataModel
  */
@@ -77,20 +83,6 @@ class ForConActorData extends foundry.abstract.TypeDataModel {
       ...describedActorSchema(),
       characteristics: characteristicSchema(FOR_CON_KEYS, characteristicFieldsFor("npc"))
     };
-  }
-
-  /**
-   * Fiche d'avant 0.5.3 : pas de FOR ni de CON. Les trous prennent le
-   * défaut. Une mise à jour partielle (`options.partial`) n'est pas complétée.
-   *
-   * @override
-   * @param {object} source
-   * @param {{ partial?: boolean }} [options]
-   * @returns {object}
-   */
-  static migrateData(source, options) {
-    const migrated = super.migrateData(source, options) ?? source;
-    return migrateForConSource(migrated, options);
   }
 
   /** @override */

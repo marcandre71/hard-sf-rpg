@@ -1,7 +1,7 @@
 # Tester le système « Sol, Nouvelle Ère » (étape 5)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 15 minutes.
-Version attendue : **0.5.3**.
+Version attendue : **0.5.4**.
 
 La procédure de l'étape 4 (versions 0.4.0 et 0.4.1, déjà validée) est dans [docs/tests/etape-4.md](docs/tests/etape-4.md).
 
@@ -12,7 +12,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
 3. Téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.3**.
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.4**.
 5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'ancienne place. Dans la console, collez `game.settings.set("core", "compendiumConfiguration", {})`, validez, puis rechargez la page **deux fois** (attendez la fin du premier rechargement).
@@ -52,8 +52,9 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 ## 6. Une créature peut être blessée
 
 1. Créez un acteur **Créature**. Sa feuille montre **Force** et **Constitution**, et le **Seuil de blessure**. Base de FOR à **30**, Base de CON à **40**, le reste à **0**. Le Seuil affiché est **4**.
-2. Posez son jeton, ciblez-le, et appliquez une attaque réussie dont les dégâts nets sont au moins 1. Une blessure est créée.
-3. Un **Véhicule** ou un **Vaisseau** n'a pas ces caractéristiques : l'application est refusée, pas de blessure.
+2. Cliquez **FOR** : la fenêtre de jet habituelle s'ouvre, score **30**. Vous pouvez annuler.
+3. Posez son jeton, ciblez-le, et appliquez une attaque réussie dont les dégâts nets sont au moins 1. Une blessure est créée.
+4. Un **Véhicule** ou un **Vaisseau** n'a pas ces caractéristiques : l'application est refusée, pas de blessure.
 
 ## 7. Compendiums
 
@@ -65,12 +66,12 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 
 ## 8. Liste de contrôle
 
-- [ ] Version **0.5.3**, aucune ligne rouge dans la console.
+- [ ] Version **0.5.4**, aucune ligne rouge dans la console.
 - [ ] Ligne de résultat de la carte : tester en interface claire ET sombre, la ligne doit rester lisible.
 - [ ] Armure pressurisée, torse 3, équipée. Carabine 10 + DR 2, FOR 30 et CON 40, Seuil **4** : nets **9**, **Critique**, brèche **Oui**. Pas de condition **Saignement**.
 - [ ] Blessure créée, joints **Percée**, condition **Combinaison percée**.
 - [ ] Dégâts nets à 0 ou moins : pas de blessure, pas de nouvelle brèche.
 - [ ] Après application, le bouton dit que les dégâts sont déjà appliqués. Un second clic demande confirmation ; **Annuler** n'écrit rien de plus.
 - [ ] Un joueur ne voit pas le bouton **Appliquer les dégâts**.
-- [ ] Une créature avec FOR et CON reçoit une blessure. Le Seuil est sur sa feuille. Véhicule et vaisseau sont refusés.
+- [ ] Une créature avec FOR et CON reçoit une blessure. Le Seuil est sur sa feuille. Cliquer **FOR** ouvre le jet. Véhicule et vaisseau sont refusés.
 - [ ] Compétences, origines, milieux, professions, armes et armures contiennent les entrées du livre. Les autres compendiums sont vides.

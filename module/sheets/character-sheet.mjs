@@ -50,6 +50,7 @@ const INVENTORY_TYPES = ["weapon", "armor", "gear", "augmentation", "substance",
 
 const PARTIALS = [
   "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+  "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs",
   "systems/sol-nouvelle-ere/templates/actor/item-section.hbs"
 ];
 
@@ -221,7 +222,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
  * @param {HTMLElement} target
  * @returns {Promise<void>}
  */
-async function rollCharacteristic(event, target) {
+export async function rollCharacteristic(event, target) {
   if ( event?.detail > 1 ) return;
   const key = target.closest("[data-characteristic]")?.dataset.characteristic;
   const cfg = SOL.characteristics[key];

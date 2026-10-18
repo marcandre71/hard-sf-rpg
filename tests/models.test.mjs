@@ -18,9 +18,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import assert from "node:assert/strict";
 import { characteristicFieldsFor } from "../module/config.mjs";
-import { migrateForConSource } from "../module/data/for-con-migrate.mjs";
 import { migrateNpcSource } from "../module/data/npc-migrate.mjs";
 
 /**
@@ -68,47 +66,6 @@ checkNpcMigration(
   { biography: "déjà", notes: "n", hasBiography: true },
   "biography déjà remplie ne doit pas être écrasée"
 );
-
-const legacyCreature = { description: "<p>gardé</p>", notes: "aussi" };
-migrateForConSource(legacyCreature);
-if ( legacyCreature.description !== "<p>gardé</p>" || legacyCreature.notes !== "aussi" ) {
-  console.error("migrateForConSource a perdu description ou notes", legacyCreature);
-  process.exit(1);
-}
-if ( legacyCreature.characteristics.for.base !== 25 || legacyCreature.characteristics.con.base !== 25 ) {
-  console.error("FOR/CON absentes doivent prendre la Base 25", legacyCreature.characteristics);
-  process.exit(1);
-}
-if ( legacyCreature.characteristics.for.origin !== 0 || legacyCreature.characteristics.con.temp !== 0 ) {
-  console.error("les autres champs FOR/CON doivent être à 0", legacyCreature.characteristics);
-  process.exit(1);
-}
-const keptForCon = {
-  description: "x",
-  notes: "y",
-  characteristics: {
-    for: { base: 80, origin: 1, advance: 2, temp: 3 },
-    con: { base: 40 }
-  }
-};
-migrateForConSource(keptForCon);
-assert.equal(keptForCon.characteristics.for.base, 80);
-assert.equal(keptForCon.characteristics.for.origin, 1);
-assert.equal(keptForCon.characteristics.con.base, 40);
-assert.equal(keptForCon.characteristics.con.origin, 0);
-assert.equal(keptForCon.description, "x");
-const partialForCon = { description: "fragment" };
-migrateForConSource(partialForCon, { partial: true });
-if ( "characteristics" in partialForCon ) {
-  console.error("une mise à jour partielle ne doit pas recevoir de caractéristiques", partialForCon);
-  process.exit(1);
-}
-const sparse = { characteristics: { for: { base: 80 } } };
-migrateForConSource(sparse);
-if ( "con" in (sparse.characteristics) || sparse.characteristics.for.origin !== undefined ) {
-  console.error("un fragment sans description ni notes ne doit pas être complété", sparse);
-  process.exit(1);
-}
 
 const characterBase = characteristicFieldsFor("character").base;
 const npcBase = characteristicFieldsFor("npc").base;
@@ -319,6 +276,7 @@ try {
     const baseMax = new Model({}).schema.fields.characteristics.fields.for.fields.base.max;
     if ( baseMax !== 100 ) throw new Error(`${Model.name} : Base max ${baseMax}, 100 attendu`);
     const legacy = new Model({ description: "<p>a</p>", notes: "b" });
+    legacy.prepareDerivedData();
     if ( legacy._source.description !== "<p>a</p>" || legacy._source.notes !== "b" ) {
       throw new Error(`${Model.name} : description ou notes perdues`);
     }
@@ -336,10 +294,61 @@ try {
         con: { base: 40, origin: 0, advance: 0, temp: 0 }
       }
     });
+    kept.prepareDerivedData();
     if ( kept.characteristics.for.value !== 85 || kept.characteristics.con.base !== 40 ) {
       throw new Error(`${Model.name} : une FOR déjà stockée a été réécrite`);
     }
+    const stored = {
+      description: "<p>a</p>",
+      notes: "b",
+      characteristics: {
+        for: { base: 70, origin: 5, advance: 0, temp: 0 },
+        con: { base: 60, origin: 0, advance: 0, temp: 0 }
+      }
+    };
+    const diff = { description: "<p>autre</p>" };
+    const migrated = Model.migrateData(foundry.utils.deepClone(diff));
+    if ( migrated.characteristics ) {
+      throw new Error(`${Model.name} : migrateData a injecté des caractéristiques dans un diff`);
+    }
+    const cleanedDiff = Model.cleanData(foundry.utils.deepClone(diff), { partial: true });
+    if ( cleanedDiff.characteristics ) {
+      throw new Error(`${Model.name} : un nettoyage partiel a injecté des caractéristiques`);
+    }
+    const merged = foundry.utils.mergeObject(stored, cleanedDiff, { inplace: false });
+    if ( merged.characteristics.for.base !== 70 || merged.characteristics.for.origin !== 5 ) {
+      throw new Error(`${Model.name} : un diff de description a écrasé la Force`);
+    }
+    if ( merged.characteristics.con.base !== 60 ) {
+      throw new Error(`${Model.name} : un diff de description a écrasé la Constitution`);
+    }
+    const old = Model.cleanData({ description: "<p>a</p>", notes: "b" });
+    if ( old.characteristics?.for?.base !== 25 || old.characteristics?.for?.origin !== 0 ) {
+      throw new Error(`${Model.name} : le nettoyage ne pose pas la Force par défaut`);
+    }
+    if ( old.characteristics?.con?.base !== 25 || old.characteristics?.con?.temp !== 0 ) {
+      throw new Error(`${Model.name} : le nettoyage ne pose pas la Constitution par défaut`);
+    }
+    if ( old.description !== "<p>a</p>" || old.notes !== "b" ) {
+      throw new Error(`${Model.name} : le nettoyage a perdu description ou notes`);
+    }
   }
+  const skillDiff = { training: 20 };
+  SkillData.migrateData(skillDiff);
+  if ( "trainingRequired" in skillDiff || "specialized" in skillDiff ) {
+    throw new Error("un diff de formation ne doit pas recevoir trainingRequired");
+  }
+  const skillOld = { specialized: true };
+  SkillData.migrateData(skillOld);
+  if ( skillOld.trainingRequired !== true || ("specialized" in skillOld) ) {
+    throw new Error("specialized présent doit devenir trainingRequired");
+  }
+  const weaponDiff = { damage: 4 };
+  WeaponData.migrateData(weaponDiff);
+  if ( "range" in weaponDiff ) throw new Error("un diff de dégâts ne doit pas recevoir de portée");
+  const weaponOld = { range: { short: 10, medium: 50, long: 200 } };
+  WeaponData.migrateData(weaponOld);
+  if ( weaponOld.range !== "short" ) throw new Error("l'ancienne portée objet doit devenir short");
   if ( new VehicleData({}).schema.fields.characteristics || new ShipData({}).schema.fields.characteristics ) {
     throw new Error("véhicule et vaisseau n'ont pas de caractéristiques");
   }

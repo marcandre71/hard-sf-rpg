@@ -53,7 +53,8 @@ export class WeaponData extends BaseItemData {
    * @returns {object}
    */
   static migrateData(source) {
-    if ( source.range && typeof source.range === "object" ) source.range = "short";
+    // Seulement l'ancienne forme objet. Un diff sans `range`, ou déjà un palier, n'est pas modifié.
+    if ( source?.range && typeof source.range === "object" ) source.range = "short";
     return super.migrateData(source);
   }
 }
