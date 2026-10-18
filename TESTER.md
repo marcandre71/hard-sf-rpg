@@ -28,7 +28,7 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 
 1. Connecté en **MJ**, ciblez le jeton de la cible (clic droit, ou la cible habituelle : le jeton est entouré).
 2. Sur Ilka, lancez l'arme en **Normale** jusqu'à une **Réussite**.
-3. La carte a un bouton **Appliquer les dégâts**. S'il n'y est pas, la carte est un échec, ou c'est une vieille carte d'avant cette version : relancez.
+3. La carte a un bouton **Appliquer les dégâts**. S'il n'y est pas, la carte est un échec, ou c'est une vieille carte d'avant cette version : relancez. La ligne de résultat : tester en interface claire ET sombre, la ligne doit rester lisible.
 4. Cliquez le bouton.
    - **Réussite simple** dont la zone n'est pas le torse : annulez et relancez. Il faut le **torse**, ou une **réussite critique** (la fenêtre permet alors de choisir **Torse**).
    - Il faut aussi que la carte affiche **Dégâts : 12** (l'arme 10, plus 2 de DR). Sinon annulez et relancez.
@@ -65,6 +65,7 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 ## 8. Liste de contrôle
 
 - [ ] Version **0.5.0**, aucune ligne rouge dans la console.
+- [ ] Ligne de résultat de la carte : tester en interface claire ET sombre, la ligne doit rester lisible.
 - [ ] Armure pressurisée, torse 3, équipée. Carabine 10 + DR 2, Seuil 7 : nets **9**, **Grave**, brèche **Oui**.
 - [ ] Blessure créée, joints **Percée**, condition **Combinaison percée**.
 - [ ] Dégâts nets à 0 ou moins : pas de blessure, pas de nouvelle brèche.

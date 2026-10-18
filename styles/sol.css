@@ -216,25 +216,27 @@
 }
 
 /* Décision Marc 18/10/2026 : couleurs du résultat, teintes des critiques à confirmer au test.
-   light-dark suit le color-scheme du thème Foundry (clair ou sombre).
-   L'or #c9a227 est trop pâle sur fond clair : variante plus sombre, même teinte. */
+   Le cœur v13/v14 dessine les messages sur un parchemin clair, même quand
+   l'interface est sombre. light-dark() suivait ce color-scheme et posait
+   alors les teintes claires sur ce parchemin : la ligne devenait illisible.
+   Une seule teinte sombre par résultat. Contraste ≥ 5:1 sur ce fond clair. */
 .sol-nouvelle-ere.sol-roll-card .sol-result.success {
-  color: light-dark(#146c36, #3dce7c);
+  color: #0f5c2d;
   font-weight: 600;
 }
 
 .sol-nouvelle-ere.sol-roll-card .sol-result.failure {
-  color: light-dark(#b42318, #ff6b63);
+  color: #9c1c12;
   font-weight: 600;
 }
 
 .sol-nouvelle-ere.sol-roll-card .sol-result.crit-success {
-  color: light-dark(#6e5410, #c9a227);
+  color: #5e470d;
   font-weight: 700;
 }
 
 .sol-nouvelle-ere.sol-roll-card .sol-result.crit-failure {
-  color: light-dark(#7a1212, #e07070);
+  color: #7a1212;
   font-weight: 700;
 }
 

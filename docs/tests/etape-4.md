@@ -39,7 +39,7 @@ Ouvrez **Ilka Moravec**, onglet **Principal**.
 - **Total** : difficulté + modificateur, jamais en dessous de −50 ni au-dessus de +50.
 - **Score visé** : score + total.
 - **Dé** : deux chiffres. **00** veut dire 100.
-- Le résultat est **Réussite** (vert), **Échec** (rouge), **Réussite critique** (or) ou **Échec critique** (rouge foncé). Les teintes des critiques sont à confirmer au test.
+- Le résultat est **Réussite** (vert), **Échec** (rouge), **Réussite critique** (or) ou **Échec critique** (rouge foncé). Les teintes des critiques sont à confirmer au test. Tester en interface claire ET sombre, la ligne doit rester lisible.
 - **DR** (degrés de réussite) si ça réussit, **DE** (degrés d'échec) sinon. Un 0 est une réussite de justesse, ou un échec sans gravité.
 
 4. Relancez FOR. Choisissez **Extrême (−40)** et mettez le modificateur à **−20**. Le total affiché doit être **−50** (plafonné), pas −60. Lancez. La carte reprend Extrême, modificateur −20, total −50, et un score visé égal à l'Actuelle moins 50.
