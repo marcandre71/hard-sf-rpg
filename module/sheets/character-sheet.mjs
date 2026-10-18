@@ -24,6 +24,7 @@
  */
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
+import { endurancePoints } from "../dice/derived.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
@@ -185,6 +186,15 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.skillSection = byType.skill;
     context.talentSection = byType.talent;
     context.injurySection = byType.injury;
+    const enduranceField = actor.system.schema.fields.endurance;
+    context.enduranceGroups = enduranceField
+      ? prepareFieldGroups({ endurance: enduranceField }, { endurance: stored.endurance ?? null }, {
+        rootId: context.rootId
+      })
+      : [];
+    const con = actor.system.characteristics?.con?.value;
+    // Réf. LdR v0.2 §3. Affiché, pas écrit.
+    context.enduranceMax = typeof con === "number" ? endurancePoints(con) : null;
     context.sequelSection = byType.sequel;
     context.inventorySections = INVENTORY_TYPES.map(type => byType[type]).filter(Boolean);
 

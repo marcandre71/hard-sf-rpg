@@ -10,6 +10,12 @@
     <li>{{localize "SOL.Roll.score"}} : {{score}}</li>
     <li>{{localize "SOL.Roll.difficulty"}} : {{difficultyLabel}} ({{difficultyModifier}})</li>
     <li>{{localize "SOL.Roll.free"}} : {{free}}</li>
+    {{#if calledModifier}}
+    <li>{{calledLabel}} ({{calledModifier}})</li>
+    {{/if}}
+    {{#if aimModifier}}
+    <li>{{localize "SOL.Roll.aim"}} : {{aimActions}} ({{aimModifier}})</li>
+    {{/if}}
     <li>{{localize "SOL.Roll.total"}} : {{total}}</li>
     <li>{{localize "SOL.Roll.target"}} : {{target}}</li>
     <li>{{localize "SOL.Roll.die"}} : {{die}}</li>
@@ -20,6 +26,9 @@
     {{/if}}
     {{#if location}}
     <li>{{localize "SOL.Roll.location"}} : {{location}}</li>
+    {{#if visor}}
+    <li>{{localize "SOL.Roll.visorHit"}}</li>
+    {{/if}}
     <li>{{localize "SOL.Roll.damage"}} : {{damage}}</li>
     {{/if}}
   </ul>

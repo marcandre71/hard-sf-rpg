@@ -18,7 +18,7 @@
 import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { migrateNpcSource } from "./npc-migrate.mjs";
 import { characteristicSchema, deriveCharacteristicValues, PersonData } from "./person.mjs";
-import { htmlField, stringField } from "./fields.mjs";
+import { htmlField, numberField, stringField } from "./fields.mjs";
 
 /** FOR, CON et PER. Pas les six autres caractéristiques du personnage. */
 export const FOR_CON_PER_KEYS = ["for", "con", "per"];
@@ -83,7 +83,16 @@ class ForConActorData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       ...describedActorSchema(),
-      characteristics: characteristicSchema(FOR_CON_PER_KEYS, characteristicFieldsFor("npc"))
+      characteristics: characteristicSchema(FOR_CON_PER_KEYS, characteristicFieldsFor("npc")),
+      // Réf. LdR v0.2 §3. null : pas encore suivie. Pas de migrateData.
+      endurance: numberField("SOL.Actor.endurance", {
+        initial: null,
+        nullable: true,
+        integer: true,
+        min: 0,
+        step: 1,
+        hint: "SOL.Actor.enduranceHint"
+      })
     };
   }
 

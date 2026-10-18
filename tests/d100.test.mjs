@@ -13,6 +13,7 @@ import {
   resolveD100,
   tens
 } from "../module/dice/d100.mjs";
+import { aimModifier, attackSituation, struckZone } from "../module/dice/attack.mjs";
 import { skillScore, weaponAttackScore, weaponCharacteristicFallback } from "../module/dice/skill-score.mjs";
 
 /**
@@ -51,6 +52,8 @@ check("plafond ±50", () => {
   assert.equal(cappedModifier(30, 40), 50);
   assert.equal(cappedModifier(-40, -30), -50);
   assert.equal(cappedModifier(10, -5), 5);
+  assert.equal(cappedModifier(-40, 0, -40), -50);
+  assert.equal(cappedModifier(0, 0, 20), 20);
   assert.deepEqual(modifiedTarget(55, -40, -20), { modifier: -50, target: 5 });
   // Le score visé n'est pas reborné : 80 + 50 = 130.
   assert.deepEqual(modifiedTarget(80, 30, 30), { modifier: 50, target: 130 });
@@ -172,8 +175,39 @@ check("arme : nom de compétence, sinon caractéristique", () => {
   assert.equal(melee.score, 30);
   assert.equal(weaponCharacteristicFallback("  Armes d'épaule "), "coo");
   const unknown = weaponAttackScore(chars, "Lance-flammes", []);
-  assert.equal(unknown.unknown, true);
-  assert.equal(unknown.score, null);
+  assert.equal(unknown.unknown, false);
+  assert.equal(unknown.fallback, true);
+  assert.equal(unknown.characteristic, "coo");
+  assert.equal(unknown.score, 40);
+  const empty = weaponAttackScore(chars, "", []);
+  assert.equal(empty.characteristic, "coo");
+  assert.equal(empty.score, 40);
+  assert.equal(empty.unknown, false);
+  assert.equal(weaponCharacteristicFallback("Corps-à-corps"), "for");
+});
+
+check("viser et tir visé", () => {
+  assert.equal(aimModifier(0).total, 0);
+  assert.equal(aimModifier(1).total, 10);
+  assert.equal(aimModifier(3).total, 30);
+  assert.equal(aimModifier(9).total, 30);
+  assert.equal(aimModifier(-2).total, 0);
+  const headTwo = attackSituation("head", 2);
+  assert.equal(headTwo.called.penalty, -30);
+  assert.equal(headTwo.situation, -10);
+  assert.equal(cappedModifier(0, 0, headTwo.situation), -10);
+  const visor = struckZone(55, "visor");
+  assert.equal(visor.zone, "head");
+  assert.equal(visor.visor, true);
+  const none = struckZone(55, "none");
+  assert.equal(none.visor, false);
+  assert.equal(none.zone, hitLocation(55));
+  assert.equal(struckZone(1, "leftLeg").zone, "leftLeg");
+  const aids = [
+    { id: "aim", per: 10, max: 30, maxActions: 3, label: "SOL.Roll.aim" },
+    { id: "scope", per: 10, max: 10, maxActions: 1, label: "SOL.Roll.aim" }
+  ];
+  assert.equal(aimModifier({ aim: 2, scope: 1 }, aids).total, 30);
 });
 
 check("Base du PNJ", () => {

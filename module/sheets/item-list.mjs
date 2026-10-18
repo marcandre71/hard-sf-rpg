@@ -281,24 +281,19 @@ async function rollItem(event, target) {
   }
 
   if ( item.type !== "weapon" || !item.system.equipped ) return;
-  const skillName = String(item.system.skill ?? "").trim();
-  if ( !skillName ) {
-    ui.notifications.warn(game.i18n.localize("SOL.Roll.noWeaponSkill"));
-    return;
-  }
+  // Réf. LdR v0.2 §15 : sans compétence, ou nom inconnu, on lance
+  // quand même, sur la caractéristique. Le jet n'est refusé que si
+  // la compétence est sur la fiche et que la formation l'interdit.
   const skills = actor.items.filter(entry => entry.type === "skill");
   const rated = weaponAttackScore(actor.system.characteristics, item.system.skill, skills);
-  if ( rated.unknown ) {
-    ui.notifications.warn(game.i18n.format("SOL.Roll.unknownSkill", { name: item.system.skill ?? "" }));
-    return;
-  }
   if ( rated.impossible ) {
     ui.notifications.warn(game.i18n.localize("SOL.Roll.impossible"));
     return;
   }
+  const skillLabel = String(rated.label ?? "").trim();
   await performRoll({
     actor,
-    label: `${item.name} — ${rated.label}`,
+    label: skillLabel ? `${item.name} — ${skillLabel}` : item.name,
     score: rated.score,
     weapon: item,
     type: "weapon"

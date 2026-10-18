@@ -3,10 +3,18 @@
  *
  * Réf. Fiche v0.2 §4. `mass`, `enc` et `equipped` y sont nommés sans type :
  * on reprend les types de l'arme (Number, Number, Boolean), mêmes noms.
- * Les valeurs de protection citées au LdR v0.2 §7 (souple 1, renforcée 3,
- * armure de pont 6) sont des exemples, pas des choix imposés au champ.
+ * Réf. LdR v0.2 §7 et §15 : protection par zone, pressurisée,
+ * seuil de brèche, joints. Les nombres du compendium (souple 1/1/1/1
+ * seuil 4, renforcée 3/3/2/2 seuil 8, pont 6/5/4/4 seuil 12) sont
+ * des objets, pas les défauts du champ.
+ * `breachThreshold` part à `null` : un 0 inventé percerait dès que
+ * les dégâts bruts sont positifs.
+ * Réserve d'air en heures. L'armure de pont du compendium stocke 0,5
+ * (30 minutes) ; la fourchette du LdR est 30 à 60 minutes. Pas
+ * d'automatisme, ni de surchauffe jouée par le logiciel.
  */
 import { SOL } from "../config.mjs";
+import { migrateArmorSource } from "./armor-migrate.mjs";
 import { BaseItemData } from "./base-item.mjs";
 import { boolField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
@@ -24,6 +32,14 @@ export class ArmorData extends BaseItemData {
       ...super.defineSchema(),
       protection: new SchemaField(protection, { label: "SOL.Armor.protection" }),
       pressurized: boolField("SOL.Armor.pressurized", false),
+      // Réf. LdR v0.2 §15. null : pas de seuil, donc pas de brèche.
+      breachThreshold: numberField("SOL.Armor.breachThreshold", {
+        initial: null,
+        nullable: true,
+        integer: true,
+        min: 0,
+        step: 1
+      }),
       // Heures, décimal. Réf. Fiche v0.2 §4 `{ value, max }` ; le LdR disait un simple nombre.
       airReserve: valueMaxField("SOL.Armor.airReserve", { hint: "SOL.Hint.hours" }),
       sealState: stringField("SOL.Armor.sealState.label", {
@@ -44,5 +60,17 @@ export class ArmorData extends BaseItemData {
       enc: numberField("SOL.Field.enc", { initial: 0, step: 0.01 }),
       equipped: boolField("SOL.Field.equipped", false)
     };
+  }
+
+  /**
+   * Valeur unique historique → une zone par clé. Rien d'autre.
+   *
+   * @override
+   * @param {object} source
+   * @returns {object}
+   */
+  static migrateData(source) {
+    migrateArmorSource(source);
+    return super.migrateData(source);
   }
 }

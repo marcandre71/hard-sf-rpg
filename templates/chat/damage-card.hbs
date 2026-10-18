@@ -8,7 +8,11 @@
     <li>{{localize "SOL.Damage.zone"}} : {{zone}}</li>
     <li>{{localize "SOL.Damage.net"}} : {{net}}</li>
     <li>{{localize "SOL.Damage.severity"}} : {{severity}}</li>
+    <li>{{localize "SOL.Damage.threshold"}} : {{threshold}}</li>
     <li>{{localize "SOL.Damage.breach"}} : {{breach}}</li>
+    {{#if visor}}
+    <li>{{localize "SOL.Damage.visor"}}</li>
+    {{/if}}
   </ul>
   {{#each reminders}}
   <p class="sol-damage-remind">{{this}}</p>

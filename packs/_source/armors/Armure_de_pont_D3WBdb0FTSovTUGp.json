@@ -5,14 +5,20 @@
   "type": "armor",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>valeur unique du LdR appliquée à toutes les zones, à affiner par Marc. Pressurisation : à confirmer.</p>",
+    "description": "<p>Combinaison pressurisée. Protection : torse 6, tête 5, bras 4, jambes 4. Seuil de brèche 12. Autonomie courte, 30 à 60 minutes, et risque de surchauffe. L'autonomie est stockée en heures : 0,5 (30 minutes) ; la fourchette du livre va jusqu'à 1 heure. Pas d'automatisme.</p>",
     "protection": {
-      "head": 6,
+      "head": 5,
       "torso": 6,
-      "rightArm": 6,
-      "leftArm": 6,
-      "rightLeg": 6,
-      "leftLeg": 6
+      "rightArm": 4,
+      "leftArm": 4,
+      "rightLeg": 4,
+      "leftLeg": 4
+    },
+    "pressurized": true,
+    "breachThreshold": 12,
+    "airReserve": {
+      "value": 0.5,
+      "max": 1
     }
   },
   "effects": [],

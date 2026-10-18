@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 5 : application des dégâts, initiative glissante (Vigilance), compendiums remplis depuis le LdR v0.2.",
-  "version": "0.5.11",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.6.0 : armure par zone, brèche au seuil, tir visé, Endurance à 0.",
+  "version": "0.6.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

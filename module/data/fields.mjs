@@ -49,12 +49,16 @@ export function stringField(label, { initial = "", choices, blank = true, hint }
  * un pas de 1 arrondit déjà les décimales, autant le dire dans le schéma.
  * Pas de min/max inventé au-delà de ce que les docs écrivent.
  *
+ * `nullable: true` et `initial: null` : le champ absent reste vide.
+ * On ne s'en sert pas pour injecter 0 (un seuil de brèche à 0 percerait
+ * au premier point de dégâts).
+ *
  * @param {string} label
- * @param {{ initial?: number, min?: number, max?: number, integer?: boolean, step?: number, hint?: string }} [options]
+ * @param {{ initial?: number|null, min?: number, max?: number, integer?: boolean, step?: number, hint?: string, nullable?: boolean }} [options]
  * @returns {foundry.data.fields.NumberField}
  */
-export function numberField(label, { initial = 0, min, max, integer = false, step, hint } = {}) {
-  const field = { required: true, nullable: false, initial, label };
+export function numberField(label, { initial = 0, min, max, integer = false, step, hint, nullable = false } = {}) {
+  const field = { required: true, nullable, initial, label };
   if ( integer ) field.integer = true;
   if ( min !== undefined ) field.min = min;
   if ( max !== undefined ) field.max = max;

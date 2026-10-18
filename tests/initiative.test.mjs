@@ -16,6 +16,8 @@ import {
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
+  injuryDefersAtStart,
+  newInjuryEndsOrder,
   INITIATIVE_SUCCESS_BASE,
   interruptTiming,
   repositionPlacement,
@@ -633,6 +635,45 @@ check("tous surpris : round 2 tout de suite", () => {
     { id: "C", surprised: true }
   ], 1);
   assert.deepEqual(log, ["R2:A"]);
+});
+
+check("fin d'ordre sans initiative : le drapeau reste, pas de nombre fictif", () => {
+  const sorted = [
+    { id: "a", initiative: 10, deferEnd: true },
+    { id: "b", initiative: null, deferEnd: true },
+    { id: "c", initiative: 8 }
+  ];
+  const updates = resolveDeferred(sorted);
+  const a = updates.find(update => update.id === "a");
+  const b = updates.find(update => update.id === "b");
+  assert.equal(a.clearEnd, true);
+  assert.ok(a.initiative < 8);
+  assert.equal(b, undefined);
+  const onlyWaiting = resolveDeferred([
+    { id: "a", initiative: 10 },
+    { id: "b", initiative: null, deferEnd: true }
+  ]);
+  assert.deepEqual(onlyWaiting, []);
+});
+
+check("case fin d'ordre : les deux cases au démarrage", () => {
+  assert.equal(newInjuryEndsOrder("light"), false);
+  assert.equal(newInjuryEndsOrder("serious"), true);
+  assert.equal(newInjuryEndsOrder("critical"), true);
+  assert.equal(newInjuryEndsOrder("mortal"), true);
+  assert.equal(severityDefers("serious"), true);
+  assert.equal(injuryDefersAtStart([]), false);
+  assert.equal(injuryDefersAtStart([{ endOfOrder: true, activeRoundOne: false }]), false);
+  assert.equal(injuryDefersAtStart([{ endOfOrder: false, activeRoundOne: true }]), false);
+  assert.equal(injuryDefersAtStart([{ endOfOrder: true, activeRoundOne: true }]), true);
+  const sorted = [
+    { id: "a", initiative: 30, injuryDefer: true },
+    { id: "b", initiative: 20 },
+    { id: "c", initiative: null, injuryDefer: true }
+  ];
+  const changes = stunnedAtStart(sorted);
+  assert.equal(changes.find(change => change.id === "a").initiative, 19);
+  assert.deepEqual(changes.find(change => change.id === "c"), { id: "c", deferEnd: true });
 });
 
 check("sonné avant le combat : fin d'ordre si l'initiative est un nombre", () => {

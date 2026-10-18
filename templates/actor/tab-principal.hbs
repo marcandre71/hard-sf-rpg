@@ -22,6 +22,10 @@
   {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=talentSection}}
 
   <h2 class="sol-section-title">{{localize "SOL.Section.physical"}}</h2>
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=enduranceGroups}}
+  {{#if enduranceMax}}
+  <p class="sol-seuil">{{localize "SOL.Actor.enduranceMax"}} : <strong>{{enduranceMax}}</strong></p>
+  {{/if}}
   {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=injurySection}}
   {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=sequelSection}}
 </section>

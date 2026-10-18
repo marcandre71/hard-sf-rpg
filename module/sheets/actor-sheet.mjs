@@ -14,6 +14,7 @@
 import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { FOR_CON_PER_KEYS } from "../data/actors.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
+import { endurancePoints } from "../dice/derived.mjs";
 import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
@@ -79,6 +80,8 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         };
       });
       context.seuil = seuilFromCharacteristics(prepared);
+      const con = prepared.con?.value;
+      context.enduranceMax = typeof con === "number" ? endurancePoints(con) : null;
     }
     context.groups = prepareFieldGroups(actor.system.schema.fields, stored, {
       prefix: "system",

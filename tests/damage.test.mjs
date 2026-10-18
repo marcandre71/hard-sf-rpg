@@ -1,25 +1,34 @@
 /**
  * Dégâts et gravité, sans Foundry. `node tests/damage.test.mjs`
  *
- * Réf. LdR v0.2 §7. Décision Marc 18/10/2026 : SB = ceil((FOR + CON) / 20).
- * Le texte de l'exemple du LdR (FOR 30 + CON 40 → SB 7, blessure grave)
- * est périmé tant que Marc n'a pas mis le livre à jour. Avec le diviseur
- * 20, le même coup (carabine 10 + 2 DR − 3) donne SB 4, nets 9, critique.
+ * Réf. LdR v0.2 §2, §3 et §7.
+ * Exemple du mineur : carabine 10 + 2 DR, renforcée (torse 3, seuil 8),
+ * FOR 30 CON 40. SB 4, nets 9, critique, brèche car 12 > 8.
  */
 import assert from "node:assert/strict";
+import { migrateArmorSource } from "../module/data/armor-migrate.mjs";
 import {
   cardReminders,
   classifyInjury,
   consequenceKey,
+  effectiveThreshold,
   INJURY_PENALTY,
   isUsableSeuil,
   pressurizedCovers,
+  resolveBreaches,
   resolveStrike,
   SEUIL_DIVISOR,
   seuilBlessure,
   seuilFromCharacteristics,
   sumZoneArmour
 } from "../module/dice/damage.mjs";
+import {
+  ceilHalf,
+  endurancePoints,
+  enduranceZeroOffer,
+  gTolerance,
+  sangFroid
+} from "../module/dice/derived.mjs";
 
 /**
  * @param {string} label
@@ -53,26 +62,26 @@ check("seuil", () => {
   assert.equal(isUsableSeuil(null), false);
 });
 
-check("exemple du LdR périmé : carabine 10 + 2 DR − 3, FOR 30 + CON 40 → SB 4, critique et brèche", () => {
+check("exemple du LdR : carabine 10 + 2 DR, renforcée, FOR 30 CON 40", () => {
   const armors = [{
+    id: "renforcee",
     equipped: true,
     pressurized: true,
-    protection: { torso: 3 }
+    breachThreshold: 8,
+    protection: { head: 3, torso: 3, rightArm: 2, leftArm: 2, rightLeg: 2, leftLeg: 2 }
   }];
   assert.equal(sumZoneArmour(armors, "torso"), 3);
   const sb = seuilBlessure(30, 40);
   assert.equal(sb, 4);
-  const strike = resolveStrike({
-    gross: 12,
-    armour: 3,
-    sb,
-    pressurized: pressurizedCovers(armors, "torso").length > 0
-  });
+  const strike = resolveStrike({ gross: 12, sb, armors, zone: "torso" });
+  assert.equal(strike.armour, 3);
   assert.equal(strike.net, 9);
   assert.equal(strike.severity, "critical");
   assert.equal(strike.penalty, 0);
   assert.equal(strike.bleeding, false);
   assert.equal(strike.breach, true);
+  assert.equal(strike.breaches[0].threshold, 8);
+  assert.equal(strike.breaches[0].breached, true);
 });
 
 check("frontières de gravité pour un seuil de 4", () => {
@@ -90,41 +99,135 @@ check("frontières de gravité pour un seuil de 4", () => {
   assert.equal(INJURY_PENALTY.mortal, 0);
 });
 
-check("dégâts nets nuls ou négatifs : ni blessure ni brèche", () => {
-  const absorbed = resolveStrike({ gross: 3, armour: 3, sb: SB, pressurized: true });
-  assert.equal(absorbed.net, 0);
+check("brèche au seuil, même sans blessure", () => {
+  const soft = [{
+    id: "souple",
+    equipped: true,
+    pressurized: true,
+    breachThreshold: 4,
+    protection: { torso: 6 }
+  }];
+  const absorbed = resolveStrike({ gross: 5, sb: SB, armors: soft, zone: "torso" });
+  assert.equal(absorbed.net, -1);
   assert.equal(absorbed.severity, null);
-  assert.equal(absorbed.breach, false);
-  const over = resolveStrike({ gross: 2, armour: 5, sb: SB, pressurized: true });
-  assert.equal(over.net, -3);
-  assert.equal(over.breach, false);
+  assert.equal(absorbed.breach, true);
+  assert.equal(absorbed.breaches[0].threshold, 4);
+  const equal = resolveStrike({
+    gross: 4,
+    sb: SB,
+    armors: [{ ...soft[0], protection: { torso: 6 } }],
+    zone: "torso"
+  });
+  assert.equal(equal.breach, false);
+  const noThreshold = resolveStrike({
+    gross: 12,
+    sb: SB,
+    armors: [{ id: "x", equipped: true, pressurized: true, protection: { torso: 0 } }],
+    zone: "torso"
+  });
+  assert.equal(noThreshold.severity, "mortal");
+  assert.equal(noThreshold.breach, false);
+  assert.deepEqual(noThreshold.breaches, []);
 });
 
-check("armures : somme des couches équipées, brèche si pressurisée", () => {
+check("armures : somme des couches équipées", () => {
   const armors = [
-    { id: "a", equipped: true, pressurized: false, protection: { torso: 1, head: 0 } },
-    { id: "b", equipped: true, pressurized: true, protection: { torso: 2 } },
-    { id: "c", equipped: false, pressurized: true, protection: { torso: 9, head: 9 } }
+    { id: "a", equipped: true, pressurized: false, breachThreshold: 1, protection: { torso: 1, head: 0 } },
+    { id: "b", equipped: true, pressurized: true, breachThreshold: 8, protection: { torso: 2 } },
+    { id: "c", equipped: false, pressurized: true, breachThreshold: 1, protection: { torso: 9, head: 9 } }
   ];
   assert.equal(sumZoneArmour(armors, "torso"), 3);
   assert.equal(sumZoneArmour(armors, "head"), 0);
   assert.deepEqual(pressurizedCovers(armors, "torso").map(armor => armor.id), ["b"]);
   assert.deepEqual(pressurizedCovers(armors, "head"), []);
-  const headSuit = [{ equipped: true, pressurized: true, protection: { head: 0 } }];
-  const head = resolveStrike({
-    gross: 3,
-    armour: sumZoneArmour(headSuit, "head"),
-    sb: SB,
-    pressurized: pressurizedCovers(headSuit, "head").length > 0
-  });
-  assert.equal(head.severity, "light");
-  assert.equal(head.breach, true);
+  const breaches = resolveBreaches(armors, "torso", 9);
+  assert.equal(breaches.length, 1);
+  assert.equal(breaches[0].id, "b");
+  assert.equal(breaches[0].breached, true);
 });
 
-check("seuil inutilisable : pas de blessure", () => {
-  const strike = resolveStrike({ gross: 12, armour: 0, sb: 0, pressurized: true });
+check("visière : moitié au supérieur, armure de pont", () => {
+  const pont = [{
+    id: "pont",
+    equipped: true,
+    pressurized: true,
+    breachThreshold: 12,
+    protection: { head: 5, torso: 6, rightArm: 4, leftArm: 4, rightLeg: 4, leftLeg: 4 }
+  }];
+  assert.equal(ceilHalf(5), 3);
+  assert.equal(ceilHalf(12), 6);
+  assert.equal(effectiveThreshold(12, "head", true), 6);
+  assert.equal(effectiveThreshold(12, "torso", true), 12);
+  assert.equal(sumZoneArmour(pont, "head", { visor: true }), 3);
+  assert.equal(sumZoneArmour(pont, "head"), 5);
+  const hit = resolveStrike({ gross: 7, sb: SB, armors: pont, zone: "head", visor: true });
+  assert.equal(hit.armour, 3);
+  assert.equal(hit.net, 4);
+  assert.equal(hit.breaches[0].threshold, 6);
+  assert.equal(hit.breach, true);
+  const equal = resolveStrike({ gross: 6, sb: SB, armors: pont, zone: "head", visor: true });
+  assert.equal(equal.breach, false);
+  const layers = [
+    { id: "a", equipped: true, pressurized: true, breachThreshold: 12, protection: { head: 5 } },
+    { id: "b", equipped: true, pressurized: true, breachThreshold: 4, protection: { head: 1 } }
+  ];
+  assert.equal(sumZoneArmour(layers, "head", { visor: true }), 4);
+  const both = resolveBreaches(layers, "head", 3, { visor: true });
+  assert.deepEqual(both.map(entry => entry.threshold), [6, 2]);
+  assert.deepEqual(both.map(entry => entry.breached), [false, true]);
+});
+
+check("seuil inutilisable : pas de blessure, la brèche reste possible", () => {
+  const armors = [{
+    id: "souple",
+    equipped: true,
+    pressurized: true,
+    breachThreshold: 4,
+    protection: { torso: 0 }
+  }];
+  const strike = resolveStrike({ gross: 5, sb: 0, armors, zone: "torso" });
   assert.equal(strike.severity, null);
-  assert.equal(strike.breach, false);
+  assert.equal(strike.breach, true);
+});
+
+check("arrondis au supérieur", () => {
+  assert.equal(endurancePoints(1), 1);
+  assert.equal(endurancePoints(5), 1);
+  assert.equal(endurancePoints(6), 2);
+  assert.equal(gTolerance(1), 1);
+  assert.equal(gTolerance(20), 1);
+  assert.equal(gTolerance(21), 2);
+  assert.equal(sangFroid(1), 1);
+  assert.equal(sangFroid(5), 1);
+  assert.equal(sangFroid(6), 2);
+  assert.equal(ceilHalf(1), 1);
+  assert.equal(ceilHalf(4), 2);
+});
+
+check("endurance à 0 : un seul passage", () => {
+  assert.equal(enduranceZeroOffer(5, 0, false), "offer");
+  assert.equal(enduranceZeroOffer(null, 0, false), "offer");
+  assert.equal(enduranceZeroOffer(0, 0, true), "none");
+  assert.equal(enduranceZeroOffer(0, 0, false), "none");
+  assert.equal(enduranceZeroOffer(5, 0, true), "none");
+  assert.equal(enduranceZeroOffer(0, 4, true), "clear");
+  assert.equal(enduranceZeroOffer(4, 4, false), "none");
+  assert.equal(enduranceZeroOffer(null, null, false), "none");
+  assert.equal(enduranceZeroOffer(null, 3, false), "none");
+});
+
+check("migration d'armure : seulement une valeur unique", () => {
+  const single = migrateArmorSource({ protection: 2, pressurized: true });
+  assert.deepEqual(single.protection, {
+    head: 2, torso: 2, rightArm: 2, leftArm: 2, rightLeg: 2, leftLeg: 2
+  });
+  const zones = { head: 5, torso: 6 };
+  const kept = migrateArmorSource({ protection: zones, breachThreshold: 12 });
+  assert.equal(kept.protection, zones);
+  assert.equal(kept.breachThreshold, 12);
+  const empty = migrateArmorSource({});
+  assert.equal("protection" in empty, false);
+  assert.equal("breachThreshold" in empty, false);
 });
 
 check("conséquence et rappels", () => {

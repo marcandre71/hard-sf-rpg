@@ -11,7 +11,8 @@ export const MODIFIER_LIMIT = 50;
 
 /**
  * Chiffre des dizaines.
- * Décision Marc 18/10/2026 : `Math.floor(x / 10)`.
+ * Réf. LdR v0.2 §2 : « la dizaine se lit directement ». Ce n'est pas
+ * un arrondi au supérieur : partie entière, `Math.floor(x / 10)`.
  * 100 → 10, 01–09 → 0. Un score négatif donne une dizaine négative.
  *
  * @param {number} value
@@ -22,17 +23,17 @@ export function tens(value) {
 }
 
 /**
- * Difficulté + modificateur libre, borné à ±50.
- * Décision Marc 18/10/2026 : le plafond couvre ces deux termes
- * (le modificateur libre est celui saisi par le meneur).
- * Le score qui en résulte n'est pas borné ici.
+ * Difficulté + modificateur libre + situation, borné à ±50.
+ * Réf. LdR v0.2 §5. Le tir visé et Viser (LdR v0.2 §7) entrent dans
+ * `situation`. Le score qui en résulte n'est pas borné ici.
  *
  * @param {number} difficulty
  * @param {number} free
+ * @param {number} [situation]
  * @returns {number}
  */
-export function cappedModifier(difficulty, free) {
-  const sum = Number(difficulty) + Number(free);
+export function cappedModifier(difficulty, free, situation = 0) {
+  const sum = Number(difficulty) + Number(free) + Number(situation);
   if ( !Number.isFinite(sum) ) return 0;
   return Math.min(MODIFIER_LIMIT, Math.max(-MODIFIER_LIMIT, sum));
 }

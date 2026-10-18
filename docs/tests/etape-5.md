@@ -1,7 +1,7 @@
 # Tester l'étape 5 jusqu'à la 0.5.4 (archive)
 
 Cette procédure correspond aux **versions 0.5.0 à 0.5.4** (dégâts, compendiums, Seuil /20).
-Le système en cours est la **0.5.10** (initiative glissante) : suivre [TESTER.md](../../TESTER.md).
+Le système en cours est la **0.6.0** : suivre [TESTER.md](../../TESTER.md). L'initiative 0.5.11 est dans [initiative-0.5.md](initiative-0.5.md).
 Ce fichier est conservé pour ne pas perdre le scénario des dégâts.
 
 # Tester le système « Sol, Nouvelle Ère » (étape 5)

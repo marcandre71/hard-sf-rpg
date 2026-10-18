@@ -5,16 +5,17 @@
   "type": "armor",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>valeur unique du LdR appliquée à toutes les zones, à affiner par Marc</p>",
+    "description": "<p>Combinaison pressurisée. Protection : torse 3, tête 3, bras 2, jambes 2. Seuil de brèche 8.</p>",
     "protection": {
       "head": 3,
       "torso": 3,
-      "rightArm": 3,
-      "leftArm": 3,
-      "rightLeg": 3,
-      "leftLeg": 3
+      "rightArm": 2,
+      "leftArm": 2,
+      "rightLeg": 2,
+      "leftLeg": 2
     },
-    "pressurized": true
+    "pressurized": true,
+    "breachThreshold": 8
   },
   "effects": [],
   "folder": null,

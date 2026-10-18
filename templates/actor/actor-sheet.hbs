@@ -19,6 +19,9 @@
   <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
   {{> "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs"}}
   <p class="sol-seuil">{{localize "SOL.Damage.sb"}} : <strong>{{seuil}}</strong></p>
+  {{#if enduranceMax}}
+  <p class="sol-seuil">{{localize "SOL.Actor.enduranceMax"}} : <strong>{{enduranceMax}}</strong></p>
+  {{/if}}
   {{/if}}
 
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=groups}}

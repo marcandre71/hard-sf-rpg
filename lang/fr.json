@@ -135,7 +135,10 @@
     "Actor": {
       "description": "Description",
       "notes": "Notes",
-      "category": "Catégorie"
+      "category": "Catégorie",
+      "endurance": "Endurance",
+      "enduranceHint": "Valeur actuelle. Vide : pas suivie. Le maximum dérivé (CON/5, arrondi au supérieur) est affiché à part et n'est pas écrit.",
+      "enduranceMax": "Endurance maximale (CON/5)"
     },
     "Vehicle": {
       "category": {
@@ -183,8 +186,19 @@
       "location": "Localisation",
       "damage": "Dégâts",
       "impossible": "Cette compétence ne peut pas être tentée sans formation.",
-      "unknownSkill": "Aucune compétence « {name} » sur cette fiche, et ce nom n'est pas une arme de poing, d'épaule ou de corps-à-corps.",
-      "noWeaponSkill": "Arme sans compétence."
+      "calledShot": "Zone visée",
+      "aim": "Actions de visée",
+      "visorHit": "Visière",
+      "called": {
+        "none": "Aucune",
+        "torso": "Torse (−10)",
+        "rightArm": "Bras droit (−20)",
+        "leftArm": "Bras gauche (−20)",
+        "rightLeg": "Jambe droite (−20)",
+        "leftLeg": "Jambe gauche (−20)",
+        "head": "Tête (−30)",
+        "visor": "Visière (−40)"
+      }
     },
     "Initiative": {
       "vigilance": "Vigilance",
@@ -194,7 +208,6 @@
       "surprised": "Surpris",
       "notAllowed": "{name} ne peut pas lancer l'initiative.",
       "impossible": "{name} ne peut pas tenter Vigilance sans formation.",
-      "noPerception": "{name} n'a ni Vigilance ni Perception : le test est à 0.",
       "rankSuccess": "{dr} DR · RÉF {ref}",
       "rankCritical": "{dr} DR crit. · RÉF {ref}",
       "rankFailure": "{de} DE"
@@ -204,7 +217,15 @@
       "bleeding": "Saignement",
       "stunned": "Sonné",
       "stunnedHint": "Pas d'action ce tour, réaction possible ; posé avant le combat, envoie en fin d'ordre dès le round 1.",
-      "surprised": "Surpris"
+      "surprised": "Surpris",
+      "exhausted": "Épuisé",
+      "exhaustedHint": "−20 à tous les tests. Rappel : le jet ne retire pas encore ce malus.",
+      "exhaustedRemind": "Épuisé : −20 (rappel, non appliqué au score)."
+    },
+    "Endurance": {
+      "prompt": "L'Endurance est à 0. Test de Constitution pour rester conscient. Réussite : Épuisé (−20, rappel). Échec : Inconscient, aucune action. Ignorer ne pose aucun statut. Le MJ peut aussi retirer le statut ensuite.",
+      "roll": "Test de Constitution",
+      "dismiss": "Ignorer"
     },
     "Damage": {
       "apply": "Appliquer les dégâts",
@@ -222,6 +243,8 @@
       "sb": "Seuil de blessure",
       "severity": "Gravité",
       "breach": "Brèche",
+      "threshold": "Seuil de brèche",
+      "visor": "Visière : protection de la tête et seuil de brèche divisés par 2, arrondis au supérieur.",
       "yes": "Oui",
       "no": "Non",
       "none": "Aucune blessure",
@@ -300,6 +323,7 @@
     "Armor": {
       "protection": "Protection",
       "pressurized": "Pressurisée",
+      "breachThreshold": "Seuil de brèche",
       "airReserve": "Réserve d'air",
       "sealState": {
         "label": "Joints",
@@ -364,6 +388,8 @@
       "bleeding": "Saignement",
       "penalty": "Pénalité",
       "treated": "Soignée",
+      "endOfOrder": "Envoie en fin d'ordre",
+      "activeRoundOne": "Active pour le round 1",
       "healingTime": "Temps de guérison",
       "source": "Source"
     },

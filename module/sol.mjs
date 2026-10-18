@@ -22,6 +22,7 @@ import { SkillData } from "./data/skill.mjs";
 import { WeaponData } from "./data/weapon.mjs";
 import { registerInitiative } from "./combat/initiative.mjs";
 import { registerDamage } from "./dice/apply-damage.mjs";
+import { registerEndurance } from "./dice/endurance.mjs";
 import { registerItemGuard } from "./guards.mjs";
 import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
 import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
@@ -59,9 +60,8 @@ function initializeSystem() {
 
   CONFIG.SOL = SOL;
 
-  // Pas de CONFIG.Actor.trackableAttributes : aucune jauge de ressource
-  // n'existe encore (Endurance, Sang-froid ne sont pas des champs).
-  // Rien à afficher dans les barres du pion. Réf. revue étape 2.
+  // Pas de CONFIG.Actor.trackableAttributes : l'Endurance est un champ
+  // de fiche, pas une barre de pion. Sang-froid n'est pas un champ.
 
   // Modèles d'acteurs. La clé est le type déclaré dans system.json.
   Object.assign(CONFIG.Actor.dataModels, {
@@ -116,6 +116,7 @@ function initializeSystem() {
   registerItemGuard();
   registerNpcReadyMigration(SYSTEM_ID);
   registerDamage();
+  registerEndurance();
   registerInitiative();
 }
 

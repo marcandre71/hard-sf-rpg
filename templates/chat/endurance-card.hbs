@@ -1,0 +1,11 @@
+{{!--
+  Endurance à 0. Réf. LdR v0.2 §3 et §11.
+  Le bouton n'est utilisable que par le propriétaire ou le MJ
+  (module/dice/endurance.mjs). Ignorer ne pose aucun statut.
+--}}
+<article class="sol-nouvelle-ere sol-roll-card">
+  <h4 class="sol-roll-title">{{name}}</h4>
+  <p>{{localize "SOL.Endurance.prompt"}}</p>
+  <button type="button" data-action="sol-endurance-con">{{localize "SOL.Endurance.roll"}}</button>
+  <button type="button" data-action="sol-endurance-dismiss">{{localize "SOL.Endurance.dismiss"}}</button>
+</article>

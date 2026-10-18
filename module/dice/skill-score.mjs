@@ -44,41 +44,58 @@ export function findSkillByName(skills, name) {
 
 /**
  * Caractéristique de repli si l'acteur n'a pas la compétence nommée.
- * Décision Marc 18/10/2026 : le champ `weapon.skill` est le nom ;
- * à défaut, Armes de poing / Armes d'épaule → COO, Corps-à-corps → FOR.
- * Ces trois compétences ne sont pas (F) : le score est la valeur actuelle.
+ * Réf. LdR v0.2 §7 et §15 : sans la compétence, on lance sur la
+ * caractéristique. Armes de poing / Armes d'épaule → COO,
+ * Corps-à-corps → FOR. Ces trois compétences ne sont pas (F).
+ * Le modèle d'arme ne porte pas de caractéristique : on n'en ajoute pas.
+ * // À confirmer par Marc : un nom vide ou inconnu ne dit pas si l'arme
+ * est de tir ou de corps-à-corps. On retombe sur COO.
  *
  * @param {string} name
  * @param {Record<string, string>} [defaults]
- * @returns {string|null} Clé de caractéristique, ou null si le nom est inconnu.
+ * @returns {string} Clé de caractéristique.
  */
 export function weaponCharacteristicFallback(name, defaults = SOL.weaponSkillDefaults) {
   const wanted = String(name ?? "").trim().toLocaleLowerCase("fr");
-  if ( !wanted ) return null;
-  const key = Object.keys(defaults).find(label => label.trim().toLocaleLowerCase("fr") === wanted);
-  return key ? defaults[key] : null;
+  if ( wanted ) {
+    const key = Object.keys(defaults).find(label => label.trim().toLocaleLowerCase("fr") === wanted);
+    if ( key ) return defaults[key];
+  }
+  return "coo";
 }
 
 /**
  * Score d'une attaque.
- * D'abord une compétence de l'acteur au même nom ; sinon le repli
- * ci-dessus ; sinon inconnu (le jet s'arrête).
+ * D'abord une compétence de l'acteur au même nom. Sinon la
+ * caractéristique de repli : le jet n'est pas refusé.
+ * Réf. LdR v0.2 §15 « Attaque ».
  *
  * @param {Record<string, { value?: number }>|undefined} characteristics
  * @param {string} skillName
  * @param {{ name?: string, system?: object }[]} skills
- * @returns {{ unknown: boolean, impossible: boolean, score: number|null, label: string, halved: boolean, fallback: boolean }}
+ * @returns {{ unknown: boolean, impossible: boolean, score: number|null, label: string, halved: boolean, fallback: boolean, characteristic: string|null }}
  */
 export function weaponAttackScore(characteristics, skillName, skills) {
   const found = findSkillByName(skills, skillName);
   if ( found ) {
     const rated = skillScore(characteristics, found.system ?? {});
-    return { ...rated, unknown: false, label: found.name ?? skillName, fallback: false };
+    return {
+      ...rated,
+      unknown: false,
+      label: found.name ?? skillName,
+      fallback: false,
+      characteristic: found.system?.characteristic ?? null
+    };
   }
   const characteristic = weaponCharacteristicFallback(skillName);
-  if ( !characteristic ) {
-    return { unknown: true, impossible: false, score: null, label: String(skillName ?? ""), halved: false, fallback: false };
-  }
   const value = Number(characteristics?.[characteristic]?.value ?? 0);
-  return { unknown: false, impossible: false, score: value, label: String(skillName ?? "").trim(), halved: false, fallback: true };
+  return {
+    unknown: false,
+    impossible: false,
+    score: value,
+    label: String(skillName ?? "").trim(),
+    halved: false,
+    fallback: true,
+    characteristic
+  };
 }

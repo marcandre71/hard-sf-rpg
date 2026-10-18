@@ -10,8 +10,12 @@
  * @see https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.renderTemplate.html
  */
 import { SOL } from "../config.mjs";
-import { formatModifier, hitLocation, resolveD100 } from "./d100.mjs";
+import { struckZone } from "./attack.mjs";
+import { formatModifier, resolveD100 } from "./d100.mjs";
 import { askRoll } from "./roll-dialog.mjs";
+
+/** Réf. LdR v0.2 §11. Le moteur ne retire pas encore ce malus du score. */
+const EXHAUSTED = "sol-nouvelle-ere.exhausted";
 
 const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
 
@@ -119,7 +123,7 @@ export async function performRoll({
   messageMode = null,
   messageOptions = null
 }) {
-  const picked = choice ?? await askRoll({ title: label, score });
+  const picked = choice ?? await askRoll({ title: label, score, attack: Boolean(weapon) });
   if ( !picked ) return null;
 
   // Foundry : 1d100 va de 1 à 100. Un 00 physique vaut 100.
@@ -152,18 +156,41 @@ export async function performRoll({
     location: "",
     damage: null,
     canApply: false,
-    note
+    note,
+    calledLabel: "",
+    calledModifier: "",
+    aimModifier: "",
+    aimActions: picked.aimActions ?? 0,
+    visor: false
   };
+
+  if ( picked.calledShot && picked.calledShot !== "none" ) {
+    card.calledLabel = game.i18n.localize(`SOL.Roll.called.${picked.calledShot}`);
+    card.calledModifier = formatModifier(picked.calledPenalty ?? 0);
+  }
+  if ( picked.aimActions ) {
+    card.aimModifier = formatModifier(picked.aimBonus ?? 0);
+  }
+  // À confirmer par Marc : Épuisé (−20, LdR v0.2 §11) n'est qu'un rappel.
+  // performRoll ne sait pas appliquer un malus de statut au score.
+  if ( actorHasStatus(actor, EXHAUSTED) ) {
+    const remind = game.i18n.localize("SOL.Status.exhaustedRemind");
+    card.note = card.note ? `${card.note} ${remind}` : remind;
+  }
 
   /** @type {string|null} */
   let locationKey = null;
+  let visor = false;
   if ( weapon && outcome.success ) {
-    locationKey = hitLocation(outcome.die);
+    // Sans tir visé : dé inversé. Avec un tir visé qui touche : la zone choisie.
+    // Réf. LdR v0.2 §7. Une réussite critique ne choisit pas la zone.
+    const struck = struckZone(outcome.die, picked.calledShot);
+    locationKey = struck.zone;
+    visor = struck.visor;
+    card.visor = visor;
     card.location = game.i18n.localize(SOL.bodyLocations[locationKey]);
     // Réf. LdR v0.2 §7 : dégâts fixes de l'arme + DR. Pas de dé de dégâts.
     card.damage = Number(weapon.system.damage ?? 0) + outcome.dr;
-    // Décision Marc 18/10/2026 : la zone reste celle du dé inversé,
-    // même en réussite critique. Pas de phrase, pas de choix.
     card.canApply = Number.isFinite(card.damage);
   }
 
@@ -188,6 +215,8 @@ export async function performRoll({
         dr: outcome.dr,
         de: outcome.de,
         location: locationKey,
+        // Visière : apply-damage divise protection et seuil de la tête.
+        visor,
         // Dégâts de l'arme + DR. L'étape d'application s'en sert tels quels.
         damage: card.damage,
         label
@@ -206,4 +235,21 @@ export async function performRoll({
     die: outcome.die,
     target: picked.target
   };
+}
+
+/**
+ * @param {Actor|null|undefined} actor
+ * @param {string} id
+ * @returns {boolean}
+ */
+function actorHasStatus(actor, id) {
+  const effects = actor?.effects;
+  if ( !effects ) return false;
+  for ( const effect of effects ) {
+    const statuses = effect?.statuses;
+    if ( !statuses ) continue;
+    if ( typeof statuses.has === "function" && statuses.has(id) ) return true;
+    if ( Array.isArray(statuses) && statuses.includes(id) ) return true;
+  }
+  return false;
 }

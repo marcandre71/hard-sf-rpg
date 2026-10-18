@@ -6,30 +6,60 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DialogV2.html
  */
 import { SOL } from "../config.mjs";
+import { AIM_MODIFIERS, attackSituation } from "./attack.mjs";
 import { cappedModifier, formatModifier } from "./d100.mjs";
 
 /** Ordre du tableau LdR v0.2 §5. La clé `normal` est le défaut. */
 const DIFFICULTY_ORDER = ["veryEasy", "easy", "simple", "normal", "tricky", "hard", "veryHard", "extreme"];
 
 /**
+ * Actions de visée saisies. Une case par entrée de `AIM_MODIFIERS`.
+ * Réf. LdR v0.2 §7. Le nombre d'actions est un entier, borné par
+ * le modificateur (0 à 3 pour Viser).
+ *
+ * @param {HTMLFormElement} form
+ * @returns {Record<string, number>}
+ */
+function readAim(form) {
+  /** @type {Record<string, number>} */
+  const actions = {};
+  for ( const mod of AIM_MODIFIERS ) {
+    const raw = Number(form.elements[`aim-${mod.id}`]?.value);
+    actions[mod.id] = Number.isFinite(raw) ? Math.trunc(raw) : 0;
+  }
+  return actions;
+}
+
+/**
  * Lit le formulaire et calcule le total borné.
+ * Tir visé et Viser entrent dans le plafond ±50. Réf. LdR v0.2 §5 et §7.
  *
  * @param {HTMLFormElement} form
  * @param {number} score
- * @returns {{ difficultyKey: string, difficultyLabel: string, difficultyModifier: number, free: number, modifier: number, target: number }}
+ * @returns {object}
  */
 function readForm(form, score) {
   const difficultyKey = form.elements.difficulty?.value || "normal";
   const cfg = SOL.difficulties[difficultyKey] ?? SOL.difficulties.normal;
   const raw = Number(form.elements.modifier?.value);
   // Décision Marc 18/10/2026 : le modificateur libre est un entier.
+  // Ce n'est pas une division du LdR.
   const free = Number.isFinite(raw) ? Math.trunc(raw) : 0;
-  const modifier = cappedModifier(cfg.modifier, free);
+  const calledShot = form.elements.calledShot?.value || "none";
+  const aimActions = readAim(form);
+  const situation = attackSituation(calledShot, aimActions);
+  const modifier = cappedModifier(cfg.modifier, free, situation.situation);
+  const aimPart = situation.aim.parts.find(part => part.id === "aim");
   return {
     difficultyKey,
     difficultyLabel: game.i18n.localize(cfg.label),
     difficultyModifier: cfg.modifier,
     free,
+    calledShot,
+    calledPenalty: situation.called.penalty,
+    aimActions: aimPart?.actions ?? 0,
+    aimBonus: aimPart?.bonus ?? 0,
+    visor: situation.called.visor,
     modifier,
     target: Number(score) + modifier
   };
@@ -74,10 +104,36 @@ export function rollChoice(score, difficultyKey = "normal", free = 0) {
 }
 
 /**
- * @param {{ title: string, score: number }} options
- * @returns {Promise<null|{ difficultyKey: string, difficultyLabel: string, difficultyModifier: number, free: number, modifier: number, target: number }>}
+ * Cases de tir visé et de visée, seulement pour une arme.
+ * Les libellés viennent de l'i18n. Les malus viennent de `attack.mjs`.
+ *
+ * @returns {string}
  */
-export async function askRoll({ title, score }) {
+function attackFields() {
+  const escape = foundry.utils.escapeHTML;
+  const options = [
+    "none", "torso", "rightArm", "leftArm", "rightLeg", "leftLeg", "head", "visor"
+  ].map(id => {
+    const selected = id === "none" ? " selected" : "";
+    const text = game.i18n.localize(`SOL.Roll.called.${id}`);
+    return `<option value="${id}"${selected}>${escape(text)}</option>`;
+  }).join("");
+  const aims = AIM_MODIFIERS.map(mod => `
+      <label>${escape(game.i18n.localize(mod.label))}
+        <input type="number" name="aim-${mod.id}" value="0" min="0" max="${mod.maxActions}" step="1">
+      </label>`).join("");
+  return `
+      <label>${escape(game.i18n.localize("SOL.Roll.calledShot"))}
+        <select name="calledShot">${options}</select>
+      </label>
+      ${aims}`;
+}
+
+/**
+ * @param {{ title: string, score: number, attack?: boolean }} options
+ * @returns {Promise<null|object>}
+ */
+export async function askRoll({ title, score, attack = false }) {
   const escape = foundry.utils.escapeHTML;
   const options = DIFFICULTY_ORDER.map(key => {
     const cfg = SOL.difficulties[key];
@@ -96,6 +152,7 @@ export async function askRoll({ title, score }) {
       <label>${escape(game.i18n.localize("SOL.Roll.free"))}
         <input type="number" name="modifier" value="0" step="1">
       </label>
+      ${attack ? attackFields() : ""}
       <p class="sol-roll-total">${escape(game.i18n.localize("SOL.Roll.total"))}
         <strong data-total>0</strong></p>
     </div>`;
@@ -127,6 +184,10 @@ export async function askRoll({ title, score }) {
         const update = () => paintTotal(form, score);
         form.querySelector("[name=difficulty]")?.addEventListener("change", update);
         form.querySelector("[name=modifier]")?.addEventListener("input", update);
+        form.querySelector("[name=calledShot]")?.addEventListener("change", update);
+        for ( const mod of AIM_MODIFIERS ) {
+          form.querySelector(`[name=aim-${mod.id}]`)?.addEventListener("input", update);
+        }
         update();
       }
     }

@@ -13,8 +13,10 @@
  * Identité, contacts, défauts, biographie, notes : Fiche v0.2 §4.
  * Vice et Lueur n'existent pas (Fiche v0.2 §5 : supprimés le 17/10/2026).
  *
- * Hors périmètre ici : autres valeurs dérivées (seuil de blessure,
- * tolérance aux g, Endurance, Sang-froid), ressources, XP.
+ * Endurance actuelle : champ nullable, pas de `migrateData`.
+ * Le maximum dérivé (CON/5, arrondi supérieur, LdR v0.2 §3) n'est
+ * pas stocké. Tolérance aux g et Sang-froid ne sont pas des champs.
+ * Hors périmètre ici : ressources, XP.
  * Décision Marc 18/10/2026 : pas de valeur dérivée Initiative (RÉF/10).
  * L'initiative glissante (test de Vigilance, LdR v0.2 §7) est dans
  * `module/dice/initiative.mjs` et `module/combat/initiative.mjs`.
@@ -150,6 +152,16 @@ export class PersonData extends foundry.abstract.TypeDataModel {
       }, { label: "SOL.Character.identity" }),
 
       characteristics: characteristicSchema(Object.keys(SOL.characteristics), this.characteristicFieldBounds()),
+
+      // Réf. LdR v0.2 §3. null : pas encore suivie. Pas de migrateData.
+      endurance: numberField("SOL.Actor.endurance", {
+        initial: null,
+        nullable: true,
+        integer: true,
+        min: 0,
+        step: 1,
+        hint: "SOL.Actor.enduranceHint"
+      }),
 
       // Texte libre, pas une liste ni un type d'objet.
       // Décision de Marc (étape 2) : un seul champ, pas le tableau

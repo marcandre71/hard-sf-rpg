@@ -158,6 +158,31 @@ export function severityDefers(severity) {
 }
 
 /**
+ * Case « Envoie en fin d'ordre » cochée à la création d'une blessure.
+ * Grave ou pire. Décision Marc 18/10/2026 : le déplacement suit la case,
+ * pas la gravité seule. `severityDefers` ne sert qu'à cocher.
+ *
+ * @param {string|null|undefined} severity
+ * @returns {boolean}
+ */
+export function newInjuryEndsOrder(severity) {
+  return severityDefers(severity);
+}
+
+/**
+ * Blessure déjà présente au démarrage du combat.
+ * Décision Marc 18/10/2026 : fin d'ordre au round 1 seulement si
+ * « Envoie en fin d'ordre » et « Active pour le round 1 » sont cochées.
+ * Par défaut, une blessure existante ne compte pas.
+ *
+ * @param {Array<{ endOfOrder?: boolean, activeRoundOne?: boolean }>|null|undefined} injuries
+ * @returns {boolean}
+ */
+export function injuryDefersAtStart(injuries) {
+  return (injuries ?? []).some(item => item?.endOfOrder === true && item?.activeRoundOne === true);
+}
+
+/**
  * Place `ids` en fin d'ordre. L'ordre relatif de ceux qui restent,
  * et celui de ceux qui partent, sont conservés.
  * `sorted` est déjà trié : index 0 joue en premier.
@@ -340,12 +365,14 @@ export function surprisedTurnIndex(entries, turn, round) {
  * Initiative numérique : on l'écrit tout de suite.
  * Initiative encore vide : drapeau `deferEnd`, sans nombre fictif
  * (le bouton de jet doit rester).
+ * `injuryDefer` : blessure déjà là, les deux cases cochées.
+ * Décision Marc 18/10/2026.
  *
- * @param {Array<{ id: string, initiative: number|null, stunned?: boolean }>} sorted
+ * @param {Array<{ id: string, initiative: number|null, stunned?: boolean, injuryDefer?: boolean }>} sorted
  * @returns {Array<{ id: string, initiative?: number, deferEnd?: boolean }>}
  */
 export function stunnedAtStart(sorted) {
-  const stunned = sorted.filter(entry => entry.stunned === true);
+  const stunned = sorted.filter(entry => entry.stunned === true || entry.injuryDefer === true);
   const placed = stunned.filter(entry => typeof entry.initiative === "number" && Number.isFinite(entry.initiative));
   const waiting = stunned.filter(entry => !placed.includes(entry));
   const moved = deferToEnd(sorted, placed.map(entry => entry.id));
@@ -488,7 +515,17 @@ export function resolveDeferred(sorted) {
   }
 
   const endIds = sorted.filter(entry => entry.deferEnd).map(entry => entry.id);
-  const moved = deferToEnd(order, endIds);
+  // Initiative encore vide : on garde le drapeau, sans nombre fictif.
+  // Réf. TODO 0.6.0. Le déplacement attend un vrai jet.
+  const waitingEnd = new Set();
+  /** @type {string[]} */
+  const readyEnd = [];
+  for ( const id of endIds ) {
+    const initiative = order.find(entry => entry.id === id)?.initiative;
+    if ( typeof initiative === "number" && Number.isFinite(initiative) ) readyEnd.push(id);
+    else waitingEnd.add(id);
+  }
+  const moved = deferToEnd(order, readyEnd);
   if ( moved.length ) {
     const byId = new Map(moved.map(change => [change.id, change.initiative]));
     order = order.map(entry => byId.has(entry.id)
@@ -508,7 +545,7 @@ export function resolveDeferred(sorted) {
       data.clearStep = true;
       touched = true;
     }
-    if ( entry.deferEnd ) {
+    if ( entry.deferEnd && !waitingEnd.has(entry.id) ) {
       data.clearEnd = true;
       touched = true;
     }

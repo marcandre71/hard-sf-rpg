@@ -19,11 +19,12 @@
  * Les déplacements reportés partent dans `nextRound`, avant `super`,
  * quand le client est le MJ actif : une seule écriture, avant que le
  * nouveau round ne désigne l'ancien premier. `turnEvents: false` évite
- * un début ou une fin de tour en trop. Si c'est un joueur qui passe le
- * round, `_onStartRound` (MJ désigné, après l'écriture) sert de secours,
- * sans `turnEvents: false`. Les drapeaux sont retirés dans la même
- * écriture : un second passage est vide. Sans MJ connecté, Foundry
- * n'appelle pas `_onStartRound` : les drapeaux attendent son retour.
+ * un début ou une fin de tour en trop. La surprise du round 1 est
+ * retirée après `super` (le round est déjà ≥ 2). Si c'est un joueur
+ * qui passe le round, `_onStartRound` (MJ désigné, après l'écriture)
+ * sert de secours, sans `turnEvents: false`. Les drapeaux sont retirés
+ * dans la même écriture : un second passage est vide. Sans MJ connecté,
+ * Foundry n'appelle pas `_onStartRound` : les drapeaux attendent son retour.
  *
  * `Combatant._preUpdateOperation` conserve le combattant actif quand
  * l'initiative change. Pour garder l'index du tour, on passe
@@ -45,6 +46,7 @@ import {
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
+  injuryDefersAtStart,
   INITIATIVE_FLAG_SCOPE,
   interruptTiming,
   resetAllFlagUpdate,
@@ -519,12 +521,15 @@ export class SolCombat extends Combat {
    * @returns {Promise<Combat>}
    */
   async nextRound() {
+    const leavingFirst = this.round === 1;
     if ( game.user.isActiveGM ) {
-      // La surprise ne dure que le round 1. Réf. LdR v0.2 §7.
-      if ( this.round === 1 ) await clearSurprise(this);
       await applyDeferred(this, { turnEvents: false });
     }
-    return super.nextRound();
+    const combat = await super.nextRound();
+    // Réf. LdR v0.2 §7. Après super, le round est déjà ≥ 2.
+    // On ne retire la surprise qu'en quittant le round 1.
+    if ( leavingFirst && game.user.isActiveGM ) await clearSurprise(this);
+    return combat;
   }
 
   /**
@@ -571,11 +576,13 @@ export class SolCombat extends Combat {
    * pas ce hook : le tour n'est pas sauté.
    *
    * @override
-   * @param {object} context
+   * @param {Combatant} combatant
+   * @param {CombatTurnEventContext} context
    * @returns {Promise<void>}
+   * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html#_onStartTurn
    */
-  async _onStartTurn(context) {
-    await super._onStartTurn(context);
+  async _onStartTurn(combatant, context) {
+    await super._onStartTurn(combatant, context);
     if ( !game.user.isActiveGM ) return;
     const entries = this.turns.map(combatant => ({
       id: combatant.id,
@@ -664,7 +671,8 @@ function rankLabel(rank) {
  */
 function trackerMenuEntry({ name, icon, visible, onClick }) {
   const generation = game.release?.generation ?? 14;
-  if ( generation >= 14 ) return { name, label: name, icon, visible, onClick };
+  // v14 : `label` seul. `name` à côté de `label` n'est plus une clé du menu.
+  if ( generation >= 14 ) return { label: name, icon, visible, onClick };
   return { name, icon, condition: visible, callback: onClick };
 }
 
@@ -765,7 +773,8 @@ async function placePrecombatStunned(combat) {
   const sorted = combat.turns.map(combatant => ({
     id: combatant.id,
     initiative: typeof combatant.initiative === "number" ? combatant.initiative : null,
-    stunned: actorHasStatus(combatant.actor, STUNNED)
+    stunned: actorHasStatus(combatant.actor, STUNNED),
+    injuryDefer: injuryDefersAtStart(startInjuries(combatant.actor))
   }));
   const changes = stunnedAtStart(sorted);
   if ( !changes.length ) return;
@@ -790,6 +799,27 @@ async function placePrecombatStunned(combat) {
  * @param {Combat} combat
  * @returns {Promise<void>}
  */
+/**
+ * Blessures déjà sur la fiche au démarrage.
+ * Décision Marc 18/10/2026 : les deux cases, sinon ça ne compte pas.
+ *
+ * @param {Actor|null|undefined} actor
+ * @returns {Array<{ endOfOrder: boolean, activeRoundOne: boolean }>}
+ */
+function startInjuries(actor) {
+  if ( !actor?.items ) return [];
+  /** @type {Array<{ endOfOrder: boolean, activeRoundOne: boolean }>} */
+  const injuries = [];
+  for ( const item of actor.items ) {
+    if ( item.type !== "injury" ) continue;
+    injuries.push({
+      endOfOrder: item.system.endOfOrder === true,
+      activeRoundOne: item.system.activeRoundOne === true
+    });
+  }
+  return injuries;
+}
+
 async function clearSurprise(combat) {
   if ( !game.user.isActiveGM ) return;
   const seen = new Set();

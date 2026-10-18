@@ -2,9 +2,11 @@
  * Le MJ applique les dégâts d'une carte d'attaque à des jetons.
  *
  * Réf. LdR v0.2 §7. Rien n'est écrit tant que le MJ n'a pas confirmé.
- * L'endurance et l'horloge de décompression ne sont pas automatisées.
- * Une blessure grave ou pire marque la fin d'ordre au round suivant
- * (initiative glissante, LdR v0.2 §7). Décision Marc 18/10/2026 :
+ * Le saignement (−1 Endurance par tour) et l'horloge de décompression
+ * ne sont pas automatisés. Décision Marc 18/10/2026 : la case
+ * « Envoie en fin d'ordre » est cochée si la blessure est grave ou pire,
+ * et c'est cette case qui marque la fin d'ordre, pas la gravité seule.
+ * Décision Marc 18/10/2026 :
  * créature, synthétique et drone ont FOR et CON, donc un Seuil.
  * Véhicule et vaisseau n'en ont pas : on refuse.
  * Aucun acteur n'a de champ d'armure par zone en dehors des objets
@@ -17,15 +19,13 @@
  */
 import { markDeferEnd, registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
-import { severityDefers } from "./initiative.mjs";
+import { newInjuryEndsOrder } from "./initiative.mjs";
 import {
   cardReminders,
   consequenceKey,
   isUsableSeuil,
-  pressurizedCovers,
   resolveStrike,
-  seuilFromCharacteristics,
-  sumZoneArmour
+  seuilFromCharacteristics
 } from "./damage.mjs";
 import { performRoll } from "./chat.mjs";
 
@@ -131,7 +131,9 @@ function readAttack(message) {
     location,
     gross: damage,
     attackerCritical: get("critical") === "success",
-    label: typeof label === "string" ? label : ""
+    label: typeof label === "string" ? label : "",
+    // Réf. LdR v0.2 §7. La visière divise protection et seuil de la tête.
+    visor: get("visor") === true
   };
 }
 
@@ -171,11 +173,16 @@ function readArmor(item) {
     const value = item.system.protection?.[zone];
     if ( typeof value === "number" && Number.isFinite(value) ) protection[zone] = value;
   }
+  const rawThreshold = item.system.breachThreshold;
   return {
     id: item.id,
     equipped: item.system.equipped === true,
     pressurized: item.system.pressurized === true,
-    protection
+    protection,
+    // null : pas de seuil, donc pas de brèche. On ne met pas 0.
+    breachThreshold: typeof rawThreshold === "number" && Number.isFinite(rawThreshold)
+      ? rawThreshold
+      : null
   };
 }
 
@@ -214,19 +221,20 @@ function escape(text) {
 /**
  * @param {string} zone
  * @param {Array<{ name: string, sb: number, armors: object[], gross: number }>} targets
+ * @param {boolean} visor
  * @returns {string}
  */
-function previewTable(zone, targets) {
-  const header = ["target", "zone", "gross", "armour", "net", "sb", "severity", "breach"]
+function previewTable(zone, targets, visor) {
+  const header = ["target", "zone", "gross", "armour", "net", "sb", "severity", "threshold", "breach"]
     .map(key => `<th>${escape(game.i18n.localize(`SOL.Damage.${key}`))}</th>`)
     .join("");
   const rows = targets.map(target => {
-    const armour = sumZoneArmour(target.armors, zone);
     const strike = resolveStrike({
       gross: target.gross,
-      armour,
       sb: target.sb,
-      pressurized: pressurizedCovers(target.armors, zone).length > 0
+      armors: target.armors,
+      zone,
+      visor
     });
     const severity = strike.severity
       ? game.i18n.localize(SOL.injurySeverities[strike.severity])
@@ -236,15 +244,27 @@ function previewTable(zone, targets) {
       target.name,
       game.i18n.localize(SOL.bodyLocations[zone]),
       target.gross,
-      armour,
+      strike.armour,
       strike.net,
       target.sb,
       severity,
+      thresholdText(strike.breaches),
       breach
     ];
     return `<tr>${cells.map(cell => `<td>${escape(cell)}</td>`).join("")}</tr>`;
   }).join("");
   return `<table><thead><tr>${header}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+/**
+ * Seuils affichés. Plusieurs armures : une valeur par couche.
+ *
+ * @param {Array<{ threshold: number }>|undefined} breaches
+ * @returns {string}
+ */
+function thresholdText(breaches) {
+  if ( !breaches?.length ) return "—";
+  return breaches.map(entry => String(entry.threshold)).join(", ");
 }
 
 /**
@@ -265,10 +285,14 @@ function dialogRoot(first, second) {
  */
 async function askDamage(attack, targets) {
   const escapeHtml = escape;
-  // Décision Marc 18/10/2026 : pas de liste. La zone est celle du dé.
+  // La zone est celle du dé, ou celle du tir visé déjà écrite sur la carte.
   const zoneLabel = escapeHtml(game.i18n.localize(SOL.bodyLocations[attack.location]));
+  const visorNote = attack.visor
+    ? `<p>${escapeHtml(game.i18n.localize("SOL.Damage.visor"))}</p>`
+    : "";
   const zoneControl = `<p>${escapeHtml(game.i18n.localize("SOL.Damage.zone"))}
         <strong>${zoneLabel}</strong></p>
+        ${visorNote}
         <input type="hidden" name="zone" value="${attack.location}">`;
 
   const result = await foundry.applications.api.DialogV2.wait({
@@ -296,7 +320,7 @@ async function askDamage(attack, targets) {
       if ( !preview || !form ) return;
       const zone = form.elements?.zone?.value;
       if ( typeof zone === "string" && zone in SOL.bodyLocations ) {
-        preview.innerHTML = previewTable(zone, targets);
+        preview.innerHTML = previewTable(zone, targets, attack.visor === true);
       }
     }
   });
@@ -328,24 +352,30 @@ function hasStatus(actor, id) {
  */
 async function applyOne(target, zone, attack, source) {
   const { actor } = target;
-  const armour = sumZoneArmour(target.armors, zone);
-  const covers = pressurizedCovers(target.armors, zone);
+  const visor = attack.visor === true && zone === "head";
   const strike = resolveStrike({
     gross: target.gross,
-    armour,
     sb: target.sb,
-    pressurized: covers.length > 0
+    armors: target.armors,
+    zone,
+    visor
   });
 
   if ( strike.severity ) {
     const key = consequenceKey(strike.severity, zone);
+    // Décision Marc 18/10/2026 : la case, pas la gravité seule.
+    // Grave ou pire : cochée. Légère : décochée.
+    // « Active pour le round 1 » reste décochée : cette blessure
+    // naît pendant le combat, le déplacement part tout de suite.
+    const endOfOrder = newInjuryEndsOrder(strike.severity);
     /** @type {object} */
     const system = {
       location: zone,
       severity: strike.severity,
       bleeding: strike.bleeding,
       penalty: strike.penalty,
-      source: attack.label
+      source: attack.label,
+      endOfOrder
     };
     if ( key ) {
       const text = game.i18n.localize(`SOL.Damage.consequence.${key}`);
@@ -363,12 +393,14 @@ async function applyOne(target, zone, attack, source) {
     if ( strike.bleeding && !hasStatus(actor, BLEEDING) ) {
       await actor.toggleStatusEffect(BLEEDING, { active: true });
     }
-    // Réf. LdR v0.2 §7. La légère ne déplace pas. Effet au round suivant.
-    if ( severityDefers(strike.severity) ) await markDeferEnd(actor);
+    // Réf. LdR v0.2 §7. Effet au round suivant, si la case est cochée.
+    if ( endOfOrder ) await markDeferEnd(actor);
   }
 
   if ( strike.breach ) {
-    const updates = covers
+    const breached = new Set(strike.breaches.filter(entry => entry.breached).map(entry => entry.id));
+    const updates = target.armors
+      .filter(armor => breached.has(armor.id))
       .map(armor => actor.items.get(armor.id))
       .filter(item => item && item.system.sealState !== "breached")
       .map(item => ({ _id: item.id, "system.sealState": "breached" }));
@@ -395,6 +427,8 @@ async function applyOne(target, zone, attack, source) {
       ? game.i18n.localize(SOL.injurySeverities[strike.severity])
       : game.i18n.localize("SOL.Damage.none"),
     breach: game.i18n.localize(strike.breach ? "SOL.Damage.yes" : "SOL.Damage.no"),
+    threshold: thresholdText(strike.breaches),
+    visor,
     reminders,
     followupLabel: followup ? game.i18n.localize(`SOL.Damage.followup.${followup}`) : ""
   });
