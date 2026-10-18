@@ -169,11 +169,13 @@ export const SOL = {
     character: CHARACTER_ITEMS,
     // Mêmes objets que le personnage, unicité comprise.
     npc: CHARACTER_ITEMS,
-    // Pas faits pour être équipés.
+    // Pas faits pour être équipés. Blessure standard. Décision Marc 18/10/2026.
     creature: ["weapon", "armor", "injury", "talent"],
     // Décision Marc 17/10/2026. Exclusion : origin, background, profession, substance.
+    // À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir.
     synthetic: without(CHARACTER_ITEMS, SYNTHETIC_EXCLUDED),
-    // Décision Marc 17/10/2026.
+    // Décision Marc 17/10/2026. Blessure standard en attendant.
+    // À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir.
     drone: ["weapon", "armor", "gear", "software", "injury"],
     vehicle: ["weapon", "armor", "gear", "software"],
     ship: ["weapon", "armor", "gear", "software", "shipModule"]

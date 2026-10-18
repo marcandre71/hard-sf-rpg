@@ -1,7 +1,10 @@
 /**
  * Dégâts et gravité, sans Foundry. `node tests/damage.test.mjs`
  *
- * Réf. LdR v0.2 §7. Décision Marc 18/10/2026.
+ * Réf. LdR v0.2 §7. Décision Marc 18/10/2026 : SB = ceil((FOR + CON) / 20).
+ * Le texte de l'exemple du LdR (FOR 30 + CON 40 → SB 7, blessure grave)
+ * est périmé tant que Marc n'a pas mis le livre à jour. Avec le diviseur
+ * 20, le même coup (carabine 10 + 2 DR − 3) donne SB 4, nets 9, critique.
  */
 import assert from "node:assert/strict";
 import {
@@ -12,6 +15,7 @@ import {
   isUsableSeuil,
   pressurizedCovers,
   resolveStrike,
+  SEUIL_DIVISOR,
   seuilBlessure,
   seuilFromCharacteristics,
   sumZoneArmour
@@ -32,50 +36,54 @@ function check(label, fn) {
   }
 }
 
-const SB = 7;
+const SB = 4;
 
 check("seuil", () => {
-  assert.equal(seuilBlessure(30, 40), 7);
-  assert.equal(seuilBlessure(31, 30), 7);
-  assert.equal(seuilBlessure(25, 25), 5);
+  assert.equal(SEUIL_DIVISOR, 20);
+  assert.equal(seuilBlessure(30, 40), 4);
+  assert.equal(seuilBlessure(31, 30), 4);
+  assert.equal(seuilBlessure(25, 25), 3);
   assert.equal(seuilBlessure(0, 0), 0);
-  assert.equal(seuilFromCharacteristics({ for: { value: 30 }, con: { value: 40 } }), 7);
+  assert.equal(seuilFromCharacteristics({ for: { value: 30 }, con: { value: 40 } }), 4);
   assert.equal(seuilFromCharacteristics({ for: { value: 30 } }), null);
   assert.equal(seuilFromCharacteristics(undefined), null);
-  assert.equal(isUsableSeuil(7), true);
+  assert.equal(isUsableSeuil(4), true);
+  assert.equal(isUsableSeuil(1), true);
   assert.equal(isUsableSeuil(0), false);
   assert.equal(isUsableSeuil(null), false);
 });
 
-check("exemple du livre : carabine 10 + 2 DR, armure 3, SB 7", () => {
+check("exemple du LdR périmé : carabine 10 + 2 DR − 3, FOR 30 + CON 40 → SB 4, critique et brèche", () => {
   const armors = [{
     equipped: true,
     pressurized: true,
     protection: { torso: 3 }
   }];
   assert.equal(sumZoneArmour(armors, "torso"), 3);
+  const sb = seuilBlessure(30, 40);
+  assert.equal(sb, 4);
   const strike = resolveStrike({
     gross: 12,
     armour: 3,
-    sb: SB,
+    sb,
     pressurized: pressurizedCovers(armors, "torso").length > 0
   });
   assert.equal(strike.net, 9);
-  assert.equal(strike.severity, "serious");
-  assert.equal(strike.penalty, -20);
-  assert.equal(strike.bleeding, true);
+  assert.equal(strike.severity, "critical");
+  assert.equal(strike.penalty, 0);
+  assert.equal(strike.bleeding, false);
   assert.equal(strike.breach, true);
 });
 
-check("frontières de gravité pour un seuil de 7", () => {
+check("frontières de gravité pour un seuil de 4", () => {
   assert.equal(classifyInjury(0, SB), null);
   assert.equal(classifyInjury(-1, SB), null);
-  assert.equal(classifyInjury(SB - 1, SB), "light");
-  assert.equal(classifyInjury(SB, SB), "serious");
-  assert.equal(classifyInjury(2 * SB - 1, SB), "serious");
-  assert.equal(classifyInjury(2 * SB, SB), "critical");
-  assert.equal(classifyInjury(3 * SB - 1, SB), "critical");
-  assert.equal(classifyInjury(3 * SB, SB), "mortal");
+  assert.equal(classifyInjury(3, SB), "light");
+  assert.equal(classifyInjury(4, SB), "serious");
+  assert.equal(classifyInjury(7, SB), "serious");
+  assert.equal(classifyInjury(8, SB), "critical");
+  assert.equal(classifyInjury(11, SB), "critical");
+  assert.equal(classifyInjury(12, SB), "mortal");
   assert.equal(INJURY_PENALTY.light, -10);
   assert.equal(INJURY_PENALTY.serious, -20);
   assert.equal(INJURY_PENALTY.critical, 0);
@@ -104,7 +112,7 @@ check("armures : somme des couches équipées, brèche si pressurisée", () => {
   assert.deepEqual(pressurizedCovers(armors, "head"), []);
   const headSuit = [{ equipped: true, pressurized: true, protection: { head: 0 } }];
   const head = resolveStrike({
-    gross: 4,
+    gross: 3,
     armour: sumZoneArmour(headSuit, "head"),
     sb: SB,
     pressurized: pressurizedCovers(headSuit, "head").length > 0

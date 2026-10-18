@@ -24,6 +24,72 @@ import { htmlField, numberField, SchemaField, stringField } from "./fields.mjs";
 const { NumberField } = foundry.data.fields;
 
 /**
+ * Champs stockés d'une caractéristique, aux bornes données.
+ *
+ * @param {typeof SOL.characteristicFields} bounds
+ * @returns {Record<string, foundry.data.fields.NumberField>}
+ */
+function storedCharacteristicFields(bounds) {
+  /** @type {Record<string, foundry.data.fields.NumberField>} */
+  const fields = {};
+  for ( const [name, cfg] of Object.entries(bounds) ) {
+    // Bornes lues dans CONFIG.SOL : les changer ici ne suffit pas,
+    // il faut les changer dans characteristicFields.
+    /** @type {foundry.data.fields.NumberFieldOptions} */
+    const options = {
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: cfg.initial,
+      label: cfg.label
+    };
+    if ( cfg.min !== undefined ) options.min = cfg.min;
+    if ( cfg.max !== undefined ) options.max = cfg.max;
+    fields[name] = new NumberField(options);
+  }
+  return fields;
+}
+
+/**
+ * Schéma `characteristics` pour les clés demandées.
+ * Personnage et PNJ : les neuf. Créature, synthétique, drone : FOR et CON.
+ *
+ * @param {string[]} keys
+ * @param {typeof SOL.characteristicFields} bounds
+ * @returns {foundry.data.fields.SchemaField}
+ */
+export function characteristicSchema(keys, bounds) {
+  /** @type {Record<string, foundry.data.fields.SchemaField>} */
+  const characteristics = {};
+  for ( const key of keys ) {
+    characteristics[key] = new SchemaField(storedCharacteristicFields(bounds));
+  }
+  return new SchemaField(characteristics, { label: "SOL.Sheet.Characteristics" });
+}
+
+/**
+ * Actuelle = base + origin + advance + temp, bornée 0 à 100.
+ * Les champs stockés ne sont pas modifiés.
+ *
+ * @param {Record<string, { base: number, origin: number, advance: number, temp: number, value?: number }>|undefined} characteristics
+ * @param {string[]} keys
+ * @returns {void}
+ */
+export function deriveCharacteristicValues(characteristics, keys) {
+  const { min, max } = SOL.characteristicValueBounds;
+  for ( const key of keys ) {
+    const c = characteristics?.[key];
+    if ( !c ) continue;
+    const sum = c.base + c.origin + c.advance + c.temp;
+    // Décision Marc 17/10/2026 : valeur Actuelle bornée 0 à 100.
+    // Math.clamp existe dans Foundry v13/v14. Repli min/max si absent.
+    c.value = typeof Math.clamp === "function"
+      ? Math.clamp(sum, min, max)
+      : Math.min(max, Math.max(min, sum));
+  }
+}
+
+/**
  * Données `system` partagées par `character` et `npc`.
  *
  * @extends foundry.abstract.TypeDataModel
@@ -48,27 +114,6 @@ export class PersonData extends foundry.abstract.TypeDataModel {
    * @returns {foundry.data.fields.DataSchema}
    */
   static defineSchema() {
-    const bounds = this.characteristicFieldBounds();
-    const characteristics = {};
-    for ( const key of Object.keys(SOL.characteristics) ) {
-      const fields = {};
-      for ( const [name, cfg] of Object.entries(bounds) ) {
-        // Bornes lues dans CONFIG.SOL : les changer ici ne suffit pas,
-        // il faut les changer dans characteristicFields.
-        const options = {
-          required: true,
-          nullable: false,
-          integer: true,
-          initial: cfg.initial,
-          label: cfg.label
-        };
-        if ( cfg.min !== undefined ) options.min = cfg.min;
-        if ( cfg.max !== undefined ) options.max = cfg.max;
-        fields[name] = new NumberField(options);
-      }
-      characteristics[key] = new SchemaField(fields);
-    }
-
     return {
       // Réf. Fiche v0.2 §4, identité. `gravityNative` min 0, défaut 1.
       // `height` est une chaîne : l'exemple de la maquette est « 1,86 m ».
@@ -102,7 +147,7 @@ export class PersonData extends foundry.abstract.TypeDataModel {
         })
       }, { label: "SOL.Character.identity" }),
 
-      characteristics: new SchemaField(characteristics, { label: "SOL.Sheet.Characteristics" }),
+      characteristics: characteristicSchema(Object.keys(SOL.characteristics), this.characteristicFieldBounds()),
 
       // Texte libre, pas une liste ni un type d'objet.
       // Décision de Marc (étape 2) : un seul champ, pas le tableau
@@ -132,15 +177,6 @@ export class PersonData extends foundry.abstract.TypeDataModel {
    */
   prepareDerivedData() {
     super.prepareDerivedData();
-    const { min, max } = SOL.characteristicValueBounds;
-    for ( const key of Object.keys(SOL.characteristics) ) {
-      const c = this.characteristics[key];
-      const sum = c.base + c.origin + c.advance + c.temp;
-      // Décision Marc 17/10/2026 : valeur Actuelle bornée 0 à 100.
-      // Math.clamp existe dans Foundry v13/v14. Repli min/max si absent.
-      c.value = typeof Math.clamp === "function"
-        ? Math.clamp(sum, min, max)
-        : Math.min(max, Math.max(min, sum));
-    }
+    deriveCharacteristicValues(this.characteristics, Object.keys(SOL.characteristics));
   }
 }

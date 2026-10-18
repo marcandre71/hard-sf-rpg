@@ -5,18 +5,19 @@
  * mêmes caractéristiques. Réf. consigne étape 3. Le LdR v0.2 §15 ne
  * détaille pas ces champs pour le PNJ ; on ne calcule rien de plus.
  *
- * Créature, Synthétique et Drone : les docs ne donnent pas de champs
- * (LdR v0.2 §15 « champs à définir » pour la créature ; description qualitative
- * seulement pour les autres). On ne stocke que description et notes.
- * Aucune caractéristique, aucun score : ce serait inventer une règle.
+ * Créature, Synthétique et Drone : description, notes, et FOR / CON.
+ * Décision Marc 18/10/2026 : mêmes champs que le PNJ (Base jusqu'à 100,
+ * Actuelle bornée 0 à 100). Pas d'autre caractéristique. Le Seuil en
+ * découle. Véhicule et vaisseau n'en ont pas.
  *
  * Véhicule et Vaisseau : la catégorie est le seul champ nommé, plus la
  * description demandée par la consigne de l'étape 2. Masse, delta-v, etc.
  * (LdR v0.2 §15) n'ont ni type ni défaut : ils ne sont pas créés ici.
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
+import { FOR_CON_KEYS, migrateForConSource } from "./for-con-migrate.mjs";
 import { migrateNpcSource } from "./npc-migrate.mjs";
-import { PersonData } from "./person.mjs";
+import { characteristicSchema, deriveCharacteristicValues, PersonData } from "./person.mjs";
 import { htmlField, stringField } from "./fields.mjs";
 
 /**
@@ -64,45 +65,66 @@ export class NpcData extends PersonData {
 }
 
 /**
- * Créature. Réf. LdR v0.2 §15 « champs à définir ».
+ * Description, notes, FOR et CON. Bornes du PNJ.
+ * Décision Marc 18/10/2026.
  *
  * @extends foundry.abstract.TypeDataModel
  */
-export class CreatureData extends foundry.abstract.TypeDataModel {
+class ForConActorData extends foundry.abstract.TypeDataModel {
   /** @override */
   static defineSchema() {
-    // À préciser : types non définis dans LdR v0.2.
-    return describedActorSchema();
+    return {
+      ...describedActorSchema(),
+      characteristics: characteristicSchema(FOR_CON_KEYS, characteristicFieldsFor("npc"))
+    };
+  }
+
+  /**
+   * Fiche d'avant 0.5.3 : pas de FOR ni de CON. Les trous prennent le
+   * défaut. Une mise à jour partielle (`options.partial`) n'est pas complétée.
+   *
+   * @override
+   * @param {object} source
+   * @param {{ partial?: boolean }} [options]
+   * @returns {object}
+   */
+  static migrateData(source, options) {
+    const migrated = super.migrateData(source, options) ?? source;
+    return migrateForConSource(migrated, options);
+  }
+
+  /** @override */
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    deriveCharacteristicValues(this.characteristics, FOR_CON_KEYS);
   }
 }
+
+/**
+ * Créature. Réf. LdR v0.2 §15 « champs à définir ».
+ * Décision Marc 18/10/2026 : FOR, CON, et la blessure standard.
+ *
+ * @extends ForConActorData
+ */
+export class CreatureData extends ForConActorData {}
 
 /**
  * Synthétique (robot ou IA au sens commun, pas forcément sentient).
  * Réf. LdR v0.2 §15, Fiche v0.2 §4.
  *
- * @extends foundry.abstract.TypeDataModel
+ * @extends ForConActorData
  */
-export class SyntheticData extends foundry.abstract.TypeDataModel {
-  /** @override */
-  static defineSchema() {
-    // Champs non définis dans LdR v0.2 §15 : description et notes seulement.
-    return describedActorSchema();
-  }
-}
+// À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir.
+export class SyntheticData extends ForConActorData {}
 
 /**
  * Drone (machine simple, intelligence très limitée).
  * Réf. LdR v0.2 §15, Fiche v0.2 §4.
  *
- * @extends foundry.abstract.TypeDataModel
+ * @extends ForConActorData
  */
-export class DroneData extends foundry.abstract.TypeDataModel {
-  /** @override */
-  static defineSchema() {
-    // Champs non définis dans LdR v0.2 §15 : description et notes seulement.
-    return describedActorSchema();
-  }
-}
+// À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir.
+export class DroneData extends ForConActorData {}
 
 /**
  * Véhicule : catégorie terrestre, maritime ou aérien.

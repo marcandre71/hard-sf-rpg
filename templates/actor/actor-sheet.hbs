@@ -2,7 +2,7 @@
   Feuille générique (Créature, Synthétique, Drone, Véhicule, Vaisseau).
   Les champs viennent du schéma du type. Nom lu dans document._source.
   Objets groupés par type, même partiel que le personnage.
-  Réf. LdR v0.2 §15 : pas d'autres champs que ceux du modèle.
+  Décision Marc 18/10/2026 : FOR, CON et Seuil si le modèle les a.
 --}}
 <section class="sol-sheet">
   <header class="sol-header">
@@ -14,6 +14,38 @@
       <input id="{{rootId}}-name" type="text" name="name" value="{{docSource.name}}">
     </div>
   </header>
+
+  {{#if characteristics}}
+  <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
+  <table class="sol-characteristics">
+    <thead>
+      <tr>
+        <th class="sol-col-name">{{localize "SOL.Sheet.Characteristic"}}</th>
+        <th>{{localize bounds.base.label}}</th>
+        <th>{{localize bounds.origin.label}}</th>
+        <th>{{localize bounds.advance.label}}</th>
+        <th>{{localize bounds.temp.label}}</th>
+        <th>{{localize "SOL.Field.value"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each characteristics as |c|}}
+      <tr>
+        <td class="sol-col-name">
+          <span class="sol-abbr">{{localize c.abbr}}</span>
+          <span class="sol-label">{{localize c.label}}</span>
+        </td>
+        <td><input type="number" name="{{c.path}}.base" value="{{c.base}}" min="{{../bounds.base.min}}" max="{{../bounds.base.max}}" step="1"></td>
+        <td><input type="number" name="{{c.path}}.origin" value="{{c.origin}}" min="{{../bounds.origin.min}}" max="{{../bounds.origin.max}}" step="1"></td>
+        <td><input type="number" name="{{c.path}}.advance" value="{{c.advance}}" min="{{../bounds.advance.min}}" max="{{../bounds.advance.max}}" step="1"></td>
+        <td><input type="number" name="{{c.path}}.temp" value="{{c.temp}}" step="1"></td>
+        <td class="sol-value"><output>{{c.value}}</output></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <p class="sol-seuil">{{localize "SOL.Damage.sb"}} : <strong>{{seuil}}</strong></p>
+  {{/if}}
 
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=groups}}
 

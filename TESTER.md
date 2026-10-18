@@ -1,7 +1,7 @@
 # Tester le système « Sol, Nouvelle Ère » (étape 5)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 15 minutes.
-Version attendue : **0.5.2**.
+Version attendue : **0.5.3**.
 
 La procédure de l'étape 4 (versions 0.4.0 et 0.4.1, déjà validée) est dans [docs/tests/etape-4.md](docs/tests/etape-4.md).
 
@@ -12,7 +12,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
 3. Téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.2**.
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.3**.
 5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'ancienne place. Dans la console, collez `game.settings.set("core", "compendiumConfiguration", {})`, validez, puis rechargez la page **deux fois** (attendez la fin du premier rechargement).
@@ -20,7 +20,7 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 ## 2. Préparer la cible
 
 1. Posez deux jetons sur la scène : **Ilka Moravec** (celle qui tire) et un second personnage ou PNJ (la cible).
-2. Sur la cible, onglet **Principal** : Base de **FOR** à **30**, Base de **CON** à **40**. Origine, acquis et temporaire à **0**. Les Actuelles sont donc 30 et 40. Le Seuil de blessure vaut **7** (on ne le voit pas sur la feuille : il apparaît dans la fenêtre plus bas).
+2. Sur la cible, onglet **Principal** : Base de **FOR** à **30**, Base de **CON** à **40**. Origine, acquis et temporaire à **0**. Les Actuelles sont donc 30 et 40. Le Seuil de blessure vaut **4** (on ne le voit pas sur la feuille du personnage : il apparaît dans la fenêtre plus bas). Le livre dit encore 7 : ce chiffre est périmé, Marc mettra le LdR à jour.
 3. Onglet **Inventaire**, liste **Armures**, **Créer**. Ouvrez l'armure. Protection du **torse** : **3**. Cochez **Pressurisée**. Joints : **Intacte**. Fermez, puis cochez **Équipé** sur la ligne.
 4. Sur Ilka, créez une arme. Dégâts : **10**. Compétence : `Armes de poing`. Cochez **Équipé**.
 
@@ -32,9 +32,9 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 4. Cliquez le bouton.
    - Si la zone n'est pas le **torse**, annulez et relancez. Une réussite critique ne permet pas de choisir la zone : c'est toujours celle écrite sur la carte.
    - Il faut aussi que la carte affiche **Dégâts : 12** (l'arme 10, plus 2 de DR). Sinon annulez et relancez.
-5. La fenêtre doit afficher, pour cette cible : zone **Torse**, dégâts bruts **12**, armure **3**, dégâts nets **9**, Seuil **7**, gravité **Grave**, brèche **Oui**.
-6. Cliquez **Appliquer**. Sur la cible : une blessure **Grave — Torse**, saignement coché, pénalité **−20**. L'armure a les joints **Percée**. Le jeton a les conditions **Combinaison percée** et **Saignement**.
-7. Une carte de résultat apparaît : cible, torse, dégâts nets 9, Grave, brèche Oui, et un rappel pour le test de Volonté. Le bouton **Test de Volonté** ouvre la fenêtre de jet habituelle pour le propriétaire de la cible, ou le MJ. Un autre joueur ne le voit pas. Vous pouvez annuler.
+5. La fenêtre doit afficher, pour cette cible : zone **Torse**, dégâts bruts **12**, armure **3**, dégâts nets **9**, Seuil **4**, gravité **Critique**, brèche **Oui**.
+6. Cliquez **Appliquer**. Sur la cible : une blessure **Critique — Torse**, saignement **non** coché, pénalité **0**. L'armure a les joints **Percée**. Le jeton a la condition **Combinaison percée**. Il n'a **pas** la condition **Saignement** : elle n'est posée que pour une blessure grave.
+7. Une carte de résultat apparaît : cible, torse, dégâts nets 9, Critique, brèche Oui, et un rappel pour le test de Constitution. Le bouton **Test de Constitution** ouvre la fenêtre de jet habituelle pour le propriétaire de la cible, ou le MJ. Un autre joueur ne le voit pas. Vous pouvez annuler.
 8. Le bouton de la carte d'attaque affiche maintenant **Dégâts déjà appliqués**. Cliquez-le : la question est « Dégâts déjà appliqués, recommencer ? ». Cliquez **Annuler** : pas de seconde blessure.
 
 ## 4. Dégâts absorbés
@@ -49,10 +49,11 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 1. Relancez une attaque **réussie** en tant que MJ.
 2. Regardez la même carte avec un compte **joueur** (autre navigateur). Le bouton **Appliquer les dégâts** n'y est pas. S'il arrivait à le déclencher, un message dit que seul le MJ peut le faire.
 
-## 6. Quelqu'un sans Seuil
+## 6. Une créature peut être blessée
 
-1. Créez un acteur **Créature**, posez son jeton, ciblez-le.
-2. Appliquez une attaque réussie. Un avertissement dit qu'il n'a pas de Force ni de Constitution. Pas de blessure créée.
+1. Créez un acteur **Créature**. Sa feuille montre **Force** et **Constitution**, et le **Seuil de blessure**. Base de FOR à **30**, Base de CON à **40**, le reste à **0**. Le Seuil affiché est **4**.
+2. Posez son jeton, ciblez-le, et appliquez une attaque réussie dont les dégâts nets sont au moins 1. Une blessure est créée.
+3. Un **Véhicule** ou un **Vaisseau** n'a pas ces caractéristiques : l'application est refusée, pas de blessure.
 
 ## 7. Compendiums
 
@@ -64,12 +65,12 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 
 ## 8. Liste de contrôle
 
-- [ ] Version **0.5.2**, aucune ligne rouge dans la console.
+- [ ] Version **0.5.3**, aucune ligne rouge dans la console.
 - [ ] Ligne de résultat de la carte : tester en interface claire ET sombre, la ligne doit rester lisible.
-- [ ] Armure pressurisée, torse 3, équipée. Carabine 10 + DR 2, Seuil 7 : nets **9**, **Grave**, brèche **Oui**.
-- [ ] Blessure créée, joints **Percée**, conditions **Combinaison percée** et **Saignement**.
+- [ ] Armure pressurisée, torse 3, équipée. Carabine 10 + DR 2, FOR 30 et CON 40, Seuil **4** : nets **9**, **Critique**, brèche **Oui**. Pas de condition **Saignement**.
+- [ ] Blessure créée, joints **Percée**, condition **Combinaison percée**.
 - [ ] Dégâts nets à 0 ou moins : pas de blessure, pas de nouvelle brèche.
 - [ ] Après application, le bouton dit que les dégâts sont déjà appliqués. Un second clic demande confirmation ; **Annuler** n'écrit rien de plus.
 - [ ] Un joueur ne voit pas le bouton **Appliquer les dégâts**.
-- [ ] Une créature est refusée, avec un message clair.
+- [ ] Une créature avec FOR et CON reçoit une blessure. Le Seuil est sur sa feuille. Véhicule et vaisseau sont refusés.
 - [ ] Compétences, origines, milieux, professions, armes et armures contiennent les entrées du livre. Les autres compendiums sont vides.

@@ -22,21 +22,24 @@ export const INJURY_PENALTY = {
   mortal: 0
 };
 
+// Décision Marc 18/10/2026 : combat très dangereux, SB divisé par 2 (LdR v0.2 §3 disait /10, LdR à mettre à jour).
+export const SEUIL_DIVISOR = 20;
+
 /**
- * Seuil de blessure. Réf. LdR v0.2 §7 : ceil((FOR + CON) / 10).
- * Les deux nombres sont les valeurs actuelles.
+ * Seuil de blessure. Les deux nombres sont les valeurs actuelles.
+ * Diviseur : `SEUIL_DIVISOR`.
  *
  * @param {number} force
  * @param {number} constitution
  * @returns {number}
  */
 export function seuilBlessure(force, constitution) {
-  return Math.ceil((force + constitution) / 10);
+  return Math.ceil((force + constitution) / SEUIL_DIVISOR);
 }
 
 /**
- * Lit FOR et CON actuelles. `null` s'il en manque une : l'acteur n'a
- * pas de Seuil (créature, synthétique, drone).
+ * Lit FOR et CON actuelles. `null` s'il en manque une (véhicule, vaisseau,
+ * ou fiche incomplète).
  *
  * @param {object|null|undefined} characteristics
  * @returns {number|null}

@@ -18,7 +18,9 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import assert from "node:assert/strict";
 import { characteristicFieldsFor } from "../module/config.mjs";
+import { migrateForConSource } from "../module/data/for-con-migrate.mjs";
 import { migrateNpcSource } from "../module/data/npc-migrate.mjs";
 
 /**
@@ -66,6 +68,47 @@ checkNpcMigration(
   { biography: "déjà", notes: "n", hasBiography: true },
   "biography déjà remplie ne doit pas être écrasée"
 );
+
+const legacyCreature = { description: "<p>gardé</p>", notes: "aussi" };
+migrateForConSource(legacyCreature);
+if ( legacyCreature.description !== "<p>gardé</p>" || legacyCreature.notes !== "aussi" ) {
+  console.error("migrateForConSource a perdu description ou notes", legacyCreature);
+  process.exit(1);
+}
+if ( legacyCreature.characteristics.for.base !== 25 || legacyCreature.characteristics.con.base !== 25 ) {
+  console.error("FOR/CON absentes doivent prendre la Base 25", legacyCreature.characteristics);
+  process.exit(1);
+}
+if ( legacyCreature.characteristics.for.origin !== 0 || legacyCreature.characteristics.con.temp !== 0 ) {
+  console.error("les autres champs FOR/CON doivent être à 0", legacyCreature.characteristics);
+  process.exit(1);
+}
+const keptForCon = {
+  description: "x",
+  notes: "y",
+  characteristics: {
+    for: { base: 80, origin: 1, advance: 2, temp: 3 },
+    con: { base: 40 }
+  }
+};
+migrateForConSource(keptForCon);
+assert.equal(keptForCon.characteristics.for.base, 80);
+assert.equal(keptForCon.characteristics.for.origin, 1);
+assert.equal(keptForCon.characteristics.con.base, 40);
+assert.equal(keptForCon.characteristics.con.origin, 0);
+assert.equal(keptForCon.description, "x");
+const partialForCon = { description: "fragment" };
+migrateForConSource(partialForCon, { partial: true });
+if ( "characteristics" in partialForCon ) {
+  console.error("une mise à jour partielle ne doit pas recevoir de caractéristiques", partialForCon);
+  process.exit(1);
+}
+const sparse = { characteristics: { for: { base: 80 } } };
+migrateForConSource(sparse);
+if ( "con" in (sparse.characteristics) || sparse.characteristics.for.origin !== undefined ) {
+  console.error("un fragment sans description ni notes ne doit pas être complété", sparse);
+  process.exit(1);
+}
 
 const characterBase = characteristicFieldsFor("character").base;
 const npcBase = characteristicFieldsFor("npc").base;
@@ -267,6 +310,38 @@ try {
   }
   if ( !sequel.schema.fields.category || !shipModule.schema.fields.category ) {
     throw new Error("sequel et shipModule doivent avoir un champ category");
+  }
+  for ( const Model of [CreatureData, SyntheticData, DroneData] ) {
+    const keys = Object.keys(new Model({}).schema.fields.characteristics.fields);
+    if ( keys.length !== 2 || !keys.includes("for") || !keys.includes("con") ) {
+      throw new Error(`${Model.name} : seulement FOR et CON, reçu ${keys.join(", ")}`);
+    }
+    const baseMax = new Model({}).schema.fields.characteristics.fields.for.fields.base.max;
+    if ( baseMax !== 100 ) throw new Error(`${Model.name} : Base max ${baseMax}, 100 attendu`);
+    const legacy = new Model({ description: "<p>a</p>", notes: "b" });
+    if ( legacy._source.description !== "<p>a</p>" || legacy._source.notes !== "b" ) {
+      throw new Error(`${Model.name} : description ou notes perdues`);
+    }
+    if ( legacy.characteristics.for.base !== 25 || legacy.characteristics.for.value !== 25 ) {
+      throw new Error(`${Model.name} : FOR par défaut attendue`);
+    }
+    if ( legacy.characteristics.con.value !== 25 ) {
+      throw new Error(`${Model.name} : CON actuelle attendue`);
+    }
+    const kept = new Model({
+      description: "",
+      notes: "",
+      characteristics: {
+        for: { base: 80, origin: 5, advance: 0, temp: 0 },
+        con: { base: 40, origin: 0, advance: 0, temp: 0 }
+      }
+    });
+    if ( kept.characteristics.for.value !== 85 || kept.characteristics.con.base !== 40 ) {
+      throw new Error(`${Model.name} : une FOR déjà stockée a été réécrite`);
+    }
+  }
+  if ( new VehicleData({}).schema.fields.characteristics || new ShipData({}).schema.fields.characteristics ) {
+    throw new Error("véhicule et vaisseau n'ont pas de caractéristiques");
   }
 } catch (error) {
   console.error(error);

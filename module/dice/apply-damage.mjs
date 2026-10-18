@@ -3,8 +3,9 @@
  *
  * Réf. LdR v0.2 §7. Rien n'est écrit tant que le MJ n'a pas confirmé.
  * L'endurance, l'initiative et l'horloge de décompression ne sont pas
- * automatisées. Créature, synthétique et drone n'ont pas de FOR ni de
- * CON (module/data/actors.mjs) : pas de Seuil, on refuse.
+ * automatisées. Décision Marc 18/10/2026 : créature, synthétique et
+ * drone ont FOR et CON, donc un Seuil. Véhicule et vaisseau n'en ont
+ * pas : on refuse.
  * Aucun acteur n'a de champ d'armure par zone en dehors des objets
  * `armor` équipés.
  *

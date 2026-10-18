@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.5.2** : le MJ applique les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Pas d'automatisation des origines, ni de l'Endurance.
+L'étape en cours est la **0.5.3** : le MJ applique les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines, ni de l'Endurance.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,7 +16,7 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques et le score de compétence (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), initiative glissante, Active Effects autres que les conditions « Combinaison percée » et « Saignement », automation des origines. Le Seuil de blessure n'est pas une colonne de la feuille : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
+Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques, le score de compétence, et le Seuil de blessure des créatures, synthétiques et drones (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), initiative glissante, Active Effects autres que les conditions « Combinaison percée » et « Saignement », automation des origines. Sur le Personnage et le PNJ, le Seuil n'est pas une colonne : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
 
 ## Où sont les règles du jeu
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.5.2, compatibilité 14,
+system.json                         Manifeste : id, version 0.5.3, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -57,6 +57,7 @@ module/data/fields.mjs              Constructeurs de champs (html, string, numbe
 module/data/base-item.mjs           Description HTML commune. Substance et Logiciel s'arrêtent là.
 module/data/person.mjs              Schéma commun Personnage et PNJ.
 module/data/npc-migrate.mjs         PNJ étape 2 seulement (description + notes, sans biography).
+module/data/for-con-migrate.mjs     FOR/CON manquantes des créatures, synthétiques, drones.
 module/npc-ready-migration.mjs      Une fois par monde (MJ actif, migrationVersion 2) : réécrit system.biography.
 module/data/character.mjs           Personnage : étend PersonData, pas de migration.
 module/data/actors.mjs              PNJ (migrateData), Créature, Synthétique, Drone, Véhicule, Vaisseau.
@@ -166,6 +167,7 @@ node --check module/data/fields.mjs
 node --check module/data/base-item.mjs
 node --check module/data/person.mjs
 node --check module/data/npc-migrate.mjs
+node --check module/data/for-con-migrate.mjs
 node --check module/npc-ready-migration.mjs
 node --check module/data/character.mjs
 node --check module/data/actors.mjs
@@ -224,7 +226,9 @@ Pour ajouter un type de jet : calculer un score (helper existant, ou nouveau fic
 
 Dégâts nets = (dégâts de l'arme + DR) − somme des `protection[zone]` des armures **équipées**. Décision Marc 18/10/2026 : les couches s'additionnent. Décision Marc 18/10/2026 : nets ≤ 0, ni blessure ni brèche. Aucun acteur n'a d'armure par zone hors objets `armor` (vérifié : Personnage, PNJ, Créature, Synthétique, Drone).
 
-Seuil = `ceil((FOR + CON) / 10)` sur les valeurs actuelles. Seuls Personnage et PNJ ont ces caractéristiques. Créature, synthétique et drone peuvent porter une blessure (`allowedItems`) mais n'ont pas de Seuil : l'application est refusée, avec un avertissement, rien n'est écrit. À confirmer par Marc : un Seuil inférieur à 1 est aussi refusé.
+Seuil = `ceil((FOR + CON) / SEUIL_DIVISOR)` sur les valeurs actuelles, avec `SEUIL_DIVISOR = 20`. Décision Marc 18/10/2026 : combat très dangereux, SB divisé par 2 (LdR v0.2 §3 disait /10, LdR à mettre à jour). Le texte de l'exemple du LdR v0.2 §7 (FOR 30 + CON 40 → SB 7, puis carabine 10 + 2 de DR − 3 d'armure = 9, blessure grave) est périmé tant que Marc n'a pas mis le livre à jour : le même coup donne maintenant SB 4, nets 9, critique et brèche, sans saignement. Les seuils de gravité ne changent pas : < SB légère, SB à 2 SB − 1 grave, 2 SB à 3 SB − 1 critique, ≥ 3 SB mortelle. À confirmer par Marc : un Seuil inférieur à 1 est aussi refusé.
+
+Décision Marc 18/10/2026 : créature, synthétique et drone ont FOR et CON, le même schéma que le PNJ (`characteristicSchema`, Base jusqu'à 100, Actuelle bornée 0 à 100). Pas les sept autres caractéristiques. Leur feuille affiche ces deux lignes et le Seuil. `migrateForConSource` complète les champs absents au chargement d'une fiche entière et ne réécrit pas un nombre déjà stocké. Une mise à jour partielle (`options.partial`) n'est pas complétée, pour ne pas écraser une Force saisie. Ils reçoivent la blessure standard. À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir. Véhicule et vaisseau n'ont toujours pas de FOR ni de CON : l'application est refusée.
 
 Gravité : < SB légère (−10), SB à 2 SB − 1 grave (−20, `bleeding`), 2 SB à 3 SB − 1 critique, ≥ 3 SB mortelle. Décision Marc 18/10/2026 : critique et mortelle n'ont pas de pénalité chiffrée. La conséquence est écrite dans `description`. Le MJ et les joueurs réagissent à la main.
 

@@ -160,6 +160,10 @@
   font-size: 1.1rem;
 }
 
+.sol-nouvelle-ere .sol-seuil {
+  margin: 0.35rem 0 0.75rem;
+}
+
 .sol-nouvelle-ere button.sol-roll-characteristic,
 .sol-nouvelle-ere button.sol-item-roll {
   background: none;
