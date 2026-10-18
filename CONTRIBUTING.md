@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.5.4** : le MJ applique les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines, ni de l'Endurance.
+L'étape en cours est la **0.5.5** : l'initiative est un test de Vigilance, conservé d'un round à l'autre. Le MJ applique aussi les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines, ni de l'Endurance.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,7 +16,7 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques, le score de compétence, et le Seuil de blessure des créatures, synthétiques et drones (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), initiative glissante, Active Effects autres que les conditions « Combinaison percée » et « Saignement », automation des origines. Sur le Personnage et le PNJ, le Seuil n'est pas une colonne : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
+Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques, le score de compétence, et le Seuil de blessure des créatures, synthétiques et drones (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), Active Effects autres que les conditions « Combinaison percée », « Saignement » et « Sonné », automation des origines. Sur le Personnage et le PNJ, le Seuil n'est pas une colonne : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
 
 ## Où sont les règles du jeu
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.5.4, compatibilité 14,
+system.json                         Manifeste : id, version 0.5.5, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -46,7 +46,9 @@ module/dice/damage.mjs              Dégâts, Seuil, gravité, brèche. Test : t
 module/dice/skill-score.mjs         Score de compétence et nom de compétence d'une arme.
 module/dice/roll-dialog.mjs         DialogV2 : difficulté, modificateur libre, total borné.
 module/dice/chat.mjs                Roll 1d100, ChatMessage, gabarit templates/chat/roll-card.hbs.
+module/dice/initiative.mjs         Classement d'initiative, sans Foundry. Test : tests/initiative.test.mjs.
 module/dice/apply-damage.mjs        Bouton MJ, DialogV2, blessure, brèche, carte de résultat.
+module/combat/initiative.mjs        Combat, Combatant, Combat Tracker : Vigilance, fin d'ordre, Sonné.
 packs/                              Compendiums. JSON dans `_source/`, LevelDB construit à côté.
 packs/build.mjs                     `compilePack` de l'outil officiel, un dossier source à la fois.
 module/guards.mjs                   Hook preCreateItem : refuse un objet interdit, et un
@@ -79,6 +81,7 @@ styles/sol.css                      Préfixe .sol-nouvelle-ere uniquement.
 README.md                           Présentation, périmètre, installation.
 TESTER.md                           Scénario de test manuel de l'étape en cours.
 docs/tests/etape-2.md               Scénario de l'étape 2, conservé.
+docs/tests/etape-5.md               Scénario des dégâts (0.5.0 à 0.5.4), conservé.
 CONTRIBUTING.md                     Ce guide.
 ```
 
@@ -186,19 +189,23 @@ node --check module/dice/skill-score.mjs
 node --check module/dice/roll-dialog.mjs
 node --check module/dice/chat.mjs
 node --check module/dice/damage.mjs
+node --check module/dice/initiative.mjs
 node --check module/dice/apply-damage.mjs
+node --check module/combat/initiative.mjs
 node --check tests/models.test.mjs
 node --check tests/d100.test.mjs
 node --check tests/damage.test.mjs
+node --check tests/initiative.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
 node tests/d100.test.mjs
 node tests/damage.test.mjs
+node tests/initiative.test.mjs
 node tests/models.test.mjs
 ```
 
 `tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts (`validate()` doit renvoyer `true`), avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Si `FOUNDRY_PATH` est défini mais que le code commun ne se charge pas, le script s'arrête avec le code 1. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
 
-Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md), l'étape 3 dans [docs/tests/etape-3.md](docs/tests/etape-3.md), l'étape 4 dans [docs/tests/etape-4.md](docs/tests/etape-4.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
+Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md), l'étape 3 dans [docs/tests/etape-3.md](docs/tests/etape-3.md), l'étape 4 dans [docs/tests/etape-4.md](docs/tests/etape-4.md), les dégâts 0.5.0 à 0.5.4 dans [docs/tests/etape-5.md](docs/tests/etape-5.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
 
 ## Jets (étape 4)
 
@@ -236,9 +243,27 @@ Brèche : une blessure (nets > 0) qui traverse une armure équipée `pressurized
 
 Réf. LdR v0.2 §11 : une blessure grave pose aussi la condition `sol-nouvelle-ere.bleeding` (`name` = `SOL.Status.bleeding`, `img` = `icons/svg/blood.svg`) si elle n'est pas déjà active. L'Endurance (−1 par tour) n'est pas automatisée.
 
-Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) sont du texte sur la carte de résultat. Décision Marc 18/10/2026 : rien n'est automatisé, ni l'Endurance, ni l'initiative. À confirmer par Marc : le rappel « réserve d'air » n'apparaît que si une blessure est créée. La fenêtre d'application n'a pas de liste de zones : la zone est celle du dé.
+Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) sont du texte sur la carte de résultat. Décision Marc 18/10/2026 : ces effets ne sont pas automatisés, ni l'Endurance. La fin d'ordre liée à une blessure grave ou pire est décrite dans la section initiative. À confirmer par Marc : le rappel « réserve d'air » n'apparaît que si une blessure est créée. La fenêtre d'application n'a pas de liste de zones : la zone est celle du dé.
 
 Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Déduplication par `token.actor.uuid` : deux jetons liés du même acteur ne comptent qu'une fois ; deux jetons non liés du même acteur de base sont chacun touchés. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose les conditions, poste `templates/chat/damage-card.hbs`. Si au moins une cible a réussi, le message d'attaque reçoit le drapeau `applied`. Le bouton affiche alors « Dégâts déjà appliqués » (le HTML stocké date du jet : le texte est mis à jour dans le hook). Un nouveau clic ouvre un `DialogV2` « Dégâts déjà appliqués, recommencer ? ». Annuler cette question n'écrit rien. Une fenêtre de dégâts annulée ne pose pas le drapeau. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`, avec `characteristicRollLabel` (`abbr` et `label`, jamais l'objet). Le bouton n'est visible et utilisable que par le propriétaire de la cible (`fromUuidSync(uuid)?.isOwner`) ou le MJ. Un double clic est ignoré le temps que la fenêtre est ouverte.
+
+## Initiative glissante (0.5.5)
+
+Réf. LdR v0.2 §7. Décision Marc 18/10/2026 : les réussites passent avant les échecs ; parmi les échecs, le moins de DE joue d'abord ; une égalité de degré se départage à la RÉF. Aucun bonus lié à la place.
+
+`module/dice/initiative.mjs` ne charge pas Foundry. `tests/initiative.test.mjs` se lance avec `node` seul.
+
+Cause du plantage « Unresolved StringTerm undefined » : `system.json` n'a pas de clé `initiative`, et [`CONFIG.Combat.initiative.formula`](https://foundryvtt.com/api/v14/variables/CONFIG.Combat.html) vaut `null`. `Combatant._getInitiativeFormula` fait `String(formula || game.system.initiative)`, donc la chaîne `"undefined"`. `Roll` en fait un StringTerm. On ne met pas une formule de dés dans le manifeste. `registerInitiative` pose `formula` à `"0"` seulement comme garde-fou, et `SolCombat.rollInitiative` fait le D100.
+
+Score : objet compétence `SOL.vigilanceSkill` (`"Vigilance"`) via `skillScore`. Sans l'objet, Vigilance n'est pas (F) : PER actuelle, pas la moitié (LdR v0.2 §4). Le jet passe par `performRoll`. Un seul combattant, ou « se replacer », ouvre la fenêtre. Plusieurs d'un coup (`rollAll`, `rollNPC`, qui appellent `rollInitiative`) : difficulté Normale, sans fenêtre. À confirmer par Marc.
+
+Encodage de `Combatant.initiative` (tri décroissant du cœur) : réussite `1_000_000 + min(DR, 999) × 1_000 + RÉF` ; échec `(999 − min(DE, 999)) × 1_000 + RÉF`. Toute réussite reste au-dessus de tout échec. À confirmer par Marc : DR ou DE au-dessus de 999 ramenés à 999 ; DR et RÉF égaux, le cœur départage par identifiant.
+
+Types qui combattent : `character`, `npc`, `creature`, `synthetic`, `drone`. `vehicle` et `ship` : avertissement `SOL.Initiative.notAllowed`, pas d'exception. À confirmer par Marc : sans PER (créature, drone), le score est 0. À confirmer par Marc : sans RÉF (créature, synthétique, drone), le départage vaut 0.
+
+L'ordre n'est pas relancé dans `nextRound`. Une blessure `serious`, `critical` ou `mortal` appliquée par `apply-damage`, ou la condition `sol-nouvelle-ere.stunned` (`SOL.Status.stunned`, icône `icons/svg/daze.svg`), pose le drapeau `deferEnd`. Au `nextRound` du MJ, ces combattants passent sous le plus bas de ceux qui restent, ordre relatif conservé, puis le drapeau est retiré. Le hook `combatRound` n'est pas utilisé pour cette écriture : il part avant la mise à jour et n'est pas attendu. À confirmer par Marc : plusieurs départs le même round gardent leur ordre ; si tout le monde part, rien ne change ; hors du combat en cours, on ne pose pas le drapeau.
+
+`SolCombatTracker._getEntryContextOptions` ajoute « Interrompu : recule d'une place » (MJ) et « Se replacer » (propriétaire ou MJ). Le recul échange les deux initiatives, ou, à nombre égal, n'écarte que ce groupe d'une place. À confirmer par Marc : déjà dernier, on ne fait rien. « Se replacer » relance la Vigilance ; la carte rappelle que l'action est sacrifiée. Sonné ne retire pas l'action : le texte `SOL.Status.stunnedHint` est un rappel.
 
 ## Compendiums (étape 5, contenu 0.5.1)
 
@@ -284,6 +309,10 @@ Documentation officielle, version 14 :
 - [ChatMessage](https://foundryvtt.com/api/v14/classes/foundry.documents.ChatMessage.html) — `create`, `getSpeaker`, `applyMode`, `getFlag`
 - [renderChatMessageHTML](https://foundryvtt.com/api/v14/functions/hookEvents.renderChatMessageHTML.html)
 - [statusEffects](https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html) et [toggleStatusEffect](https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect)
+- [Combat](https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html) — `rollInitiative`, `rollAll`, `rollNPC`, `nextRound` ; [CONFIG.Combat](https://foundryvtt.com/api/v14/variables/CONFIG.Combat.html) (`documentClass`, `initiative.formula`)
+- [Combatant](https://foundryvtt.com/api/v14/classes/foundry.documents.Combatant.html) — `_getInitiativeFormula` ; [CONFIG.Combatant](https://foundryvtt.com/api/v14/variables/CONFIG.Combatant.html)
+- [CombatTracker](https://foundryvtt.com/api/v14/classes/foundry.applications.sidebar.tabs.CombatTracker.html) — `_getEntryContextOptions` ; [CONFIG.ui.combat](https://foundryvtt.com/api/v14/variables/CONFIG.ui.html)
+- [combatRound](https://foundryvtt.com/api/v14/functions/hookEvents.combatRound.html) — non utilisé pour écrire la fin d'ordre (`Hooks.call` n'attend pas la promesse)
 - [PackageCompendiumData](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackageCompendiumData.html) et [PackFolderData](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackFolderData.html)
 - [renderTemplate](https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.renderTemplate.html)
 

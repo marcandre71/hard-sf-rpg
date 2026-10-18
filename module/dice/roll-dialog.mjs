@@ -50,6 +50,30 @@ function paintTotal(root, score) {
 }
 
 /**
+ * Difficulté et modificateur libre, sans fenêtre.
+ * Le score visé est le score de base plus le modificateur borné.
+ *
+ * @param {number} score
+ * @param {string} [difficultyKey]
+ * @param {number} [free]
+ * @returns {{ difficultyKey: string, difficultyLabel: string, difficultyModifier: number, free: number, modifier: number, target: number }}
+ */
+export function rollChoice(score, difficultyKey = "normal", free = 0) {
+  const key = difficultyKey in SOL.difficulties ? difficultyKey : "normal";
+  const cfg = SOL.difficulties[key];
+  const safeFree = Number.isFinite(free) ? Math.trunc(free) : 0;
+  const modifier = cappedModifier(cfg.modifier, safeFree);
+  return {
+    difficultyKey: key,
+    difficultyLabel: game.i18n.localize(cfg.label),
+    difficultyModifier: cfg.modifier,
+    free: safeFree,
+    modifier,
+    target: Number(score) + modifier
+  };
+}
+
+/**
  * @param {{ title: string, score: number }} options
  * @returns {Promise<null|{ difficultyKey: string, difficultyLabel: string, difficultyModifier: number, free: number, modifier: number, target: number }>}
  */

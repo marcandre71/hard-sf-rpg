@@ -139,6 +139,13 @@ export const SOL = {
     "Corps-à-corps": "for"
   },
 
+  /**
+   * Compétence du test d'initiative. Pas (F) : sans l'objet, le score
+   * est la PER actuelle. Réf. LdR v0.2 §4 et §7.
+   * Le nom est en français, comme `weaponSkillDefaults`.
+   */
+  vigilanceSkill: "Vigilance",
+
   /** Types d'acteurs déclarés. Réf. LdR v0.2 §15, Fiche v0.2 §4. */
   actorTypes: ["character", "npc", "creature", "synthetic", "drone", "vehicle", "ship"],
 

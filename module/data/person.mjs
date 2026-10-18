@@ -16,7 +16,9 @@
  * Hors périmètre ici : autres valeurs dérivées (seuil de blessure,
  * tolérance aux g, Endurance, Sang-froid), ressources, XP.
  * Décision Marc 18/10/2026 : pas de valeur dérivée Initiative (RÉF/10).
- * L'initiative glissante (test de Vigilance, LdR v0.2 §7) viendra plus tard.
+ * L'initiative glissante (test de Vigilance, LdR v0.2 §7) est dans
+ * `module/dice/initiative.mjs` et `module/combat/initiative.mjs`.
+ * Ce n'est pas un champ de la fiche.
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { htmlField, numberField, SchemaField, stringField } from "./fields.mjs";

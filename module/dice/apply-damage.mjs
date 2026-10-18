@@ -2,10 +2,11 @@
  * Le MJ applique les dégâts d'une carte d'attaque à des jetons.
  *
  * Réf. LdR v0.2 §7. Rien n'est écrit tant que le MJ n'a pas confirmé.
- * L'endurance, l'initiative et l'horloge de décompression ne sont pas
- * automatisées. Décision Marc 18/10/2026 : créature, synthétique et
- * drone ont FOR et CON, donc un Seuil. Véhicule et vaisseau n'en ont
- * pas : on refuse.
+ * L'endurance et l'horloge de décompression ne sont pas automatisées.
+ * Une blessure grave ou pire marque la fin d'ordre au round suivant
+ * (initiative glissante, LdR v0.2 §7). Décision Marc 18/10/2026 :
+ * créature, synthétique et drone ont FOR et CON, donc un Seuil.
+ * Véhicule et vaisseau n'en ont pas : on refuse.
  * Aucun acteur n'a de champ d'armure par zone en dehors des objets
  * `armor` équipés.
  *
@@ -14,7 +15,9 @@
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect
  */
+import { markDeferEnd } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
+import { severityDefers } from "./initiative.mjs";
 import {
   cardReminders,
   consequenceKey,
@@ -381,6 +384,8 @@ async function applyOne(target, zone, attack, source) {
     if ( strike.bleeding && !hasStatus(actor, BLEEDING) ) {
       await actor.toggleStatusEffect(BLEEDING, { active: true });
     }
+    // Réf. LdR v0.2 §7. La légère ne déplace pas. Effet au round suivant.
+    if ( severityDefers(strike.severity) ) await markDeferEnd(actor);
   }
 
   if ( strike.breach ) {

@@ -61,28 +61,38 @@ function resultKey(critical, success) {
  * @param {string} params.label Ce qui est testé.
  * @param {number} params.score Score avant difficulté.
  * @param {Item|null} [params.weapon] Arme : localisation et dégâts si réussite.
- * @param {"characteristic"|"skill"|"weapon"} [params.type] Pour l'étape dégâts.
- * @returns {Promise<void>}
+ * @param {"characteristic"|"skill"|"weapon"|"initiative"} [params.type] Pour l'étape dégâts.
+ * @param {object|null} [params.choice] Déjà choisi : pas de fenêtre (jets groupés).
+ * @param {string} [params.note] Rappel déjà traduit, sous le résultat.
+ * @returns {Promise<null|{ success: boolean, dr: number, de: number, critical: "success"|"failure"|null, die: number, target: number }>}
  */
-export async function performRoll({ actor, label, score, weapon = null, type = "characteristic" }) {
-  const choice = await askRoll({ title: label, score });
-  if ( !choice ) return;
+export async function performRoll({
+  actor,
+  label,
+  score,
+  weapon = null,
+  type = "characteristic",
+  choice = null,
+  note = ""
+}) {
+  const picked = choice ?? await askRoll({ title: label, score });
+  if ( !picked ) return null;
 
   // Foundry : 1d100 va de 1 à 100. Un 00 physique vaut 100.
   // Décision Marc 18/10/2026.
   const roll = new Roll("1d100");
   await roll.evaluate();
-  const outcome = resolveD100(roll.total, choice.target);
+  const outcome = resolveD100(roll.total, picked.target);
 
   /** @type {object} */
   const card = {
     label,
     score,
-    difficultyLabel: choice.difficultyLabel,
-    difficultyModifier: formatModifier(choice.difficultyModifier),
-    free: formatModifier(choice.free),
-    total: formatModifier(choice.modifier),
-    target: choice.target,
+    difficultyLabel: picked.difficultyLabel,
+    difficultyModifier: formatModifier(picked.difficultyModifier),
+    free: formatModifier(picked.free),
+    total: formatModifier(picked.modifier),
+    target: picked.target,
     // 100 s'affiche « 00 », comme sur les dés.
     die: outcome.die === 100 ? "00" : String(outcome.die).padStart(2, "0"),
     result: game.i18n.localize(resultKey(outcome.critical, outcome.success)),
@@ -97,7 +107,8 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     degree: outcome.success ? outcome.dr : outcome.de,
     location: "",
     damage: null,
-    canApply: false
+    canApply: false,
+    note
   };
 
   /** @type {string|null} */
@@ -122,7 +133,7 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     flags: {
       "sol-nouvelle-ere": {
         type,
-        target: choice.target,
+        target: picked.target,
         die: outcome.die,
         success: outcome.success,
         critical: outcome.critical,
@@ -136,4 +147,12 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     }
   });
   await ChatMessage.create(messageData);
+  return {
+    success: outcome.success,
+    dr: outcome.dr,
+    de: outcome.de,
+    critical: outcome.critical,
+    die: outcome.die,
+    target: picked.target
+  };
 }

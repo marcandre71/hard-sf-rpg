@@ -186,9 +186,20 @@
       "unknownSkill": "Aucune compétence « {name} » sur cette fiche, et ce nom n'est pas une arme de poing, d'épaule ou de corps-à-corps.",
       "noWeaponSkill": "Arme sans compétence."
     },
+    "Initiative": {
+      "vigilance": "Vigilance",
+      "interrupt": "Interrompu : recule d'une place",
+      "reposition": "Se replacer",
+      "sacrificed": "L'action de ce tour est sacrifiée pour se replacer.",
+      "notAllowed": "{name} ne peut pas lancer l'initiative.",
+      "impossible": "{name} ne peut pas tenter Vigilance sans formation.",
+      "noPerception": "{name} n'a ni Vigilance ni Perception : le test est à 0."
+    },
     "Status": {
       "suitBreach": "Combinaison percée",
-      "bleeding": "Saignement"
+      "bleeding": "Saignement",
+      "stunned": "Sonné",
+      "stunnedHint": "Pas d'action ce tour, une réaction reste possible. Rappel seulement : le logiciel n'empêche pas l'action."
     },
     "Damage": {
       "apply": "Appliquer les dégâts",

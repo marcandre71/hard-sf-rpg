@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : étape 5 (version 0.5.4)
+## État du système : étape 5 (version 0.5.5)
 
-On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. Des compendiums vides sont déclarés. L'interface est en français.
+On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. L'initiative est un test de Vigilance, conservé d'un round à l'autre. Des compendiums sont déclarés. L'interface est en français.
 
 Acteurs : **Personnage** (`character`), **PNJ** (`npc`), **Créature** (`creature`), **Synthétique** (`synthetic`), **Drone** (`drone`), **Véhicule** (`vehicle`), **Vaisseau** (`ship`).
 
@@ -22,7 +22,11 @@ Objets : **Compétence** (`skill`), **Atout** (`talent`), **Origine** (`origin`)
 
 Le Personnage et le PNJ partagent la même feuille et les mêmes champs (caractéristiques, identité, textes). Les autres acteurs gardent une feuille simple, avec leurs objets groupés par type. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
 
-Le Seuil de blessure est `ceil((FOR + CON) / 20)` (décision du 18/10/2026 : le LdR v0.2 disait /10). Sur le Personnage et le PNJ il n'est pas une colonne de la feuille : il apparaît dans la fenêtre d'application. Créature, synthétique et drone ont Force et Constitution (bornes du PNJ) et le Seuil est affiché sur leur feuille. Véhicule et vaisseau n'en ont pas. Pas encore inclus : tolérance aux g, Endurance, Sang-froid, initiative glissante, autres effets automatiques. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026. Les compendiums de compétences, origines, milieux, professions, armes et armures reprennent le texte explicite du LdR v0.2. Les autres packs restent vides.
+Le Seuil de blessure est `ceil((FOR + CON) / 20)` (décision du 18/10/2026 : le LdR v0.2 disait /10). Sur le Personnage et le PNJ il n'est pas une colonne de la feuille : il apparaît dans la fenêtre d'application. Créature, synthétique et drone ont Force et Constitution (bornes du PNJ) et le Seuil est affiché sur leur feuille. Véhicule et vaisseau n'en ont pas.
+
+L'initiative est un test de Vigilance (LdR v0.2 §7). On agit dans l'ordre des réussites, puis des échecs, et la Réflexes départage. Cet ordre reste au round suivant. Une blessure grave ou pire, ou la condition Sonné, envoie en fin d'ordre au round d'après. Le meneur peut reculer un interrompu d'une place. Se replacer relance la Vigilance et sacrifie l'action. Jouer avant ne donne aucun bonus. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026.
+
+Pas encore inclus : tolérance aux g, Endurance, Sang-froid, autres effets automatiques. Les compendiums de compétences, origines, milieux, professions, armes et armures reprennent le texte explicite du LdR v0.2. Les autres packs restent vides.
 
 Compatibilité : **FoundryVTT version 14** (cible : version 14 Stable, build 369 ; `compatibility.minimum` et `compatibility.verified` = `"14"`).
 
@@ -44,7 +48,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.5.4.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.5.5.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -56,7 +60,8 @@ system.json                         manifeste (types, htmlFields, langues fr et 
 module/sol.mjs                      point d'entrée (hook « init »)
 module/config.mjs                   caractéristiques, choix, difficultés, objets autorisés
 module/guards.mjs                   refus des objets interdits (preCreateItem)
-module/dice/                        jet D100, application des dégâts (règles pures)
+module/dice/                        jet D100, dégâts, classement d'initiative (règles pures)
+module/combat/                      initiative dans le Combat Tracker
 packs/                              compendiums (JSON dans _source, LevelDB construit)
 module/data/                        un modèle par type (base commune des objets)
 module/sheets/character-sheet.mjs   feuille du Personnage

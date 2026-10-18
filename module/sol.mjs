@@ -7,7 +7,7 @@
  *
  * Enchaînement : publier `CONFIG.SOL`, lier chaque TypeDataModel, retirer
  * les feuilles V1 du cœur, poser nos feuilles par défaut, armer le
- * garde-fou `preCreateItem`, enregistrer la condition « Combinaison percée ».
+ * garde-fou `preCreateItem`, enregistrer les conditions, et l'initiative.
  */
 import { SOL } from "./config.mjs";
 import { CreatureData, DroneData, NpcData, ShipData, SyntheticData, VehicleData } from "./data/actors.mjs";
@@ -20,6 +20,7 @@ import { InjuryData } from "./data/injury.mjs";
 import { BackgroundData, OriginData, ProfessionData, SequelData, ShipModuleData, TalentData } from "./data/provisional.mjs";
 import { SkillData } from "./data/skill.mjs";
 import { WeaponData } from "./data/weapon.mjs";
+import { registerInitiative } from "./combat/initiative.mjs";
 import { registerDamage } from "./dice/apply-damage.mjs";
 import { registerItemGuard } from "./guards.mjs";
 import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
@@ -115,6 +116,7 @@ function initializeSystem() {
   registerItemGuard();
   registerNpcReadyMigration(SYSTEM_ID);
   registerDamage();
+  registerInitiative();
 }
 
 Hooks.once("init", initializeSystem);

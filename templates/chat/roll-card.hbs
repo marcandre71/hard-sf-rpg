@@ -15,6 +15,9 @@
     <li>{{localize "SOL.Roll.die"}} : {{die}}</li>
     <li class="sol-result {{resultClass}}">{{result}}</li>
     <li>{{degreeLabel}} : {{degree}}</li>
+    {{#if note}}
+    <li class="sol-damage-remind">{{note}}</li>
+    {{/if}}
     {{#if location}}
     <li>{{localize "SOL.Roll.location"}} : {{location}}</li>
     <li>{{localize "SOL.Roll.damage"}} : {{damage}}</li>
