@@ -6,12 +6,13 @@
  * `{{formGroup}}`, puis les objets groupés par type (même partiel
  * que la feuille du personnage).
  * Décision Marc 18/10/2026 : créature, synthétique et drone affichent
- * FOR, CON et le Seuil. Véhicule et vaisseau n'ont pas ces champs.
+ * FOR, CON, PER et le Seuil. Le bouton de jet est celui du partiel.
+ * Véhicule et vaisseau n'ont pas ces champs.
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
-import { FOR_CON_KEYS } from "../data/actors.mjs";
+import { FOR_CON_PER_KEYS } from "../data/actors.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
 import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
@@ -62,7 +63,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     if ( prepared?.for && prepared?.con ) {
       const fieldBounds = characteristicFieldsFor("npc");
       context.bounds = fieldBounds;
-      context.characteristics = FOR_CON_KEYS.map(key => {
+      context.characteristics = FOR_CON_PER_KEYS.map(key => {
         const cfg = SOL.characteristics[key];
         const source = stored.characteristics?.[key] ?? {};
         return {

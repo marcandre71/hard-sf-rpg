@@ -3,10 +3,13 @@
  * `node tests/initiative.test.mjs`
  *
  * Réf. LdR v0.2 §7. Décision Marc 18/10/2026 : réussites avant échecs,
- * moins de DE d'abord, égalité à la RÉF.
+ * moins de DE d'abord, égalité à la RÉF, puis au score de Vigilance
+ * (réussites et échecs), puis à l'identifiant. Réussite critique
+ * avant une réussite normale du même DR.
  */
 import assert from "node:assert/strict";
 import {
+  canReposition,
   compareByFoundryInitiative,
   deferToEnd,
   encodeInitiative,
@@ -25,6 +28,8 @@ import {
   showRankLabel,
   sortByInitiative,
   stepBack,
+  stunnedAtStart,
+  surprisedTurnIndex,
   vigilanceBaseScore
 } from "../module/dice/initiative.mjs";
 import { mapMessageMode } from "../module/dice/chat.mjs";
@@ -483,6 +488,114 @@ check("resetAll retire rank, pending, recul et fin d'ordre", () => {
     { id: "b", initiative: 5 }
   ];
   assert.deepEqual(resolveDeferred(cleared), []);
+});
+
+check("même DR et même RÉF : le score de Vigilance le plus haut passe devant", () => {
+  const order = orderByRank([
+    { id: "low", success: true, dr: 2, ref: 40, score: 10 },
+    { id: "high", success: true, dr: 2, ref: 40, score: 80 },
+    { id: "mid", success: true, dr: 2, ref: 40, score: 40 }
+  ]);
+  assert.deepEqual(order, ["high", "mid", "low"]);
+});
+
+check("même DE et même RÉF : le score de Vigilance le plus haut passe devant", () => {
+  const order = orderByRank([
+    { id: "low", success: false, de: 1, ref: 40, score: 10 },
+    { id: "high", success: false, de: 1, ref: 40, score: 55 },
+    { id: "mid", success: false, de: 1, ref: 40, score: 30 }
+  ]);
+  assert.deepEqual(order, ["high", "mid", "low"]);
+});
+
+check("le degré et la RÉF passent avant le score", () => {
+  const successes = orderByRank([
+    { id: "ref-low-score-high", success: true, dr: 1, ref: 10, score: 999 },
+    { id: "ref-high-score-low", success: true, dr: 1, ref: 11, score: 0 },
+    { id: "dr-higher", success: true, dr: 2, ref: 0, score: 0 }
+  ]);
+  assert.deepEqual(successes, ["dr-higher", "ref-high-score-low", "ref-low-score-high"]);
+  const failures = orderByRank([
+    { id: "more-de-high-score", success: false, de: 2, ref: 0, score: 999 },
+    { id: "less-de-low-score", success: false, de: 0, ref: 0, score: 0 },
+    { id: "same-de-ref-high", success: false, de: 2, ref: 20, score: 0 }
+  ]);
+  assert.deepEqual(failures, ["less-de-low-score", "same-de-ref-high", "more-de-high-score"]);
+});
+
+check("réussite critique avant une réussite normale du même DR", () => {
+  const order = orderByRank([
+    { id: "normal", success: true, dr: 2, ref: 90, score: 99, critical: null },
+    { id: "crit", success: true, dr: 2, ref: 10, score: 1, critical: "success" }
+  ]);
+  assert.deepEqual(order, ["crit", "normal"]);
+  const degree = orderByRank([
+    { id: "crit0", success: true, dr: 0, ref: 100, score: 999, critical: "success" },
+    { id: "normal1", success: true, dr: 1, ref: 0, score: 0, critical: null }
+  ]);
+  assert.deepEqual(degree, ["normal1", "crit0"]);
+});
+
+check("échec critique : même rang qu'un échec normal de même DE, RÉF et score", () => {
+  const normal = encodeInitiative({ success: false, de: 2, ref: 40, score: 15, critical: null });
+  const crit = encodeInitiative({ success: false, de: 2, ref: 40, score: 15, critical: "failure" });
+  assert.equal(crit, normal);
+  const order = orderByRank([
+    { id: "é", success: false, de: 2, ref: 40, score: 15, critical: "failure" },
+    { id: "z", success: false, de: 2, ref: 40, score: 15, critical: null }
+  ]);
+  assert.deepEqual(order, ["z", "é"]);
+});
+
+check("score au-dessus de 999 : ramené à 999, la réussite reste devant", () => {
+  assert.equal(
+    encodeInitiative({ success: false, de: 0, ref: 100, score: 5000 }),
+    encodeInitiative({ success: false, de: 0, ref: 100, score: 999 })
+  );
+  const bestFailure = encodeInitiative({ success: false, de: 0, ref: 100, score: 999 });
+  const smallestSuccess = encodeInitiative({ success: true, dr: 0, ref: 0, score: 0 });
+  assert.ok(smallestSuccess > bestFailure);
+  assert.equal(
+    encodeInitiative({ success: true, dr: 1, ref: 50, score: 11 })
+      - encodeInitiative({ success: true, dr: 1, ref: 50, score: 10 }),
+    1
+  );
+});
+
+check("se replacer : seulement le combattant actif", () => {
+  assert.equal(canReposition({ started: true, isActive: true, isOwner: true, isGM: false }), true);
+  assert.equal(canReposition({ started: true, isActive: true, isOwner: false, isGM: true }), true);
+  assert.equal(canReposition({ started: true, isActive: false, isOwner: true, isGM: true }), false);
+  assert.equal(canReposition({ started: false, isActive: true, isOwner: true, isGM: true }), false);
+  assert.equal(canReposition({ started: true, isActive: true, isOwner: false, isGM: false }), false);
+});
+
+check("surprise : round 1, on saute jusqu'au prochain non surpris", () => {
+  const entries = [
+    { id: "a", surprised: true },
+    { id: "b", surprised: true },
+    { id: "c", surprised: false },
+    { id: "d", surprised: true }
+  ];
+  assert.equal(surprisedTurnIndex(entries, 0, 1), 2);
+  assert.equal(surprisedTurnIndex(entries, 1, 1), 2);
+  assert.equal(surprisedTurnIndex(entries, 2, 1), null);
+  assert.equal(surprisedTurnIndex(entries, 3, 1), null);
+  assert.equal(surprisedTurnIndex(entries, 0, 2), null);
+  assert.equal(surprisedTurnIndex([{ id: "a", surprised: true }], 0, 1), null);
+});
+
+check("sonné avant le combat : fin d'ordre si l'initiative est un nombre", () => {
+  const sorted = [
+    { id: "a", initiative: 30, stunned: true },
+    { id: "b", initiative: 20, stunned: false },
+    { id: "c", initiative: null, stunned: true }
+  ];
+  const changes = stunnedAtStart(sorted);
+  assert.deepEqual(changes.find(change => change.id === "a"), { id: "a", initiative: 19 });
+  assert.equal(changes.find(change => change.id === "b"), undefined);
+  assert.deepEqual(changes.find(change => change.id === "c"), { id: "c", deferEnd: true });
+  assert.equal(changes.find(change => change.id === "c").initiative, undefined);
 });
 
 check("modes de carte v13 et v14", () => {

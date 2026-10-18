@@ -270,11 +270,14 @@ try {
   }
   for ( const Model of [CreatureData, SyntheticData, DroneData] ) {
     const keys = Object.keys(new Model({}).schema.fields.characteristics.fields);
-    if ( keys.length !== 2 || !keys.includes("for") || !keys.includes("con") ) {
-      throw new Error(`${Model.name} : seulement FOR et CON, reçu ${keys.join(", ")}`);
+    if ( keys.length !== 3 || !keys.includes("for") || !keys.includes("con") || !keys.includes("per") ) {
+      throw new Error(`${Model.name} : FOR, CON et PER, reçu ${keys.join(", ")}`);
     }
     const baseMax = new Model({}).schema.fields.characteristics.fields.for.fields.base.max;
-    if ( baseMax !== 100 ) throw new Error(`${Model.name} : Base max ${baseMax}, 100 attendu`);
+    const perMax = new Model({}).schema.fields.characteristics.fields.per.fields.base.max;
+    if ( baseMax !== 100 || perMax !== 100 ) {
+      throw new Error(`${Model.name} : Base max FOR ${baseMax}, PER ${perMax}, 100 attendu`);
+    }
     const legacy = new Model({ description: "<p>a</p>", notes: "b" });
     legacy.prepareDerivedData();
     if ( legacy._source.description !== "<p>a</p>" || legacy._source.notes !== "b" ) {
@@ -285,6 +288,9 @@ try {
     }
     if ( legacy.characteristics.con.value !== 25 ) {
       throw new Error(`${Model.name} : CON actuelle attendue`);
+    }
+    if ( legacy.characteristics.per.base !== 25 || legacy.characteristics.per.value !== 25 ) {
+      throw new Error(`${Model.name} : PER par défaut attendue`);
     }
     const kept = new Model({
       description: "",
@@ -328,6 +334,9 @@ try {
     }
     if ( old.characteristics?.con?.base !== 25 || old.characteristics?.con?.temp !== 0 ) {
       throw new Error(`${Model.name} : le nettoyage ne pose pas la Constitution par défaut`);
+    }
+    if ( old.characteristics?.per?.base !== 25 || old.characteristics?.per?.value !== undefined ) {
+      throw new Error(`${Model.name} : le nettoyage ne pose pas la Perception par défaut`);
     }
     if ( old.description !== "<p>a</p>" || old.notes !== "b" ) {
       throw new Error(`${Model.name} : le nettoyage a perdu description ou notes`);

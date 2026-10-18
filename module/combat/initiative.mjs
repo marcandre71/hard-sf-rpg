@@ -40,19 +40,21 @@
 import { SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import {
+  canReposition,
   encodeInitiative,
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
   INITIATIVE_FLAG_SCOPE,
   interruptTiming,
-  repositionPlacement,
   resetAllFlagUpdate,
   resolveDeferred,
   reflexScore,
   shouldClearRank,
   showRankLabel,
   stepBack,
+  stunnedAtStart,
+  surprisedTurnIndex,
   vigilanceBaseScore
 } from "../dice/initiative.mjs";
 import { rollChoice } from "../dice/roll-dialog.mjs";
@@ -68,25 +70,84 @@ const STUNNED_ADDED = "solStunnedAdded";
 /** Condition Sonné. Réf. LdR v0.2 §7. L'effet est un rappel, pas une règle jouée par le logiciel. */
 export const STUNNED = "sol-nouvelle-ere.stunned";
 
+/**
+ * Condition Surpris. Réf. LdR v0.2 §7, ligne 158.
+ * Le statut est la marque (visible dans le HUD du jeton). Le menu du
+ * tracker la bascule. Au round 1, `_onStartTurn` saute le tour.
+ */
+export const SURPRISED = "sol-nouvelle-ere.surprised";
+
 const CAN_FIGHT = new Set(["character", "npc", "creature", "synthetic", "drone"]);
 
 /**
+ * Enregistre une condition dans le HUD du jeton.
+ *
+ * v14 : `CONFIG.statusEffects` est un objet indexé par id, avec une
+ * compatibilité tableau jusqu'en v16 (issue 13122). `push` seul ne met
+ * pas à jour la vue par id que le HUD lit (`Object.values`, SR5 #1960).
+ * On assigne toujours `effects[id]`. On ne pousse que si l'itérateur
+ * ne voit pas encore cette id, pour ne pas doubler l'entrée.
+ *
+ * `description` n'est pas dans l'objet au moment de l'insertion.
+ * Sonné était le seul statut à la porter : Saignement et Combinaison
+ * percée, enregistrés sans elle, apparaissaient, lui non. On l'ajoute
+ * ensuite, sur l'objet déjà stocké.
+ * `hud: true` : le HUD saute `hud === false`
+ * (`TokenHUD#_getStatusEffectChoices`).
+ * `name` reste une clé : `init` tourne avant les traductions.
+ *
  * @param {string} id
  * @param {string} name
  * @param {string} img
- * @param {string} [description]
+ * @param {{ description?: string, order?: number }} [options]
  * @returns {void}
  */
-function registerStatus(id, name, img, description) {
-  const effect = { id, name, img };
-  if ( description ) effect.description = description;
+export function registerHudStatus(id, name, img, { description, order } = {}) {
+  const effect = { id, name, img, hud: true };
+  if ( typeof order === "number" ) effect.order = order;
+  storeStatusEffect(effect);
+  if ( description ) attachStatusDescription(id, description);
+}
+
+/**
+ * @param {{ id: string, name: string, img: string, hud: true, order?: number }} effect
+ * @returns {void}
+ */
+function storeStatusEffect(effect) {
   CONFIG.statusEffects ??= {};
   const effects = CONFIG.statusEffects;
-  if ( Array.isArray(effects) ) {
-    if ( !effects.some(entry => entry.id === id) ) effects.push(effect);
-    return;
+  effects[effect.id] = effect;
+  if ( statusListed(effects, effect.id) ) return;
+  if ( typeof effects.push === "function" ) effects.push(effect);
+}
+
+/**
+ * @param {object} effects
+ * @param {string} id
+ * @returns {boolean}
+ */
+function statusListed(effects, id) {
+  if ( typeof effects[Symbol.iterator] !== "function" ) return false;
+  for ( const entry of effects ) {
+    if ( entry?.id === id ) return true;
   }
-  effects[id] = effect;
+  return false;
+}
+
+/**
+ * @param {string} id
+ * @param {string} description
+ * @returns {void}
+ */
+function attachStatusDescription(id, description) {
+  const effects = CONFIG.statusEffects;
+  if ( !effects ) return;
+  const stored = effects[id];
+  if ( stored && typeof stored === "object" ) stored.description = description;
+  if ( typeof effects[Symbol.iterator] !== "function" ) return;
+  for ( const entry of effects ) {
+    if ( entry?.id === id && entry !== stored ) entry.description = description;
+  }
 }
 
 /**
@@ -97,12 +158,10 @@ function registerStatus(id, name, img, description) {
  * @returns {void}
  */
 function localizeStunnedHint() {
-  const effects = CONFIG.statusEffects;
-  const effect = Array.isArray(effects)
-    ? effects.find(entry => entry.id === STUNNED)
-    : effects?.[STUNNED];
-  if ( !effect?.description ) return;
-  effect.description = game.i18n.localize(effect.description);
+  const effect = CONFIG.statusEffects?.[STUNNED];
+  const key = effect?.description;
+  if ( typeof key !== "string" || !key.startsWith("SOL.") ) return;
+  attachStatusDescription(STUNNED, game.i18n.localize(key));
 }
 
 /**
@@ -115,6 +174,22 @@ function effectHasStatus(effect, id) {
   if ( !statuses ) return false;
   if ( typeof statuses.has === "function" ) return statuses.has(id);
   return Array.isArray(statuses) && statuses.includes(id);
+}
+
+/**
+ * @param {Actor|null|undefined} actor
+ * @param {string} id
+ * @returns {boolean}
+ */
+function actorHasStatus(actor, id) {
+  if ( !actor ) return false;
+  if ( typeof actor.statuses?.has === "function" && actor.statuses.has(id) ) return true;
+  const effects = actor.effects;
+  if ( !effects ) return false;
+  for ( const effect of effects ) {
+    if ( effectHasStatus(effect, id) ) return true;
+  }
+  return false;
 }
 
 /**
@@ -319,6 +394,9 @@ export class SolCombat extends Combat {
       const actor = combatant.actor;
       if ( !actor ) continue;
       if ( !CAN_FIGHT.has(actor.type) ) {
+        // Décision Marc 18/10/2026 : véhicule et vaisseau restent hors
+        // initiative (le pilote ou l'équipage agit). À revoir avec le
+        // combat spatial.
         ui.notifications.warn(game.i18n.format("SOL.Initiative.notAllowed", { name: combatant.name }));
         continue;
       }
@@ -331,10 +409,7 @@ export class SolCombat extends Combat {
         ui.notifications.warn(game.i18n.format("SOL.Initiative.impossible", { name: actor.name }));
         continue;
       }
-      if ( rated.missingPerception ) {
-        ui.notifications.warn(game.i18n.format("SOL.Initiative.noPerception", { name: actor.name }));
-      }
-      // À confirmer par Marc : un jet groupé (tout lancer, lancer les PNJ)
+      // Décision Marc 18/10/2026 : un jet groupé (tout lancer, lancer les PNJ)
       // est en difficulté Normale, sans une fenêtre par combattant.
       const choice = batch ? rollChoice(rated.score) : null;
       // Combatant caché : carte privée MJ (`gm`, doc ChatMessage.applyMode).
@@ -361,13 +436,22 @@ export class SolCombat extends Combat {
         success: outcome.success,
         dr: outcome.dr,
         de: outcome.de,
-        ref
+        ref,
+        critical: outcome.critical,
+        score: rated.score
       });
-      const rank = { success: outcome.success, dr: outcome.dr, de: outcome.de, ref };
+      const rank = {
+        success: outcome.success,
+        dr: outcome.dr,
+        de: outcome.de,
+        ref,
+        critical: outcome.critical ?? null,
+        score: rated.score
+      };
       const order = turnOrder(this);
       const index = order.findIndex(entry => entry.id === id);
       const newIndex = indexAfterRoll(order, id, initiative);
-      // À confirmer par Marc : effet immédiat ou au round suivant.
+      // Décision Marc 18/10/2026 : actif ou déjà joué, au round suivant.
       const plan = initiativeRollPlan({
         reposition: options.reposition === true,
         started: this.started === true,
@@ -435,8 +519,26 @@ export class SolCombat extends Combat {
    * @returns {Promise<Combat>}
    */
   async nextRound() {
-    if ( game.user.isActiveGM ) await applyDeferred(this, { turnEvents: false });
+    if ( game.user.isActiveGM ) {
+      // La surprise ne dure que le round 1. Réf. LdR v0.2 §7.
+      if ( this.round === 1 ) await clearSurprise(this);
+      await applyDeferred(this, { turnEvents: false });
+    }
     return super.nextRound();
+  }
+
+  /**
+   * Sonné posé avant le combat : fin d'ordre dès le round 1.
+   * Décision Marc 18/10/2026. `markDeferEnd` ne fait rien tant qu'il
+   * n'y a pas de combat : on place ici, avant le premier tour.
+   *
+   * @override
+   * @param {object} [options]
+   * @returns {Promise<Combat>}
+   */
+  async startCombat(options) {
+    if ( game.user.isActiveGM ) await placePrecombatStunned(this);
+    return super.startCombat(options);
   }
 
   /**
@@ -452,7 +554,36 @@ export class SolCombat extends Combat {
    */
   async _onStartRound(context) {
     await super._onStartRound(context);
+    const round = context?.round ?? this.round;
+    // Secours : un joueur a démarré le combat, le MJ actif n'a pas
+    // écrit dans startCombat. Le drapeau évite un second recul.
+    if ( round === 1 ) await placePrecombatStunned(this);
+    if ( round >= 2 ) await clearSurprise(this);
     await applyDeferred(this);
+  }
+
+  /**
+   * Round 1 : saute le tour d'un surpris, d'un seul `update`.
+   * `nextTurn` rappelé depuis ici relancerait ce hook avant que le
+   * drapeau de réentrance ne soit levé, et le surpris suivant serait
+   * perdu. Un index non surpris rappelle ce hook une fois, puis s'arrête.
+   * Réf. LdR v0.2 §7, ligne 158. Sans MJ connecté, Foundry n'appelle
+   * pas ce hook : le tour n'est pas sauté.
+   *
+   * @override
+   * @param {object} context
+   * @returns {Promise<void>}
+   */
+  async _onStartTurn(context) {
+    await super._onStartTurn(context);
+    if ( !game.user.isActiveGM ) return;
+    const entries = this.turns.map(combatant => ({
+      id: combatant.id,
+      surprised: actorHasStatus(combatant.actor, SURPRISED)
+    }));
+    const next = surprisedTurnIndex(entries, this.turn, this.round);
+    if ( next === null ) return;
+    await this.update({ turn: next });
   }
 }
 
@@ -463,49 +594,28 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
    */
   _getEntryContextOptions() {
     const entries = super._getEntryContextOptions();
+    // v14 : `condition` lève pendant `ContextMenu#renderEntries`
+    // (« ContextMenuEntry#condition is deprecated. Use visible instead »,
+    // build 369). On ne pose pas la propriété. v13 : `condition` + `callback`.
     entries.push(
-      {
+      trackerMenuEntry({
         name: "SOL.Initiative.interrupt",
         icon: '<i class="fa-solid fa-arrow-down"></i>',
-        condition: () => game.user.isGM,
-        callback: li => {
-          const id = combatantIdFrom(li);
-          const combat = game.combat;
-          if ( !id || !combat || !game.user.isGM ) return;
-          const index = combat.turns.findIndex(combatant => combatant.id === id);
-          if ( index < 0 ) return;
-          // À confirmer par Marc : effet immédiat ou au round suivant.
-          if ( interruptTiming(index, combat.turn) === "defer" ) {
-            void combat.updateEmbeddedDocuments("Combatant", [{
-              _id: id,
-              [`flags.${SYSTEM_ID}.deferStep`]: true
-            }]);
-            return;
-          }
-          const changes = stepBack(turnOrder(combat), id);
-          if ( !changes ) return;
-          void combat.updateEmbeddedDocuments("Combatant", changes.map(change => ({
-            _id: change.id,
-            initiative: change.initiative
-          })), { ...keepTurn(combat), [SYSTEM_WRITE]: true });
-        }
-      },
-      {
+        visible: () => game.user.isGM,
+        onClick: onInterrupt
+      }),
+      trackerMenuEntry({
         name: "SOL.Initiative.reposition",
         icon: '<i class="fa-solid fa-dice-d20"></i>',
-        condition: li => {
-          if ( !game.combat?.started ) return false;
-          const id = combatantIdFrom(li);
-          const combatant = game.combat?.combatants.get(id);
-          return game.user.isGM || combatant?.isOwner === true;
-        },
-        callback: li => {
-          const id = combatantIdFrom(li);
-          const combat = game.combat;
-          if ( !id || !combat ) return;
-          void combat.rollInitiative(id, { reposition: true });
-        }
-      }
+        visible: repositionVisible,
+        onClick: onReposition
+      }),
+      trackerMenuEntry({
+        name: "SOL.Initiative.surprised",
+        icon: '<i class="fa-solid fa-eye-slash"></i>',
+        visible: () => game.user.isGM,
+        onClick: onSurprise
+      })
     );
     return entries;
   }
@@ -534,12 +644,162 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
 function rankLabel(rank) {
   if ( !rank || typeof rank.success !== "boolean" ) return "";
   if ( rank.success ) {
-    return game.i18n.format("SOL.Initiative.rankSuccess", {
+    const key = rank.critical === "success"
+      ? "SOL.Initiative.rankCritical"
+      : "SOL.Initiative.rankSuccess";
+    return game.i18n.format(key, {
       dr: rank.dr ?? 0,
       ref: rank.ref ?? 0
     });
   }
   return game.i18n.format("SOL.Initiative.rankFailure", { de: rank.de ?? 0 });
+}
+
+/**
+ * v14 : `label`, `visible`, `onClick(event, target)`.
+ * v13 : `condition`, `callback(li)`. Pas de `condition` en v14 : la lire lève.
+ *
+ * @param {{ name: string, icon: string, visible: Function, onClick: Function }} entry
+ * @returns {object}
+ */
+function trackerMenuEntry({ name, icon, visible, onClick }) {
+  const generation = game.release?.generation ?? 14;
+  if ( generation >= 14 ) return { name, label: name, icon, visible, onClick };
+  return { name, icon, condition: visible, callback: onClick };
+}
+
+/**
+ * v14 passe `(event, target)`. v13 passe `(li)`.
+ *
+ * @param {Event|HTMLElement|JQuery|HTMLElement[]} first
+ * @param {HTMLElement|undefined} second
+ * @returns {HTMLElement|JQuery|HTMLElement[]}
+ */
+function menuTarget(first, second) {
+  if ( second instanceof HTMLElement || Array.isArray(second) || second?.[0] ) return second;
+  return first;
+}
+
+/**
+ * @param {Event|HTMLElement|JQuery|HTMLElement[]} first
+ * @param {HTMLElement|undefined} second
+ * @returns {void}
+ */
+function onInterrupt(first, second) {
+  const id = combatantIdFrom(menuTarget(first, second));
+  const combat = game.combat;
+  if ( !id || !combat || !game.user.isGM ) return;
+  const index = combat.turns.findIndex(combatant => combatant.id === id);
+  if ( index < 0 ) return;
+  // Décision Marc 18/10/2026 : actif ou déjà joué, au round suivant.
+  if ( interruptTiming(index, combat.turn) === "defer" ) {
+    void combat.updateEmbeddedDocuments("Combatant", [{
+      _id: id,
+      [`flags.${SYSTEM_ID}.deferStep`]: true
+    }]);
+    return;
+  }
+  const changes = stepBack(turnOrder(combat), id);
+  if ( !changes ) return;
+  void combat.updateEmbeddedDocuments("Combatant", changes.map(change => ({
+    _id: change.id,
+    initiative: change.initiative
+  })), { ...keepTurn(combat), [SYSTEM_WRITE]: true });
+}
+
+/**
+ * Décision Marc 18/10/2026 : seulement le combattant actif,
+ * propriétaire ou MJ, combat commencé.
+ *
+ * @param {HTMLElement|JQuery|HTMLElement[]} target
+ * @returns {boolean}
+ */
+function repositionVisible(target) {
+  const combat = game.combat;
+  if ( !combat ) return false;
+  const id = combatantIdFrom(target);
+  const combatant = id ? combat.combatants.get(id) : null;
+  return canReposition({
+    started: combat.started === true,
+    isActive: Boolean(id) && combat.combatant?.id === id,
+    isOwner: combatant?.isOwner === true,
+    isGM: game.user.isGM === true
+  });
+}
+
+/**
+ * @param {Event|HTMLElement|JQuery|HTMLElement[]} first
+ * @param {HTMLElement|undefined} second
+ * @returns {void}
+ */
+function onReposition(first, second) {
+  const id = combatantIdFrom(menuTarget(first, second));
+  const combat = game.combat;
+  if ( !id || !combat ) return;
+  if ( !repositionVisible(menuTarget(first, second)) ) return;
+  void combat.rollInitiative(id, { reposition: true });
+}
+
+/**
+ * Bascule le statut Surpris. Le HUD du jeton montre la même marque.
+ *
+ * @param {Event|HTMLElement|JQuery|HTMLElement[]} first
+ * @param {HTMLElement|undefined} second
+ * @returns {void}
+ */
+function onSurprise(first, second) {
+  if ( !game.user.isGM ) return;
+  const id = combatantIdFrom(menuTarget(first, second));
+  const actor = game.combat?.combatants.get(id)?.actor;
+  if ( !actor ) return;
+  void actor.toggleStatusEffect(SURPRISED, { active: !actorHasStatus(actor, SURPRISED) });
+}
+
+/**
+ * @param {Combat} combat
+ * @returns {Promise<void>}
+ */
+async function placePrecombatStunned(combat) {
+  if ( !game.user.isActiveGM ) return;
+  if ( combat.getFlag(SYSTEM_ID, "stunnedStart") === true ) return;
+  const sorted = combat.turns.map(combatant => ({
+    id: combatant.id,
+    initiative: typeof combatant.initiative === "number" ? combatant.initiative : null,
+    stunned: actorHasStatus(combatant.actor, STUNNED)
+  }));
+  const changes = stunnedAtStart(sorted);
+  if ( !changes.length ) return;
+  const updates = changes.map(change => {
+    /** @type {object} */
+    const data = { _id: change.id };
+    if ( typeof change.initiative === "number" ) data.initiative = change.initiative;
+    if ( change.deferEnd ) data[`flags.${SYSTEM_ID}.deferEnd`] = true;
+    return data;
+  });
+  await combat.updateEmbeddedDocuments("Combatant", updates, {
+    ...keepTurn(combat),
+    [SYSTEM_WRITE]: true,
+    turnEvents: false
+  });
+  await combat.setFlag(SYSTEM_ID, "stunnedStart", true);
+}
+
+/**
+ * La marque surpris disparaît au round 2. Une fois par acteur.
+ *
+ * @param {Combat} combat
+ * @returns {Promise<void>}
+ */
+async function clearSurprise(combat) {
+  if ( !game.user.isActiveGM ) return;
+  const seen = new Set();
+  for ( const combatant of combat.combatants ) {
+    const actor = combatant.actor;
+    if ( !actor || seen.has(actor.uuid) ) continue;
+    seen.add(actor.uuid);
+    if ( !actorHasStatus(actor, SURPRISED) ) continue;
+    await actor.toggleStatusEffect(SURPRISED, { active: false });
+  }
 }
 
 /**
@@ -556,7 +816,7 @@ function noteStunned(effect) {
  * @returns {void}
  */
 function flagStunned(actor) {
-  // À confirmer par Marc : retirer Sonné avant le round suivant
+  // Décision Marc 18/10/2026 : retirer Sonné avant le round suivant
   // n'annule pas la fin d'ordre déjà marquée.
   if ( actor ) void markDeferEnd(actor, { automatic: true });
 }
@@ -611,12 +871,13 @@ export function registerInitiative() {
   CONFIG.Combat.documentClass = SolCombat;
   CONFIG.Combatant.documentClass = SolCombatant;
   CONFIG.ui.combat = SolCombatTracker;
-  registerStatus(
-    STUNNED,
-    "SOL.Status.stunned",
-    "icons/svg/daze.svg",
-    "SOL.Status.stunnedHint"
-  );
+  registerHudStatus(STUNNED, "SOL.Status.stunned", "icons/svg/daze.svg", {
+    description: "SOL.Status.stunnedHint",
+    order: 900
+  });
+  registerHudStatus(SURPRISED, "SOL.Status.surprised", "icons/svg/mystery-man.svg", {
+    order: 903
+  });
   Hooks.on("createActiveEffect", onStunned);
   Hooks.on("preUpdateActiveEffect", onStunnedPreUpdate);
   Hooks.on("updateActiveEffect", onStunnedUpdate);

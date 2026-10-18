@@ -15,7 +15,7 @@
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect
  */
-import { markDeferEnd } from "../combat/initiative.mjs";
+import { markDeferEnd, registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { severityDefers } from "./initiative.mjs";
 import {
@@ -40,38 +40,17 @@ const BLEEDING = "sol-nouvelle-ere.bleeding";
 const busy = new Set();
 
 /**
- * Doc v14 : `CONFIG.statusEffects` est un objet indexé par id
- * (`{ [id: string]: StatusEffectConfig }`). Le texte de la même page
- * dit encore « array ». On enregistre des deux façons, selon ce que
- * le cœur a réellement posé.
- *
  * `name` est la clé i18n, pas le français. `init` tourne avant le
  * chargement des traductions : `localize` ici renverrait la clé.
  * Foundry traduit `name` en créant l'effet.
+ * `registerHudStatus` assigne par id et pose `hud: true`.
  *
- * @param {string} id
- * @param {string} name
- * @param {string} img
- * @returns {void}
- */
-function registerStatus(id, name, img) {
-  const effect = { id, name, img };
-  CONFIG.statusEffects ??= {};
-  const effects = CONFIG.statusEffects;
-  if ( Array.isArray(effects) ) {
-    if ( !effects.some(entry => entry.id === id) ) effects.push(effect);
-    return;
-  }
-  effects[id] = effect;
-}
-
-/**
  * @returns {void}
  */
 function registerStatuses() {
-  registerStatus(SUIT_BREACH, "SOL.Status.suitBreach", "icons/svg/hazard.svg");
+  registerHudStatus(SUIT_BREACH, "SOL.Status.suitBreach", "icons/svg/hazard.svg", { order: 901 });
   // Réf. LdR v0.2 §11. Pas d'automatisation de l'Endurance.
-  registerStatus(BLEEDING, "SOL.Status.bleeding", "icons/svg/blood.svg");
+  registerHudStatus(BLEEDING, "SOL.Status.bleeding", "icons/svg/blood.svg", { order: 902 });
 }
 
 /**

@@ -6,43 +6,76 @@ import { findSkillByName, skillScore } from "./skill-score.mjs";
  * Réf. LdR v0.2 §7 « Le tour et l'initiative ».
  * Réf. LdR v0.2 §7 : les réussites passent avant les échecs.
  * Parmi les échecs, le moins de degrés d'échec joue d'abord.
- * Décision Marc 18/10/2026. Une égalité de degré se départage à la RÉF la plus élevée.
+ * Décision Marc 18/10/2026. Une égalité de degré se départage à la RÉF
+ * la plus élevée, puis au score de Vigilance le plus élevé
+ * (réussite ou échec), puis à l'identifiant.
  * L'avantage ne donne aucun bonus.
  *
  * Foundry trie les combattants par initiative décroissante
  * (`Combat._sortCombatants`), puis par identifiant en cas d'égalité.
  *
- * Encodage (un seul nombre) :
- *   réussite : 1_000_000 + min(DR, 999) × 1_000 + RÉF (0 à 100)
- *   échec    : (999 − min(DE, 999)) × 1_000 + RÉF
- * Toute réussite reste au-dessus de tout échec (le plus gros échec
- * vaut 999 × 1_000 + 100 = 999_100). Un DR plus haut, ou un DE plus
- * bas, donne un nombre plus haut. La RÉF départage dans la même case.
- * // À confirmer par Marc : un DR ou un DE au-dessus de 999 est ramené
- * à 999, pour ne pas déborder sur la case du dessus.
- * // À confirmer par Marc : DR et RÉF égaux, Foundry départage par
- * l'identifiant du combattant (`Combat._sortCombatants`).
+ * Encodage (un seul nombre, du plus significatif au moins) :
+ *   réussite ou échec, puis degré (DR, ou moins de DE), puis réussite
+ *   critique, puis RÉF, puis score de Vigilance, puis l'identifiant
+ *   (hors du nombre : tri du cœur).
+ * Décision Marc 18/10/2026 : à DR (ou DE) et RÉF égaux, le score de
+ * Vigilance le plus élevé passe devant, réussites comme échecs.
+ * Décision Marc 18/10/2026 : une réussite critique passe avant une
+ * réussite normale du même DR. Un échec critique ne change pas le rang
+ * d'un échec normal de même DE.
+ * Décision Marc 18/10/2026 : un DR, un DE ou un score au-dessus de 999
+ * est ramené à 999. L'égalité qui reste se départage par identifiant.
+ *
+ *   réussite : BASE + min(DR, 999) × DEGRÉ
+ *              + (critique ? CRIT : 0) + RÉF × RÉF_SLOT + min(score, 999)
+ *   échec    : (999 − min(DE, 999)) × DEGRÉ + RÉF × RÉF_SLOT + min(score, 999)
+ * Le plus gros échec (0 DE, RÉF 100, score 999) vaut 201_898_999.
+ * BASE vaut 202_000_000 : toute réussite reste au-dessus.
+ * L'écart minimum entre deux rangs différents est 1. Le pas d'un recul
+ * (0,001) tient dans cet écart.
  *
  * Fin d'ordre et recul d'une place n'encodent pas un nouveau jet :
  * ils écrivent un nombre strictement plus petit que ceux qui jouent
- * avant. Le DR, le DE et la RÉF du jet restent sur la carte.
+ * avant. Le DR, le DE, la RÉF et le score du jet restent sur la carte.
  */
 
-/** Case du degré, au-dessus de la RÉF (0 à 100). */
-export const INITIATIVE_DEGREE_SLOT = 1000;
+/** Score de Vigilance maximum stocké. Au-delà, on reste dans la case. */
+export const INITIATIVE_SCORE_CAP = 999;
 
-/** Plancher de toutes les réussites, au-dessus de tous les échecs. */
-export const INITIATIVE_SUCCESS_BASE = 1_000_000;
+/** Case du score, la moins significative. */
+export const INITIATIVE_SCORE_SLOT = 1;
+
+/** Case de la RÉF (0 à 100), au-dessus du score (0 à 999). */
+export const INITIATIVE_REF_SLOT = 1000;
+
+/**
+ * Case de la réussite critique.
+ * Au-dessus de RÉF + score (maximum 100 × 1_000 + 999 = 100_999).
+ */
+export const INITIATIVE_CRIT_SLOT = 101_000;
+
+/**
+ * Case du degré, au-dessus de critique + RÉF + score
+ * (maximum 101_000 + 100_999 = 201_999).
+ */
+export const INITIATIVE_DEGREE_SLOT = 202_000;
 
 /** Degré maximum stocké. Au-delà, on reste dans la case. */
 export const INITIATIVE_DEGREE_CAP = 999;
+
+/**
+ * Plancher de toutes les réussites, au-dessus de tous les échecs.
+ * (999 + 1) × case du degré.
+ */
+export const INITIATIVE_SUCCESS_BASE = (INITIATIVE_DEGREE_CAP + 1) * INITIATIVE_DEGREE_SLOT;
 
 /**
  * Score de Vigilance avant difficulté.
  * Réf. LdR v0.2 §4 : sans l'objet, et la compétence n'est pas (F),
  * on prend la PER actuelle (pas la moitié). Avec l'objet, c'est
  * `skillScore` (formation comprise).
- * // À confirmer par Marc : sans PER et sans l'objet (créature, drone),
+ * Décision Marc 18/10/2026 : créature, synthétique et drone ont une PER.
+ * Sans l'objet, le score est cette PER. Sans caractéristique PER du tout,
  * le score est 0.
  *
  * @param {Record<string, { value?: number }>|undefined} characteristics
@@ -53,9 +86,7 @@ export const INITIATIVE_DEGREE_CAP = 999;
 export function vigilanceBaseScore(characteristics, skills, skillName) {
   const found = findSkillByName(skills ?? [], skillName);
   if ( found ) {
-    // À confirmer par Marc : Vigilance des créatures, synthétiques et drones.
-    // Avec l'objet, le score est celui de skillScore : la formation seule
-    // si la caractéristique (PER) n'existe pas. Pas d'avertissement.
+    // Avec l'objet, le score est celui de skillScore (PER + formation).
     const rated = skillScore(characteristics, found.system ?? {});
     return { ...rated, missingPerception: false };
   }
@@ -92,17 +123,27 @@ function clamp(value, min, max) {
 }
 
 /**
- * @param {{ success: boolean, dr?: number, de?: number, ref?: number }} rank
+ * @param {{ success: boolean, dr?: number, de?: number, ref?: number, critical?: "success"|"failure"|null, score?: number }} rank
  * @returns {number}
  */
-export function encodeInitiative({ success, dr = 0, de = 0, ref = 0 }) {
+export function encodeInitiative({ success, dr = 0, de = 0, ref = 0, critical = null, score = 0 }) {
   const reflex = clamp(ref, 0, 100);
+  const vigilance = clamp(score, 0, INITIATIVE_SCORE_CAP) * INITIATIVE_SCORE_SLOT;
   if ( success ) {
     const degree = clamp(dr, 0, INITIATIVE_DEGREE_CAP);
-    return INITIATIVE_SUCCESS_BASE + degree * INITIATIVE_DEGREE_SLOT + reflex;
+    // Un échec critique n'arrive pas ici. Une réussite non critique vaut 0.
+    const crit = critical === "success" ? INITIATIVE_CRIT_SLOT : 0;
+    return INITIATIVE_SUCCESS_BASE
+      + degree * INITIATIVE_DEGREE_SLOT
+      + crit
+      + reflex * INITIATIVE_REF_SLOT
+      + vigilance;
   }
   const degree = clamp(de, 0, INITIATIVE_DEGREE_CAP);
-  return (INITIATIVE_DEGREE_CAP - degree) * INITIATIVE_DEGREE_SLOT + reflex;
+  // Décision Marc 18/10/2026 : l'échec critique ne décale pas le rang.
+  return (INITIATIVE_DEGREE_CAP - degree) * INITIATIVE_DEGREE_SLOT
+    + reflex * INITIATIVE_REF_SLOT
+    + vigilance;
 }
 
 /**
@@ -146,10 +187,9 @@ export function deferToEnd(sorted, ids) {
 /**
  * Moment du recul d'une place.
  * `turn` est l'index du combattant actif (`Combat.turn`), 0 en tête.
- * // À confirmer par Marc : effet immédiat ou au round suivant.
- * Actif ou déjà joué (index <= turn) : au round suivant, pour ne pas
- * sauter le suivant ni faire rejouer celui qu'on vient de dépasser.
- * Pas encore joué : tout de suite.
+ * Décision Marc 18/10/2026 : actif ou déjà joué (index <= turn),
+ * au round suivant, pour ne pas sauter le suivant ni faire rejouer
+ * celui qu'on vient de dépasser. Pas encore joué : tout de suite.
  *
  * @param {number} index
  * @param {number|null|undefined} turn
@@ -164,7 +204,7 @@ export function interruptTiming(index, turn) {
 /**
  * Index actuel de « se replacer », même règle que l'interruption.
  * Le rang d'arrivée est décidé par `repositionPlacement`.
- * // À confirmer par Marc : effet immédiat ou au round suivant.
+ * Décision Marc 18/10/2026 : actif ou déjà joué, au round suivant.
  *
  * @param {number} index
  * @param {number|null|undefined} turn
@@ -191,10 +231,13 @@ export function indexAfterRoll(sorted, id, initiative) {
 
 /**
  * « Se replacer », et « Relancer » du cœur en cours de round.
- * // À confirmer par Marc : effet immédiat ou au round suivant.
- * Actif ou déjà joué : au round suivant.
+ * Décision Marc 18/10/2026 : actif ou déjà joué, au round suivant.
+ * « Se replacer » n'est proposé que sur le tour actif, donc ce cas-là
+ * part toujours au round suivant.
  * Pas encore joué, mais le nouveau rang tombe sur le tour actif ou
  * avant : au round suivant, sinon il prend le tour et l'actif rejoue.
+ * // À confirmer par Marc : ce second cas (Relancer, d20, Tout lancer
+ * sur quelqu'un qui n'a pas encore joué).
  * Sinon : tout de suite.
  *
  * @param {number} currentIndex
@@ -215,8 +258,7 @@ export function repositionPlacement(currentIndex, newIndex, turn) {
  * « Lancer les PNJ » ou « Tout lancer » quand il n'en reste qu'un,
  * ou un combattant qui arrive en cours de round.
  * « Relancer », le d20 et « Tout lancer » sur quelqu'un qui a déjà
- * une initiative : oui.
- * // À confirmer par Marc : effet immédiat ou au round suivant.
+ * une initiative : oui. Le moment est celui de `repositionPlacement`.
  *
  * @param {{ reposition?: boolean, started?: boolean, alone?: boolean, initiative?: number|null }} input
  * @returns {boolean}
@@ -253,6 +295,64 @@ export function initiativeRollPlan({
   const keepIndex = updateTurn === false || (writeNow && likeReposition);
   const preserveActive = writeNow && firstRoll && updateTurn !== false && !keepIndex;
   return { likeReposition, defer, writeNow, keepIndex, preserveActive };
+}
+
+/**
+ * Le bouton « Se replacer » : combat commencé, combattant actif,
+ * propriétaire ou MJ. Décision Marc 18/10/2026. Il sacrifie le
+ * mouvement, pas l'action. Comme il est actif, le nouveau rang
+ * part au round suivant (`repositionPlacement`).
+ *
+ * @param {{ started?: boolean, isActive?: boolean, isOwner?: boolean, isGM?: boolean }} input
+ * @returns {boolean}
+ */
+export function canReposition({ started = false, isActive = false, isOwner = false, isGM = false } = {}) {
+  return started === true && isActive === true && (isOwner === true || isGM === true);
+}
+
+/**
+ * Tour sauté pour surprise, round 1 seulement.
+ * Réf. LdR v0.2 §7, ligne 158. Décision Marc 18/10/2026 : le MJ marque
+ * les surpris. On rend l'index du prochain qui ne l'est pas.
+ * Le courant n'est pas surpris, ou le round n'est pas 1 : null.
+ * Tous ceux qui restent le sont : null, sans boucler. Le tour reste,
+ * le statut signale la surprise.
+ *
+ * @param {Array<{ id?: string, surprised?: boolean }>} entries Ordre de jeu, index 0 en tête.
+ * @param {number} turn
+ * @param {number} round
+ * @returns {number|null}
+ */
+export function surprisedTurnIndex(entries, turn, round) {
+  if ( round !== 1 ) return null;
+  if ( typeof turn !== "number" || !Number.isFinite(turn) || turn < 0 ) return null;
+  if ( turn >= entries.length ) return null;
+  if ( entries[turn]?.surprised !== true ) return null;
+  for ( let index = turn + 1; index < entries.length; index += 1 ) {
+    if ( entries[index]?.surprised !== true ) return index;
+  }
+  return null;
+}
+
+/**
+ * Sonné déjà posé quand le combat démarre.
+ * Décision Marc 18/10/2026 : fin d'ordre dès le round 1.
+ * Initiative numérique : on l'écrit tout de suite.
+ * Initiative encore vide : drapeau `deferEnd`, sans nombre fictif
+ * (le bouton de jet doit rester).
+ *
+ * @param {Array<{ id: string, initiative: number|null, stunned?: boolean }>} sorted
+ * @returns {Array<{ id: string, initiative?: number, deferEnd?: boolean }>}
+ */
+export function stunnedAtStart(sorted) {
+  const stunned = sorted.filter(entry => entry.stunned === true);
+  const placed = stunned.filter(entry => typeof entry.initiative === "number" && Number.isFinite(entry.initiative));
+  const waiting = stunned.filter(entry => !placed.includes(entry));
+  const moved = deferToEnd(sorted, placed.map(entry => entry.id));
+  return [
+    ...moved,
+    ...waiting.map(entry => ({ id: entry.id, deferEnd: true }))
+  ];
 }
 
 /** Portée des drapeaux d'initiative sur le combattant. */
@@ -467,6 +567,8 @@ export function stepBack(sorted, id) {
     // actuelle, dans l'écart avec le combattant d'après.
     const after = sorted[index + 2]?.initiative;
     const gap = isRank(after) ? current - after : 1;
+    // Écart minimum entre deux rangs encodés différents : 1.
+    // Le pas reste ≤ 0,001 pour ne pas rattraper le rang d'après.
     const step = gap > 0 ? Math.min(0.001, gap / 3) : 0.001;
     return [
       { id: sorted[index + 1].id, initiative: current - step },

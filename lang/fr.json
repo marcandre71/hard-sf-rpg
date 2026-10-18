@@ -190,18 +190,21 @@
       "vigilance": "Vigilance",
       "interrupt": "Interrompu : recule d'une place",
       "reposition": "Se replacer",
-      "sacrificed": "L'action de ce tour est sacrifiée pour se replacer.",
+      "sacrificed": "Le mouvement de ce tour est sacrifié pour se replacer.",
+      "surprised": "Surpris",
       "notAllowed": "{name} ne peut pas lancer l'initiative.",
       "impossible": "{name} ne peut pas tenter Vigilance sans formation.",
       "noPerception": "{name} n'a ni Vigilance ni Perception : le test est à 0.",
       "rankSuccess": "{dr} DR · RÉF {ref}",
+      "rankCritical": "{dr} DR crit. · RÉF {ref}",
       "rankFailure": "{de} DE"
     },
     "Status": {
       "suitBreach": "Combinaison percée",
       "bleeding": "Saignement",
       "stunned": "Sonné",
-      "stunnedHint": "Pas d'action ce tour, une réaction reste possible. Rappel seulement : le logiciel n'empêche pas l'action."
+      "stunnedHint": "Pas d'action ce tour, réaction possible ; posé avant le combat, envoie en fin d'ordre dès le round 1.",
+      "surprised": "Surpris"
     },
     "Damage": {
       "apply": "Appliquer les dégâts",

@@ -5,10 +5,11 @@
  * mêmes caractéristiques. Réf. consigne étape 3. Le LdR v0.2 §15 ne
  * détaille pas ces champs pour le PNJ ; on ne calcule rien de plus.
  *
- * Créature, Synthétique et Drone : description, notes, et FOR / CON.
+ * Créature, Synthétique et Drone : description, notes, FOR, CON et PER.
  * Décision Marc 18/10/2026 : mêmes champs que le PNJ (Base jusqu'à 100,
- * Actuelle bornée 0 à 100). Pas d'autre caractéristique. Le Seuil en
- * découle. Véhicule et vaisseau n'en ont pas.
+ * Actuelle bornée 0 à 100). Pas les six autres caractéristiques.
+ * Le Seuil en découle. La PER sert au test de Vigilance.
+ * Véhicule et vaisseau n'en ont pas.
  *
  * Véhicule et Vaisseau : la catégorie est le seul champ nommé, plus la
  * description demandée par la consigne de l'étape 2. Masse, delta-v, etc.
@@ -19,8 +20,8 @@ import { migrateNpcSource } from "./npc-migrate.mjs";
 import { characteristicSchema, deriveCharacteristicValues, PersonData } from "./person.mjs";
 import { htmlField, stringField } from "./fields.mjs";
 
-/** FOR et CON seulement. Pas les sept autres caractéristiques du personnage. */
-export const FOR_CON_KEYS = ["for", "con"];
+/** FOR, CON et PER. Pas les six autres caractéristiques du personnage. */
+export const FOR_CON_PER_KEYS = ["for", "con", "per"];
 
 /**
  * Schéma commun : description + notes, toutes deux HTML.
@@ -67,8 +68,9 @@ export class NpcData extends PersonData {
 }
 
 /**
- * Description, notes, FOR et CON. Bornes du PNJ.
- * Décision Marc 18/10/2026.
+ * Description, notes, FOR, CON et PER. Bornes du PNJ.
+ * Décision Marc 18/10/2026 : la PER manquait, le test de Vigilance
+ * tombait à 0. Pas de `migrateData` : le `initial` du schéma suffit.
  * Pas de `migrateData` : un diff client passe par `migrateData` (v13
  * `client-backend.mjs`, inchangé en v14). Y injecter les défauts écrase
  * une Force déjà saisie. Le nettoyage du schéma pose `initial` sur une
@@ -81,20 +83,20 @@ class ForConActorData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       ...describedActorSchema(),
-      characteristics: characteristicSchema(FOR_CON_KEYS, characteristicFieldsFor("npc"))
+      characteristics: characteristicSchema(FOR_CON_PER_KEYS, characteristicFieldsFor("npc"))
     };
   }
 
   /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
-    deriveCharacteristicValues(this.characteristics, FOR_CON_KEYS);
+    deriveCharacteristicValues(this.characteristics, FOR_CON_PER_KEYS);
   }
 }
 
 /**
  * Créature. Réf. LdR v0.2 §15 « champs à définir ».
- * Décision Marc 18/10/2026 : FOR, CON, et la blessure standard.
+ * Décision Marc 18/10/2026 : FOR, CON, PER, et la blessure standard.
  *
  * @extends ForConActorData
  */

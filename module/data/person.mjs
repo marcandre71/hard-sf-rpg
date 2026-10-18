@@ -54,7 +54,7 @@ function storedCharacteristicFields(bounds) {
 
 /**
  * Schéma `characteristics` pour les clés demandées.
- * Personnage et PNJ : les neuf. Créature, synthétique, drone : FOR et CON.
+ * Personnage et PNJ : les neuf. Créature, synthétique, drone : FOR, CON et PER.
  *
  * @param {string[]} keys
  * @param {typeof SOL.characteristicFields} bounds
