@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.4.0** : jets de dés sur la feuille du Personnage et du PNJ. Pas d'application des dégâts, pas d'automatisation des origines.
+L'étape en cours est la **0.4.1** : jets de dés sur la feuille du Personnage et du PNJ. Pas d'application des dégâts, pas d'automatisation des origines.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.4.0, compatibilité 14,
+system.json                         Manifeste : id, version 0.4.1, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields pour chaque HTMLField.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,

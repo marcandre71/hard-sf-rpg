@@ -87,9 +87,9 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     die: outcome.die === 100 ? "00" : String(outcome.die).padStart(2, "0"),
     result: game.i18n.localize(resultKey(outcome.critical, outcome.success)),
     resultClass: outcome.critical === "success"
-      ? "critical-success"
+      ? "crit-success"
       : outcome.critical === "failure"
-        ? "critical-failure"
+        ? "crit-failure"
         : outcome.success ? "success" : "failure",
     degreeLabel: outcome.success
       ? game.i18n.localize("SOL.Roll.dr")

@@ -215,12 +215,27 @@
   padding-left: 1.1rem;
 }
 
-.sol-nouvelle-ere.sol-roll-card .sol-roll-critical-success {
-  font-weight: bold;
+/* Décision Marc 18/10/2026 : couleurs du résultat, teintes des critiques à confirmer au test.
+   light-dark suit le color-scheme du thème Foundry (clair ou sombre).
+   L'or #c9a227 est trop pâle sur fond clair : variante plus sombre, même teinte. */
+.sol-nouvelle-ere.sol-roll-card .sol-result.success {
+  color: light-dark(#146c36, #3dce7c);
+  font-weight: 600;
 }
 
-.sol-nouvelle-ere.sol-roll-card .sol-roll-critical-failure {
-  font-weight: bold;
+.sol-nouvelle-ere.sol-roll-card .sol-result.failure {
+  color: light-dark(#b42318, #ff6b63);
+  font-weight: 600;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-result.crit-success {
+  color: light-dark(#6e5410, #c9a227);
+  font-weight: 700;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-result.crit-failure {
+  color: light-dark(#7a1212, #e07070);
+  font-weight: 700;
 }
 
 .sol-nouvelle-ere .sol-slots {

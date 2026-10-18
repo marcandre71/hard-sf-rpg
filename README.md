@@ -12,7 +12,7 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : étape 4 (version 0.4.0)
+## État du système : étape 4 (version 0.4.1)
 
 On avance pas à pas (« ne pas brûler les étapes »). L'étape 3 (feuille à onglets) est validée. Cette étape rend la feuille **interactive** : jet de caractéristique, de compétence et d'arme, avec carte de discussion. Pas d'application des dégâts à une cible (armure, seuil de blessure, blessure créée). L'interface est en français.
 
@@ -44,7 +44,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.4.0.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.4.1.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).

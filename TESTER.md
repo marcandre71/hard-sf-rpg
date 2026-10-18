@@ -1,7 +1,7 @@
 # Tester le système « Sol, Nouvelle Ère » (étape 4)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 10 à 15 minutes.
-Version attendue : **0.4.0**.
+Version attendue : **0.4.1**.
 
 La procédure de l'étape 3 (version 0.3.0, déjà validée) est dans [docs/tests/etape-3.md](docs/tests/etape-3.md).
 
@@ -12,7 +12,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
 3. Téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.4.0**.
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.4.1**.
 5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 ## 2. Jet de caractéristique
@@ -32,7 +32,7 @@ Ouvrez **Ilka Moravec**, onglet **Principal**.
 - **Total** : difficulté + modificateur, jamais en dessous de −50 ni au-dessus de +50.
 - **Score visé** : score + total.
 - **Dé** : deux chiffres. **00** veut dire 100.
-- Le résultat est **Réussite**, **Échec**, **Réussite critique** ou **Échec critique**.
+- Le résultat est **Réussite** (vert), **Échec** (rouge), **Réussite critique** (or) ou **Échec critique** (rouge foncé). Les teintes des critiques sont à confirmer au test.
 - **DR** (degrés de réussite) si ça réussit, **DE** (degrés d'échec) sinon. Un 0 est une réussite de justesse, ou un échec sans gravité.
 
 4. Relancez FOR. Choisissez **Extrême (−40)** et mettez le modificateur à **−20**. Le total affiché doit être **−50** (plafonné), pas −60. Lancez. La carte reprend Extrême, modificateur −20, total −50, et un score visé égal à l'Actuelle moins 50.
@@ -62,7 +62,8 @@ Ouvrez **Cobaye PNJ** (ou créez un acteur **PNJ**). Dans le tableau, mettez la 
 
 ## 6. Liste de contrôle
 
-- [ ] Version **0.4.0**, aucune ligne rouge dans la console.
+- [ ] Version **0.4.1**, aucune ligne rouge dans la console.
+- [ ] La ligne de résultat est verte, rouge, or ou rouge foncé selon le cas. Marc confirme les teintes des critiques.
 - [ ] FOR en Normale envoie une carte lisible. Annuler n'envoie rien.
 - [ ] Extrême et modificateur −20 : total **−50** dans la fenêtre et sur la carte.
 - [ ] Menu de visibilité des jets en bas du chat, mode réservé au MJ : un joueur dans un autre navigateur ne voit pas la carte, ou la carte est marquée comme jet privé (icône ou mention). Un MJ seul la voit toujours.
