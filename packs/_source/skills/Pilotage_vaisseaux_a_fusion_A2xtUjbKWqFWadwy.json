@@ -1,0 +1,32 @@
+{
+  "_id": "A2xtUjbKWqFWadwy",
+  "_key": "!items!A2xtUjbKWqFWadwy",
+  "name": "Pilotage : vaisseaux à fusion",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>piloter un engin spatial ou atmosphérique. Spécialités : petits engins et remorqueurs (dont pousse-rochers) ; navettes et atterrisseurs ; aéronefs atmosphériques (Titan, Vénus, Mars) ; vaisseaux à fusion (impossible sans formation). Les véhicules de surface relèvent de Conduite.</p>",
+    "characteristic": "coo",
+    "training": 0,
+    "trainingRequired": true,
+    "perSpecialty": true,
+    "domain": "espace",
+    "untrainedAllowed": false,
+    "specialty": "vaisseaux à fusion"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

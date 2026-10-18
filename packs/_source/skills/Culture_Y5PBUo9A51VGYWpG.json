@@ -1,0 +1,32 @@
+{
+  "_id": "Y5PBUo9A51VGYWpG",
+  "_key": "!items!Y5PBUo9A51VGYWpG",
+  "name": "Culture",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>une seule compétence, avec un champ libre pour la spécificité du personnage (origine, bloc, communauté, milieu…), sans liste fermée.</p>",
+    "characteristic": "int",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": false,
+    "domain": "savoirs",
+    "untrainedAllowed": true,
+    "specialty": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5000000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "_id": "shzqbEn7U7HEOdXY",
+  "_key": "!items!shzqbEn7U7HEOdXY",
+  "name": "Habitat tournant (station)",
+  "type": "origin",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "characteristicModifiers": "ADA +10, PER +5, FOR -5, CON -5",
+    "gToleranceModifier": -1,
+    "trait": "Réflexes de sécurité : +10 pour détecter une fuite ou une anomalie de pression.",
+    "description": "<p>0,3 à 0,7 g selon l'habitat</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

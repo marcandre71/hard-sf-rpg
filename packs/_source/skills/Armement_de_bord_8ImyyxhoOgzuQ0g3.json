@@ -1,0 +1,31 @@
+{
+  "_id": "8ImyyxhoOgzuQ0g3",
+  "_key": "!items!8ImyyxhoOgzuQ0g3",
+  "name": "Armement de bord",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>utiliser les armes d'un vaisseau. Les règles détaillées figureront dans le futur livre de combat spatial.</p>",
+    "characteristic": "per",
+    "training": 0,
+    "trainingRequired": true,
+    "perSpecialty": false,
+    "domain": "espace",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

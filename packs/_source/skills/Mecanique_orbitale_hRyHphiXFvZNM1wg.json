@@ -1,0 +1,31 @@
+{
+  "_id": "hRyHphiXFvZNM1wg",
+  "_key": "!items!hRyHphiXFvZNM1wg",
+  "name": "Mécanique orbitale",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>calcul de trajectoires, fenêtres de lancement, rendez-vous, gestion du delta-v.</p>",
+    "characteristic": "int",
+    "training": 0,
+    "trainingRequired": true,
+    "perSpecialty": false,
+    "domain": "espace",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

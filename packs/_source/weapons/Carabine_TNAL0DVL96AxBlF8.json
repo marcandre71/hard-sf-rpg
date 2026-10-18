@@ -1,0 +1,26 @@
+{
+  "_id": "TNAL0DVL96AxBlF8",
+  "_key": "!items!TNAL0DVL96AxBlF8",
+  "name": "Carabine",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "skill": "Armes d'épaule",
+    "damage": 10
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

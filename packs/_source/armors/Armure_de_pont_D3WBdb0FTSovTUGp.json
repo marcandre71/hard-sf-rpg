@@ -1,0 +1,33 @@
+{
+  "_id": "D3WBdb0FTSovTUGp",
+  "_key": "!items!D3WBdb0FTSovTUGp",
+  "name": "Armure de pont",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>valeur unique du LdR appliquée à toutes les zones, à affiner par Marc. Pressurisation : à confirmer.</p>",
+    "protection": {
+      "head": 6,
+      "torso": 6,
+      "rightArm": 6,
+      "leftArm": 6,
+      "rightLeg": 6,
+      "leftLeg": 6
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

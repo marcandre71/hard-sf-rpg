@@ -1,0 +1,28 @@
+{
+  "_id": "ZqmsYPaRoPKGuono",
+  "_key": "!items!ZqmsYPaRoPKGuono",
+  "name": "Terre",
+  "type": "origin",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "characteristicModifiers": "FOR +5, CON +10, ADA -10",
+    "gToleranceModifier": 1,
+    "trait": "Supporte toutes les gravités du système, mais souffre du mal de l'espace les premiers jours en apesanteur.",
+    "description": "<p>1 g</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

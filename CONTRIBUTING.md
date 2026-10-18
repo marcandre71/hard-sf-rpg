@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.5.0** : le MJ applique les dégâts d'une attaque, et les compendiums sont déclarés, vides. Pas d'automatisation des origines, ni de l'Endurance.
+L'étape en cours est la **0.5.1** : le MJ applique les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Pas d'automatisation des origines, ni de l'Endurance.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.5.0, compatibilité 14,
+system.json                         Manifeste : id, version 0.5.1, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -46,7 +46,8 @@ module/dice/skill-score.mjs         Score de compétence et nom de compétence d
 module/dice/roll-dialog.mjs         DialogV2 : difficulté, modificateur libre, total borné.
 module/dice/chat.mjs                Roll 1d100, ChatMessage, gabarit templates/chat/roll-card.hbs.
 module/dice/apply-damage.mjs        Bouton MJ, DialogV2, blessure, brèche, carte de résultat.
-packs/                              Compendiums LevelDB vides. Pas de contenu inventé.
+packs/                              Compendiums. JSON dans `_source/`, LevelDB construit à côté.
+packs/build.mjs                     `compilePack` de l'outil officiel, un dossier source à la fois.
 module/guards.mjs                   Hook preCreateItem : refuse un objet interdit, et un
                                     second origin / background / profession sur un personnage
                                     (y compris deux d'un coup dans le même appel).
@@ -232,7 +233,7 @@ Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) 
 
 Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose la condition, poste `templates/chat/damage-card.hbs`. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`. Un double clic est ignoré le temps que la fenêtre est ouverte.
 
-## Compendiums vides (étape 5)
+## Compendiums (étape 5, contenu 0.5.1)
 
 Déclarés dans `system.json`, format v14 [`PackageCompendiumData`](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackageCompendiumData.html) : `name`, `label`, `path`, `type`, `system`. Le `path` est un dossier dont le nom est le `name`. `system` est obligatoire pour les Items ; on le met aussi sur le journal et les tables.
 
@@ -240,26 +241,18 @@ Déclarés dans `system.json`, format v14 [`PackageCompendiumData`](https://foun
 
 [`PackFolderData`](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackFolderData.html) : `name`, `sorting` (`m`), `color`, `packs`, `folders`. Trois dossiers : Objets, Journal, Tables. Les libellés ne passent pas par l'i18n : ils sont déjà en français. Les dossiers ne sont créés qu'une fois par monde : un monde déjà ouvert peut garder l'ancienne disposition tant que le réglage `core.compendiumConfiguration` n'est pas vidé.
 
-Contenu : aucun. Les bases LevelDB vides sont produites par l'outil officiel, pas à la main :
+La source lisible est `packs/_source/<pack>/*.json` (un document par fichier, `_id` stable, `_key` `!items!<id>`). Foundry lit le LevelDB `packs/<pack>/`, produit par l'outil officiel :
 
 ```bash
-npm install @foundryvtt/foundryvtt-cli
-node --input-type=module -e '
-import { compilePack } from "@foundryvtt/foundryvtt-cli";
-import { mkdir } from "node:fs/promises";
-const names = ["skills","talents","origins","backgrounds","professions","weapons","armors","gear","augmentations","substances","software","ship-modules","sequels","universe","tables"];
-for (const name of names) {
-  await mkdir(`packs/src/${name}`, { recursive: true });
-  await compilePack(`packs/src/${name}`, `packs/${name}`);
-}
-'
+npm install --no-save @foundryvtt/foundryvtt-cli
+node packs/build.mjs
 ```
 
-`compilePack` sur un dossier source vide écrit une LevelDB valide et vide. On commit `packs/<name>/` (CURRENT, MANIFEST, les fichiers `.ldb`). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée. On ne commit pas `packs/src/` tant qu'il n'y a pas de documents.
+`packs/build.mjs` appelle `compilePack` pour chaque dossier de `packs/_source`. On commit les JSON et le LevelDB (CURRENT, MANIFEST, `.ldb`, `.log` de la base). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée.
 
-Ajouter un objet (Marc, dans Foundry) : ouvrir le compendium, le déverrouiller (clic droit, ou le cadenas), créer l'objet ou le glisser depuis une fiche, reverrouiller. Les fichiers de `packs/<name>/` changent : ce sont eux qu'on versionne.
+Rempli depuis le LdR v0.2, sans valeur inventée : Compétences (§4, une entrée par spécialité listée), Origines, Milieux, Professions (§9), Armes et Armures (§7). Le texte qui n'a pas de champ va dans `description`. Les champs non écrits restent au défaut du modèle. Vides : Atouts, Équipement, Augmentations, Substances, Logiciels, Modules de vaisseau, Séquelles, Univers et factions, Tables. Les tables du §15 (localisation, séquelles de radiation) ne sont pas créées.
 
-Ajouter un objet (agent, sans Foundry) : un fichier JSON par document dans `packs/src/<name>/`, puis la même commande `compilePack`. Ne pas inventer d'objet tant que Marc n'a pas fourni le contenu. Les tables du LdR §15 (localisation, séquelles de radiation) ne sont pas créées : le pack Tables reste vide.
+Ajouter un objet (Marc, dans Foundry) : ouvrir le compendium, le déverrouiller, créer l'objet ou le glisser, reverrouiller, puis `fvtt package unpack` vers `packs/_source/<pack>` pour que le JSON suive. Ajouter un objet (agent) : un JSON de plus dans `packs/_source/<pack>/`, puis `node packs/build.mjs`. Ne pas inventer un champ que le LdR ne donne pas.
 
 ## Feuille à onglets (étape 3)
 

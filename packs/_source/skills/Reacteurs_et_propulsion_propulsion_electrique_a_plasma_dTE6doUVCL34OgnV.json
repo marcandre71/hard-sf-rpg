@@ -1,0 +1,32 @@
+{
+  "_id": "dTE6doUVCL34OgnV",
+  "_key": "!items!dTE6doUVCL34OgnV",
+  "name": "Réacteurs et propulsion : propulsion électrique à plasma",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>fission, fusion, moteurs. Dangereux à rater. Spécialités : microréacteurs à fission ; nucléaire thermique ; fusion pulsée (fournaise) ; propulsion électrique à plasma.</p>",
+    "characteristic": "int",
+    "training": 0,
+    "trainingRequired": true,
+    "perSpecialty": true,
+    "domain": "technique",
+    "untrainedAllowed": true,
+    "specialty": "propulsion électrique à plasma"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

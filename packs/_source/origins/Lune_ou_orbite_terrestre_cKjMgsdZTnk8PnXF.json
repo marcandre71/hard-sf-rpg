@@ -1,0 +1,29 @@
+{
+  "_id": "cKjMgsdZTnk8PnXF",
+  "_key": "!items!cKjMgsdZTnk8PnXF",
+  "name": "Lune ou orbite terrestre",
+  "type": "origin",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "characteristicModifiers": "COO +5, ADA +5, CON -5",
+    "gToleranceModifier": 0,
+    "culturalSkill": "Culture (Terre) offerte",
+    "trait": "Peut vivre sur Terre après entraînement.",
+    "description": "<p>0,17 g</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

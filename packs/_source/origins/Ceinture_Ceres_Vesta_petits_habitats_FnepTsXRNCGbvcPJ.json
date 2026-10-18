@@ -1,0 +1,28 @@
+{
+  "_id": "FnepTsXRNCGbvcPJ",
+  "_key": "!items!FnepTsXRNCGbvcPJ",
+  "name": "Ceinture (Cérès, Vesta, petits habitats)",
+  "type": "origin",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "characteristicModifiers": "ADA +15, FOR -5, CON -5",
+    "gToleranceModifier": -2,
+    "trait": "Ignore la première pénalité de recul en apesanteur. Ne supporte pas durablement plus de 0,5 g.",
+    "description": "<p>0,03 à 0,5 g</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

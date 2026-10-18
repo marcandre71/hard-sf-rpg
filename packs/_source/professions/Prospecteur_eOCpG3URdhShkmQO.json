@@ -1,0 +1,26 @@
+{
+  "_id": "eOCpG3URdhShkmQO",
+  "_key": "!items!eOCpG3URdhShkmQO",
+  "name": "Prospecteur",
+  "type": "profession",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "careerSkills": "Sciences physiques, Sortie extravéhiculaire, Pilotage, Commerce, Robotique et télépilotage, Mécanique, Survie, Négociation",
+    "description": "<p>3 à +20, 5 à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

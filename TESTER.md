@@ -1,7 +1,7 @@
 # Tester le système « Sol, Nouvelle Ère » (étape 5)
 
 Guide pas à pas, sans connaissances techniques. Durée : environ 15 minutes.
-Version attendue : **0.5.0**.
+Version attendue : **0.5.1**.
 
 La procédure de l'étape 4 (versions 0.4.0 et 0.4.1, déjà validée) est dans [docs/tests/etape-4.md](docs/tests/etape-4.md).
 
@@ -12,7 +12,7 @@ Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À
 1. Fermez Foundry s'il est ouvert.
 2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
 3. Téléchargez le ZIP du dépôt, décompressez-le, et remplacez le contenu de `Data/systems/sol-nouvelle-ere` (le fichier `system.json` doit rester directement dans ce dossier).
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.0**.
+4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.1**.
 5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'ancienne place. Dans la console, collez `game.settings.set("core", "compendiumConfiguration", {})`, validez, puis rechargez la page **deux fois** (attendez la fin du premier rechargement).
@@ -58,13 +58,13 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 
 1. Onglet **Compendiums** (la barre de droite).
 2. Trois dossiers : **Objets**, **Journal**, **Tables**.
-3. Dans Objets : Compétences, Atouts, Origines, Milieux, Professions, Armes, Armures et vêtements, Équipement, Augmentations, Substances, Logiciels, Modules de vaisseau, Séquelles. Tous vides.
-4. Dans Journal : **Univers et factions**, vide.
-5. Dans Tables : **Tables**, vide. Pas de table de localisation ni de séquelles.
+3. **Compétences** contient les compétences du livre, dont **Pilotage : vaisseaux à fusion** et **Médecine : chirurgie**. **Origines** contient **Terre**. **Milieux** en contient six, **Professions** huit.
+4. **Armes** : **Pistolet frangible** (dégâts 6) et **Carabine** (dégâts 10). **Armures et vêtements** : **Combinaison souple**, **Combinaison renforcée**, **Armure de pont**.
+5. Restent vides : Atouts, Équipement, Augmentations, Substances, Logiciels, Modules de vaisseau, Séquelles, **Univers et factions**, **Tables**. Pas de table de localisation ni de séquelles.
 
 ## 8. Liste de contrôle
 
-- [ ] Version **0.5.0**, aucune ligne rouge dans la console.
+- [ ] Version **0.5.1**, aucune ligne rouge dans la console.
 - [ ] Ligne de résultat de la carte : tester en interface claire ET sombre, la ligne doit rester lisible.
 - [ ] Armure pressurisée, torse 3, équipée. Carabine 10 + DR 2, Seuil 7 : nets **9**, **Grave**, brèche **Oui**.
 - [ ] Blessure créée, joints **Percée**, condition **Combinaison percée**.
@@ -72,4 +72,4 @@ Si le monde existait déjà, les dossiers de compendiums peuvent rester à l'anc
 - [ ] **Annuler** n'écrit rien.
 - [ ] Un joueur ne voit pas le bouton **Appliquer les dégâts**.
 - [ ] Une créature est refusée, avec un message clair.
-- [ ] Les compendiums sont visibles, dans leurs dossiers, et vides.
+- [ ] Compétences, origines, milieux, professions, armes et armures contiennent les entrées du livre. Les autres compendiums sont vides.

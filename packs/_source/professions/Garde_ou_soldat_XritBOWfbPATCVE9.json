@@ -1,0 +1,26 @@
+{
+  "_id": "XritBOWfbPATCVE9",
+  "_key": "!items!XritBOWfbPATCVE9",
+  "name": "Garde ou soldat",
+  "type": "profession",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "careerSkills": "Armes d'épaule, Armes de poing, Corps-à-corps, Esquive, Manœuvre en apesanteur, Vigilance, Premiers secours, Commandement",
+    "description": "<p>3 à +20, 5 à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 700000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

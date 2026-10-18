@@ -1,0 +1,28 @@
+{
+  "_id": "Y5xBzHHXSbL03DzW",
+  "_key": "!items!Y5xBzHHXSbL03DzW",
+  "name": "Mars",
+  "type": "origin",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "characteristicModifiers": "CON +5, VOL +5, FOR -5",
+    "gToleranceModifier": -1,
+    "trait": "Ne visite la Terre qu'avec aide médicale. Sens de la rareté : +10 en Systèmes de survie pour économiser l'eau et l'air.",
+    "description": "<p>0,38 g</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

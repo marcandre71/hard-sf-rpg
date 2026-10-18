@@ -1,0 +1,27 @@
+{
+  "_id": "lo6Nw9L7HbHqqjoa",
+  "_key": "!items!lo6Nw9L7HbHqqjoa",
+  "name": "Enfant de la Veille",
+  "type": "background",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "skillBonuses": "Opérations de bord, Bureaucratie et droit, Vigilance",
+    "link": "un parent officier",
+    "description": "<p>3 compétences à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

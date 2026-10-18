@@ -1,0 +1,31 @@
+{
+  "_id": "IgQHgsKI4sI1tmSM",
+  "_key": "!items!IgQHgsKI4sI1tmSM",
+  "name": "Persuasion",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>convaincre, inspirer, séduire.</p>",
+    "characteristic": "pre",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": false,
+    "domain": "relations",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

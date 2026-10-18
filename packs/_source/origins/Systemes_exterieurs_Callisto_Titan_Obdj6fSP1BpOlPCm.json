@@ -1,0 +1,28 @@
+{
+  "_id": "Obdj6fSP1BpOlPCm",
+  "_key": "!items!Obdj6fSP1BpOlPCm",
+  "name": "Systèmes extérieurs (Callisto, Titan)",
+  "type": "origin",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "characteristicModifiers": "VOL +10, CON -5",
+    "gToleranceModifier": -1,
+    "trait": "Habitué à l'isolement : +10 pour résister au stress de la solitude. Dose cumulée de départ plus élevée.",
+    "description": "<p>0,13 à 0,14 g</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

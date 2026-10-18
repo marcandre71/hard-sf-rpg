@@ -1,0 +1,31 @@
+{
+  "_id": "eRglUaK3NlbRErnp",
+  "_key": "!items!eRglUaK3NlbRErnp",
+  "name": "Opérations de bord",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>capteurs, communications, protocoles, gestion de quart.</p>",
+    "characteristic": "int",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": false,
+    "domain": "espace",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 900000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

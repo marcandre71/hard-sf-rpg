@@ -1,0 +1,31 @@
+{
+  "_id": "vfOxTSLb1FtVKkCL",
+  "_key": "!items!vfOxTSLb1FtVKkCL",
+  "name": "Vigilance",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
+    "characteristic": "per",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": false,
+    "domain": "corps",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

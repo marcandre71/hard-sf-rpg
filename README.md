@@ -12,7 +12,7 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : étape 5 (version 0.5.0)
+## État du système : étape 5 (version 0.5.1)
 
 On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. Des compendiums vides sont déclarés. L'interface est en français.
 
@@ -22,7 +22,7 @@ Objets : **Compétence** (`skill`), **Atout** (`talent`), **Origine** (`origin`)
 
 Le Personnage et le PNJ partagent la même feuille et les mêmes champs (caractéristiques, identité, textes). Les autres acteurs gardent une feuille simple, avec leurs objets groupés par type. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
 
-Le Seuil de blessure est calculé au moment d'appliquer des dégâts (pas affiché comme valeur dérivée sur la feuille). Pas encore inclus : tolérance aux g, Endurance, Sang-froid, initiative glissante, autres effets automatiques. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026. Les compendiums existent et sont vides.
+Le Seuil de blessure est calculé au moment d'appliquer des dégâts (pas affiché comme valeur dérivée sur la feuille). Pas encore inclus : tolérance aux g, Endurance, Sang-froid, initiative glissante, autres effets automatiques. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026. Les compendiums de compétences, origines, milieux, professions, armes et armures reprennent le texte explicite du LdR v0.2. Les autres packs restent vides.
 
 Compatibilité : **FoundryVTT version 14** (cible : version 14 Stable, build 369 ; `compatibility.minimum` et `compatibility.verified` = `"14"`).
 
@@ -44,7 +44,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.5.0.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.5.1.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -57,7 +57,7 @@ module/sol.mjs                      point d'entrée (hook « init »)
 module/config.mjs                   caractéristiques, choix, difficultés, objets autorisés
 module/guards.mjs                   refus des objets interdits (preCreateItem)
 module/dice/                        jet D100, application des dégâts (règles pures)
-packs/                              compendiums vides (LevelDB)
+packs/                              compendiums (JSON dans _source, LevelDB construit)
 module/data/                        un modèle par type (base commune des objets)
 module/sheets/character-sheet.mjs   feuille du Personnage
 module/sheets/actor-sheet.mjs       feuille des autres acteurs

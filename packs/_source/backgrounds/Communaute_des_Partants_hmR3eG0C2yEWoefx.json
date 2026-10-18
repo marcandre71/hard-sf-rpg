@@ -1,0 +1,27 @@
+{
+  "_id": "hmR3eG0C2yEWoefx",
+  "_key": "!items!hmR3eG0C2yEWoefx",
+  "name": "Communauté des Partants",
+  "type": "background",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "skillBonuses": "Sciences de la vie, Psychologie, Systèmes de survie",
+    "link": "un vœu prononcé",
+    "description": "<p>3 compétences à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

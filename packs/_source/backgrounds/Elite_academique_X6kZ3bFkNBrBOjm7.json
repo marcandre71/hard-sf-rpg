@@ -1,0 +1,27 @@
+{
+  "_id": "X6kZ3bFkNBrBOjm7",
+  "_key": "!items!X6kZ3bFkNBrBOjm7",
+  "name": "Élite académique",
+  "type": "background",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "skillBonuses": "Sciences (au choix), Langues, Persuasion",
+    "link": "un mentor de Valhalla",
+    "description": "<p>3 compétences à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

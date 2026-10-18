@@ -1,0 +1,31 @@
+{
+  "_id": "AxDPQ0Gf5iTI0FCA",
+  "_key": "!items!AxDPQ0Gf5iTI0FCA",
+  "name": "Conduite",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>rovers, véhicules de surface, engins de chantier, véhicules terrestres et maritimes. Note : certains engins spatiaux pourront être conçus pour se piloter aussi facilement qu'une voiture ; ce détail sera traité plus tard avec les vaisseaux.</p>",
+    "characteristic": "coo",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": false,
+    "domain": "espace",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

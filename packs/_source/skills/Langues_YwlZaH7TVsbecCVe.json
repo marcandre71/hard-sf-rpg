@@ -1,0 +1,32 @@
+{
+  "_id": "YwlZaH7TVsbecCVe",
+  "_key": "!items!YwlZaH7TVsbecCVe",
+  "name": "Langues",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
+    "characteristic": "int",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": true,
+    "domain": "savoirs",
+    "untrainedAllowed": true,
+    "specialty": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

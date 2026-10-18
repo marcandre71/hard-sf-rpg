@@ -1,0 +1,31 @@
+{
+  "_id": "SpVGluVndxPwBfLf",
+  "_key": "!items!SpVGluVndxPwBfLf",
+  "name": "Informatique",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>programmation, intrusion, gestion des greffiers (systèmes spécialisés).</p>",
+    "characteristic": "int",
+    "training": 0,
+    "trainingRequired": false,
+    "perSpecialty": false,
+    "domain": "technique",
+    "untrainedAllowed": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

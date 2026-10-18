@@ -1,0 +1,26 @@
+{
+  "_id": "NQgCFUvv3qsJMrRv",
+  "_key": "!items!NQgCFUvv3qsJMrRv",
+  "name": "Ingénieur",
+  "type": "profession",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "careerSkills": "Mécanique, Électronique, Réacteurs et propulsion, Systèmes de survie, Sortie extravéhiculaire, Informatique, Robotique et télépilotage, Fouille",
+    "description": "<p>3 à +20, 5 à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

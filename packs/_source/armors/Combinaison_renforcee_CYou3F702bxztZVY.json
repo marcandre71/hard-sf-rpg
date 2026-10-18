@@ -1,0 +1,34 @@
+{
+  "_id": "CYou3F702bxztZVY",
+  "_key": "!items!CYou3F702bxztZVY",
+  "name": "Combinaison renforcée",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>valeur unique du LdR appliquée à toutes les zones, à affiner par Marc</p>",
+    "protection": {
+      "head": 3,
+      "torso": 3,
+      "rightArm": 3,
+      "leftArm": 3,
+      "rightLeg": 3,
+      "leftLeg": 3
+    },
+    "pressurized": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

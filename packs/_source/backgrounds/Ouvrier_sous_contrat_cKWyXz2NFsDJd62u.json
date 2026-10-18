@@ -1,0 +1,27 @@
+{
+  "_id": "cKWyXz2NFsDJd62u",
+  "_key": "!items!cKWyXz2NFsDJd62u",
+  "name": "Ouvrier sous contrat",
+  "type": "background",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "skillBonuses": "Mécanique, Systèmes de survie, Corps-à-corps",
+    "link": "un contrat pas encore remboursé",
+    "description": "<p>3 compétences à +10</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}
