@@ -43,6 +43,7 @@ import {
   encodeInitiative,
   flagDeletionUpdate,
   indexAfterRoll,
+  initiativeRollPlan,
   INITIATIVE_FLAG_SCOPE,
   interruptTiming,
   repositionPlacement,
@@ -308,6 +309,10 @@ export class SolCombat extends Combat {
     const batch = list.length > 1 && options.reposition !== true;
     /** @type {object[]} */
     const updates = [];
+    // Figer l'index seulement pour un « se replacer » immédiat.
+    // Un premier jet ne le fait pas : on conserve le combattant actif.
+    let keepIndex = options.updateTurn === false;
+    let preserveActive = false;
     for ( const id of list ) {
       const combatant = this.combatants.get(id);
       if ( !combatant?.isOwner ) continue;
@@ -362,13 +367,18 @@ export class SolCombat extends Combat {
       const order = turnOrder(this);
       const index = order.findIndex(entry => entry.id === id);
       const newIndex = indexAfterRoll(order, id, initiative);
-      // « Se replacer », ou « Relancer » du cœur pendant le round.
       // À confirmer par Marc : effet immédiat ou au round suivant.
-      const likeReposition = options.reposition === true
-        || (this.started === true && list.length === 1);
-      const deferPlace = likeReposition
-        && repositionPlacement(index, newIndex, this.turn) === "defer";
-      if ( deferPlace ) {
+      const plan = initiativeRollPlan({
+        reposition: options.reposition === true,
+        started: this.started === true,
+        alone: list.length === 1,
+        initiative: combatant.initiative,
+        currentIndex: index,
+        newIndex,
+        turn: this.turn,
+        updateTurn: options.updateTurn !== false
+      });
+      if ( plan.defer ) {
         updates.push({
           _id: id,
           [`flags.${SYSTEM_ID}.pendingInitiative`]: { initiative, rank }
@@ -380,20 +390,19 @@ export class SolCombat extends Combat {
           [`flags.${SYSTEM_ID}.rank`]: rank,
           ...withoutFlag("pendingInitiative")
         });
+        if ( plan.keepIndex ) keepIndex = true;
+        if ( plan.preserveActive ) preserveActive = true;
       }
     }
     if ( updates.length ) {
       const wroteInitiative = updates.some(update => Object.prototype.hasOwnProperty.call(update, "initiative"));
-      const likeReposition = options.reposition === true
-        || (this.started === true && list.length === 1);
-      // updateTurn false, ou remplacement immédiat : garder l'index.
-      // Sinon le cœur suit le combattant.
-      const keepIndex = options.updateTurn === false || (likeReposition && wroteInitiative);
+      // « Se replacer » immédiat : figer l'index. Premier jet : non,
+      // le combattant actif est replacé juste après.
       await this.updateEmbeddedDocuments("Combatant", updates, {
         ...(keepIndex ? keepTurn(this) : {}),
         [SYSTEM_WRITE]: true
       });
-      if ( wroteInitiative && !likeReposition && options.updateTurn !== false && previousId ) {
+      if ( wroteInitiative && preserveActive && !keepIndex && previousId ) {
         const turn = this.turns.findIndex(entry => entry.id === previousId);
         if ( turn >= 0 && turn !== this.turn ) await this.update({ turn });
       }

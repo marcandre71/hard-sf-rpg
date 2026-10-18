@@ -12,6 +12,7 @@ import {
   encodeInitiative,
   flagDeletionUpdate,
   indexAfterRoll,
+  initiativeRollPlan,
   INITIATIVE_SUCCESS_BASE,
   interruptTiming,
   repositionPlacement,
@@ -426,6 +427,42 @@ check("se replacer devant l'actif : au round suivant", () => {
   const behind = indexAfterRoll(order, "C", 15);
   assert.equal(behind, 2);
   assert.equal(repositionPlacement(2, behind, 0), "now");
+});
+
+check("premier jet en cours de round, devant l'actif : écrit tout de suite", () => {
+  // A est actif. C vient d'être ajouté, sans initiative, et tire devant A.
+  const order = [
+    { id: "A", initiative: 30 },
+    { id: "B", initiative: 20 },
+    { id: "C", initiative: null }
+  ];
+  const newIndex = indexAfterRoll(order, "C", 40);
+  assert.equal(newIndex, 0);
+  const plan = initiativeRollPlan({
+    started: true,
+    alone: true,
+    initiative: null,
+    currentIndex: 2,
+    newIndex,
+    turn: 0
+  });
+  assert.equal(plan.likeReposition, false);
+  assert.equal(plan.defer, false);
+  assert.equal(plan.writeNow, true);
+  assert.equal(plan.preserveActive, true);
+  assert.equal(plan.keepIndex, false);
+  // Le même jet, s'il avait déjà une initiative, est un « se replacer ».
+  const again = initiativeRollPlan({
+    started: true,
+    alone: true,
+    initiative: 10,
+    currentIndex: 2,
+    newIndex: 0,
+    turn: 0
+  });
+  assert.equal(again.likeReposition, true);
+  assert.equal(again.defer, true);
+  assert.equal(again.writeNow, false);
 });
 
 check("resetAll retire rank, pending, recul et fin d'ordre", () => {

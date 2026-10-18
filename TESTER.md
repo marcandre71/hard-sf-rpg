@@ -1,74 +1,30 @@
-# Tester le système « Sol, Nouvelle Ère » (0.5.8, initiative)
+# Tester le système « Sol, Nouvelle Ère » (0.5.9, initiative)
 
-Guide pas à pas, sans connaissances techniques. Durée : environ 15 minutes.
-Version attendue : **0.5.8**.
+Pour Marc, sans connaissances techniques. Environ 15 minutes.
+Version attendue : **0.5.9**.
 
-La procédure des dégâts (versions 0.5.0 à 0.5.4) est dans [docs/tests/etape-5.md](docs/tests/etape-5.md).
+La procédure des dégâts (0.5.0 à 0.5.4) est dans [docs/tests/etape-5.md](docs/tests/etape-5.md).
 
-Gardez la console ouverte (**F12**, onglet **Console**) pendant tout le test. À la fin, elle ne doit contenir **aucune ligne rouge**. L'erreur ancienne « Unresolved StringTerm undefined » ne doit plus apparaître.
+Gardez la console ouverte (**F12**, onglet **Console**). À la fin : aucune ligne rouge. L'ancienne erreur « Unresolved StringTerm undefined » ne doit plus apparaître.
 
-## 1. Mettre à jour
+## Mettre à jour
 
-1. Fermez Foundry s'il est ouvert.
-2. Le dossier du système doit s'appeler **exactement** `sol-nouvelle-ere`, dans `Data/systems`.
-3. Mettez le dossier à jour (`git pull`, ou remplacez le contenu par le ZIP). Le fichier `system.json` doit rester directement dans ce dossier.
-4. Relancez Foundry (version 14). Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.8**.
-5. Ouvrez votre monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
+1. Fermez Foundry. Le dossier du système s'appelle exactement `sol-nouvelle-ere`, dans `Data/systems`.
+2. Mettez-le à jour (`git pull`, ou remplacez par le ZIP). `system.json` reste directement dans ce dossier.
+3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.5.9**.
+4. Ouvrez le monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
-## 2. Deux combattants
+## Initiative glissante
 
-1. Posez deux jetons : un **Personnage** (PER et RÉF déjà remplies, par exemple Ilka) et un **Synthétique**.
-2. Sélectionnez les deux. Clic droit sur un jeton, bouton des épées : ils entrent dans le combat.
-3. Dans le **Combat Tracker**, lancez l'initiative des **PNJ** seulement (le bouton du tracker qui ne vise pas les joueurs). Une carte **Vigilance** apparaît pour le synthétique. Un avertissement dit qu'il n'a ni Vigilance ni Perception et que le test est à **0**. Pas de ligne rouge. Le personnage n'a pas encore de carte.
-4. Lancez ensuite l'initiative de **tout le monde** (l'autre bouton du tracker). Seul le personnage, qui n'a pas encore lancé, a une carte. La fenêtre de difficulté s'ouvre s'il est seul à lancer : choisissez **Normale**. S'il y en a plusieurs d'un coup, il n'y a pas une fenêtre par personne : c'est **Normale**.
-5. Le personnage en **réussite** est au-dessus du synthétique (échec). Dans le tracker, la case d'initiative affiche le jet, par exemple **2 DR · RÉF 57** ou **3 DE**, pas un grand nombre du genre 1002057. La carte de discussion montre les mêmes DR ou DE. Ce n'est pas un bonus.
-6. Jouer en premier ne change aucun jet suivant : lancez une compétence, le score n'a pas de bonus d'ordre.
-7. Cochez le synthétique comme **caché** dans le tracker, effacez son initiative, et relancez-la. La carte est **chuchotée au MJ** : un joueur ne la voit pas.
+Il faut quatre jetons : un **personnage** (PER et RÉF remplies, par exemple Ilka), un **PNJ**, et **deux synthétiques identiques** (les sbires).
 
-## 3. L'ordre reste
-
-1. Démarrez le combat s'il ne l'est pas, puis passez au **round suivant**.
-2. L'ordre des deux noms est le même. Aucune nouvelle carte de Vigilance.
-
-## 4. Blessure grave, puis Sonné
-
-1. Sur le personnage qui joue en premier : Base de **FOR** à **30**, Base de **CON** à **40** (Origine, acquis et temporaire à 0). Le Seuil vaut **4**.
-2. Armure équipée, protection du **torse** à **6**.
-3. Une arme à **10** dégâts, lancée en réussite, zone **torse**, dégâts affichés **10, 11, 12 ou 13** (DR 0 à 3). Appliquez : la gravité est **Grave**.
-4. Passez au round suivant. Ce personnage est **en bas** de l'ordre, dans le même geste que le nouveau round : il ne redevient pas actif une seconde (pas de « à vous », pas de surbrillance qui saute). Pas de nouveau jet de Vigilance. Le tour en cours reste le premier de la liste. Si c'est un compte **joueur** qui clique, le déplacement a quand même lieu au début du nouveau round, pas un round plus tard. S'il n'y a **aucun MJ connecté**, le déplacement attend qu'un MJ revienne, puis un nouveau changement de round.
-5. Sur l'autre combattant, clic droit sur le jeton, conditions, **Sonné**. Le texte rappelle : pas d'action ce tour, une réaction reste possible. Rien ne bloque le tour : c'est un rappel. Un joueur, ou le second MJ, peut l'ajouter : la fin d'ordre est quand même posée, y compris si Sonné est ajouté à un effet déjà présent.
-6. Passez au round suivant. Le sonné passe **en bas**. Les autres ne bougent pas entre eux.
-
-## 5. Interrompu, et se replacer
-
-Il faut au moins trois combattants, et le combat **démarré**. Avant le début, **Se replacer** n'est pas dans le menu.
-
-1. Le premier est en surbrillance. Clic droit sur un combattant **plus bas, qui n'a pas encore joué** et qui n'est pas le dernier. **Interrompu : recule d'une place**. Il échange tout de suite avec le suivant. La surbrillance reste sur la même personne. Pas de carte de dés. S'il partage déjà son nombre avec ceux au-dessus, ceux-là ne bougent pas : seul le suivant prend sa place.
-2. Clic droit sur la personne **en surbrillance** (ou sur quelqu'un au-dessus, déjà joué). **Interrompu**. L'ordre ne change pas tout de suite. Passez au round suivant : il a reculé d'une place. Personne n'a sauté son tour, et personne n'a rejoué.
-3. **Se replacer** (MJ, ou le joueur propriétaire) sur quelqu'un **qui n'a pas encore joué**. La fenêtre de Vigilance s'ouvre. La carte dit que **l'action de ce tour est sacrifiée**. S'il reste **derrière** la personne en surbrillance, sa place suit le nouveau jet tout de suite et la surbrillance ne change pas. S'il passe **devant** elle (ou à sa place), l'ordre ne change pas ce round : au round suivant il prend sa place, et personne ne rejoue. **Relancer** du menu du cœur, pendant le round, suit la même règle.
-4. **Se replacer** sur la personne **en surbrillance**, ou sur quelqu'un **déjà joué** (au-dessus). La carte apparaît, l'ordre **ne change pas** ce round. Passez au round suivant : il prend la place du nouveau jet. Personne ne rejoue, personne n'est sauté.
-5. Sur le **dernier** de la liste, **Interrompu** ne change rien.
-6. **Effacer l'initiative** d'une ligne qui affiche « 2 DR » : le libellé disparaît, le bouton de dé revient. Si le MJ tape un nombre à la main dans la case, l'ancien « 2 DR » disparaît aussi. **Réinitialiser les initiatives** (le bouton du tracker) retire aussi un jet en attente : au round suivant, l'ancienne place ne revient pas.
-7. Avec **deux MJ**, le second (pas celui qui a la main) voit **Interrompu** et ça recule bien. Une blessure grave appliquée par ce second MJ envoie quand même en fin d'ordre au round suivant.
-
-## 6. Véhicule
-
-1. Posez un **Véhicule** et ajoutez-le au combat.
-2. Lancez son initiative (le dé sur sa ligne). Un avertissement dit qu'il ne peut pas. Pas de ligne rouge, pas de nombre d'initiative.
-
-## 7. Liste de contrôle
-
-- [ ] Version **0.5.8**, aucune ligne rouge. Plus d'erreur « StringTerm undefined ».
-- [ ] Personnage, PNJ, créature, synthétique et drone peuvent lancer. Véhicule et vaisseau : avertissement, pas de plantage.
-- [ ] Carte de Vigilance. Réussites au-dessus des échecs. Le tracker affiche « 2 DR · RÉF 57 » ou « 3 DE », pas le code de tri. Pas de bonus.
-- [ ] Un PNJ caché : la carte est chuchotée au MJ.
-- [ ] Round suivant : même ordre, pas de nouveau jet.
-- [ ] Blessure grave (ou pire) : en bas au début du round suivant, même si c'est un joueur qui change de round. **Sonné** : pareil, et le tour n'est pas bloqué.
-- [ ] **Interrompu** sur quelqu'un qui n'a pas encore joué : tout de suite, la surbrillance ne bouge pas. Sur l'actif ou un déjà joué : au round suivant, sans tour sauté ni rejoué.
-- [ ] **Se replacer** seulement une fois le combat démarré (propriétaire ou MJ). La carte rappelle l'action sacrifiée. Pas encore joué et toujours derrière l'actif : tout de suite, la surbrillance ne bouge pas. Devant l'actif, ou déjà joué : au round suivant, sans tour sauté ni rejoué. **Relancer** du cœur pendant le round : pareil.
-- [ ] Deux personnes à égalité : interrompre la seconde ne fait pas remonter le suivant devant les précédents.
-- [ ] Réinitialiser les initiatives retire le libellé et un jet en attente.
-- [ ] Sans MJ connecté, un déplacement reporté attend son retour.
-- [ ] Effacer l'initiative, ou taper un nombre à la main, retire le libellé « 2 DR » et le bouton de dé revient si la case est vide.
-- [ ] Un second MJ peut interrompre, et sa blessure grave pose la fin d'ordre.
-- [ ] « Tout lancer » et « lancer les PNJ » posent des cartes, sans erreur rouge.
+1. Sélectionnez les quatre. Clic droit, bouton des épées : ils entrent dans le combat.
+2. Dans le Combat Tracker, **Tout lancer**. Une carte **Vigilance** par personne. Les sbires préviennent qu'ils n'ont ni Vigilance ni Perception et que le test est à **0**. Pas une fenêtre par personne : difficulté **Normale**. Pas de ligne rouge.
+3. Le tracker affiche le jet, par exemple **2 DR · RÉF 57** ou **3 DE**, pas un grand nombre du genre 1002057. Une réussite est au-dessus d'un échec. Ce n'est pas un bonus : une compétence lancée ensuite n'en gagne pas.
+4. Démarrez le combat. Passez au **round 2**. Le même ordre. Aucune nouvelle carte de Vigilance.
+5. Sur celui qui joue en premier : Base de **FOR** à **30**, Base de **CON** à **40**. Le Seuil vaut **4**. Armure équipée, torse à **6**. Une arme à **10** dégâts, réussite, zone **torse**. Appliquez : gravité **Grave**. Round suivant : il est **en bas**. Pas de nouveau jet. La surbrillance reste sur le premier de la liste.
+6. Sur un autre, clic droit sur le jeton, conditions, **Sonné**. Le texte rappelle qu'il ne joue pas d'action, une réaction reste possible. Rien ne bloque le tour. Round suivant : le sonné passe **en bas**.
+7. **Interrompu** (clic droit dans le tracker) sur quelqu'un qui n'a pas encore joué et qui n'est pas dernier : il échange tout de suite avec le suivant. La surbrillance ne change pas de personne. **Interrompu** sur la personne en surbrillance : l'ordre ne change pas ce round. Au round suivant, elle a reculé d'une place. Personne ne rejoue, personne n'est sauté.
+8. **Se replacer** (combat déjà démarré, propriétaire ou MJ). La carte dit que l'action de ce tour est sacrifiée. S'il reste derrière la surbrillance, sa place change tout de suite. S'il passe devant, l'ordre attend le round suivant.
+9. **Relancer**, le **d20**, ou **Tout lancer** sur quelqu'un qui a **déjà** un libellé « 2 DR · RÉF 57 » : même règle que Se replacer. Effet immédiat ou au round suivant : à confirmer. Quelqu'un **ajouté en cours de round**, qui n'a encore aucune initiative : son premier jet s'écrit tout de suite, même s'il passe devant. La personne en surbrillance garde le tour. Le d20 ne reste pas affiché.
+10. Cochez le PNJ comme **caché**, **Effacer l'initiative**, relancez-la. La carte est **chuchotée au MJ** : un joueur ne la voit pas. Le libellé « 2 DR » a disparu tant que la case est vide, et le bouton de dé est revenu.

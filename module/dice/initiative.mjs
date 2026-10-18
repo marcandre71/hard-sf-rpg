@@ -209,6 +209,52 @@ export function repositionPlacement(currentIndex, newIndex, turn) {
   return newIndex <= turn ? "defer" : "now";
 }
 
+/**
+ * Un jet pendant le round suit-il « se replacer ».
+ * Le premier jet (initiative encore vide) n'en fait pas partie :
+ * « Lancer les PNJ » ou « Tout lancer » quand il n'en reste qu'un,
+ * ou un combattant qui arrive en cours de round.
+ * « Relancer », le d20 et « Tout lancer » sur quelqu'un qui a déjà
+ * une initiative : oui.
+ * // À confirmer par Marc : effet immédiat ou au round suivant.
+ *
+ * @param {{ reposition?: boolean, started?: boolean, alone?: boolean, initiative?: number|null }} input
+ * @returns {boolean}
+ */
+export function isLikeReposition({ reposition = false, started = false, alone = false, initiative = null } = {}) {
+  return reposition === true
+    || (started === true && alone === true && Number.isFinite(initiative));
+}
+
+/**
+ * Écriture d'un jet, et ce qu'il faut faire du tour actif.
+ * Premier jet : initiative écrite tout de suite, combattant actif conservé
+ * (`preserveActive`, pas l'index numérique : sinon il prend le tour).
+ * « Se replacer » immédiat : `keepIndex` fige l'index.
+ *
+ * @param {{ reposition?: boolean, started?: boolean, alone?: boolean, initiative?: number|null, currentIndex?: number, newIndex?: number, turn?: number|null, updateTurn?: boolean }} input
+ * @returns {{ likeReposition: boolean, defer: boolean, writeNow: boolean, keepIndex: boolean, preserveActive: boolean }}
+ */
+export function initiativeRollPlan({
+  reposition = false,
+  started = false,
+  alone = false,
+  initiative = null,
+  currentIndex = -1,
+  newIndex = -1,
+  turn = null,
+  updateTurn = true
+} = {}) {
+  const likeReposition = isLikeReposition({ reposition, started, alone, initiative });
+  const defer = likeReposition
+    && repositionPlacement(currentIndex, newIndex, turn) === "defer";
+  const writeNow = !defer;
+  const firstRoll = !Number.isFinite(initiative);
+  const keepIndex = updateTurn === false || (writeNow && likeReposition);
+  const preserveActive = writeNow && firstRoll && updateTurn !== false && !keepIndex;
+  return { likeReposition, defer, writeNow, keepIndex, preserveActive };
+}
+
 /** Portée des drapeaux d'initiative sur le combattant. */
 export const INITIATIVE_FLAG_SCOPE = "sol-nouvelle-ere";
 
