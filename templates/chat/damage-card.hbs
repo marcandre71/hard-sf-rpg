@@ -1,0 +1,19 @@
+{{!--
+  Résultat d'une application de dégâts. Les valeurs sont déjà traduites
+  dans module/dice/apply-damage.mjs. Réf. LdR v0.2 §7.
+--}}
+<article class="sol-nouvelle-ere sol-roll-card sol-damage-card">
+  <h4 class="sol-roll-title">{{name}}</h4>
+  <ul class="sol-roll-lines">
+    <li>{{localize "SOL.Damage.zone"}} : {{zone}}</li>
+    <li>{{localize "SOL.Damage.net"}} : {{net}}</li>
+    <li>{{localize "SOL.Damage.severity"}} : {{severity}}</li>
+    <li>{{localize "SOL.Damage.breach"}} : {{breach}}</li>
+  </ul>
+  {{#each reminders}}
+  <p class="sol-damage-remind">{{this}}</p>
+  {{/each}}
+  {{#if followupLabel}}
+  <button type="button" data-action="sol-roll-followup">{{followupLabel}}</button>
+  {{/if}}
+</article>

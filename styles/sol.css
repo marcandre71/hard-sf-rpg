@@ -238,6 +238,31 @@
   font-weight: 700;
 }
 
+.sol-nouvelle-ere.sol-roll-card button {
+  margin-top: 0.4rem;
+}
+
+.sol-nouvelle-ere.sol-roll-card .sol-damage-remind {
+  margin: 0.25rem 0 0;
+}
+
+.sol-nouvelle-ere.sol-damage-dialog .sol-damage-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sol-nouvelle-ere.sol-damage-dialog table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sol-nouvelle-ere.sol-damage-dialog th,
+.sol-nouvelle-ere.sol-damage-dialog td {
+  text-align: left;
+  padding: 0.2rem 0.35rem;
+}
+
 .sol-nouvelle-ere .sol-slots {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

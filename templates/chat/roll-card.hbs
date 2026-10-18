@@ -1,8 +1,8 @@
 {{!--
   Carte de jet D100. Les textes sont déjà traduits dans module/dice/chat.mjs
   (résultat, zone). Les libellés de ligne passent par localize.
-  Pas d'armure, pas de Seuil de blessure, pas de Blessure créée.
-  Réf. LdR v0.2 §2 et §7.
+  Réf. LdR v0.2 §2 et §7. Le bouton n'est là que si les drapeaux
+  d'attaque existent : les cartes de l'étape 4 n'en ont pas.
 --}}
 <article class="sol-nouvelle-ere sol-roll-card">
   <h4 class="sol-roll-title">{{label}}</h4>
@@ -22,5 +22,8 @@
   </ul>
   {{#if chooseZone}}
   <p class="sol-roll-choose">{{localize "SOL.Roll.chooseZone"}}</p>
+  {{/if}}
+  {{#if canApply}}
+  <button type="button" data-action="sol-apply-damage">{{localize "SOL.Damage.apply"}}</button>
   {{/if}}
 </article>

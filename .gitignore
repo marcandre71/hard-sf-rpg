@@ -11,3 +11,10 @@ dist/
 
 # Journaux
 *.log
+# Les compendiums LevelDB ont un fichier 000003.log : ce n'est pas un journal texte.
+!packs/**/*.log
+
+# Verrous LevelDB, recréés par Foundry à l'ouverture d'un compendium.
+packs/**/LOCK
+packs/**/LOG
+packs/**/LOG.old

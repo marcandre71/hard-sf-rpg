@@ -2,8 +2,8 @@
  * Lance un D100 et poste la carte de discussion.
  *
  * Réf. LdR v0.2 §2, §7 et §15. Pas de ressource narrative, pas de relance
- * (LdR v0.2 §7). Étape suivante, pas ici : armure de la zone, Seuil de
- * blessure, création d'une Blessure, condition « Combinaison percée ».
+ * (LdR v0.2 §7). L'application des dégâts est dans `apply-damage.mjs` :
+ * elle lit les drapeaux posés ici.
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.dice.Roll.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.ChatMessage.html
@@ -97,7 +97,8 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     degree: outcome.success ? outcome.dr : outcome.de,
     location: "",
     damage: null,
-    chooseZone: false
+    chooseZone: false,
+    canApply: false
   };
 
   /** @type {string|null} */
@@ -107,12 +108,14 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
     card.location = game.i18n.localize(SOL.bodyLocations[locationKey]);
     // Réf. LdR v0.2 §7 : dégâts fixes de l'arme + DR. Pas de dé de dégâts.
     card.damage = Number(weapon.system.damage ?? 0) + outcome.dr;
-    // Décision Marc 18/10/2026 : texte seulement, pas de choix de zone.
+    // Décision Marc 18/10/2026 : texte seulement. Le choix de zone est
+    // dans la fenêtre d'application, réservée au MJ.
     if ( outcome.critical === "success" ) card.chooseZone = true;
+    card.canApply = Number.isFinite(card.damage);
   }
 
   const content = await foundry.applications.handlebars.renderTemplate(CARD, card);
-  // flags : l'étape suivante lira la zone et les dégâts sans reparser la carte.
+  // flags : apply-damage.mjs lit la zone et les dégâts sans reparser la carte.
   const messageData = applyClientVisibility({
     speaker: ChatMessage.getSpeaker({ actor }),
     rolls: [roll],
@@ -128,7 +131,9 @@ export async function performRoll({ actor, label, score, weapon = null, type = "
         dr: outcome.dr,
         de: outcome.de,
         location: locationKey,
-        damage: card.damage
+        // Dégâts de l'arme + DR. L'étape d'application s'en sert tels quels.
+        damage: card.damage,
+        label
       }
     }
   });

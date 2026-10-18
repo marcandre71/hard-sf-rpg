@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 4 : jets de dés sur la feuille.",
-  "version": "0.4.1",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. Étape 5 : application des dégâts et compendiums vides.",
+  "version": "0.5.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -101,6 +101,150 @@
     "distance": 1,
     "units": "m"
   },
+  "packs": [
+    {
+      "name": "skills",
+      "label": "Compétences",
+      "path": "packs/skills",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "talents",
+      "label": "Atouts",
+      "path": "packs/talents",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "origins",
+      "label": "Origines",
+      "path": "packs/origins",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "backgrounds",
+      "label": "Milieux",
+      "path": "packs/backgrounds",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "professions",
+      "label": "Professions",
+      "path": "packs/professions",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "weapons",
+      "label": "Armes",
+      "path": "packs/weapons",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "armors",
+      "label": "Armures et vêtements",
+      "path": "packs/armors",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "gear",
+      "label": "Équipement",
+      "path": "packs/gear",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "augmentations",
+      "label": "Augmentations",
+      "path": "packs/augmentations",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "substances",
+      "label": "Substances",
+      "path": "packs/substances",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "software",
+      "label": "Logiciels",
+      "path": "packs/software",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "ship-modules",
+      "label": "Modules de vaisseau",
+      "path": "packs/ship-modules",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "sequels",
+      "label": "Séquelles",
+      "path": "packs/sequels",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "universe",
+      "label": "Univers et factions",
+      "path": "packs/universe",
+      "type": "JournalEntry",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "tables",
+      "label": "Tables",
+      "path": "packs/tables",
+      "type": "RollTable",
+      "system": "sol-nouvelle-ere"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Objets",
+      "sorting": "m",
+      "color": "#3d5a4c",
+      "packs": [
+        "skills",
+        "talents",
+        "origins",
+        "backgrounds",
+        "professions",
+        "weapons",
+        "armors",
+        "gear",
+        "augmentations",
+        "substances",
+        "software",
+        "ship-modules",
+        "sequels"
+      ],
+      "folders": []
+    },
+    {
+      "name": "Journal",
+      "sorting": "m",
+      "color": "#3d4f6b",
+      "packs": ["universe"],
+      "folders": []
+    },
+    {
+      "name": "Tables",
+      "sorting": "m",
+      "color": "#6b5340",
+      "packs": ["tables"],
+      "folders": []
+    }
+  ],
   "socket": false,
   "flags": {
     "hotReload": {

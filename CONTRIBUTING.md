@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.4.1** : jets de dés sur la feuille du Personnage et du PNJ. Pas d'application des dégâts, pas d'automatisation des origines.
+L'étape en cours est la **0.5.0** : le MJ applique les dégâts d'une attaque, et les compendiums sont déclarés, vides. Pas d'automatisation des origines, ni de l'Endurance.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,7 +16,7 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre (ne pas les ajouter) : valeurs dérivées autres que l'Actuelle des caractéristiques et le score de compétence (seuil de blessure, tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), application d'une attaque (armure, création de Blessure), initiative glissante, Active Effects, compendiums, automation des origines. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
+Hors périmètre (ne pas les ajouter) : valeurs dérivées affichées sur la feuille autres que l'Actuelle des caractéristiques et le score de compétence (tolérance aux g, Endurance, Sang-froid, encombrement, mouvement), initiative glissante, Active Effects autres que la condition « Combinaison percée », automation des origines. Le Seuil de blessure n'est pas une colonne de la feuille : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
 
 ## Où sont les règles du jeu
 
@@ -29,9 +29,9 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.4.1, compatibilité 14,
+system.json                         Manifeste : id, version 0.5.0, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
-                                    documentTypes avec htmlFields pour chaque HTMLField.
+                                    documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
                                     retrait des feuilles V1 du cœur, registerSheet, garde-fou.
 module/config.mjs                   Caractéristiques, characteristicFields (base max 60 ;
@@ -41,9 +41,12 @@ module/config.mjs                   Caractéristiques, characteristicFields (bas
                                     choix d'énumération, actorTypes, itemTypes,
                                     allowedItems, uniqueOnCharacter, uniqueItemActors.
 module/dice/d100.mjs                Règles du D100, sans Foundry. Test : tests/d100.test.mjs.
+module/dice/damage.mjs              Dégâts, Seuil, gravité, brèche. Test : tests/damage.test.mjs.
 module/dice/skill-score.mjs         Score de compétence et nom de compétence d'une arme.
 module/dice/roll-dialog.mjs         DialogV2 : difficulté, modificateur libre, total borné.
 module/dice/chat.mjs                Roll 1d100, ChatMessage, gabarit templates/chat/roll-card.hbs.
+module/dice/apply-damage.mjs        Bouton MJ, DialogV2, blessure, brèche, carte de résultat.
+packs/                              Compendiums LevelDB vides. Pas de contenu inventé.
 module/guards.mjs                   Hook preCreateItem : refuse un objet interdit, et un
                                     second origin / background / profession sur un personnage
                                     (y compris deux d'un coup dans le même appel).
@@ -180,16 +183,20 @@ node --check module/dice/d100.mjs
 node --check module/dice/skill-score.mjs
 node --check module/dice/roll-dialog.mjs
 node --check module/dice/chat.mjs
+node --check module/dice/damage.mjs
+node --check module/dice/apply-damage.mjs
 node --check tests/models.test.mjs
 node --check tests/d100.test.mjs
+node --check tests/damage.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
 node tests/d100.test.mjs
+node tests/damage.test.mjs
 node tests/models.test.mjs
 ```
 
 `tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts (`validate()` doit renvoyer `true`), avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Si `FOUNDRY_PATH` est défini mais que le code commun ne se charge pas, le script s'arrête avec le code 1. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.
 
-Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md), l'étape 3 dans [docs/tests/etape-3.md](docs/tests/etape-3.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
+Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/tests/etape-2.md](docs/tests/etape-2.md), l'étape 3 dans [docs/tests/etape-3.md](docs/tests/etape-3.md), l'étape 4 dans [docs/tests/etape-4.md](docs/tests/etape-4.md). Le message `Sol, Nouvelle Ère | Initialisation du système` confirme que `module/sol.mjs` a tourné.
 
 ## Jets (étape 4)
 
@@ -201,13 +208,58 @@ Difficultés : `SOL.difficulties`, défaut `normal`. Le total difficulté + modi
 
 Décision Marc 18/10/2026 : 18 % de critiques par jet (01–05, 96–00, doubles 11–88), voulu.
 
-Arme : `weapon.system.skill` est le nom d'une compétence de l'acteur (casse ignorée). Sinon `SOL.weaponSkillDefaults` (Armes de poing et d'épaule → COO, Corps-à-corps → FOR), et ces compétences ne sont pas (F). Nom inconnu : avertissement, pas de jet. Le dé n'est affiché que si `equipped` est vrai. Réussite : localisation par inversion des chiffres, dégâts = dégâts de l'arme + DR. Réussite critique : le texte « la zone peut être choisie », sans interface pour la choisir. Décision Marc 18/10/2026. Pas d'armure ni de Blessure à cette étape.
+Arme : `weapon.system.skill` est le nom d'une compétence de l'acteur (casse ignorée). Sinon `SOL.weaponSkillDefaults` (Armes de poing et d'épaule → COO, Corps-à-corps → FOR), et ces compétences ne sont pas (F). Nom inconnu : avertissement, pas de jet. Le dé n'est affiché que si `equipped` est vrai. Réussite : localisation par inversion des chiffres, dégâts = dégâts de l'arme + DR. Réussite critique : le texte « la zone peut être choisie ». Décision Marc 18/10/2026. Le choix se fait dans la fenêtre d'application, pas sur la carte.
 
-`performRoll` (`chat.mjs`) ouvre `DialogV2.wait`. Annuler ne lance pas le dé. Le modificateur libre est un entier (`step="1"`, `Math.trunc`). Décision Marc 18/10/2026. Le dé est `new Roll("1d100")`, puis `ChatMessage.create` avec `rolls`, `sound: CONFIG.sounds.dice`, `ChatMessage.getSpeaker({ actor })` et `flags["sol-nouvelle-ere"]` (type, score visé, dé, réussite, critique, DR, DE, zone, dégâts). Le gabarit est `templates/chat/roll-card.hbs`.
+`performRoll` (`chat.mjs`) ouvre `DialogV2.wait`. Annuler ne lance pas le dé. Le modificateur libre est un entier (`step="1"`, `Math.trunc`). Décision Marc 18/10/2026. Le dé est `new Roll("1d100")`, puis `ChatMessage.create` avec `rolls`, `sound: CONFIG.sounds.dice`, `ChatMessage.getSpeaker({ actor })` et `flags["sol-nouvelle-ere"]` (type, score visé, dé, réussite, critique, DR, DE, zone, dégâts = arme + DR, libellé). Le gabarit est `templates/chat/roll-card.hbs`. Une réussite d'arme y ajoute le bouton « Appliquer les dégâts ». Les cartes déjà postées en 0.4 n'ont pas ces drapeaux dans le HTML : pas de bouton.
 
 Visibilité (foundryvtt#8856) : en v14 le réglage client est `core.messageMode`. On appelle `ChatMessage.applyMode(data)` sans mode (il modifie `data`) et on garde cet objet, sans utiliser la valeur renvoyée. `game.settings.get("core", "rollMode")` lève, le réglage n'est plus enregistré. En v13, si `applyMode` est absent et que `game.settings.settings.has("core.rollMode")`, on appelle `ChatMessage.applyRollMode` de la même façon.
 
 Pour ajouter un type de jet : calculer un score (helper existant, ou nouveau fichier sans Foundry s'il y a une formule), ajouter un bouton `data-action`, appeler `performRoll`. Une difficulté nouvelle se déclare dans `SOL.difficulties` et `lang/fr.json`, pas dans le gabarit. Une ligne nouvelle sur la carte se prépare dans `chat.mjs` et s'affiche dans `roll-card.hbs`. Ne pas dupliquer `resolveD100`.
+
+## Dégâts (étape 5)
+
+`module/dice/damage.mjs` ne charge pas Foundry. `tests/damage.test.mjs` se lance avec `node` seul. Réf. LdR v0.2 §7.
+
+Dégâts nets = (dégâts de l'arme + DR) − somme des `protection[zone]` des armures **équipées**. Décision Marc 18/10/2026 : nets ≤ 0, ni blessure ni brèche. À confirmer par Marc : les couches s'additionnent. Aucun acteur n'a d'armure par zone hors objets `armor` (vérifié : Personnage, PNJ, Créature, Synthétique, Drone).
+
+Seuil = `ceil((FOR + CON) / 10)` sur les valeurs actuelles. Seuls Personnage et PNJ ont ces caractéristiques. Créature, synthétique et drone peuvent porter une blessure (`allowedItems`) mais n'ont pas de Seuil : l'application est refusée, avec un avertissement, rien n'est écrit. À confirmer par Marc : un Seuil inférieur à 1 est aussi refusé.
+
+Gravité : < SB légère (−10), SB à 2 SB − 1 grave (−20, `bleeding`), 2 SB à 3 SB − 1 critique, ≥ 3 SB mortelle. À confirmer par Marc : critique et mortelle ont une pénalité 0, et la conséquence est écrite dans `description`.
+
+Brèche : une blessure (nets > 0) qui traverse une armure équipée `pressurized` couvrant la zone. À confirmer par Marc : la zone est couverte dès que la clé existe, y compris à 0. `sealState` passe à `breached`. La condition `sol-nouvelle-ere.suitBreach` est enregistrée dans `CONFIG.statusEffects` (`name` français, `img` = `icons/svg/hazard.svg`, icône du cœur). Pas d'horloge de décompression. La tête suit la même règle, sans second mécanisme.
+
+Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) sont du texte sur la carte de résultat. Rien n'est automatisé, ni l'Endurance, ni l'initiative. À confirmer par Marc : le rappel « réserve d'air » n'apparaît que si une blessure est créée.
+
+Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose la condition, poste `templates/chat/damage-card.hbs`. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`. Un double clic est ignoré le temps que la fenêtre est ouverte.
+
+## Compendiums vides (étape 5)
+
+Déclarés dans `system.json`, format v14 [`PackageCompendiumData`](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackageCompendiumData.html) : `name`, `label`, `path`, `type`, `system`. Le `path` est un dossier dont le nom est le `name`. `system` est obligatoire pour les Items ; on le met aussi sur le journal et les tables.
+
+`ownership` n'est pas un champ de cette interface v14. La visibilité est le défaut du cœur (joueur : Observer, le pack est visible). On ne l'invente pas dans le manifeste. Le MJ peut la changer ensuite par le menu du compendium (`CompendiumCollection#configure`).
+
+[`PackFolderData`](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackFolderData.html) : `name`, `sorting` (`m`), `color`, `packs`, `folders`. Trois dossiers : Objets, Journal, Tables. Les libellés ne passent pas par l'i18n : ils sont déjà en français. Les dossiers ne sont créés qu'une fois par monde : un monde déjà ouvert peut garder l'ancienne disposition tant que le réglage `core.compendiumConfiguration` n'est pas vidé.
+
+Contenu : aucun. Les bases LevelDB vides sont produites par l'outil officiel, pas à la main :
+
+```bash
+npm install @foundryvtt/foundryvtt-cli
+node --input-type=module -e '
+import { compilePack } from "@foundryvtt/foundryvtt-cli";
+import { mkdir } from "node:fs/promises";
+const names = ["skills","talents","origins","backgrounds","professions","weapons","armors","gear","augmentations","substances","software","ship-modules","sequels","universe","tables"];
+for (const name of names) {
+  await mkdir(`packs/src/${name}`, { recursive: true });
+  await compilePack(`packs/src/${name}`, `packs/${name}`);
+}
+'
+```
+
+`compilePack` sur un dossier source vide écrit une LevelDB valide et vide. On commit `packs/<name>/` (CURRENT, MANIFEST, les fichiers `.ldb`). On ne commit pas `LOCK`, `LOG`, `LOG.old` (voir `.gitignore`) : Foundry les recrée. On ne commit pas `packs/src/` tant qu'il n'y a pas de documents.
+
+Ajouter un objet (Marc, dans Foundry) : ouvrir le compendium, le déverrouiller (clic droit, ou le cadenas), créer l'objet ou le glisser depuis une fiche, reverrouiller. Les fichiers de `packs/<name>/` changent : ce sont eux qu'on versionne.
+
+Ajouter un objet (agent, sans Foundry) : un fichier JSON par document dans `packs/src/<name>/`, puis la même commande `compilePack`. Ne pas inventer d'objet tant que Marc n'a pas fourni le contenu. Les tables du LdR §15 (localisation, séquelles de radiation) ne sont pas créées : le pack Tables reste vide.
 
 ## Feuille à onglets (étape 3)
 
@@ -225,9 +277,12 @@ Documentation officielle, version 14 :
 - [formGroup](https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.formGroup.html)
 - [Actors.registerSheet](https://foundryvtt.com/api/v14/classes/foundry.documents.collections.Actors.html#registerSheet) / `unregisterSheet` (feuilles V1 : `foundry.appv1.sheets.ActorSheet` et `ItemSheet`)
 - [Hooks](https://foundryvtt.com/api/v14/classes/foundry.helpers.Hooks.html) — `init`, `preCreateItem`
-- [DialogV2.wait](https://foundryvtt.com/api/v14/classes/foundry.applications.api.DialogV2.html) — fenêtre de jet
+- [DialogV2.wait](https://foundryvtt.com/api/v14/classes/foundry.applications.api.DialogV2.html) — fenêtre de jet et fenêtre d'application
 - [Roll](https://foundryvtt.com/api/v14/classes/foundry.dice.Roll.html) — `new Roll("1d100")`, `evaluate`
-- [ChatMessage](https://foundryvtt.com/api/v14/classes/foundry.documents.ChatMessage.html) — `create`, `getSpeaker`, `applyMode`
+- [ChatMessage](https://foundryvtt.com/api/v14/classes/foundry.documents.ChatMessage.html) — `create`, `getSpeaker`, `applyMode`, `getFlag`
+- [renderChatMessageHTML](https://foundryvtt.com/api/v14/functions/hookEvents.renderChatMessageHTML.html)
+- [statusEffects](https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html) et [toggleStatusEffect](https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect)
+- [PackageCompendiumData](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackageCompendiumData.html) et [PackFolderData](https://foundryvtt.com/api/v14/interfaces/foundry.packages.types.PackFolderData.html)
 - [renderTemplate](https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.renderTemplate.html)
 
 Articles utiles : [System Data Models](https://foundryvtt.com/article/system-data-models/), [Localization](https://foundryvtt.com/article/localization/).

@@ -187,6 +187,54 @@
       "unknownSkill": "Aucune compétence « {name} » sur cette fiche, et ce nom n'est pas une arme de poing, d'épaule ou de corps-à-corps.",
       "noWeaponSkill": "Arme sans compétence."
     },
+    "Status": {
+      "suitBreach": "Combinaison percée"
+    },
+    "Damage": {
+      "apply": "Appliquer les dégâts",
+      "confirm": "Appliquer",
+      "cancel": "Annuler",
+      "title": "Appliquer les dégâts",
+      "target": "Cible",
+      "zone": "Zone",
+      "gross": "Dégâts bruts",
+      "armour": "Armure",
+      "net": "Dégâts nets",
+      "sb": "Seuil de blessure",
+      "severity": "Gravité",
+      "breach": "Brèche",
+      "yes": "Oui",
+      "no": "Non",
+      "none": "Aucune blessure",
+      "injuryName": "{severity} — {zone}",
+      "gmOnly": "Seul le MJ peut appliquer les dégâts.",
+      "noTarget": "Aucune cible : ciblez un jeton, ou sélectionnez-en un.",
+      "badCard": "Cette carte ne contient pas les données d'une attaque.",
+      "noSeuil": "{name} n'a pas de Force ni de Constitution : pas de Seuil de blessure, les dégâts ne sont pas appliqués.",
+      "sbTooLow": "{name} a un Seuil de blessure inférieur à 1 : les dégâts ne sont pas appliqués.",
+      "notAllowed": "{name} ne peut pas recevoir de blessure.",
+      "failed": "Les dégâts n'ont pas pu être appliqués à {name}.",
+      "missingActor": "La cible n'est plus là.",
+      "noCharacteristic": "{name} n'a pas cette caractéristique.",
+      "followup": {
+        "vol": "Test de Volonté",
+        "con": "Test de Constitution"
+      },
+      "consequence": {
+        "critical": "Zone hors d'usage. Test de Constitution pour rester conscient.",
+        "criticalVital": "Zone hors d'usage. Test de Constitution pour rester conscient. Sans soins, risque de mort en quelques minutes.",
+        "mortal": "Mort immédiate, ou en quelques tours selon la zone."
+      },
+      "remind": {
+        "unconscious": "Tête, blessure critique : inconscience. Rappel seulement, rien n'est automatisé.",
+        "drop": "Bras, blessure grave : l'objet en main tombe. Rappel seulement, rien n'est automatisé.",
+        "slow": "Jambe, blessure grave : le mouvement est réduit de moitié. Rappel seulement, rien n'est automatisé.",
+        "air": "Torse et réussite critique de l'attaquant : la réserve d'air peut être touchée. Rappel seulement, rien n'est automatisé.",
+        "bleeding": "Saignement : −1 Endurance par tour jusqu'aux premiers soins. Ce n'est pas automatisé.",
+        "vol": "Test de Volonté pour continuer à agir.",
+        "con": "Test de Constitution pour rester conscient."
+      }
+    },
     "Skill": {
       "characteristic": "Caractéristique",
       "training": "Formation",
