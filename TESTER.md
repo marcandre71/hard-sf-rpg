@@ -14,7 +14,9 @@ Gardez la console ouverte (**F12**, onglet **Console**). À la fin : aucune lign
 3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.6.0**.
 4. Ouvrez le monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
-Si le monde existait déjà, ouvrez une fois le compendium **Armures** pour voir les trois combinaisons à jour.
+Si le monde existait déjà, ouvrez une fois le compendium **Armures et vêtements** pour voir les trois combinaisons à jour.
+
+Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium **Armures et vêtements**.
 
 ## Préparer
 
@@ -44,13 +46,16 @@ Remettez ensuite la protection du torse à **3**.
 ## 3. Visière sur l'armure de pont
 
 1. Retirez la renforcée (ou décochez **Équipé**). Glissez **Armure de pont**. Torse **6**, tête **5**, bras **4**, jambes **4**, pressurisée, seuil **12**. La description parle d'une autonomie courte (30 à 60 minutes) et d'un risque de surchauffe. Réserve d'air : **0,5**. Équipez-la. Joints **Intacte**.
-2. Lancez la carabine. Zone visée : **Visière (−40)**. Actions de visée : **2**. Le total est **−20** (−40 + 20). Lancez jusqu'à une réussite.
-3. La carte dit **Visière** et la localisation **Tête**. Appliquez. La fenêtre rappelle que la protection et le seuil sont divisés par 2, arrondis au supérieur : armure **3** (moitié de 5), seuil de brèche **6** (moitié de 12).
-4. Avec des bruts **7** ou plus, la brèche est **Oui**. Avec des bruts **6** pile, elle est **Non**. Annulez si les dés ne donnent pas le cas que vous voulez voir, et relancez.
+2. Glissez le **Pistolet frangible** du compendium **Armes** sur Ilka. Dégâts **6**, compétence `Armes de poing`. Cochez **Équipé**. La carabine part à 10 : elle ne peut pas tomber sur 6 bruts.
+3. Lancez le pistolet. Zone visée : **Visière (−40)**. Actions de visée : **0**. Le total est **−40**. Une réussite dit **Visière** et la localisation **Tête**.
+4. **Appliquer les dégâts**. La fenêtre rappelle que la protection et le seuil sont divisés par 2, arrondis au supérieur : armure **3** (moitié de 5), seuil de brèche **6** (moitié de 12).
+5. Deux réussites, en annulant entre les deux si ce n'est pas le cas voulu :
+   - **Dégâts : 6** (arme 6 + 0 DR). Bruts égaux au seuil : brèche **Non**. L'égalité ne perce pas.
+   - **Dégâts : 7** (arme 6 + 1 DR). Bruts au-dessus du seuil : brèche **Oui**.
 
 ## 4. Viser, sans zone
 
-1. Relancez, zone visée **Aucune**, actions de visée **3**. Le total est **+30**. La localisation d'une réussite est celle du dé, pas une zone choisie.
+1. Relancez le pistolet, zone visée **Aucune**, actions de visée **3**. Le total est **+30**. La localisation d'une réussite est celle du dé, pas une zone choisie.
 
 ## 5. Arme sans compétence
 

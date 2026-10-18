@@ -50,6 +50,8 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
 4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.6.0.
 
+Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
+
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).
 
