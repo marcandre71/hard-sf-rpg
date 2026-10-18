@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.5.5** : l'initiative est un test de Vigilance, conservé d'un round à l'autre. Le MJ applique aussi les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines, ni de l'Endurance.
+L'étape en cours est la **0.5.6** : l'initiative est un test de Vigilance, conservé d'un round à l'autre. Le MJ applique aussi les dégâts d'une attaque, et une partie des compendiums reprend le texte explicite du LdR v0.2. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines, ni de l'Endurance.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.5.5, compatibilité 14,
+system.json                         Manifeste : id, version 0.5.6, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -221,7 +221,7 @@ Arme : `weapon.system.skill` est le nom d'une compétence de l'acteur (casse ign
 
 `performRoll` (`chat.mjs`) ouvre `DialogV2.wait`. Annuler ne lance pas le dé. Le modificateur libre est un entier (`step="1"`, `Math.trunc`). Décision Marc 18/10/2026. Le dé est `new Roll("1d100")`, puis `ChatMessage.create` avec `rolls`, `sound: CONFIG.sounds.dice`, `ChatMessage.getSpeaker({ actor })` et `flags["sol-nouvelle-ere"]` (type, score visé, dé, réussite, critique, DR, DE, zone, dégâts = arme + DR, libellé). Le gabarit est `templates/chat/roll-card.hbs`. Une réussite d'arme y ajoute le bouton « Appliquer les dégâts ». Les cartes déjà postées en 0.4 n'ont pas ces drapeaux dans le HTML : pas de bouton.
 
-Visibilité (foundryvtt#8856) : en v14 le réglage client est `core.messageMode`. On appelle `ChatMessage.applyMode(data)` sans mode (il modifie `data`) et on garde cet objet, sans utiliser la valeur renvoyée. `game.settings.get("core", "rollMode")` lève, le réglage n'est plus enregistré. En v13, si `applyMode` est absent et que `game.settings.settings.has("core.rollMode")`, on appelle `ChatMessage.applyRollMode` de la même façon.
+Visibilité (foundryvtt#8856) : en v14 le réglage client est `core.messageMode`. On appelle `ChatMessage.applyMode(data, mode)` (il modifie `data`) et on garde cet objet, sans utiliser la valeur renvoyée. Sans mode, le réglage du client. `game.settings.get("core", "rollMode")` lève, le réglage n'est plus enregistré. En v13, si `applyMode` est absent et que `game.settings.settings.has("core.rollMode")`, on appelle `ChatMessage.applyRollMode` de la même façon. Un appelant peut passer `messageMode` ou `messageOptions`.
 
 Pour ajouter un type de jet : calculer un score (helper existant, ou nouveau fichier sans Foundry s'il y a une formule), ajouter un bouton `data-action`, appeler `performRoll`. Une difficulté nouvelle se déclare dans `SOL.difficulties` et `lang/fr.json`, pas dans le gabarit. Une ligne nouvelle sur la carte se prépare dans `chat.mjs` et s'affiche dans `roll-card.hbs`. Ne pas dupliquer `resolveD100`.
 
@@ -247,7 +247,7 @@ Les effets de zone (inconscience, objet lâché, mouvement / 2, réserve d'air) 
 
 Bouton : `renderChatMessageHTML` retire le bouton si `game.user.isGM` est faux, et le handler le revérifie. Cibles : `game.user.targets`, sinon `canvas.tokens.controlled`. Déduplication par `token.actor.uuid` : deux jetons liés du même acteur ne comptent qu'une fois ; deux jetons non liés du même acteur de base sont chacun touchés. Aucune : avertissement. `DialogV2.wait` montre zone, dégâts bruts, armure, nets, Seuil, gravité, brèche. Annuler n'écrit rien. Confirmer crée la blessure, met à jour les joints, pose les conditions, poste `templates/chat/damage-card.hbs`. Si au moins une cible a réussi, le message d'attaque reçoit le drapeau `applied`. Le bouton affiche alors « Dégâts déjà appliqués » (le HTML stocké date du jet : le texte est mis à jour dans le hook). Un nouveau clic ouvre un `DialogV2` « Dégâts déjà appliqués, recommencer ? ». Annuler cette question n'écrit rien. Une fenêtre de dégâts annulée ne pose pas le drapeau. La carte reprend `whisper` et `blind` du jet. Grave : bouton de test de VOL. Critique : test de CON. Les deux passent par `performRoll`, avec `characteristicRollLabel` (`abbr` et `label`, jamais l'objet). Le bouton n'est visible et utilisable que par le propriétaire de la cible (`fromUuidSync(uuid)?.isOwner`) ou le MJ. Un double clic est ignoré le temps que la fenêtre est ouverte.
 
-## Initiative glissante (0.5.5)
+## Initiative glissante (0.5.6)
 
 Réf. LdR v0.2 §7. Décision Marc 18/10/2026 : les réussites passent avant les échecs ; parmi les échecs, le moins de DE joue d'abord ; une égalité de degré se départage à la RÉF. Aucun bonus lié à la place.
 
@@ -261,9 +261,11 @@ Encodage de `Combatant.initiative` (tri décroissant du cœur) : réussite `1_00
 
 Types qui combattent : `character`, `npc`, `creature`, `synthetic`, `drone`. `vehicle` et `ship` : avertissement `SOL.Initiative.notAllowed`, pas d'exception. À confirmer par Marc : sans PER (créature, drone), le score est 0. À confirmer par Marc : sans RÉF (créature, synthétique, drone), le départage vaut 0.
 
-L'ordre n'est pas relancé dans `nextRound`. Une blessure `serious`, `critical` ou `mortal` appliquée par `apply-damage`, ou la condition `sol-nouvelle-ere.stunned` (`SOL.Status.stunned`, icône `icons/svg/daze.svg`), pose le drapeau `deferEnd`. Au `nextRound` du MJ, ces combattants passent sous le plus bas de ceux qui restent, ordre relatif conservé, puis le drapeau est retiré. Le hook `combatRound` n'est pas utilisé pour cette écriture : il part avant la mise à jour et n'est pas attendu. À confirmer par Marc : plusieurs départs le même round gardent leur ordre ; si tout le monde part, rien ne change ; hors du combat en cours, on ne pose pas le drapeau.
+L'ordre n'est pas relancé. Une blessure `serious`, `critical` ou `mortal` appliquée par `apply-damage`, ou la condition `sol-nouvelle-ere.stunned` (`SOL.Status.stunned`, icône `icons/svg/daze.svg`), pose le drapeau `deferEnd`. Sonné est aussi détecté sur `updateActiveEffect` quand le statut est ajouté à un effet déjà présent. L'écriture se fait dans `Combat#_onStartRound` ([doc v14](https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html)) : après la mise à jour du round, seulement chez le MJ désigné. On passe `{ combatTurn: this.turn }` pour garder l'index du tour. `nextRound` n'écrit plus : le client du joueur qui termine le round n'est pas MJ, et le déplacement arrivait un round trop tard. Les drapeaux ne sont posés que par `game.user.isActiveGM`. À confirmer par Marc : plusieurs départs le même round gardent leur ordre ; si tout le monde part, rien ne change ; hors du combat en cours, on ne pose pas le drapeau.
 
-`SolCombatTracker._getEntryContextOptions` ajoute « Interrompu : recule d'une place » (MJ) et « Se replacer » (propriétaire ou MJ). Le recul échange les deux initiatives, ou, à nombre égal, n'écarte que ce groupe d'une place. À confirmer par Marc : déjà dernier, on ne fait rien. « Se replacer » relance la Vigilance ; la carte rappelle que l'action est sacrifiée. Sonné ne retire pas l'action : le texte `SOL.Status.stunnedHint` est un rappel.
+`SolCombatTracker._getEntryContextOptions` ajoute « Interrompu : recule d'une place » (MJ) et « Se replacer » (propriétaire ou MJ, seulement si le combat est commencé). `Combatant._preUpdateOperation` suit le combattant actif : interrompre l'actif lui fait sauter le suivant, interrompre un déjà joué le fait rejouer. `interruptTiming` reporte donc le recul (`deferStep`, appliqué dans `_onStartRound`) quand l'index est inférieur ou égal à `combat.turn`. Sinon le recul est immédiat, avec `{ combatTurn: combat.turn }`. À confirmer par Marc : effet immédiat ou au round suivant. Déjà dernier, on ne fait rien. À nombre égal, on n'écarte que ce groupe d'une place. « Se replacer » relance la Vigilance ; la carte rappelle que l'action est sacrifiée. Sonné ne retire pas l'action : le texte `SOL.Status.stunnedHint` est un rappel.
+
+`rollInitiative` avec `updateTurn: false` passe aussi `{ combatTurn: this.turn }`. La carte de Vigilance reçoit `messageMode` et `messageOptions`. Un combattant `hidden` force le mode `gm` (`ChatMessage.applyMode`, chuchoté aux MJ). Le tracker (`_prepareTurnContext`) affiche `flags.sol-nouvelle-ere.rank` (« 2 DR · RÉF 57 », « 3 DE »), pas le code de tri. À confirmer par Marc : Vigilance des créatures, synthétiques et drones qui ont l'objet : le score est la formation seule, sans avertissement.
 
 ## Compendiums (étape 5, contenu 0.5.1)
 

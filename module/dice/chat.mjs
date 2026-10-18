@@ -27,21 +27,41 @@ const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
  * si le réglage `core.rollMode` est encore enregistré.
  *
  * @param {object} chatData
+ * @param {string|null} [mode] Clé de `CONFIG.ChatMessage.modes`. Sans mode, le réglage du client.
  * @returns {object}
  */
-function applyClientVisibility(chatData) {
+function applyClientVisibility(chatData, mode = null) {
   // applyMode et applyRollMode modifient chatData. On ne se fie pas à leur
   // valeur de retour : on renvoie l'objet qu'on leur a passé.
+  // Doc v14 : applyMode(chatData, mode). `gm` chuchote aux MJ.
   if ( typeof ChatMessage.applyMode === "function" ) {
-    ChatMessage.applyMode(chatData);
+    if ( mode ) ChatMessage.applyMode(chatData, mode);
+    else ChatMessage.applyMode(chatData);
     return chatData;
   }
   const hasRollMode = game.settings.settings.has("core.rollMode");
-  if ( hasRollMode && typeof ChatMessage.applyRollMode === "function" ) {
-    ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+  const rollMode = mode ?? (hasRollMode ? game.settings.get("core", "rollMode") : null);
+  if ( rollMode && typeof ChatMessage.applyRollMode === "function" ) {
+    ChatMessage.applyRollMode(chatData, rollMode);
     return chatData;
   }
   return chatData;
+}
+
+/**
+ * Visibilité demandée pour cette carte.
+ * Un mode explicite gagne. Sinon `messageOptions.messageMode` ou
+ * `messageOptions.rollMode`. Sinon null : le réglage du client,
+ * sauf si `messageOptions` a déjà `whisper` ou `blind`.
+ *
+ * @param {{ messageMode?: string|null, messageOptions?: object|null }} options
+ * @returns {string|null}
+ */
+function requestedMode({ messageMode, messageOptions }) {
+  if ( typeof messageMode === "string" && messageMode ) return messageMode;
+  const fromOptions = messageOptions?.messageMode ?? messageOptions?.rollMode;
+  if ( typeof fromOptions === "string" && fromOptions ) return fromOptions;
+  return null;
 }
 
 /**
@@ -64,6 +84,8 @@ function resultKey(critical, success) {
  * @param {"characteristic"|"skill"|"weapon"|"initiative"} [params.type] Pour l'étape dégâts.
  * @param {object|null} [params.choice] Déjà choisi : pas de fenêtre (jets groupés).
  * @param {string} [params.note] Rappel déjà traduit, sous le résultat.
+ * @param {string|null} [params.messageMode] Clé de `CONFIG.ChatMessage.modes`.
+ * @param {object|null} [params.messageOptions] Champs ajoutés à la carte (`whisper`, `blind`, …).
  * @returns {Promise<null|{ success: boolean, dr: number, de: number, critical: "success"|"failure"|null, die: number, target: number }>}
  */
 export async function performRoll({
@@ -73,7 +95,9 @@ export async function performRoll({
   weapon = null,
   type = "characteristic",
   choice = null,
-  note = ""
+  note = "",
+  messageMode = null,
+  messageOptions = null
 }) {
   const picked = choice ?? await askRoll({ title: label, score });
   if ( !picked ) return null;
@@ -124,8 +148,12 @@ export async function performRoll({
   }
 
   const content = await foundry.applications.handlebars.renderTemplate(CARD, card);
+  const extra = { ...(messageOptions ?? {}) };
+  delete extra.messageMode;
+  delete extra.rollMode;
   // flags : apply-damage.mjs lit la zone et les dégâts sans reparser la carte.
-  const messageData = applyClientVisibility({
+  const messageData = {
+    ...extra,
     speaker: ChatMessage.getSpeaker({ actor }),
     rolls: [roll],
     content,
@@ -145,7 +173,10 @@ export async function performRoll({
         label
       }
     }
-  });
+  };
+  const mode = requestedMode({ messageMode, messageOptions });
+  const alreadyHidden = Array.isArray(extra.whisper) || typeof extra.blind === "boolean";
+  if ( mode || !alreadyHidden ) applyClientVisibility(messageData, mode);
   await ChatMessage.create(messageData);
   return {
     success: outcome.success,

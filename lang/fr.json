@@ -193,7 +193,9 @@
       "sacrificed": "L'action de ce tour est sacrifiée pour se replacer.",
       "notAllowed": "{name} ne peut pas lancer l'initiative.",
       "impossible": "{name} ne peut pas tenter Vigilance sans formation.",
-      "noPerception": "{name} n'a ni Vigilance ni Perception : le test est à 0."
+      "noPerception": "{name} n'a ni Vigilance ni Perception : le test est à 0.",
+      "rankSuccess": "{dr} DR · RÉF {ref}",
+      "rankFailure": "{de} DE"
     },
     "Status": {
       "suitBreach": "Combinaison percée",

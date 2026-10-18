@@ -16,9 +16,15 @@
  * On ne lance plus cette formule : `SolCombat.rollInitiative` fait le D100.
  * La formule `"0"` n'est qu'un garde-fou si un autre appel l'évalue.
  *
- * Le hook `combatRound` part du client qui avance le round, avant
- * l'écriture, et `Hooks.call` n'attend pas une promesse. La fin d'ordre
- * est donc écrite dans `nextRound`, avant `super`.
+ * La fin d'ordre et le recul reporté s'écrivent dans `_onStartRound`.
+ * Doc v14 : cette méthode tourne après la mise à jour du round, et
+ * seulement chez le MJ désigné. `nextRound` sur le client du joueur
+ * qui termine le round ne doit pas l'appliquer : ce client n'est pas MJ,
+ * le drapeau resterait, et le déplacement arriverait un round trop tard.
+ *
+ * `Combatant._preUpdateOperation` conserve le combattant actif quand
+ * l'initiative change. Pour garder l'index du tour, on passe
+ * `{ combatTurn: combat.turn }` (confirmé par l'API, issue 12990).
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Combatant.html
@@ -33,6 +39,7 @@ import { performRoll } from "../dice/chat.mjs";
 import {
   deferToEnd,
   encodeInitiative,
+  interruptTiming,
   reflexScore,
   stepBack,
   vigilanceBaseScore
@@ -101,7 +108,8 @@ function effectHasStatus(effect, id) {
  * @returns {Promise<void>}
  */
 export async function markDeferEnd(actor) {
-  if ( !game.user.isGM || !actor ) return;
+  // Un seul MJ écrit. Plusieurs MJ ne posent pas le drapeau deux fois.
+  if ( !game.user.isActiveGM || !actor ) return;
   const combat = game.combat;
   if ( !combat ) return;
   const updates = combat.combatants
@@ -117,16 +125,84 @@ export async function markDeferEnd(actor) {
  * @param {Combat} combat
  * @returns {Promise<void>}
  */
+/**
+ * Garde l'index du tour. `0` est un index valide : on le passe tel quel.
+ *
+ * @param {Combat} combat
+ * @returns {{ combatTurn?: number }}
+ */
+function keepTurn(combat) {
+  return typeof combat.turn === "number" ? { combatTurn: combat.turn } : {};
+}
+
+/**
+ * @param {Combat} combat
+ * @returns {Array<{ id: string, initiative: number|null }>}
+ */
+function turnOrder(combat) {
+  return combat.turns.map(combatant => ({
+    id: combatant.id,
+    initiative: typeof combatant.initiative === "number" ? combatant.initiative : null
+  }));
+}
+
+/**
+ * Reculs reportés, du dernier vers le premier, puis tri.
+ * Chaque drapeau est retiré, même si le combattant est déjà dernier.
+ *
+ * @param {Combat} combat
+ * @returns {Promise<void>}
+ */
+async function applyDeferredSteps(combat) {
+  if ( !game.user.isActiveGM ) return;
+  const ids = combat.turns
+    .filter(combatant => combatant.getFlag(SYSTEM_ID, "deferStep") === true)
+    .map(combatant => combatant.id);
+  if ( !ids.length ) return;
+  const pending = new Set(ids);
+  let sorted = turnOrder(combat);
+  const original = new Map(sorted.map(entry => [entry.id, entry.initiative]));
+  for ( let i = sorted.length - 1; i >= 0; i -= 1 ) {
+    const id = sorted[i].id;
+    if ( !pending.has(id) ) continue;
+    const changes = stepBack(sorted, id);
+    if ( !changes ) continue;
+    const byId = new Map(changes.map(change => [change.id, change.initiative]));
+    sorted = sorted.map(entry => byId.has(entry.id)
+      ? { ...entry, initiative: byId.get(entry.id) }
+      : entry);
+    sorted.sort((a, b) => {
+      const av = typeof a.initiative === "number" ? a.initiative : Number.NEGATIVE_INFINITY;
+      const bv = typeof b.initiative === "number" ? b.initiative : Number.NEGATIVE_INFINITY;
+      return bv - av || String(a.id).localeCompare(String(b.id));
+    });
+  }
+  /** @type {Map<string, object>} */
+  const updates = new Map();
+  for ( const id of ids ) {
+    updates.set(id, { _id: id, [`flags.${SYSTEM_ID}.deferStep`]: false });
+  }
+  for ( const entry of sorted ) {
+    if ( entry.initiative === original.get(entry.id) ) continue;
+    if ( typeof entry.initiative !== "number" ) continue;
+    const data = updates.get(entry.id) ?? { _id: entry.id };
+    data.initiative = entry.initiative;
+    updates.set(entry.id, data);
+  }
+  await combat.updateEmbeddedDocuments("Combatant", [...updates.values()], keepTurn(combat));
+}
+
+/**
+ * @param {Combat} combat
+ * @returns {Promise<void>}
+ */
 async function applyDeferredEnds(combat) {
-  if ( !game.user.isGM ) return;
+  if ( !game.user.isActiveGM ) return;
   const ids = combat.combatants
     .filter(combatant => combatant.getFlag(SYSTEM_ID, "deferEnd") === true)
     .map(combatant => combatant.id);
   if ( !ids.length ) return;
-  const sorted = combat.turns.map(combatant => ({
-    id: combatant.id,
-    initiative: typeof combatant.initiative === "number" ? combatant.initiative : null
-  }));
+  const sorted = turnOrder(combat);
   const moved = deferToEnd(sorted, ids);
   const byId = new Map(moved.map(entry => [entry.id, entry.initiative]));
   const updates = ids.map(id => {
@@ -135,7 +211,7 @@ async function applyDeferredEnds(combat) {
     if ( byId.has(id) ) data.initiative = byId.get(id);
     return data;
   });
-  await combat.updateEmbeddedDocuments("Combatant", updates);
+  await combat.updateEmbeddedDocuments("Combatant", updates, keepTurn(combat));
 }
 
 /**
@@ -182,7 +258,7 @@ export class SolCombat extends Combat {
    *
    * @override
    * @param {string|string[]} ids
-   * @param {{ formula?: string|null, updateTurn?: boolean, reposition?: boolean }} [options]
+   * @param {{ formula?: string|null, updateTurn?: boolean, reposition?: boolean, messageMode?: string, messageOptions?: object }} [options]
    * @returns {Promise<Combat>}
    */
   async rollInitiative(ids, options = {}) {
@@ -215,13 +291,23 @@ export class SolCombat extends Combat {
       // À confirmer par Marc : un jet groupé (tout lancer, lancer les PNJ)
       // est en difficulté Normale, sans une fenêtre par combattant.
       const choice = batch ? rollChoice(rated.score) : null;
+      // Combatant caché : carte privée MJ (`gm`, doc ChatMessage.applyMode).
+      // Sinon le mode du cœur, ou celui porté par messageOptions.
+      const messageMode = combatant.hidden
+        ? "gm"
+        : (options.messageMode
+          ?? options.messageOptions?.messageMode
+          ?? options.messageOptions?.rollMode
+          ?? null);
       const outcome = await performRoll({
         actor,
         label: game.i18n.localize("SOL.Initiative.vigilance"),
         score: rated.score,
         type: "initiative",
         choice,
-        note: options.reposition ? game.i18n.localize("SOL.Initiative.sacrificed") : ""
+        note: options.reposition ? game.i18n.localize("SOL.Initiative.sacrificed") : "",
+        messageMode,
+        messageOptions: options.messageOptions ?? null
       });
       if ( !outcome ) continue;
       const ref = reflexScore(actor.system?.characteristics);
@@ -242,7 +328,9 @@ export class SolCombat extends Combat {
       });
     }
     if ( updates.length ) {
-      await this.updateEmbeddedDocuments("Combatant", updates);
+      // updateTurn false : garder l'index. Sinon le cœur suit le combattant.
+      const operation = options.updateTurn === false ? keepTurn(this) : {};
+      await this.updateEmbeddedDocuments("Combatant", updates, operation);
       if ( options.updateTurn !== false && previousId ) {
         const turn = this.turns.findIndex(entry => entry.id === previousId);
         if ( turn >= 0 && turn !== this.turn ) await this.update({ turn });
@@ -252,16 +340,20 @@ export class SolCombat extends Combat {
   }
 
   /**
-   * Fin d'ordre reportée, avant le changement de round.
-   * On ne relance pas la Vigilance : l'ordre est conservé.
+   * Début de round, chez le MJ désigné, après l'écriture du round.
+   * On ne relance pas la Vigilance : l'ordre est conservé, puis
+   * les reculs et les fins d'ordre reportés sont appliqués.
    * Réf. LdR v0.2 §7.
    *
    * @override
-   * @returns {Promise<Combat>}
+   * @param {CombatRoundEventContext} context
+   * @returns {Promise<void>}
+   * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html
    */
-  async nextRound() {
+  async _onStartRound(context) {
+    await super._onStartRound(context);
+    await applyDeferredSteps(this);
     await applyDeferredEnds(this);
-    return super.nextRound();
   }
 }
 
@@ -280,23 +372,30 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
         callback: li => {
           const id = combatantIdFrom(li);
           const combat = game.combat;
-          if ( !id || !combat ) return;
-          const sorted = combat.turns.map(combatant => ({
-            id: combatant.id,
-            initiative: combatant.initiative
-          }));
-          const changes = stepBack(sorted, id);
+          if ( !id || !combat || !game.user.isActiveGM ) return;
+          const index = combat.turns.findIndex(combatant => combatant.id === id);
+          if ( index < 0 ) return;
+          // À confirmer par Marc : effet immédiat ou au round suivant.
+          if ( interruptTiming(index, combat.turn) === "defer" ) {
+            void combat.updateEmbeddedDocuments("Combatant", [{
+              _id: id,
+              [`flags.${SYSTEM_ID}.deferStep`]: true
+            }]);
+            return;
+          }
+          const changes = stepBack(turnOrder(combat), id);
           if ( !changes ) return;
           void combat.updateEmbeddedDocuments("Combatant", changes.map(change => ({
             _id: change.id,
             initiative: change.initiative
-          })));
+          })), keepTurn(combat));
         }
       },
       {
         name: "SOL.Initiative.reposition",
         icon: '<i class="fa-solid fa-dice-d20"></i>',
         condition: li => {
+          if ( !game.combat?.started ) return false;
           const id = combatantIdFrom(li);
           const combatant = game.combat?.combatants.get(id);
           return game.user.isGM || combatant?.isOwner === true;
@@ -311,6 +410,49 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
     );
     return entries;
   }
+
+  /**
+   * Le nombre stocké est un code de tri. Le tracker montre le jet.
+   *
+   * @override
+   * @param {Combat} combat
+   * @param {Combatant} combatant
+   * @param {number} index
+   * @returns {Promise<object>}
+   */
+  async _prepareTurnContext(combat, combatant, index) {
+    const context = await super._prepareTurnContext(combat, combatant, index);
+    const label = rankLabel(combatant.getFlag(SYSTEM_ID, "rank"));
+    if ( label ) context.initiative = label;
+    return context;
+  }
+}
+
+/**
+ * @param {{ success?: boolean, dr?: number, de?: number, ref?: number }|null|undefined} rank
+ * @returns {string}
+ */
+function rankLabel(rank) {
+  if ( !rank || typeof rank.success !== "boolean" ) return "";
+  if ( rank.success ) {
+    return game.i18n.format("SOL.Initiative.rankSuccess", {
+      dr: rank.dr ?? 0,
+      ref: rank.ref ?? 0
+    });
+  }
+  return game.i18n.format("SOL.Initiative.rankFailure", { de: rank.de ?? 0 });
+}
+
+/**
+ * @param {ActiveEffect} effect
+ * @returns {void}
+ */
+function noteStunned(effect) {
+  if ( !effectHasStatus(effect, STUNNED) ) return;
+  const actor = effect.parent;
+  // À confirmer par Marc : retirer Sonné avant le round suivant
+  // n'annule pas la fin d'ordre déjà marquée.
+  if ( actor ) void markDeferEnd(actor);
 }
 
 /**
@@ -318,11 +460,23 @@ export class SolCombatTracker extends foundry.applications.sidebar.tabs.CombatTr
  * @returns {void}
  */
 function onStunned(effect) {
-  if ( !effectHasStatus(effect, STUNNED) ) return;
-  const actor = effect.parent;
-  // À confirmer par Marc : retirer Sonné avant le round suivant
-  // n'annule pas la fin d'ordre déjà marquée.
-  if ( actor ) void markDeferEnd(actor);
+  noteStunned(effect);
+}
+
+/**
+ * Sonné ajouté à un effet déjà là (pas seulement à la création).
+ *
+ * @param {ActiveEffect} effect
+ * @param {object} changes
+ * @returns {void}
+ */
+function onStunnedUpdate(effect, changes) {
+  const statuses = changes?.statuses;
+  const added = typeof statuses?.has === "function"
+    ? statuses.has(STUNNED)
+    : Array.isArray(statuses) && statuses.includes(STUNNED);
+  if ( !added ) return;
+  noteStunned(effect);
 }
 
 /**
@@ -342,5 +496,6 @@ export function registerInitiative() {
     "SOL.Status.stunnedHint"
   );
   Hooks.on("createActiveEffect", onStunned);
+  Hooks.on("updateActiveEffect", onStunnedUpdate);
   Hooks.once("ready", localizeStunnedHint);
 }

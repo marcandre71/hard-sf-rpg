@@ -53,6 +53,9 @@ export const INITIATIVE_DEGREE_CAP = 999;
 export function vigilanceBaseScore(characteristics, skills, skillName) {
   const found = findSkillByName(skills ?? [], skillName);
   if ( found ) {
+    // À confirmer par Marc : Vigilance des créatures, synthétiques et drones.
+    // Avec l'objet, le score est celui de skillScore : la formation seule
+    // si la caractéristique (PER) n'existe pas. Pas d'avertissement.
     const rated = skillScore(characteristics, found.system ?? {});
     return { ...rated, missingPerception: false };
   }
@@ -138,6 +141,24 @@ export function deferToEnd(sorted, ids) {
     id: entry.id,
     initiative: floor - 1 - index
   }));
+}
+
+/**
+ * Moment du recul d'une place.
+ * `turn` est l'index du combattant actif (`Combat.turn`), 0 en tête.
+ * // À confirmer par Marc : effet immédiat ou au round suivant.
+ * Actif ou déjà joué (index <= turn) : au round suivant, pour ne pas
+ * sauter le suivant ni faire rejouer celui qu'on vient de dépasser.
+ * Pas encore joué : tout de suite.
+ *
+ * @param {number} index
+ * @param {number|null|undefined} turn
+ * @returns {"defer"|"now"}
+ */
+export function interruptTiming(index, turn) {
+  if ( typeof index !== "number" || index < 0 ) return "now";
+  if ( typeof turn !== "number" || !Number.isFinite(turn) ) return "now";
+  return index <= turn ? "defer" : "now";
 }
 
 /**

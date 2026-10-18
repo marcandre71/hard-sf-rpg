@@ -10,6 +10,7 @@ import {
   deferToEnd,
   encodeInitiative,
   INITIATIVE_SUCCESS_BASE,
+  interruptTiming,
   reflexScore,
   severityDefers,
   stepBack,
@@ -186,6 +187,38 @@ check("recul d'une place : échange des nombres", () => {
   assert.equal(stepBack(sorted, "c"), null);
   assert.equal(stepBack(sorted, "absent"), null);
   assert.equal(stepBack([{ id: "a", initiative: null }, { id: "b", initiative: 1 }], "a"), null);
+});
+
+check("objet Vigilance sans PER : formation seule, pas d'avertissement", () => {
+  const rated = vigilanceBaseScore(
+    { for: { value: 30 } },
+    [{
+      name: "Vigilance",
+      system: { characteristic: "per", training: 15, trainingRequired: false }
+    }],
+    "Vigilance"
+  );
+  assert.equal(rated.score, 15);
+  assert.equal(rated.missingPerception, false);
+  assert.equal(rated.impossible, false);
+});
+
+check("interrompu actif : reporté au round suivant", () => {
+  // Ordre A, B, C. A est le tour en cours (index 0, turn 0).
+  assert.equal(interruptTiming(0, 0), "defer");
+});
+
+check("interrompu déjà joué : reporté au round suivant", () => {
+  // B est actif (turn 1). A (index 0) a déjà joué.
+  assert.equal(interruptTiming(0, 1), "defer");
+  assert.equal(interruptTiming(1, 1), "defer");
+});
+
+check("interrompu pas encore joué : tout de suite", () => {
+  // A est actif (turn 0). B (index 1) et C (index 2) n'ont pas joué.
+  assert.equal(interruptTiming(1, 0), "now");
+  assert.equal(interruptTiming(2, 1), "now");
+  assert.equal(interruptTiming(0, null), "now");
 });
 
 check("égalité : une place, sans sauter le suivant", () => {
