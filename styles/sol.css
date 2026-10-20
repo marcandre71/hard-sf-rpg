@@ -296,6 +296,10 @@
   gap: 0.5rem;
 }
 
+.sol-nouvelle-ere .sol-status-name {
+  flex: 1;
+}
+
 .sol-nouvelle-ere .sol-item img {
   width: 28px;
   height: 28px;

@@ -29,3 +29,48 @@ export function findSealMethod(name, methods) {
 export function canSeal(quantity) {
   return typeof quantity === "number" && Number.isFinite(quantity) && quantity >= 1;
 }
+
+/**
+ * La compétence embarquée est Survie si son id est celui du compendium,
+ * ou si `flags.core.sourceId` s'y termine (glisser-déposer : nouvel id).
+ * Décision Marc 20/10/2026. On ne compare pas le nom.
+ *
+ * @param {{ id?: string, sourceId?: string, flags?: { core?: { sourceId?: string } } }|null|undefined} skill
+ * @param {string|null|undefined} compendiumId
+ * @returns {boolean}
+ */
+export function isSealSkill(skill, compendiumId) {
+  if ( !skill || typeof compendiumId !== "string" || compendiumId.length === 0 ) return false;
+  if ( skill.id === compendiumId ) return true;
+  const source = skill.sourceId ?? skill.flags?.core?.sourceId;
+  if ( typeof source !== "string" || source.length === 0 ) return false;
+  return source.endsWith(`.Item.${compendiumId}`);
+}
+
+/**
+ * Id embarqué de Survie, ou null si la fiche ne l'a pas.
+ *
+ * @param {Array<{ id?: string, sourceId?: string, flags?: { core?: { sourceId?: string } } }>|null|undefined} skills
+ * @param {string|null|undefined} compendiumId
+ * @returns {string|null}
+ */
+export function pickSealSkillId(skills, compendiumId) {
+  const found = (skills ?? []).find(skill => isSealSkill(skill, compendiumId));
+  return typeof found?.id === "string" && found.id.length > 0 ? found.id : null;
+}
+
+/**
+ * Joints. Décision Marc 20/10/2026 : une armure non pressurisée n'a pas
+ * de joints étanches. Percée ne lance rien. Intacte, sur une armure
+ * équipée et pressurisée, se traite comme un colmatage.
+ *
+ * @param {unknown} next
+ * @param {{ equipped?: boolean, pressurized?: boolean }|null|undefined} armor
+ * @returns {"start"|"seal"|"ignore"}
+ */
+export function jointEffect(next, armor) {
+  if ( armor?.equipped !== true || armor?.pressurized !== true ) return "ignore";
+  if ( next === "breached" ) return "start";
+  if ( next === "intact" ) return "seal";
+  return "ignore";
+}

@@ -238,6 +238,20 @@ export function injuryBoxChange(was, now) {
 }
 
 /**
+ * Ancien état de la case. Le booléen posé au preUpdate prime s'il est
+ * arrivé. Sinon on regarde si l'id est encore dans `injuryDefer` :
+ * l'option ne traverse pas toujours le socket jusqu'au MJ actif.
+ *
+ * @param {unknown} option
+ * @param {boolean} listed
+ * @returns {boolean}
+ */
+export function endOfOrderWas(option, listed) {
+  if ( option === true || option === false ) return option;
+  return listed === true;
+}
+
+/**
  * Place `ids` en fin d'ordre. L'ordre relatif de ceux qui restent,
  * et celui de ceux qui partent, sont conservés.
  * `sorted` est déjà trié : index 0 joue en premier.

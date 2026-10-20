@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.6.2 : compte à rebours sur les jetons non liés, arrêt par le MJ, fin d'ordre par blessure, Rustine à difficulté normale.",
-  "version": "0.6.2",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.6.3 : fin d'ordre sur la ligne, Rustine sur Survie, joints à la main, section États.",
+  "version": "0.6.3",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.6.2** : compte à rebours aussi sur les jetons non liés, arrêt par le MJ, tour de 5 secondes, fin d'ordre par id de blessure, Rustine à difficulté normale, Hypoxie alignée sur le §8 et le §11. L'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11) restent en place. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines.
+L'étape en cours est la **0.6.3** : case Fin d'ordre sur la ligne de blessure, Rustine sur Survie, joints à la main, section États. Le compte à rebours des jetons non liés (0.6.2) reste en place. L'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11) restent en place. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -29,7 +29,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.6.2, compatibilité 14,
+system.json                         Manifeste : id, version 0.6.3, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -202,6 +202,9 @@ node --check module/dice/breach-clock.mjs
 node --check module/dice/breach-countdown.mjs
 node --check module/dice/seal.mjs
 node --check module/dice/seal-apply.mjs
+node --check module/dice/seal-joints.mjs
+node --check module/dice/state-status.mjs
+node --check module/sheets/states.mjs
 node --check module/data/armor-migrate.mjs
 node --check module/combat/initiative.mjs
 node --check tests/models.test.mjs
@@ -293,11 +296,15 @@ Surprise, round 1 : `_onStartTurn(combatant, context)` ([doc v14](https://foundr
 
 Réf. LdR v0.2 §3 et §11. Champ `endurance` nullable, `initial: null`, pas de `migrateData`, sur Personnage, PNJ, créature, synthétique et drone. Décision Marc 19/10/2026 : un nombre, pas `{ value, max }` du §15. `resolveEndurance` : null ou undefined prend `ceil(CON/5)` ; 0 reste 0. Le MJ actif écrit ce remplissage au `ready` seulement (option `solFillEndurance`), pas dans `createActor` : une CON par défaut écrirait 5, puis la fiche montrerait 5/8 après une CON à 40. Tant que le champ est vide, l'affichage lit déjà le maximum. Ce remplissage ne propose pas le test. `preUpdateActor` retient la valeur d'avant. `updateActor`, seulement chez l'auteur, appelle `enduranceZeroOffer`. Passage à 0 : drapeau `enduranceZeroOffered` puis une carte. Rester à 0 ne la reposte pas. Repasser au-dessus de 0 retire le drapeau. Créer une fiche déjà à 0 ne poste pas (ce n'est pas un `update`). Bouton : propriétaire ou MJ, test de CON via `performRoll`. La résolution est le drapeau d'acteur `enduranceCards` (le joueur ne peut pas `setFlag` une carte créée par le MJ). `pruneResolvedCards` retire les ids de messages qui n'existent plus et garde celui qu'on vient d'écrire. Le jet et **Ignorer** relisent ce drapeau avant d'écrire : un second clic ne relance pas. Réussite : `sol-nouvelle-ere.exhausted`. Échec : statut cœur `unconscious`. Ignorer ne pose aucun statut. Décision Marc 20/10/2026 : le −20 d'Épuisé passe par `statusRollModifiers` et entre dans `cappedModifier` avec la difficulté, le modificateur libre, le tir visé et Viser. La fenêtre et la carte l'affichent. À confirmer par Marc : l'Atout qui dispense du test n'est pas joué.
 
-Case « Envoie en fin d'ordre » : relue pendant le combat. `injuryDefer` est la liste des ids. La cocher ajoute cet id ; la décocher retire cet id seulement, même s'il reste d'autres cases cochées. Le MJ actif écrit, y compris quand c'est un joueur qui a coché (`preUpdate` pose `solEndOfOrderWas`, lu au `update`). Un booléen `true` hérité de la 0.6.1 compte encore une fois. `deferEnd` (Sonné) n'est pas effacé par cette case. Au passage de round, l'un ou l'autre envoie en fin d'ordre, puis la liste est vidée (`[]`). La case peut rester cochée : elle ne renvoie pas une seconde fois tant qu'on ne la décoche pas et qu'on ne la recoche pas.
+Case « Envoie en fin d'ordre » : sur la ligne de la section Blessures (pas de `name`, `data-action` écrit `system.endOfOrder`) et dans la fenêtre de l'objet. `injuryDefer` est la liste des ids. La cocher ajoute cet id ; la décocher retire cet id seulement, même s'il reste d'autres cases cochées. Le MJ actif écrit, y compris quand c'est un joueur qui a coché. `preUpdate` pose `solEndOfOrderWas`. S'il n'arrive pas, `endOfOrderWas` relit la présence de l'id dans la liste. Les écritures d'un même acteur sont enchaînées. Un booléen `true` hérité de la 0.6.1 compte encore une fois. `deferEnd` (Sonné) n'est pas effacé par cette case. Au passage de round, l'un ou l'autre envoie en fin d'ordre, puis la liste est vidée (`[]`). La case peut rester cochée : elle ne renvoie pas une seconde fois tant qu'on ne la décoche pas et qu'on ne la recoche pas.
 
 Armure : `equipped` part à `true`. Décision Marc 20/10/2026 : équipée par défaut au glisser-déposer. Un `false` déjà stocké reste `false`. La case est sur la ligne d'armure. Seules les pièces équipées comptent pour la protection, le seuil, la pressurisation et la réserve d'air.
 
-Rustine : `SOL.sealMethods`, première entrée `{ id: "patch", name: "Rustine" }`. Bouton Colmater sur l'équipement dont le nom correspond et dont la quantité est au moins 1. Au calme : pas de test. Sous le feu : `performRoll` sans choix préparé. Décision Marc 20/10/2026 : difficulté normale par défaut, le MJ peut la changer. « Test simple » du LdR s'oppose au test prolongé, ce n'est pas la difficulté Aisée. Réussite : condition retirée, horloge effacée, joints équipés encore `breached` repassent `intact`, quantité − 1, message au MJ. À confirmer par Marc : un échec ne consomme pas l'objet. Décision Marc 20/10/2026 : le propriétaire peut ouvrir la fenêtre, pas seulement le MJ.
+Rustine : `SOL.sealMethods`, première entrée `{ id: "patch", name: "Rustine" }`. Bouton Colmater sur l'équipement dont le nom correspond et dont la quantité est au moins 1. Au calme : pas de test. Sous le feu : `performRoll` sans choix préparé. Décision Marc 20/10/2026 : Survie par défaut, id de compendium `SOL.sealSkillId` (`Hs6fnCes2ZtRhEJK`), pas le nom et pas « Systèmes de survie ». La fenêtre liste les compétences de la fiche, Survie présélectionnée si `flags.core.sourceId` s'y termine. Difficulté normale, le MJ peut changer la compétence et la difficulté. « Test simple » du LdR s'oppose au test prolongé, ce n'est pas la difficulté Aisée. Réussite : condition retirée, horloge effacée, joints équipés encore `breached` repassent `intact`, quantité − 1, message au MJ. À confirmer par Marc : un échec ne consomme pas l'objet. Décision Marc 20/10/2026 : le propriétaire peut ouvrir la fenêtre, pas seulement le MJ.
+
+Joints à la main, `module/dice/seal-joints.mjs`. Décision Marc 20/10/2026 : une armure non pressurisée n'a pas de joints étanches. Le champ est grisé (« Sans effet : armure non pressurisée ») et passer à `breached` ne pose rien. Équipée et pressurisée : `breached` pose `sol-nouvelle-ere.suitBreach` (le MJ actif, y compris sur un jeton non lié), ce qui lance l'horloge et le message de départ. `intact` sur la dernière de ces armures appelle `repairBreach` (même effet que la Rustine, sans baisser la quantité). L'option `solSealApply` évite que cette écriture relance le hook.
+
+Section États : `presentStatuses` lit `actor.statuses` et les effets. Déposer une page (ou un journal d'une seule page) du pack `states` lit `flags.sol-nouvelle-ere.statusId` et appelle `toggleStatusEffect`. Pas de statut dans `CONFIG.statusEffects` : notification, rien d'inventé. Hypoxie, Exposé, Irradié, Condamné, Sous accélération, Choqué et Ancré / Flottant / En vol n'ont pas de statut.
 
 Épuisé et les autres malus de statut : un seul module, `module/dice/status-mods.mjs`. Ne pas en disperser un second.
 

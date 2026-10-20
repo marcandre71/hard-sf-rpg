@@ -18,6 +18,7 @@ import { seuilFromCharacteristics } from "../dice/damage.mjs";
 import { resolveEndurance } from "../dice/derived.mjs";
 import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
+import { applyDroppedState, dragData, presentStatuses, removeStatus } from "./states.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -32,7 +33,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, rollCharacteristic, stopBreachClock }
+    actions: { ...itemListActions, rollCharacteristic, stopBreachClock, removeStatus }
   };
 
   /** @override */
@@ -42,7 +43,8 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       templates: [
         "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
         "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs",
-        "systems/sol-nouvelle-ere/templates/actor/item-section.hbs"
+        "systems/sol-nouvelle-ere/templates/actor/item-section.hbs",
+        "systems/sol-nouvelle-ere/templates/actor/status-section.hbs"
       ]
     }
   };
@@ -91,6 +93,8 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     context.breachText = breach.text;
     context.breachAir = breach.air;
     context.breachStop = breach.stop;
+    context.statuses = presentStatuses(actor);
+    context.canRemoveStatus = game.user?.isGM === true || actor.isOwner === true;
     context.groups = prepareFieldGroups(actor.system.schema.fields, stored, {
       prefix: "system",
       rootId: context.rootId,
@@ -98,5 +102,18 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     });
     context.sections = prepareSections(actor);
     return context;
+  }
+
+  /**
+   * Une page du compendium États pose un statut. Le reste suit le cœur.
+   *
+   * @override
+   * @param {DragEvent} event
+   * @returns {Promise<void>}
+   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
+   */
+  async _onDrop(event) {
+    if ( await applyDroppedState(this.document, dragData(event)) ) return;
+    return super._onDrop(event);
   }
 }

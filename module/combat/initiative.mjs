@@ -47,6 +47,7 @@ import {
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
+  endOfOrderWas,
   injuryBoxChange,
   injuryDeferList,
   injuryDefersAtStart,
@@ -210,9 +211,36 @@ function actorHasStatus(actor, id) {
  * @param {boolean} active
  * @returns {Promise<void>}
  */
+/** Une écriture par acteur : deux cases cochées ensemble ne s'effacent pas. */
+const deferQueues = new Map();
+
+/**
+ * @param {string} key
+ * @param {() => Promise<void>} task
+ * @returns {Promise<void>}
+ */
+function enqueueDefer(key, task) {
+  const previous = deferQueues.get(key) ?? Promise.resolve();
+  const run = previous.then(task, task);
+  deferQueues.set(key, run.then(() => undefined, () => undefined));
+  return run;
+}
+
 export async function markInjuryDefer(actor, injuryId, active) {
   if ( game.user?.isActiveGM !== true || !actor ) return;
   if ( typeof injuryId !== "string" || injuryId.length === 0 ) return;
+  const key = actor.uuid || actor.id;
+  if ( !key ) return;
+  await enqueueDefer(key, () => writeInjuryDefer(actor, injuryId, active));
+}
+
+/**
+ * @param {Actor} actor
+ * @param {string} injuryId
+ * @param {boolean} active
+ * @returns {Promise<void>}
+ */
+async function writeInjuryDefer(actor, injuryId, active) {
   const combat = game.combat;
   if ( !combat ) return;
   /** @type {object[]} */
@@ -231,6 +259,24 @@ export async function markInjuryDefer(actor, injuryId, active) {
     });
   }
   if ( updates.length ) await combat.updateEmbeddedDocuments("Combatant", updates);
+}
+
+/**
+ * L'id est-il dans la liste d'un combattant de cet acteur ?
+ *
+ * @param {Actor} actor
+ * @param {string} injuryId
+ * @returns {boolean}
+ */
+function injuryListed(actor, injuryId) {
+  const combat = game.combat;
+  if ( !combat || !injuryId ) return false;
+  for ( const combatant of combat.combatants ) {
+    if ( combatant.actor?.uuid !== actor.uuid ) continue;
+    const current = combatant.getFlag(SYSTEM_ID, "injuryDefer");
+    if ( Array.isArray(current) && current.includes(injuryId) ) return true;
+  }
+  return false;
 }
 
 /**
@@ -264,12 +310,14 @@ function onInjuryPreUpdate(item, changes, options) {
  */
 function onInjuryUpdate(item, changes, options, _userId) {
   // Le MJ actif écrit, pas seulement le client qui a coché.
-  // `solEndOfOrderWas` est posé au preUpdate et suit l'opération.
+  // `solEndOfOrderWas` est posé au preUpdate. S'il n'arrive pas
+  // (socket), l'id encore dans `injuryDefer` dit que la case comptait.
   if ( game.user?.isActiveGM !== true ) return;
   if ( item?.type !== "injury" || !touchesEndOfOrder(changes) ) return;
   const actor = item.actor;
   if ( !actor || !item.id ) return;
-  const change = injuryBoxChange(options?.solEndOfOrderWas === true, item.system?.endOfOrder === true);
+  const was = endOfOrderWas(options?.solEndOfOrderWas, injuryListed(actor, item.id));
+  const change = injuryBoxChange(was, item.system?.endOfOrder === true);
   if ( change === "set" ) void markInjuryDefer(actor, item.id, true);
   if ( change === "clear" ) void markInjuryDefer(actor, item.id, false);
 }

@@ -235,6 +235,13 @@ export const SOL = {
     { id: "patch", name: "Rustine" }
   ],
 
+  /**
+   * Compétence du colmatage sous le feu.
+   * Décision Marc 20/10/2026 : Survie, par l'id du compendium Compétences,
+   * pas par le nom. Ce n'est pas « Systèmes de survie ».
+   */
+  sealSkillId: "Hs6fnCes2ZtRhEJK",
+
   /** Joints de combinaison. Valeurs : Fiche v0.2 §4 (`intact`, `breached`). */
   sealStates: {
     intact: "SOL.Armor.sealState.intact",

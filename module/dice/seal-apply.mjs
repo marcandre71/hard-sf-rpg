@@ -2,9 +2,10 @@
  * Poser une Rustine, ou une autre méthode du registre.
  *
  * Réf. LdR v0.2 §7 et §8. Au calme : pas de test. Sous le feu :
- * la fenêtre de jet habituelle. Décision Marc 20/10/2026 : difficulté
- * normale par défaut, le MJ peut la changer. « Test simple » du LdR
- * s'oppose au test prolongé, ce n'est pas la difficulté Aisée.
+ * la fenêtre de jet habituelle. Décision Marc 20/10/2026 : Survie
+ * par défaut (id du compendium, pas le nom), difficulté normale.
+ * Le MJ peut changer la compétence et la difficulté. « Test simple »
+ * du LdR s'oppose au test prolongé, ce n'est pas la difficulté Aisée.
  * Réussite : la condition Combinaison percée part, l'horloge s'arrête,
  * la quantité baisse d'un. Les armures équipées encore marquées
  * percées repassent intactes. Un message part au MJ.
@@ -16,7 +17,7 @@
  */
 import { SOL } from "../config.mjs";
 import { performRoll } from "./chat.mjs";
-import { canSeal, findSealMethod } from "./seal.mjs";
+import { canSeal, findSealMethod, pickSealSkillId } from "./seal.mjs";
 import { skillScore } from "./skill-score.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
@@ -91,18 +92,30 @@ function hasBreach(actor) {
  * @returns {Promise<void>}
  */
 async function sealNow(actor, item) {
+  await repairBreach(actor);
+  const quantity = Number(item.system?.quantity);
+  const next = Number.isFinite(quantity) ? Math.max(0, quantity - 1) : 0;
+  await item.update({ "system.quantity": next });
+}
+
+/**
+ * Même effet qu'une Rustine réussie, sans consommer d'objet.
+ * Joints remis à Intacte à la main, ou réussite du test.
+ * `solSealApply` empêche le hook des joints de relancer ce passage.
+ *
+ * @param {Actor} actor
+ * @returns {Promise<void>}
+ */
+export async function repairBreach(actor) {
   const updates = [];
   for ( const piece of actor.items ?? [] ) {
     if ( piece.type !== "armor" || piece.system?.equipped !== true ) continue;
     if ( piece.system.sealState !== "breached" ) continue;
     updates.push({ _id: piece.id, "system.sealState": "intact" });
   }
-  if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates);
+  if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates, { solSealApply: true });
   if ( actorHasStatus(actor, SUIT) ) await actor.toggleStatusEffect(SUIT, { active: false });
   if ( actor.getFlag(SYSTEM_ID, "breachClock") ) await actor.unsetFlag(SYSTEM_ID, "breachClock");
-  const quantity = Number(item.system?.quantity);
-  const next = Number.isFinite(quantity) ? Math.max(0, quantity - 1) : 0;
-  await item.update({ "system.quantity": next });
   await postSeal(actor);
 }
 
@@ -153,11 +166,17 @@ async function askSkill(actor) {
     return null;
   }
   const escape = foundry.utils.escapeHTML;
-  const options = skills.map(skill => `<option value="${escape(skill.id)}">${escape(skill.name)}</option>`).join("");
+  // Décision Marc 20/10/2026 : Survie est présélectionnée par son id.
+  const preferred = pickSealSkillId(skills, SOL.sealSkillId);
+  const note = preferred ? "" : `<p>${escape(game.i18n.localize("SOL.Seal.noSurvie"))}</p>`;
+  const options = skills.map(skill => {
+    const selected = skill.id === preferred ? " selected" : "";
+    return `<option value="${escape(skill.id)}"${selected}>${escape(skill.name)}</option>`;
+  }).join("");
   const result = await foundry.applications.api.DialogV2.wait({
     window: { title: game.i18n.localize("SOL.Seal.fire") },
     classes: ["sol", "sol-nouvelle-ere"],
-    content: `<label>${escape(game.i18n.localize("SOL.Seal.skill"))}
+    content: `${note}<label>${escape(game.i18n.localize("SOL.Seal.skill"))}
       <select name="skill">${options}</select></label>`,
     buttons: [
       {

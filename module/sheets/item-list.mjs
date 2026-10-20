@@ -82,9 +82,18 @@ function itemFields(item) {
         { label: "SOL.Weapon.damage", value: source.damage ?? 0 },
         { label: "SOL.Weapon.range.label", value: choiceLabel(SOL.weaponRanges, source.range) }
       ];
-    case "armor":
+    case "armor": {
       // Protection du torse seulement : un repère, pas le détail des six zones.
-      return [{ label: "SOL.Location.torso", value: source.protection?.torso ?? 0 }];
+      // Décision Marc 20/10/2026 : sans pressurisation, les joints ne font rien.
+      const rows = [{ label: "SOL.Location.torso", value: source.protection?.torso ?? 0 }];
+      if ( source.pressurized !== true ) {
+        rows.push({
+          label: "SOL.Armor.sealState.label",
+          value: game.i18n.localize("SOL.Armor.sealState.inert")
+        });
+      }
+      return rows;
+    }
     case "gear":
       return [{ label: "SOL.Gear.quantity", value: source.quantity ?? 0 }];
     case "augmentation":
@@ -129,6 +138,8 @@ function presentItem(item, actor) {
     // Armure : case sur toute fiche qui en porte. Seules les équipées comptent.
     showEquipped: (rollable && isWeapon) || isArmor,
     equipped,
+    showEndOfOrder: item.type === "injury",
+    endOfOrder: item.type === "injury" && item.system?.endOfOrder === true,
     showSeal: Boolean(seal) && Number(item.system.quantity) >= 1,
     canRoll: rollable && (item.type === "skill" || (isWeapon && equipped))
   };
@@ -181,7 +192,15 @@ export function prepareSections(actor, types = SOL.itemTypes) {
  * Actions `data-action` des gabarits de liste.
  * Foundry appelle ces fonctions avec la feuille comme `this`.
  */
-export const itemListActions = { openItem, deleteItem, createItem, rollItem, toggleEquipped, sealItem };
+export const itemListActions = {
+  openItem,
+  deleteItem,
+  createItem,
+  rollItem,
+  toggleEquipped,
+  toggleEndOfOrder,
+  sealItem
+};
 
 /**
  * Ouvre la feuille de l'objet cliqué (le nom, ou le bouton Modifier).
@@ -259,6 +278,26 @@ async function toggleEquipped(event, target) {
   const item = this.document.items.get(id);
   if ( !item || (item.type !== "weapon" && item.type !== "armor") ) return;
   await item.update({ "system.equipped": Boolean(input.checked) });
+}
+
+/**
+ * Case « Fin d'ordre » sur la ligne de blessure. Pas de `name` :
+ * on n'écrit pas l'acteur. Le hook d'initiative lit `system.endOfOrder`.
+ * Le propriétaire de la fiche peut cocher, pas seulement le MJ.
+ *
+ * @param {PointerEvent} event
+ * @param {HTMLElement} target
+ * @returns {Promise<void>}
+ */
+async function toggleEndOfOrder(event, target) {
+  const input = target.closest("input") ?? target;
+  input.addEventListener("change", change => change.stopPropagation(), { once: true });
+  const actor = this.document;
+  if ( game.user?.isGM !== true && actor?.isOwner !== true ) return;
+  const id = target.closest("[data-item-id]")?.dataset.itemId;
+  const item = actor.items.get(id);
+  if ( !item || item.type !== "injury" ) return;
+  await item.update({ "system.endOfOrder": Boolean(input.checked) });
 }
 
 /**

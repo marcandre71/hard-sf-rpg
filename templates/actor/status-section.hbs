@@ -1,0 +1,25 @@
+{{!--
+  Statuts actifs du pion. Pas des objets : actor.statuses et les effets.
+  Retirer : propriétaire ou MJ. Déposer une page du compendium États
+  pose le statut lié par flags.sol-nouvelle-ere.statusId.
+--}}
+<section class="sol-item-section">
+  <h3 class="sol-section-title">{{localize "SOL.Section.states"}}</h3>
+  {{#if statuses.length}}
+  <ul class="sol-items">
+    {{#each statuses as |status|}}
+    <li class="sol-item">
+      <img src="{{status.img}}" alt="">
+      <span class="sol-status-name" data-tooltip="{{status.hint}}">{{status.name}}</span>
+      {{#if ../canRemoveStatus}}
+      <button type="button" class="sol-item-delete" data-action="removeStatus" data-status-id="{{status.id}}" data-tooltip="{{localize 'SOL.Status.remove'}}">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p class="sol-empty">{{localize "SOL.Empty.states"}}</p>
+  {{/if}}
+</section>

@@ -26,6 +26,13 @@
         {{localize "SOL.Field.equipped"}}
       </label>
       {{/if}}
+      {{!-- Pas de name : sinon submitOnChange écrirait l'acteur. --}}
+      {{#if item.showEndOfOrder}}
+      <label class="sol-equipped" data-tooltip="{{localize 'SOL.Injury.endOfOrderHint'}}">
+        <input type="checkbox" data-action="toggleEndOfOrder" {{#if item.endOfOrder}}checked{{/if}}>
+        {{localize "SOL.Injury.endOfOrderShort"}}
+      </label>
+      {{/if}}
       {{#if item.showSeal}}
       <button type="button" class="sol-item-roll" data-action="sealItem">{{localize "SOL.Seal.apply"}}</button>
       {{/if}}

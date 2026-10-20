@@ -44,6 +44,10 @@ export function registerBreachCountdown() {
   });
   Hooks.on("createActiveEffect", effect => { void syncFromEffect(effect); });
   Hooks.on("deleteActiveEffect", effect => { void syncFromEffect(effect); });
+  // `game.time.advance` écrit le temps du monde et déclenche ce hook
+  // chez les clients connectés. Seul le MJ actif fait avancer l'horloge.
+  // https://foundryvtt.com/api/v14/functions/hookEvents.updateWorldTime.html
+  // https://foundryvtt.com/api/v14/classes/foundry.helpers.GameTime.html#advance
   Hooks.on("updateWorldTime", worldTime => { void tick(worldTime); });
   Hooks.on("renderChatMessageHTML", onBreachCard);
   Hooks.once("ready", () => {
@@ -207,6 +211,19 @@ function readRegistry() {
   }
 }
 
+/** Une écriture du registre à la fois : deux brèches ne s'effacent pas. */
+let registryQueue = Promise.resolve();
+
+/**
+ * @param {() => Promise<void>} task
+ * @returns {Promise<void>}
+ */
+function enqueueRegistry(task) {
+  const run = registryQueue.then(task, task);
+  registryQueue = run.then(() => undefined, () => undefined);
+  return run;
+}
+
 /**
  * @param {string[]} uuids
  * @returns {Promise<void>}
@@ -222,9 +239,11 @@ async function writeRegistry(uuids) {
  */
 async function remember(uuid) {
   if ( typeof uuid !== "string" || !uuid ) return;
-  const list = readRegistry();
-  if ( list.includes(uuid) ) return;
-  await writeRegistry([...list, uuid]);
+  await enqueueRegistry(async () => {
+    const list = readRegistry();
+    if ( list.includes(uuid) ) return;
+    await writeRegistry([...list, uuid]);
+  });
 }
 
 /**
@@ -232,9 +251,12 @@ async function remember(uuid) {
  * @returns {Promise<void>}
  */
 async function forget(uuid) {
-  const list = readRegistry();
-  if ( !list.includes(uuid) ) return;
-  await writeRegistry(list.filter(id => id !== uuid));
+  if ( typeof uuid !== "string" || !uuid ) return;
+  await enqueueRegistry(async () => {
+    const list = readRegistry();
+    if ( !list.includes(uuid) ) return;
+    await writeRegistry(list.filter(id => id !== uuid));
+  });
 }
 
 /**
@@ -242,19 +264,21 @@ async function forget(uuid) {
  */
 async function rebuildRegistry() {
   if ( game.user?.isActiveGM !== true ) return;
-  const entries = scanClockEntries();
-  for ( const uuid of readRegistry() ) {
-    if ( entries.some(entry => entry.uuid === uuid) ) continue;
-    const actor = await actorFromUuid(uuid);
-    if ( !actor ) continue;
-    entries.push({
-      uuid,
-      clock: actor.getFlag(SYSTEM_ID, CLOCK) ?? null,
-      linked: false,
-      actor
-    });
-  }
-  await writeRegistry(collectClockUuids(entries));
+  await enqueueRegistry(async () => {
+    const entries = scanClockEntries();
+    for ( const uuid of readRegistry() ) {
+      if ( entries.some(entry => entry.uuid === uuid) ) continue;
+      const actor = await actorFromUuid(uuid);
+      if ( !actor ) continue;
+      entries.push({
+        uuid,
+        clock: actor.getFlag(SYSTEM_ID, CLOCK) ?? null,
+        linked: false,
+        actor
+      });
+    }
+    await writeRegistry(collectClockUuids(entries));
+  });
 }
 
 /**

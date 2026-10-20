@@ -103,7 +103,11 @@
       "name": "Saignement",
       "type": "text",
       "sort": 600000,
-      "flags": {},
+      "flags": {
+        "sol-nouvelle-ere": {
+          "statusId": "sol-nouvelle-ere.bleeding"
+        }
+      },
       "text": {
         "format": 1,
         "content": "<p>Saignement : perte d'Endurance par tour. Réf. LdR v0.2 §11.</p><p>Blessure grave : saignement, perte d'1 point d'Endurance par tour jusqu'aux premiers secours. Réf. LdR v0.2 §7. Cette perte n'est pas automatisée.</p>"
@@ -122,7 +126,11 @@
       "name": "Sonné",
       "type": "text",
       "sort": 700000,
-      "flags": {},
+      "flags": {
+        "sol-nouvelle-ere": {
+          "statusId": "sol-nouvelle-ere.stunned"
+        }
+      },
       "text": {
         "format": 1,
         "content": "<p>Sonné : pas d'action ce tour, réaction possible. Réf. LdR v0.2 §11.</p><p>Un personnage qui devient Sonné passe en fin d'ordre au tour suivant. Retirer la condition Sonné n'annule pas un renvoi en fin d'ordre déjà marqué. Réf. LdR v0.2 §7.</p>"
@@ -141,7 +149,11 @@
       "name": "Inconscient",
       "type": "text",
       "sort": 800000,
-      "flags": {},
+      "flags": {
+        "sol-nouvelle-ere": {
+          "statusId": "unconscious"
+        }
+      },
       "text": {
         "format": 1,
         "content": "<p>Inconscient : aucune action. Réf. LdR v0.2 §11.</p>"
@@ -179,10 +191,14 @@
       "name": "Combinaison percée",
       "type": "text",
       "sort": 1000000,
-      "flags": {},
+      "flags": {
+        "sol-nouvelle-ere": {
+          "statusId": "sol-nouvelle-ere.suitBreach"
+        }
+      },
       "text": {
         "format": 1,
-        "content": "<p>Combinaison percée : horloge de décompression active. Réf. LdR v0.2 §11.</p><p>Une perforation laisse 5 minutes de survie : à zéro, le personnage perd connaissance, puis meurt 2 minutes plus tard si la brèche n'est pas colmatée. Elle se gère avec les règles de décompression. Réf. LdR v0.2 §7.</p><p>Colmater : une rustine sur une combinaison est une action (aucun test au calme ; sous le feu, test simple, compétence au choix du meneur). Colmater une coque est un test prolongé. Réf. LdR v0.2 §8.</p>"
+        "content": "<p>Combinaison percée : horloge de décompression active. Réf. LdR v0.2 §11.</p><p>Une perforation laisse 5 minutes de survie : à zéro, le personnage perd connaissance, puis meurt 2 minutes plus tard si la brèche n'est pas colmatée. Elle se gère avec les règles de décompression. Réf. LdR v0.2 §7.</p><p>Colmater : une rustine sur une combinaison est une action (aucun test au calme ; sous le feu, Survie par défaut, le meneur peut changer la compétence et la difficulté). Colmater une coque est un test prolongé. Décision Marc 20/10/2026. Réf. LdR v0.2 §8.</p>"
       },
       "title": {
         "show": true,
@@ -198,7 +214,11 @@
       "name": "Épuisé",
       "type": "text",
       "sort": 1100000,
-      "flags": {},
+      "flags": {
+        "sol-nouvelle-ere": {
+          "statusId": "sol-nouvelle-ere.exhausted"
+        }
+      },
       "text": {
         "format": 1,
         "content": "<p>Épuisé : −20 ; Endurance à 0 et test de CON réussi pour rester conscient. Réf. LdR v0.2 §11 et §3.</p><p>Le −20 s'applique à tous les jets tant que le statut est actif. Le meneur retire le statut depuis le pion.</p>"
@@ -241,7 +261,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.6.2",
+    "systemVersion": "0.6.3",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

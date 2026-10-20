@@ -11,10 +11,14 @@
     <legend>{{localize group.label}}</legend>
     <div class="sol-fields">
       {{#each group.rows as |row|}}
-        {{#if row.number}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
+        {{#if row.disabled}}
+          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
         {{else}}
+          {{#if row.number}}
+          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
+          {{else}}
           {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+          {{/if}}
         {{/if}}
       {{/each}}
     </div>
@@ -22,10 +26,14 @@
   {{else}}
   <div class="sol-fields">
     {{#each group.rows as |row|}}
-        {{#if row.number}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
+        {{#if row.disabled}}
+          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
         {{else}}
+          {{#if row.number}}
+          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
+          {{else}}
           {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+          {{/if}}
         {{/if}}
     {{/each}}
   </div>

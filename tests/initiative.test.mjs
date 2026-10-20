@@ -16,6 +16,7 @@ import {
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
+  endOfOrderWas,
   injuryBoxChange,
   injuryDeferList,
   injuryDefersAtStart,
@@ -707,6 +708,10 @@ check("modes de carte v13 et v14", () => {
 });
 
 check("case fin d'ordre relue : cocher compte, décocher n'efface pas Sonné", () => {
+  assert.equal(endOfOrderWas(true, false), true);
+  assert.equal(endOfOrderWas(false, true), false);
+  assert.equal(endOfOrderWas(undefined, true), true);
+  assert.equal(endOfOrderWas(undefined, false), false);
   assert.equal(injuryBoxChange(false, true), "set");
   assert.equal(injuryBoxChange(true, false), "clear");
   assert.equal(injuryBoxChange(true, true), "none");

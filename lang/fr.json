@@ -58,6 +58,7 @@
       "profession": "Profession",
       "skill": "Compétences",
       "talent": "Atouts",
+      "states": "États",
       "injury": "Blessures",
       "sequel": "Séquelles",
       "weapon": "Armes",
@@ -74,6 +75,7 @@
       "profession": "Aucune profession.",
       "skill": "Aucune compétence.",
       "talent": "Aucun atout.",
+      "states": "Aucun état. Glissez une page du compendium États.",
       "injury": "Aucune blessure.",
       "sequel": "Aucune séquelle.",
       "weapon": "Aucune arme.",
@@ -220,6 +222,10 @@
       "surprised": "Surpris",
       "exhausted": "Épuisé",
       "exhaustedHint": "−20 à tous les tests, tant que le statut est actif.",
+      "remove": "Retirer l'état",
+      "noMechanic": "« {name} » n'a pas de condition sur le pion. Rien n'est posé.",
+      "already": "« {name} » est déjà actif.",
+      "dropPage": "Glissez une page du journal États, pas le journal entier.",
       "exhaustedMod": "Épuisé",
       "exhaustedRemind": "Épuisé : −20, appliqué au score."
     },
@@ -329,7 +335,8 @@
       "sealState": {
         "label": "Joints",
         "intact": "Intacte",
-        "breached": "Percée"
+        "breached": "Percée",
+        "inert": "Sans effet : armure non pressurisée"
       },
       "penalty": {
         "label": "Pénalité",
@@ -390,6 +397,8 @@
       "penalty": "Pénalité",
       "treated": "Soignée",
       "endOfOrder": "Envoie en fin d'ordre",
+      "endOfOrderShort": "Fin d'ordre",
+      "endOfOrderHint": "Envoie en fin d'ordre au prochain round",
       "activeRoundOne": "Active pour le round 1",
       "healingTime": "Temps de guérison",
       "source": "Source"
@@ -423,7 +432,7 @@
       "permanent": "Permanente"
     },
     "Breach": {
-      "started": "{name} : combinaison percée. 5 minutes avant l'inconscience, puis 2 minutes avant la mort si ce n'est pas colmaté.",
+      "started": "{name} : compte à rebours démarré. Combinaison percée, 5 minutes avant l'inconscience, puis 2 minutes avant la mort si ce n'est pas colmaté.",
       "unconscious": "{name} perd connaissance (combinaison percée).",
       "death": "{name} : le délai de la brèche est passé. Le statut Mort est appliqué.",
       "remainingSurvival": "Combinaison percée : {min} min {sec} s avant l'inconscience.",
@@ -438,7 +447,8 @@
     "Seal": {
       "apply": "Colmater",
       "title": "Colmater",
-      "prompt": "Au calme, pas de test. Sous le feu, la fenêtre de jet s'ouvre : difficulté normale, le MJ peut la changer. La compétence est choisie ici.",
+      "prompt": "Au calme, pas de test. Sous le feu, Survie par défaut et difficulté normale. Le MJ peut changer la compétence et la difficulté.",
+      "noSurvie": "Survie n'est pas sur cette fiche. Choisissez une autre compétence.",
       "done": "{name} : brèche colmatée.",
       "calm": "Au calme",
       "fire": "Sous le feu",

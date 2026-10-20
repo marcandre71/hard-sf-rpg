@@ -23,6 +23,7 @@ import { WeaponData } from "./data/weapon.mjs";
 import { registerInitiative } from "./combat/initiative.mjs";
 import { registerDamage } from "./dice/apply-damage.mjs";
 import { registerBreachCountdown } from "./dice/breach-countdown.mjs";
+import { registerSealJoints } from "./dice/seal-joints.mjs";
 import { registerEndurance } from "./dice/endurance.mjs";
 import { registerItemGuard } from "./guards.mjs";
 import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
@@ -125,6 +126,7 @@ function initializeSystem() {
   registerDamage();
   registerEndurance();
   registerBreachCountdown();
+  registerSealJoints();
   registerInitiative();
 }
 

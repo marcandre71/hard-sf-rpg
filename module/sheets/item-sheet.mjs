@@ -50,6 +50,16 @@ export class GenericItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       prefix: "system",
       rootId: context.rootId
     });
+    if ( item.type === "armor" && item.system?.pressurized !== true ) {
+      // Décision Marc 20/10/2026 : joints sans effet si l'armure n'est pas pressurisée.
+      for ( const group of context.groups ) {
+        for ( const line of group.rows ) {
+          if ( line.name !== "system.sealState" ) continue;
+          line.disabled = true;
+          line.hint = game.i18n.localize("SOL.Armor.sealState.inert");
+        }
+      }
+    }
     const description = item.system.schema.fields.description;
     context.description = description
       ? {

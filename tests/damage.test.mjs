@@ -33,7 +33,8 @@ import {
   resolveEndurance,
   sangFroid
 } from "../module/dice/derived.mjs";
-import { canSeal, findSealMethod } from "../module/dice/seal.mjs";
+import { canSeal, findSealMethod, isSealSkill, jointEffect, pickSealSkillId } from "../module/dice/seal.mjs";
+import { statusEffectKnown, statusIdFromFlags } from "../module/dice/state-status.mjs";
 import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
 /**
@@ -306,6 +307,25 @@ check("horloge : jeton non lié, et cartes d'endurance élaguées", () => {
     "courant"
   ), { vivant: true, courant: true });
   assert.deepEqual(pruneResolvedCards({ vieux: true }, [], "neuf"), { neuf: true });
+});
+
+check("Survie par id, joints, et pages d'états", () => {
+  const id = "Hs6fnCes2ZtRhEJK";
+  const source = `Compendium.sol-nouvelle-ere.skills.Item.${id}`;
+  assert.equal(isSealSkill({ id: "autre", flags: { core: { sourceId: source } } }, id), true);
+  assert.equal(isSealSkill({ id, name: "Systèmes de survie" }, id), true);
+  assert.equal(isSealSkill({ id: "CYmXqUScf8aPhhYQ", name: "Survie" }, id), false);
+  assert.equal(pickSealSkillId([{ id: "a" }, { id: "emb", sourceId: source }], id), "emb");
+  assert.equal(pickSealSkillId([{ id: "a", name: "Survie" }], id), null);
+  assert.equal(jointEffect("breached", { equipped: true, pressurized: true }), "start");
+  assert.equal(jointEffect("intact", { equipped: true, pressurized: true }), "seal");
+  assert.equal(jointEffect("breached", { equipped: true, pressurized: false }), "ignore");
+  assert.equal(jointEffect("breached", { equipped: false, pressurized: true }), "ignore");
+  assert.equal(statusIdFromFlags({ "sol-nouvelle-ere": { statusId: "unconscious" } }), "unconscious");
+  assert.equal(statusIdFromFlags({}), null);
+  assert.equal(statusEffectKnown("unconscious", { unconscious: { id: "unconscious" } }), true);
+  assert.equal(statusEffectKnown("unconscious", [{ id: "unconscious" }]), true);
+  assert.equal(statusEffectKnown("sol-nouvelle-ere.hypoxia", { unconscious: { id: "unconscious" } }), false);
 });
 
 check("Épuisé et Rustine", () => {
