@@ -30,7 +30,7 @@
       "flags": {},
       "text": {
         "format": 1,
-        "content": "<p>Hypoxie (1 à 3) : −10 par stade, inconscience au stade 3. Réf. LdR v0.2 §11.</p><p>Hypoxie : −10 au premier stade, −20 au deuxième, inconscience au troisième. Chaque stade dure quelques tours à quelques minutes selon la pression. Réf. LdR v0.2 §8.</p><p>À confirmer par Marc : le §11 dit −10 par stade, le §8 dit −10 puis −20.</p>"
+        "content": "<p>Hypoxie (1 à 3). Décision Marc 20/10/2026 : le « −10 par stade » du §11 est cumulatif, il dit la même chose que le §8. Stade 1 : −10. Stade 2 : −20. Stade 3 : inconscience. Chaque stade dure quelques tours à quelques minutes selon la pression. Réf. LdR v0.2 §8 et §11.</p>"
       },
       "title": {
         "show": true,
@@ -241,7 +241,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.6.2",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

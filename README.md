@@ -12,7 +12,7 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.6.1
+## État du système : version 0.6.2
 
 On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. L'initiative est un test de Vigilance, conservé d'un round à l'autre. Des compendiums sont déclarés. L'interface est en français.
 
@@ -26,7 +26,7 @@ Le Seuil de blessure est `ceil((FOR + CON) / 20)` (décision du 18/10/2026 : le 
 
 L'initiative est un test de Vigilance (LdR v0.2 §7). On agit dans l'ordre des réussites, puis des échecs. À degré égal, la Réflexes départage, puis le score de Vigilance (réussites et échecs), puis l'identifiant. Une réussite critique passe avant une réussite normale du même degré. Cet ordre reste au round suivant. Une blessure grave ou pire, ou la condition Sonné, envoie en fin d'ordre. Sonné posé avant le combat le fait dès le round 1. Le meneur peut reculer un interrompu d'une place. Se replacer, seulement pendant son tour, relance la Vigilance et sacrifie le mouvement. Au round 1, un combattant marqué Surpris saute son tour. Jouer avant ne donne aucun bonus. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026.
 
-L'Endurance actuelle est un nombre. Si elle est vide, elle part au maximum (CON/5, arrondi au supérieur) ; un 0 déjà écrit reste 0. La fiche affiche actuelle / max. À 0, une carte propose un test de Constitution : échec Inconscient, réussite Épuisé (−20 appliqué aux jets). Une combinaison percée lance un compte à rebours (5 minutes, puis mort 2 minutes plus tard) sur le temps du monde. La Rustine colmate : sans test au calme, test simple sous le feu. Les compendiums de compétences, origines, milieux, professions, armes, armures, la Rustine, les blessures et les états reprennent le texte explicite du LdR v0.2. Pas encore inclus : tolérance aux g et Sang-froid comme champs.
+L'Endurance actuelle est un nombre. Si elle est vide, la fiche affiche le maximum (CON/5, arrondi au supérieur) ; le MJ actif l'écrit au chargement du monde, pas à la création de la fiche. Un 0 déjà écrit reste 0. À 0, une carte propose un test de Constitution : échec Inconscient, réussite Épuisé (−20 appliqué aux jets). Une combinaison percée lance un compte à rebours (5 minutes, puis mort 2 minutes plus tard) sur le temps du monde, y compris pour un jeton non lié. Un tour de combat dure 5 secondes. Le MJ peut arrêter ce compte sans retirer le statut. La Rustine colmate : sans test au calme, et sous le feu avec la fenêtre de jet (difficulté normale, le MJ peut la changer). Les compendiums de compétences, origines, milieux, professions, armes, armures, la Rustine, les blessures et les états reprennent le texte explicite du LdR v0.2. L'hypoxie du compendium États suit le §8 et le §11 : −10, puis −20, puis l'inconscience. Pas encore inclus : tolérance aux g et Sang-froid comme champs.
 
 Compatibilité : **FoundryVTT version 14** (cible : version 14 Stable, build 369 ; `compatibility.minimum` et `compatibility.verified` = `"14"`).
 
@@ -48,7 +48,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.6.1.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.6.2.
 
 Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
 

@@ -8,7 +8,8 @@
     "description": "<p>De SB à 2 SB − 1 : blessure grave (−20, saignement : perte d'1 point d'Endurance par tour jusqu'aux premiers secours, test de VOL pour continuer à agir). Réf. LdR v0.2 §7.</p>",
     "severity": "serious",
     "penalty": -20,
-    "bleeding": true
+    "bleeding": true,
+    "endOfOrder": true
   },
   "effects": [],
   "folder": null,
@@ -20,7 +21,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.6.2",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

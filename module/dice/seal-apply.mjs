@@ -2,19 +2,20 @@
  * Poser une Rustine, ou une autre méthode du registre.
  *
  * Réf. LdR v0.2 §7 et §8. Au calme : pas de test. Sous le feu :
- * test simple, compétence choisie dans la fenêtre.
+ * la fenêtre de jet habituelle. Décision Marc 20/10/2026 : difficulté
+ * normale par défaut, le MJ peut la changer. « Test simple » du LdR
+ * s'oppose au test prolongé, ce n'est pas la difficulté Aisée.
  * Réussite : la condition Combinaison percée part, l'horloge s'arrête,
  * la quantité baisse d'un. Les armures équipées encore marquées
- * percées repassent intactes.
+ * percées repassent intactes. Un message part au MJ.
  * // À confirmer par Marc : un échec ne consomme pas l'objet.
- * // À confirmer par Marc : le propriétaire peut ouvrir la fenêtre,
- * pas seulement le MJ.
+ * Décision Marc 20/10/2026 : le propriétaire de la fiche peut ouvrir
+ * la fenêtre, pas seulement le MJ.
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DialogV2.html
  */
 import { SOL } from "../config.mjs";
 import { performRoll } from "./chat.mjs";
-import { rollChoice } from "./roll-dialog.mjs";
 import { canSeal, findSealMethod } from "./seal.mjs";
 import { skillScore } from "./skill-score.mjs";
 
@@ -53,12 +54,13 @@ export async function applySealAction(actor, target) {
     ui.notifications.warn(game.i18n.format("SOL.Seal.impossible", { name: skill.name }));
     return;
   }
+  // Décision Marc 20/10/2026 : pas de choix préparé. La fenêtre
+  // s'ouvre sur la difficulté normale, le MJ peut la changer.
   const outcome = await performRoll({
     actor,
     label: skill.name,
     score: rated.score,
-    type: "skill",
-    choice: rollChoice(rated.score, "simple")
+    type: "skill"
   });
   if ( !outcome ) return;
   // À confirmer par Marc : l'échec laisse la quantité et la brèche.
@@ -101,6 +103,21 @@ async function sealNow(actor, item) {
   const quantity = Number(item.system?.quantity);
   const next = Number.isFinite(quantity) ? Math.max(0, quantity - 1) : 0;
   await item.update({ "system.quantity": next });
+  await postSeal(actor);
+}
+
+/**
+ * @param {Actor} actor
+ * @returns {Promise<void>}
+ */
+async function postSeal(actor) {
+  const whisper = (game.users ?? []).filter(user => user.isGM).map(user => user.id);
+  const body = foundry.utils.escapeHTML(game.i18n.format("SOL.Seal.done", { name: actor.name }));
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<p>${body}</p>`,
+    whisper
+  });
 }
 
 /**

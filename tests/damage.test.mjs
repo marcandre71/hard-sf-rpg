@@ -23,12 +23,13 @@ import {
   sumZoneArmour,
   visorHeadProtection
 } from "../module/dice/damage.mjs";
-import { breachClock } from "../module/dice/breach-clock.mjs";
+import { breachClock, clockIsStopped, collectClockUuids } from "../module/dice/breach-clock.mjs";
 import {
   ceilHalf,
   endurancePoints,
   enduranceZeroOffer,
   gTolerance,
+  pruneResolvedCards,
   resolveEndurance,
   sangFroid
 } from "../module/dice/derived.mjs";
@@ -287,6 +288,24 @@ check("horloge de brèche : 5 minutes, puis 2", () => {
   const dead = breachClock(start + 420, start);
   assert.equal(dead.phase, "death");
   assert.equal(dead.remainingDeath, 0);
+});
+
+check("horloge : jeton non lié, et cartes d'endurance élaguées", () => {
+  assert.deepEqual(collectClockUuids([
+    { uuid: "Actor.a", clock: { startedAt: 10 } },
+    { uuid: "Actor.a", clock: { startedAt: 10 }, linked: true },
+    { uuid: "Scene.s.Token.t", clock: { startedAt: 12 }, linked: false },
+    { uuid: "Scene.s.Token.u", clock: null },
+    { uuid: "", clock: { startedAt: 1 } }
+  ]), ["Actor.a", "Scene.s.Token.t"]);
+  assert.equal(clockIsStopped({ startedAt: 1, stopped: true }), true);
+  assert.equal(clockIsStopped({ startedAt: 1 }), false);
+  assert.deepEqual(pruneResolvedCards(
+    { vieux: true, vivant: true, courant: true },
+    ["vivant"],
+    "courant"
+  ), { vivant: true, courant: true });
+  assert.deepEqual(pruneResolvedCards({ vieux: true }, [], "neuf"), { neuf: true });
 });
 
 check("Épuisé et Rustine", () => {

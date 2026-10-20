@@ -8,7 +8,8 @@
     "description": "<p>À confirmer par Marc : blessures propres aux machines (synthétique, drone). Le LdR v0.2 §7 dit que la liste viendra ; en attendant, on utilise la blessure standard. Cette entrée est un repère du compendium, sans effet inventé.</p>",
     "severity": "serious",
     "penalty": 0,
-    "bleeding": false
+    "bleeding": false,
+    "endOfOrder": true
   },
   "effects": [],
   "folder": null,
@@ -20,7 +21,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.6.2",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

@@ -61,6 +61,12 @@ function initializeSystem() {
 
   CONFIG.SOL = SOL;
 
+  // Réf. LdR v0.2 : un tour dure environ 5 secondes. `0` ne fait pas
+  // avancer le temps du monde au changement de round, et l'horloge de
+  // brèche resterait figée en combat.
+  // https://foundryvtt.com/api/v14/variables/CONFIG.html
+  CONFIG.time.roundTime = 5;
+
   // Pas de CONFIG.Actor.trackableAttributes : l'Endurance est un champ
   // de fiche, pas une barre de pion. Sang-froid n'est pas un champ.
 

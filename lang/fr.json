@@ -430,12 +430,16 @@
       "remainingDeath": "Inconscient : {min} min {sec} s avant la mort si la brèche n'est pas colmatée.",
       "remainingOver": "Délai de la brèche dépassé.",
       "remainingUnknown": "Combinaison percée : horloge en cours.",
-      "air": "Rappel réserve d'air ({name}) : {value} / {max} h."
+      "air": "Rappel réserve d'air ({name}) : {value} / {max} h.",
+      "stop": "Arrêter le compte à rebours",
+      "stopped": "{name} : le compte à rebours de la brèche est arrêté. Le statut Combinaison percée reste.",
+      "stoppedSheet": "Compte à rebours arrêté. Le statut Combinaison percée est encore là."
     },
     "Seal": {
       "apply": "Colmater",
       "title": "Colmater",
-      "prompt": "Au calme, pas de test. Sous le feu, test simple : la compétence est choisie ici.",
+      "prompt": "Au calme, pas de test. Sous le feu, la fenêtre de jet s'ouvre : difficulté normale, le MJ peut la changer. La compétence est choisie ici.",
+      "done": "{name} : brèche colmatée.",
       "calm": "Au calme",
       "fire": "Sous le feu",
       "cancel": "Annuler",

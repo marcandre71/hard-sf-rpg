@@ -27,6 +27,9 @@
   {{#each breachAir as |line|}}
   <p class="sol-seuil">{{line}}</p>
   {{/each}}
+  {{#if breachStop}}
+  <button type="button" data-action="stopBreachClock">{{localize "SOL.Breach.stop"}}</button>
+  {{/if}}
   {{/if}}
   {{/if}}
 

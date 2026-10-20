@@ -377,7 +377,7 @@ async function applyOne(target, zone, attack, source) {
       const text = game.i18n.localize(`SOL.Damage.consequence.${key}`);
       system.description = `<p>${foundry.utils.escapeHTML(text)}</p>`;
     }
-    await actor.createEmbeddedDocuments("Item", [{
+    const [created] = await actor.createEmbeddedDocuments("Item", [{
       name: game.i18n.format("SOL.Damage.injuryName", {
         severity: game.i18n.localize(SOL.injurySeverities[strike.severity]),
         zone: game.i18n.localize(SOL.bodyLocations[zone])
@@ -392,7 +392,7 @@ async function applyOne(target, zone, attack, source) {
     // Réf. LdR v0.2 §7. La case est relue au passage de round.
     // Décocher avant ce passage annule le déplacement de cette blessure.
     // Le drapeau Sonné (`deferEnd`) n'est pas touché.
-    if ( endOfOrder ) await markInjuryDefer(actor, true);
+    if ( endOfOrder && created?.id ) await markInjuryDefer(actor, created.id, true);
   }
 
   if ( strike.breach ) {

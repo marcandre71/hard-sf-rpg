@@ -17,6 +17,7 @@ import {
   indexAfterRoll,
   initiativeRollPlan,
   injuryBoxChange,
+  injuryDeferList,
   injuryDefersAtStart,
   newInjuryEndsOrder,
   INITIATIVE_SUCCESS_BASE,
@@ -731,6 +732,30 @@ check("case fin d'ordre relue : cocher compte, décocher n'efface pas Sonné", (
   ]);
   assert.equal(unchecked.find(update => update.id === "a"), undefined);
   assert.equal(unchecked.find(update => update.id === "b").clearEnd, true);
+});
+
+check("injuryDefer est une liste d'ids : retirer un id n'efface pas les autres", () => {
+  assert.deepEqual(injuryDeferList(true, { add: "blessure-a" }), ["blessure-a"]);
+  assert.deepEqual(injuryDeferList(true, { remove: "blessure-a" }), []);
+  assert.deepEqual(injuryDeferList(["blessure-a", "blessure-a", 3, ""], { add: "blessure-b" }), ["blessure-a", "blessure-b"]);
+  assert.deepEqual(injuryDeferList(["blessure-a", "blessure-b"], { remove: "blessure-a" }), ["blessure-b"]);
+  assert.equal(wantsEndOfOrder(false, ["blessure-b"]), true);
+  assert.equal(wantsEndOfOrder(false, []), false);
+  assert.equal(wantsEndOfOrder(false, true), true);
+  const sorted = [
+    { id: "a", initiative: 30, injuryDefer: ["blessure-a"] },
+    { id: "b", initiative: 20, injuryDefer: [] }
+  ];
+  const updates = resolveDeferred(sorted);
+  const a = updates.find(update => update.id === "a");
+  assert.equal(a.clearInjury, true);
+  assert.equal(a.initiative, 19);
+  assert.equal(updates.find(update => update.id === "b"), undefined);
+  const kept = resolveDeferred([
+    { id: "a", initiative: 30, injuryDefer: ["blessure-b"] },
+    { id: "c", initiative: 10 }
+  ]);
+  assert.equal(kept.find(update => update.id === "a").clearInjury, true);
 });
 
 console.log("initiative.test.mjs : ok");

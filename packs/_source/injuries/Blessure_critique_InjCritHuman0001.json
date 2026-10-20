@@ -8,7 +8,8 @@
     "description": "<p>De 2 SB à 3 SB − 1 : blessure critique (zone hors d'usage, test de CON pour rester conscient ; à la tête ou au torse, risque de mort sans soins en quelques minutes). Réf. LdR v0.2 §7.</p>",
     "severity": "critical",
     "penalty": 0,
-    "bleeding": false
+    "bleeding": false,
+    "endOfOrder": true
   },
   "effects": [],
   "folder": null,
@@ -20,7 +21,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.6.2",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

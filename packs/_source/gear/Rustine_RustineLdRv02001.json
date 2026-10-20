@@ -5,7 +5,7 @@
   "type": "gear",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Équipement consommable, posé en une action. Aucun test au calme. Sous le feu, un test simple, compétence au choix du meneur. D'autres objets de colmatage (mousses expansives, etc.) seront définis plus tard. Réf. LdR v0.2 §7 et §8.</p>",
+    "description": "<p>Équipement consommable, posé en une action. Aucun test au calme. Sous le feu, un test simple (pas un test prolongé) : difficulté normale par défaut, le MJ peut la changer, compétence au choix. Décision Marc 20/10/2026. D'autres objets de colmatage (mousses expansives, etc.) seront définis plus tard. Réf. LdR v0.2 §7 et §8.</p>",
     "quantity": 1
   },
   "effects": [],
@@ -18,7 +18,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.6.2",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

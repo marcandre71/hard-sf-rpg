@@ -48,6 +48,7 @@ import {
   indexAfterRoll,
   initiativeRollPlan,
   injuryBoxChange,
+  injuryDeferList,
   injuryDefersAtStart,
   INITIATIVE_FLAG_SCOPE,
   interruptTiming,
@@ -198,23 +199,37 @@ function actorHasStatus(actor, id) {
 
 /**
  * Case « Envoie en fin d'ordre » cochée, pas encore consommée.
- * Décision Marc 18/10/2026. Distinct de `deferEnd` (Sonné) :
- * décocher la case retire ce drapeau, pas un renvoi Sonné déjà marqué.
+ * Décision Marc 18/10/2026. `injuryDefer` est la liste des ids.
+ * Décocher retire cet id seulement, pas un renvoi Sonné (`deferEnd`).
+ * Un booléen `true` (0.6.1) reste jusqu'au passage de round : le retirer
+ * ici ne sait pas quel id il représentait. Seul le MJ actif écrit.
+ * // À confirmer par Marc : hors du combat en cours, on ne pose rien.
  *
  * @param {Actor|null|undefined} actor
+ * @param {string} injuryId
  * @param {boolean} active
  * @returns {Promise<void>}
  */
-export async function markInjuryDefer(actor, active) {
-  if ( !game.user?.isGM || !actor ) return;
+export async function markInjuryDefer(actor, injuryId, active) {
+  if ( game.user?.isActiveGM !== true || !actor ) return;
+  if ( typeof injuryId !== "string" || injuryId.length === 0 ) return;
   const combat = game.combat;
   if ( !combat ) return;
-  const updates = combat.combatants
-    .filter(combatant => combatant.actor?.uuid === actor.uuid)
-    .map(combatant => ({
+  /** @type {object[]} */
+  const updates = [];
+  for ( const combatant of combat.combatants ) {
+    if ( combatant.actor?.uuid !== actor.uuid ) continue;
+    const current = combatant.getFlag(SYSTEM_ID, "injuryDefer");
+    if ( current === true && active !== true ) continue;
+    const next = injuryDeferList(current, active === true ? { add: injuryId } : { remove: injuryId });
+    if ( Array.isArray(current) && current.length === next.length && current.every((id, index) => id === next[index]) ) {
+      continue;
+    }
+    updates.push({
       _id: combatant.id,
-      [`flags.${SYSTEM_ID}.injuryDefer`]: active === true
-    }));
+      [`flags.${SYSTEM_ID}.injuryDefer`]: next
+    });
+  }
   if ( updates.length ) await combat.updateEmbeddedDocuments("Combatant", updates);
 }
 
@@ -247,18 +262,16 @@ function onInjuryPreUpdate(item, changes, options) {
  * @param {string} userId
  * @returns {void}
  */
-function onInjuryUpdate(item, changes, options, userId) {
-  if ( game.user?.id !== userId ) return;
+function onInjuryUpdate(item, changes, options, _userId) {
+  // Le MJ actif écrit, pas seulement le client qui a coché.
+  // `solEndOfOrderWas` est posé au preUpdate et suit l'opération.
+  if ( game.user?.isActiveGM !== true ) return;
   if ( item?.type !== "injury" || !touchesEndOfOrder(changes) ) return;
   const actor = item.actor;
-  if ( !actor ) return;
+  if ( !actor || !item.id ) return;
   const change = injuryBoxChange(options?.solEndOfOrderWas === true, item.system?.endOfOrder === true);
-  if ( change === "set" ) void markInjuryDefer(actor, true);
-  if ( change !== "clear" ) return;
-  const other = actor.items.some(entry => entry.type === "injury"
-    && entry.id !== item.id
-    && entry.system?.endOfOrder === true);
-  if ( !other ) void markInjuryDefer(actor, false);
+  if ( change === "set" ) void markInjuryDefer(actor, item.id, true);
+  if ( change === "clear" ) void markInjuryDefer(actor, item.id, false);
 }
 
 /**
@@ -267,10 +280,10 @@ function onInjuryUpdate(item, changes, options, userId) {
  * @param {string} userId
  * @returns {void}
  */
-function onInjuryCreate(item, _options, userId) {
-  if ( game.user?.id !== userId ) return;
-  if ( item?.type !== "injury" || item.system?.endOfOrder !== true ) return;
-  void markInjuryDefer(item.actor, true);
+function onInjuryCreate(item, _options, _userId) {
+  if ( game.user?.isActiveGM !== true ) return;
+  if ( item?.type !== "injury" || item.system?.endOfOrder !== true || !item.id ) return;
+  void markInjuryDefer(item.actor, item.id, true);
 }
 
 /**
@@ -355,7 +368,7 @@ async function applyDeferred(combat, { turnEvents = true } = {}) {
     initiative: typeof combatant.initiative === "number" ? combatant.initiative : null,
     deferStep: combatant.getFlag(SYSTEM_ID, "deferStep") === true,
     deferEnd: combatant.getFlag(SYSTEM_ID, "deferEnd") === true,
-    injuryDefer: combatant.getFlag(SYSTEM_ID, "injuryDefer") === true,
+    injuryDefer: combatant.getFlag(SYSTEM_ID, "injuryDefer"),
     pendingInitiative: combatant.getFlag(SYSTEM_ID, "pendingInitiative") ?? null
   }));
   const resolved = resolveDeferred(sorted);
@@ -365,7 +378,7 @@ async function applyDeferred(combat, { turnEvents = true } = {}) {
     const data = { _id: entry.id };
     if ( entry.clearStep ) data[`flags.${SYSTEM_ID}.deferStep`] = false;
     if ( entry.clearEnd ) data[`flags.${SYSTEM_ID}.deferEnd`] = false;
-    if ( entry.clearInjury ) data[`flags.${SYSTEM_ID}.injuryDefer`] = false;
+    if ( entry.clearInjury ) data[`flags.${SYSTEM_ID}.injuryDefer`] = [];
     if ( entry.clearPending ) Object.assign(data, withoutFlag("pendingInitiative"));
     if ( entry.rank ) data[`flags.${SYSTEM_ID}.rank`] = entry.rank;
     if ( typeof entry.initiative === "number" ) data.initiative = entry.initiative;

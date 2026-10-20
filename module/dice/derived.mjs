@@ -109,3 +109,27 @@ export function enduranceZeroOffer(previous, next, alreadyOffered) {
 function finite(value) {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
+
+/**
+ * Cartes d'Endurance déjà résolues. On retire les messages disparus
+ * pour que le drapeau ne grossisse pas. L'id qu'on vient d'écrire reste,
+ * même s'il n'est pas encore dans la liste des messages.
+ *
+ * @param {unknown} cards
+ * @param {Iterable<string>|null|undefined} existingIds
+ * @param {string|null|undefined} keepId
+ * @returns {Record<string, boolean>}
+ */
+export function pruneResolvedCards(cards, existingIds, keepId) {
+  const live = existingIds instanceof Set ? existingIds : new Set(existingIds ?? []);
+  /** @type {Record<string, boolean>} */
+  const next = {};
+  if ( cards && typeof cards === "object" ) {
+    for ( const [id, value] of Object.entries(cards) ) {
+      if ( !id ) continue;
+      if ( id === keepId || live.has(id) ) next[id] = value === true;
+    }
+  }
+  if ( typeof keepId === "string" && keepId ) next[keepId] = true;
+  return next;
+}

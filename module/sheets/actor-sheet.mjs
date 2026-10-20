@@ -13,7 +13,7 @@
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { FOR_CON_PER_KEYS } from "../data/actors.mjs";
-import { breachContext } from "../dice/breach-countdown.mjs";
+import { breachContext, stopBreachClock } from "../dice/breach-countdown.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
 import { resolveEndurance } from "../dice/derived.mjs";
 import { rollCharacteristic } from "./character-sheet.mjs";
@@ -32,7 +32,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, rollCharacteristic }
+    actions: { ...itemListActions, rollCharacteristic, stopBreachClock }
   };
 
   /** @override */
@@ -90,6 +90,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     const breach = breachContext(actor);
     context.breachText = breach.text;
     context.breachAir = breach.air;
+    context.breachStop = breach.stop;
     context.groups = prepareFieldGroups(actor.system.schema.fields, stored, {
       prefix: "system",
       rootId: context.rootId,

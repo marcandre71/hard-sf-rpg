@@ -23,7 +23,7 @@
  * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
  */
 import { characteristicRollLabel, SOL } from "../config.mjs";
-import { breachContext } from "../dice/breach-countdown.mjs";
+import { breachContext, stopBreachClock } from "../dice/breach-countdown.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import { resolveEndurance } from "../dice/derived.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
@@ -74,7 +74,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, rollCharacteristic }
+    actions: { ...itemListActions, rollCharacteristic, stopBreachClock }
   };
 
   /**
@@ -201,6 +201,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const breach = breachContext(actor);
     context.breachText = breach.text;
     context.breachAir = breach.air;
+    context.breachStop = breach.stop;
     context.sequelSection = byType.sequel;
     context.inventorySections = INVENTORY_TYPES.map(type => byType[type]).filter(Boolean);
 

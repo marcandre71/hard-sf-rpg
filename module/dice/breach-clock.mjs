@@ -48,3 +48,39 @@ export function clockParts(seconds) {
   if ( !Number.isFinite(total) ) return { min: 0, sec: 0 };
   return { min: Math.floor(total / 60), sec: total % 60 };
 }
+
+/**
+ * Horloge arrêtée par le MJ. Le statut peut rester.
+ * Décision Marc 20/10/2026.
+ *
+ * @param {unknown} clock
+ * @returns {boolean}
+ */
+export function clockIsStopped(clock) {
+  return Boolean(clock && typeof clock === "object" && clock.stopped === true);
+}
+
+/**
+ * Uuids à suivre. Un acteur du monde et un jeton non lié sont distincts.
+ * Un jeton lié a le même uuid que l'acteur : `linked` l'écarte.
+ * Deux fois le même uuid ne compte qu'une fois.
+ *
+ * @param {Array<{ uuid?: string, clock?: { startedAt?: number }|null, linked?: boolean }>|null|undefined} entries
+ * @returns {string[]}
+ */
+export function collectClockUuids(entries) {
+  /** @type {string[]} */
+  const result = [];
+  const seen = new Set();
+  for ( const entry of entries ?? [] ) {
+    const uuid = entry?.uuid;
+    if ( typeof uuid !== "string" || uuid.length === 0 ) continue;
+    if ( entry.linked === true ) continue;
+    const startedAt = entry.clock?.startedAt;
+    if ( typeof startedAt !== "number" || !Number.isFinite(startedAt) ) continue;
+    if ( seen.has(uuid) ) continue;
+    seen.add(uuid);
+    result.push(uuid);
+  }
+  return result;
+}

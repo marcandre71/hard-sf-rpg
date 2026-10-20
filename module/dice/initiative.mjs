@@ -185,18 +185,42 @@ export function injuryDefersAtStart(injuries) {
 /**
  * Fin d'ordre à ce passage du round.
  * `deferEnd` : Sonné, ou un renvoi déjà marqué. Le retirer n'efface pas
- * ce drapeau. `injuryDefer` : la case d'une blessure a été cochée et
- * n'a pas encore été consommée. Décocher la case retire `injuryDefer`
- * sans toucher `deferEnd`.
+ * ce drapeau. `injuryDefer` : ids des blessures dont la case a été
+ * cochée et n'a pas encore été consommée. Un booléen `true` (0.6.1)
+ * compte encore une fois. Décocher retire cet id, pas `deferEnd`.
  * Décision Marc 18/10/2026 : la case, pas la gravité seule. Elle est
  * relue quand on la coche ou la décoche pendant le combat.
  *
  * @param {boolean|undefined} deferEnd
- * @param {boolean|undefined} injuryDefer
+ * @param {boolean|string[]|undefined} injuryDefer
  * @returns {boolean}
  */
 export function wantsEndOfOrder(deferEnd, injuryDefer) {
-  return deferEnd === true || injuryDefer === true;
+  if ( deferEnd === true ) return true;
+  if ( injuryDefer === true ) return true;
+  return Array.isArray(injuryDefer) && injuryDefer.some(id => typeof id === "string" && id.length > 0);
+}
+
+/**
+ * Liste d'ids. Un booléen (drapeau 0.6.1) part d'une liste vide :
+ * l'appelant garde `true` tel quel s'il ne fait qu'un retrait.
+ * Les valeurs qui ne sont pas des chaînes sont ignorées.
+ *
+ * @param {unknown} current
+ * @param {{ add?: string, remove?: string }} [change]
+ * @returns {string[]}
+ */
+export function injuryDeferList(current, { add, remove } = {}) {
+  /** @type {Set<string>} */
+  const ids = new Set();
+  if ( Array.isArray(current) ) {
+    for ( const id of current ) {
+      if ( typeof id === "string" && id.length > 0 ) ids.add(id);
+    }
+  }
+  if ( typeof add === "string" && add.length > 0 ) ids.add(add);
+  if ( typeof remove === "string" && remove.length > 0 ) ids.delete(remove);
+  return [...ids];
 }
 
 /**
@@ -580,7 +604,8 @@ export function resolveDeferred(sorted) {
     }
     if ( wantsEndOfOrder(entry.deferEnd, entry.injuryDefer) && !waitingEnd.has(entry.id) ) {
       if ( entry.deferEnd ) data.clearEnd = true;
-      if ( entry.injuryDefer ) data.clearInjury = true;
+      // Une liste vide est truthy : on ne l'efface que si elle comptait.
+      if ( wantsEndOfOrder(false, entry.injuryDefer) ) data.clearInjury = true;
       touched = true;
     }
     if ( entry.pendingInitiative ) {

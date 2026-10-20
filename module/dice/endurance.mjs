@@ -21,7 +21,7 @@
 import { registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { performRoll } from "./chat.mjs";
-import { enduranceZeroOffer, resolveEndurance } from "./derived.mjs";
+import { enduranceZeroOffer, pruneResolvedCards, resolveEndurance } from "./derived.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const EXHAUSTED = "sol-nouvelle-ere.exhausted";
@@ -45,7 +45,10 @@ export function registerEndurance() {
   Hooks.on("preUpdateActor", onPreUpdate);
   Hooks.on("updateActor", onUpdate);
   Hooks.on("renderChatMessageHTML", onCard);
-  Hooks.on("createActor", onCreate);
+  // Pas de `createActor` : une CON par défaut (25) écrirait 5, puis la
+  // fiche afficherait 5/8 après une CON à 40. `resolveEndurance` montre
+  // déjà le maximum tant que le champ est vide. Le MJ actif remplit
+  // les fiches déjà là, au ready seulement.
   Hooks.once("ready", () => {
     localizeExhaustedHint();
     if ( game.user?.isActiveGM !== true ) return;
@@ -97,11 +100,6 @@ function onPreUpdate(actor, changes, options) {
  * @param {string} userId
  * @returns {void}
  */
-function onCreate(actor) {
-  if ( game.user?.isActiveGM !== true ) return;
-  void fillEndurance(actor);
-}
-
 /**
  * Absence seulement : null ou undefined. Un 0 stocké reste 0.
  * Pas de `migrateData` : un diff partiel n'est pas rempli ici.
@@ -192,8 +190,9 @@ function cardResolved(message, actor) {
 async function markCardResolved(actor, messageId) {
   if ( !actor || !messageId ) return;
   const prior = actor.getFlag(SYSTEM_ID, "enduranceCards");
-  const cards = prior && typeof prior === "object" ? { ...prior } : {};
-  cards[messageId] = true;
+  const existing = [];
+  for ( const message of game.messages ?? [] ) existing.push(message.id);
+  const cards = pruneResolvedCards(prior, existing, messageId);
   await actor.setFlag(SYSTEM_ID, "enduranceCards", cards);
 }
 
@@ -220,7 +219,13 @@ function onCard(message, html) {
     dismiss.dataset.solBound = "1";
     dismiss.addEventListener("click", event => {
       event.preventDefault();
-      void markCardResolved(actor, message.id);
+      const current = typeof uuid === "string" ? foundry.utils.fromUuidSync(uuid) : null;
+      if ( cardResolved(message, current) ) {
+        roll?.remove();
+        dismiss.remove();
+        return;
+      }
+      void markCardResolved(current, message.id);
       roll?.remove();
       dismiss.remove();
     });
@@ -234,20 +239,20 @@ function onCard(message, html) {
  */
 async function rollCon(message, button) {
   if ( busy.has(message.id) ) return;
-  const uuid = message.getFlag(SYSTEM_ID, "actorUuid");
-  if ( typeof uuid !== "string" || !allowed(uuid) ) return;
-  const actor = await foundry.utils.fromUuid(uuid);
-  if ( !actor ) return;
-  const score = actor.system?.characteristics?.con?.value;
-  if ( typeof score !== "number" ) {
-    ui.notifications.warn(game.i18n.format("SOL.Damage.noCharacteristic", { name: actor.name }));
-    return;
-  }
-  const label = characteristicRollLabel(SOL.characteristics.con, text => game.i18n.localize(text));
-  if ( !label ) return;
   busy.add(message.id);
   button.disabled = true;
   try {
+    const uuid = message.getFlag(SYSTEM_ID, "actorUuid");
+    if ( typeof uuid !== "string" || !allowed(uuid) ) return;
+    const actor = await foundry.utils.fromUuid(uuid);
+    if ( !actor || cardResolved(message, actor) ) return;
+    const score = actor.system?.characteristics?.con?.value;
+    if ( typeof score !== "number" ) {
+      ui.notifications.warn(game.i18n.format("SOL.Damage.noCharacteristic", { name: actor.name }));
+      return;
+    }
+    const label = characteristicRollLabel(SOL.characteristics.con, text => game.i18n.localize(text));
+    if ( !label ) return;
     const outcome = await performRoll({ actor, label, score, type: "characteristic" });
     if ( !outcome ) return;
     // Réf. LdR v0.2 §11. Inconscient : aucune action. Épuisé : −20, appliqué au jet.
