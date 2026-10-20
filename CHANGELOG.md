@@ -10,7 +10,7 @@
 - Décision Marc 20/10/2026 : une Rustine ratée n'est pas consommée. La mort par perforation est appliquée d'office, avec un message au MJ. Retirer le statut vaincu à la main suffit : l'horloge ne le repose pas.
 - Relecture : une brèche sur plusieurs couches ne pose Combinaison percée qu'une fois (`solSealApply`, verrou d'horloge, garde de pose). Le `ready` d'Endurance ne remplit que les fiches d'avant la 0.6.1. Une valeur stockée sur une fiche récente n'est pas touchée. Tant que le champ est vide, l'affichage reste le maximum, donc une fiche neuve commence pleine dès que la CON est posée.
 - Décision Marc 20/10/2026 : remettre les joints à Intact à la main est un outil du MJ. Ça vaut colmatage, sans Rustine ni test. Les règles de réparation viendront plus tard.
-- À confirmer par Marc : sous le feu, Survie ou « Systèmes de survie ». En attendant, Survie par l'id `Hs6fnCes2ZtRhEJK`.
+- Décision Marc 20/10/2026 : sous le feu, c'est Survie, pas « Systèmes de survie ». L'id reste `Hs6fnCes2ZtRhEJK`.
 
 ## 0.6.2
 

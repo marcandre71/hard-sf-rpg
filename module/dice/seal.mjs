@@ -5,8 +5,8 @@
  * D'autres (mousse expansive, etc.) s'ajoutent au registre,
  * elles ne sont pas inventées ici.
  * // Décision Marc 20/10/2026 : un test raté ne consomme pas l'objet.
- * // À confirmer par Marc : sous le feu, Survie ou « Systèmes de survie ».
- * En attendant, Survie, par l'id du compendium, pas par le nom.
+ * // Décision Marc 20/10/2026 : sous le feu, Survie, pas « Systèmes de survie ».
+ * Survie, par l'id du compendium, pas par le nom.
  */
 
 /**
@@ -36,7 +36,7 @@ export function canSeal(quantity) {
  * La compétence embarquée est Survie si son id est celui du compendium,
  * ou si la source s'y termine (glisser-déposer : nouvel id).
  * `_stats.compendiumSource`, sinon `flags.core.sourceId`.
- * // À confirmer par Marc : Survie ou « Systèmes de survie ».
+ * // Décision Marc 20/10/2026 : Survie, pas « Systèmes de survie ».
  * On ne compare pas le nom.
  *
  * @param {{ id?: string, _stats?: { compendiumSource?: string }, flags?: { core?: { sourceId?: string } } }|null|undefined} skill

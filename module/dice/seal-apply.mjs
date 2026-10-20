@@ -2,9 +2,9 @@
  * Poser une Rustine, ou une autre méthode du registre.
  *
  * Réf. LdR v0.2 §7 et §8. Au calme : pas de test. Sous le feu :
- * la fenêtre de jet habituelle. // À confirmer par Marc : Survie
- * ou « Systèmes de survie ». En attendant, Survie par l'id du
- * compendium, pas le nom. Difficulté normale.
+ * la fenêtre de jet habituelle. // Décision Marc 20/10/2026 : Survie,
+ * pas « Systèmes de survie ». Survie par l'id du compendium, pas le
+ * nom. Difficulté normale.
  * Le MJ peut changer la compétence et la difficulté. « Test simple »
  * du LdR s'oppose au test prolongé, ce n'est pas la difficulté Aisée.
  * Réussite : la condition Combinaison percée part, l'horloge s'arrête,
@@ -167,8 +167,8 @@ async function askSkill(actor) {
     return null;
   }
   const escape = foundry.utils.escapeHTML;
-  // À confirmer par Marc : Survie ou « Systèmes de survie ».
-  // En attendant, Survie est présélectionnée par son id.
+  // Décision Marc 20/10/2026 : Survie, pas « Systèmes de survie ».
+  // Survie est présélectionnée par son id.
   const preferred = pickSealSkillId(skills, SOL.sealSkillId);
   const note = preferred ? "" : `<p>${escape(game.i18n.localize("SOL.Seal.noSurvie"))}</p>`;
   const options = skills.map(skill => {
