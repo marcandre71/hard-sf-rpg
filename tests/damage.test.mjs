@@ -20,15 +20,20 @@ import {
   SEUIL_DIVISOR,
   seuilBlessure,
   seuilFromCharacteristics,
-  sumZoneArmour
+  sumZoneArmour,
+  visorHeadProtection
 } from "../module/dice/damage.mjs";
+import { breachClock } from "../module/dice/breach-clock.mjs";
 import {
   ceilHalf,
   endurancePoints,
   enduranceZeroOffer,
   gTolerance,
+  resolveEndurance,
   sangFroid
 } from "../module/dice/derived.mjs";
+import { canSeal, findSealMethod } from "../module/dice/seal.mjs";
+import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
 /**
  * @param {string} label
@@ -171,10 +176,23 @@ check("visière : moitié au supérieur, armure de pont", () => {
     { id: "a", equipped: true, pressurized: true, breachThreshold: 12, protection: { head: 5 } },
     { id: "b", equipped: true, pressurized: true, breachThreshold: 4, protection: { head: 1 } }
   ];
-  assert.equal(sumZoneArmour(layers, "head", { visor: true }), 4);
+  // Décision Marc 20/10/2026 : somme puis /2. 5 + 1 = 6 → 3.
+  // Les seuils restent par couche : 12 → 6, 4 → 2.
+  assert.equal(sumZoneArmour(layers, "head", { visor: true }), 3);
+  assert.equal(visorHeadProtection(layers), 3);
   const both = resolveBreaches(layers, "head", 3, { visor: true });
   assert.deepEqual(both.map(entry => entry.threshold), [6, 2]);
   assert.deepEqual(both.map(entry => entry.breached), [false, true]);
+  const stacked = [
+    { equipped: true, protection: { head: 1 } },
+    { equipped: true, protection: { head: 3 } },
+    { equipped: false, protection: { head: 9 } }
+  ];
+  assert.equal(visorHeadProtection(stacked), 2);
+  assert.equal(sumZoneArmour(stacked, "head", { visor: true }), 2);
+  assert.equal(sumZoneArmour([{ equipped: true, protection: { torso: "3" } }], "torso"), 3);
+  assert.equal(effectiveThreshold("12", "head", true), 6);
+  assert.equal(effectiveThreshold("abc", "head", true), null);
 });
 
 check("seuil inutilisable : pas de blessure, la brèche reste possible", () => {
@@ -245,6 +263,39 @@ check("conséquence et rappels", () => {
   assert.deepEqual(cardReminders({ severity: "serious", zone: "torso", attackerCritical: false }), ["bleeding", "vol"]);
   assert.deepEqual(cardReminders({ severity: "mortal", zone: "head", attackerCritical: false }), []);
   assert.deepEqual(cardReminders({ severity: "light", zone: "head", attackerCritical: false }), []);
+});
+
+check("endurance vide : le maximum, un 0 reste 0", () => {
+  assert.deepEqual(resolveEndurance(null, 40), { current: 8, max: 8, filled: true });
+  assert.deepEqual(resolveEndurance(undefined, 40), { current: 8, max: 8, filled: true });
+  assert.deepEqual(resolveEndurance(0, 40), { current: 0, max: 8, filled: false });
+  assert.deepEqual(resolveEndurance(3, 40), { current: 3, max: 8, filled: false });
+});
+
+check("horloge de brèche : 5 minutes, puis 2", () => {
+  const start = 1000;
+  const fresh = breachClock(start, start);
+  assert.equal(fresh.phase, "survival");
+  assert.equal(fresh.remainingSurvival, 300);
+  assert.equal(fresh.remainingDeath, 420);
+  const almost = breachClock(start + 299, start);
+  assert.equal(almost.phase, "survival");
+  const out = breachClock(start + 300, start);
+  assert.equal(out.phase, "unconscious");
+  assert.equal(out.remainingSurvival, 0);
+  assert.equal(out.remainingDeath, 120);
+  const dead = breachClock(start + 420, start);
+  assert.equal(dead.phase, "death");
+  assert.equal(dead.remainingDeath, 0);
+});
+
+check("Épuisé et Rustine", () => {
+  assert.equal(statusSituation([]), 0);
+  assert.equal(statusSituation([EXHAUSTED_STATUS]), -20);
+  assert.equal(findSealMethod(" rustine ", [{ id: "patch", name: "Rustine" }])?.id, "patch");
+  assert.equal(findSealMethod("Mousse", [{ id: "patch", name: "Rustine" }]), null);
+  assert.equal(canSeal(1), true);
+  assert.equal(canSeal(0), false);
 });
 
 console.log("damage.test.mjs : ok");

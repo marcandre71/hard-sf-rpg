@@ -226,6 +226,15 @@ export const SOL = {
     long: "SOL.Weapon.range.long"
   },
 
+  /**
+   * Colmatage. Réf. LdR v0.2 §7. La clé `name` est le nom de l'objet
+   * (français, comme les compétences d'arme). Rustine est la première.
+   * Une autre méthode s'ajoute ici, sans nouveau code de pose.
+   */
+  sealMethods: [
+    { id: "patch", name: "Rustine" }
+  ],
+
   /** Joints de combinaison. Valeurs : Fiche v0.2 §4 (`intact`, `breached`). */
   sealStates: {
     intact: "SOL.Armor.sealState.intact",

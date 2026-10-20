@@ -36,9 +36,10 @@ function readAim(form) {
  *
  * @param {HTMLFormElement} form
  * @param {number} score
+ * @param {number} [statusModifier] Malus de statut, dans le plafond ±50.
  * @returns {object}
  */
-function readForm(form, score) {
+function readForm(form, score, statusModifier = 0) {
   const difficultyKey = form.elements.difficulty?.value || "normal";
   const cfg = SOL.difficulties[difficultyKey] ?? SOL.difficulties.normal;
   const raw = Number(form.elements.modifier?.value);
@@ -48,7 +49,7 @@ function readForm(form, score) {
   const calledShot = form.elements.calledShot?.value || "none";
   const aimActions = readAim(form);
   const situation = attackSituation(calledShot, aimActions);
-  const modifier = cappedModifier(cfg.modifier, free, situation.situation);
+  const modifier = cappedModifier(cfg.modifier, free, situation.situation + Number(statusModifier || 0));
   const aimPart = situation.aim.parts.find(part => part.id === "aim");
   return {
     difficultyKey,
@@ -60,6 +61,8 @@ function readForm(form, score) {
     aimActions: aimPart?.actions ?? 0,
     aimBonus: aimPart?.bonus ?? 0,
     visor: situation.called.visor,
+    situation: situation.situation,
+    statusModifier: Number(statusModifier || 0),
     modifier,
     target: Number(score) + modifier
   };
@@ -70,13 +73,14 @@ function readForm(form, score) {
  *
  * @param {HTMLElement} root
  * @param {number} score
+ * @param {number} [statusModifier]
  * @returns {void}
  */
-function paintTotal(root, score) {
+function paintTotal(root, score, statusModifier = 0) {
   const form = root.querySelector("form") ?? root;
   const out = form.querySelector("[data-total]");
   if ( !out || !form.elements?.difficulty ) return;
-  out.textContent = formatModifier(readForm(form, score).modifier);
+  out.textContent = formatModifier(readForm(form, score, statusModifier).modifier);
 }
 
 /**
@@ -130,10 +134,24 @@ function attackFields() {
 }
 
 /**
- * @param {{ title: string, score: number, attack?: boolean }} options
+ * Ligne Épuisé dans la fenêtre. Le total la compte déjà.
+ * Décision Marc 20/10/2026.
+ *
+ * @param {number} statusModifier
+ * @returns {string}
+ */
+function statusNote(statusModifier) {
+  if ( !statusModifier ) return "";
+  const escape = foundry.utils.escapeHTML;
+  const text = `${game.i18n.localize("SOL.Status.exhaustedMod")} (${formatModifier(statusModifier)})`;
+  return `<p class="sol-roll-score">${escape(text)}</p>`;
+}
+
+/**
+ * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number }} options
  * @returns {Promise<null|object>}
  */
-export async function askRoll({ title, score, attack = false }) {
+export async function askRoll({ title, score, attack = false, statusModifier = 0 }) {
   const escape = foundry.utils.escapeHTML;
   const options = DIFFICULTY_ORDER.map(key => {
     const cfg = SOL.difficulties[key];
@@ -153,6 +171,7 @@ export async function askRoll({ title, score, attack = false }) {
         <input type="number" name="modifier" value="0" step="1">
       </label>
       ${attack ? attackFields() : ""}
+      ${statusNote(statusModifier)}
       <p class="sol-roll-total">${escape(game.i18n.localize("SOL.Roll.total"))}
         <strong data-total>0</strong></p>
     </div>`;
@@ -166,7 +185,7 @@ export async function askRoll({ title, score, attack = false }) {
         action: "roll",
         label: game.i18n.localize("SOL.Roll.confirm"),
         default: true,
-        callback: (_event, button) => readForm(button.form, score)
+        callback: (_event, button) => readForm(button.form, score, statusModifier)
       },
       {
         action: "cancel",
@@ -181,7 +200,7 @@ export async function askRoll({ title, score, attack = false }) {
         : (second?.element ?? first?.element ?? second);
       if ( root instanceof HTMLElement ) {
         const form = root.querySelector("form") ?? root;
-        const update = () => paintTotal(form, score);
+        const update = () => paintTotal(form, score, statusModifier);
         form.querySelector("[name=difficulty]")?.addEventListener("change", update);
         form.querySelector("[name=modifier]")?.addEventListener("input", update);
         form.querySelector("[name=calledShot]")?.addEventListener("change", update);

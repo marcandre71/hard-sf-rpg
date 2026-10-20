@@ -58,7 +58,9 @@ export class ArmorData extends BaseItemData {
       // Entier ou décimal : choix provisoire, à valider par Marc.
       mass: numberField("SOL.Field.mass", { initial: 0, step: 0.01, hint: "SOL.Hint.kg" }),
       enc: numberField("SOL.Field.enc", { initial: 0, step: 0.01 }),
-      equipped: boolField("SOL.Field.equipped", false)
+      // À confirmer par Marc : équipée par défaut au glisser-déposer.
+      // Une clé absente devient true. Un false déjà stocké reste false.
+      equipped: boolField("SOL.Field.equipped", true)
     };
   }
 

@@ -137,7 +137,7 @@
       "notes": "Notes",
       "category": "Catégorie",
       "endurance": "Endurance",
-      "enduranceHint": "Valeur actuelle. Vide : pas suivie. Le maximum dérivé (CON/5, arrondi au supérieur) est affiché à part et n'est pas écrit.",
+      "enduranceHint": "Valeur actuelle. Si elle est vide, elle est remplie au maximum (CON/5, arrondi au supérieur). Un 0 déjà écrit reste 0.",
       "enduranceMax": "Endurance maximale (CON/5)"
     },
     "Vehicle": {
@@ -219,11 +219,12 @@
       "stunnedHint": "Pas d'action ce tour, réaction possible ; posé avant le combat, envoie en fin d'ordre dès le round 1.",
       "surprised": "Surpris",
       "exhausted": "Épuisé",
-      "exhaustedHint": "−20 à tous les tests. Rappel : le jet ne retire pas encore ce malus.",
-      "exhaustedRemind": "Épuisé : −20 (rappel, non appliqué au score)."
+      "exhaustedHint": "−20 à tous les tests, tant que le statut est actif.",
+      "exhaustedMod": "Épuisé",
+      "exhaustedRemind": "Épuisé : −20, appliqué au score."
     },
     "Endurance": {
-      "prompt": "L'Endurance est à 0. Test de Constitution pour rester conscient. Réussite : Épuisé (−20, rappel). Échec : Inconscient, aucune action. Ignorer ne pose aucun statut. Le MJ peut aussi retirer le statut ensuite.",
+      "prompt": "L'Endurance est à 0. Test de Constitution pour rester conscient. Réussite : Épuisé (−20 à tous les jets). Échec : Inconscient, aucune action. Ignorer ne pose aucun statut. Le MJ peut aussi retirer le statut ensuite.",
       "roll": "Test de Constitution",
       "dismiss": "Ignorer"
     },
@@ -244,7 +245,7 @@
       "severity": "Gravité",
       "breach": "Brèche",
       "threshold": "Seuil de brèche",
-      "visor": "Visière : protection de la tête et seuil de brèche divisés par 2, arrondis au supérieur.",
+      "visor": "Visière : protection de tête des couches équipées additionnée, puis divisée par 2 (arrondi au supérieur). Seuil de tête de chaque couche divisé par 2 (arrondi au supérieur), brèche vérifiée couche par couche.",
       "yes": "Oui",
       "no": "Non",
       "none": "Aucune blessure",
@@ -420,6 +421,31 @@
         "trauma": "Trauma"
       },
       "permanent": "Permanente"
+    },
+    "Breach": {
+      "started": "{name} : combinaison percée. 5 minutes avant l'inconscience, puis 2 minutes avant la mort si ce n'est pas colmaté.",
+      "unconscious": "{name} perd connaissance (combinaison percée).",
+      "death": "{name} : le délai de la brèche est passé. Le statut Mort est appliqué.",
+      "remainingSurvival": "Combinaison percée : {min} min {sec} s avant l'inconscience.",
+      "remainingDeath": "Inconscient : {min} min {sec} s avant la mort si la brèche n'est pas colmatée.",
+      "remainingOver": "Délai de la brèche dépassé.",
+      "remainingUnknown": "Combinaison percée : horloge en cours.",
+      "air": "Rappel réserve d'air ({name}) : {value} / {max} h."
+    },
+    "Seal": {
+      "apply": "Colmater",
+      "title": "Colmater",
+      "prompt": "Au calme, pas de test. Sous le feu, test simple : la compétence est choisie ici.",
+      "calm": "Au calme",
+      "fire": "Sous le feu",
+      "cancel": "Annuler",
+      "skill": "Compétence",
+      "roll": "Lancer",
+      "empty": "Plus de quoi colmater.",
+      "noBreach": "Aucune combinaison percée à colmater.",
+      "noSkill": "Aucune compétence sur la fiche pour le test sous le feu.",
+      "impossible": "{name} ne peut pas être tentée sans formation.",
+      "failed": "Échec : la brèche reste, l'objet n'est pas consommé."
     },
     "ShipModule": {
       "category": "Type",

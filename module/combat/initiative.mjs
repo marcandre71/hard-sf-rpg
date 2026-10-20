@@ -20,7 +20,8 @@
  * quand le client est le MJ actif : une seule écriture, avant que le
  * nouveau round ne désigne l'ancien premier. `turnEvents: false` évite
  * un début ou une fin de tour en trop. La surprise du round 1 est
- * retirée après `super` (le round est déjà ≥ 2). Si c'est un joueur
+ * retirée dans `_onStartRound` quand le round est déjà ≥ 2,
+ * une seule fois (pas dans `nextRound`). Si c'est un joueur
  * qui passe le round, `_onStartRound` (MJ désigné, après l'écriture)
  * sert de secours, sans `turnEvents: false`. Les drapeaux sont retirés
  * dans la même écriture : un second passage est vide. Sans MJ connecté,
@@ -46,6 +47,7 @@ import {
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
+  injuryBoxChange,
   injuryDefersAtStart,
   INITIATIVE_FLAG_SCOPE,
   interruptTiming,
@@ -195,12 +197,89 @@ function actorHasStatus(actor, id) {
 }
 
 /**
+ * Case « Envoie en fin d'ordre » cochée, pas encore consommée.
+ * Décision Marc 18/10/2026. Distinct de `deferEnd` (Sonné) :
+ * décocher la case retire ce drapeau, pas un renvoi Sonné déjà marqué.
+ *
+ * @param {Actor|null|undefined} actor
+ * @param {boolean} active
+ * @returns {Promise<void>}
+ */
+export async function markInjuryDefer(actor, active) {
+  if ( !game.user?.isGM || !actor ) return;
+  const combat = game.combat;
+  if ( !combat ) return;
+  const updates = combat.combatants
+    .filter(combatant => combatant.actor?.uuid === actor.uuid)
+    .map(combatant => ({
+      _id: combatant.id,
+      [`flags.${SYSTEM_ID}.injuryDefer`]: active === true
+    }));
+  if ( updates.length ) await combat.updateEmbeddedDocuments("Combatant", updates);
+}
+
+/**
+ * @param {Item} item
+ * @param {object} changes
+ * @returns {boolean}
+ */
+function touchesEndOfOrder(changes) {
+  if ( !changes || typeof changes !== "object" ) return false;
+  if ( changes.system && Object.prototype.hasOwnProperty.call(changes.system, "endOfOrder") ) return true;
+  return Object.prototype.hasOwnProperty.call(changes, "system.endOfOrder");
+}
+
+/**
+ * @param {Item} item
+ * @param {object} changes
+ * @param {object} options
+ * @returns {void}
+ */
+function onInjuryPreUpdate(item, changes, options) {
+  if ( item?.type !== "injury" || !touchesEndOfOrder(changes) || !options ) return;
+  options.solEndOfOrderWas = item.system?.endOfOrder === true;
+}
+
+/**
+ * @param {Item} item
+ * @param {object} changes
+ * @param {object} options
+ * @param {string} userId
+ * @returns {void}
+ */
+function onInjuryUpdate(item, changes, options, userId) {
+  if ( game.user?.id !== userId ) return;
+  if ( item?.type !== "injury" || !touchesEndOfOrder(changes) ) return;
+  const actor = item.actor;
+  if ( !actor ) return;
+  const change = injuryBoxChange(options?.solEndOfOrderWas === true, item.system?.endOfOrder === true);
+  if ( change === "set" ) void markInjuryDefer(actor, true);
+  if ( change !== "clear" ) return;
+  const other = actor.items.some(entry => entry.type === "injury"
+    && entry.id !== item.id
+    && entry.system?.endOfOrder === true);
+  if ( !other ) void markInjuryDefer(actor, false);
+}
+
+/**
+ * @param {Item} item
+ * @param {object} _options
+ * @param {string} userId
+ * @returns {void}
+ */
+function onInjuryCreate(item, _options, userId) {
+  if ( game.user?.id !== userId ) return;
+  if ( item?.type !== "injury" || item.system?.endOfOrder !== true ) return;
+  void markInjuryDefer(item.actor, true);
+}
+
+/**
  * Marque le combattant : fin d'ordre au prochain `nextRound`.
  * // À confirmer par Marc : hors du combat en cours, on ne pose rien.
  *
  * @param {Actor|null|undefined} actor
  * @param {{ automatic?: boolean }} [options] `automatic` : seulement le MJ actif.
- * Une action directe (apply-damage) accepte n'importe quel MJ.
+ * Une action directe accepte n'importe quel MJ.
  * @returns {Promise<void>}
  */
 export async function markDeferEnd(actor, { automatic = false } = {}) {
@@ -276,6 +355,7 @@ async function applyDeferred(combat, { turnEvents = true } = {}) {
     initiative: typeof combatant.initiative === "number" ? combatant.initiative : null,
     deferStep: combatant.getFlag(SYSTEM_ID, "deferStep") === true,
     deferEnd: combatant.getFlag(SYSTEM_ID, "deferEnd") === true,
+    injuryDefer: combatant.getFlag(SYSTEM_ID, "injuryDefer") === true,
     pendingInitiative: combatant.getFlag(SYSTEM_ID, "pendingInitiative") ?? null
   }));
   const resolved = resolveDeferred(sorted);
@@ -285,6 +365,7 @@ async function applyDeferred(combat, { turnEvents = true } = {}) {
     const data = { _id: entry.id };
     if ( entry.clearStep ) data[`flags.${SYSTEM_ID}.deferStep`] = false;
     if ( entry.clearEnd ) data[`flags.${SYSTEM_ID}.deferEnd`] = false;
+    if ( entry.clearInjury ) data[`flags.${SYSTEM_ID}.injuryDefer`] = false;
     if ( entry.clearPending ) Object.assign(data, withoutFlag("pendingInitiative"));
     if ( entry.rank ) data[`flags.${SYSTEM_ID}.rank`] = entry.rank;
     if ( typeof entry.initiative === "number" ) data.initiative = entry.initiative;
@@ -521,15 +602,11 @@ export class SolCombat extends Combat {
    * @returns {Promise<Combat>}
    */
   async nextRound() {
-    const leavingFirst = this.round === 1;
     if ( game.user.isActiveGM ) {
       await applyDeferred(this, { turnEvents: false });
     }
-    const combat = await super.nextRound();
-    // Réf. LdR v0.2 §7. Après super, le round est déjà ≥ 2.
-    // On ne retire la surprise qu'en quittant le round 1.
-    if ( leavingFirst && game.user.isActiveGM ) await clearSurprise(this);
-    return combat;
+    // La surprise part dans `_onStartRound` (round ≥ 2), une seule fois.
+    return super.nextRound();
   }
 
   /**
@@ -794,12 +871,6 @@ async function placePrecombatStunned(combat) {
 }
 
 /**
- * La marque surpris disparaît au round 2. Une fois par acteur.
- *
- * @param {Combat} combat
- * @returns {Promise<void>}
- */
-/**
  * Blessures déjà sur la fiche au démarrage.
  * Décision Marc 18/10/2026 : les deux cases, sinon ça ne compte pas.
  *
@@ -820,6 +891,12 @@ function startInjuries(actor) {
   return injuries;
 }
 
+/**
+ * La marque surpris disparaît au round 2. Une fois par acteur.
+ *
+ * @param {Combat} combat
+ * @returns {Promise<void>}
+ */
 async function clearSurprise(combat) {
   if ( !game.user.isActiveGM ) return;
   const seen = new Set();
@@ -911,5 +988,8 @@ export function registerInitiative() {
   Hooks.on("createActiveEffect", onStunned);
   Hooks.on("preUpdateActiveEffect", onStunnedPreUpdate);
   Hooks.on("updateActiveEffect", onStunnedUpdate);
+  Hooks.on("createItem", onInjuryCreate);
+  Hooks.on("preUpdateItem", onInjuryPreUpdate);
+  Hooks.on("updateItem", onInjuryUpdate);
   Hooks.once("ready", localizeStunnedHint);
 }

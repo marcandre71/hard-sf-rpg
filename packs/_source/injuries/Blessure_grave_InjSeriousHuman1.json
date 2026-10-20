@@ -1,0 +1,28 @@
+{
+  "_id": "InjSeriousHuman1",
+  "_key": "!items!InjSeriousHuman1",
+  "name": "Blessure grave",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<p>De SB à 2 SB − 1 : blessure grave (−20, saignement : perte d'1 point d'Endurance par tour jusqu'aux premiers secours, test de VOL pour continuer à agir). Réf. LdR v0.2 §7.</p>",
+    "severity": "serious",
+    "penalty": -20,
+    "bleeding": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

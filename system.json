@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.6.0 : armure par zone, brèche au seuil, tir visé, Endurance à 0.",
-  "version": "0.6.0",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.6.1 : compte à rebours de perforation, Rustine, armure équipée, Endurance pleine, Épuisé −20.",
+  "version": "0.6.1",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -194,9 +194,23 @@
       "system": "sol-nouvelle-ere"
     },
     {
+      "name": "injuries",
+      "label": "Blessures",
+      "path": "packs/injuries",
+      "type": "Item",
+      "system": "sol-nouvelle-ere"
+    },
+    {
       "name": "universe",
       "label": "Univers et factions",
       "path": "packs/universe",
+      "type": "JournalEntry",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "states",
+      "label": "États",
+      "path": "packs/states",
       "type": "JournalEntry",
       "system": "sol-nouvelle-ere"
     },
@@ -226,7 +240,8 @@
         "substances",
         "software",
         "ship-modules",
-        "sequels"
+        "sequels",
+        "injuries"
       ],
       "folders": []
     },
@@ -234,7 +249,7 @@
       "name": "Journal",
       "sorting": "m",
       "color": "#3d4f6b",
-      "packs": ["universe"],
+      "packs": ["universe", "states"],
       "folders": []
     },
     {

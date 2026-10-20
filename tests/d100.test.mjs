@@ -15,6 +15,7 @@ import {
 } from "../module/dice/d100.mjs";
 import { aimModifier, attackSituation, struckZone } from "../module/dice/attack.mjs";
 import { skillScore, weaponAttackScore, weaponCharacteristicFallback } from "../module/dice/skill-score.mjs";
+import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
 /**
  * @param {string} label
@@ -196,6 +197,10 @@ check("viser et tir visé", () => {
   assert.equal(headTwo.called.penalty, -30);
   assert.equal(headTwo.situation, -10);
   assert.equal(cappedModifier(0, 0, headTwo.situation), -10);
+  const exhausted = statusSituation([EXHAUSTED_STATUS]);
+  assert.equal(exhausted, -20);
+  const visorShot = attackSituation("visor", 0);
+  assert.equal(cappedModifier(0, 0, visorShot.situation + exhausted), -50);
   const visor = struckZone(55, "visor");
   assert.equal(visor.zone, "head");
   assert.equal(visor.visor, true);

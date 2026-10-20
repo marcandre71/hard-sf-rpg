@@ -10,11 +10,14 @@
     <li>{{localize "SOL.Roll.score"}} : {{score}}</li>
     <li>{{localize "SOL.Roll.difficulty"}} : {{difficultyLabel}} ({{difficultyModifier}})</li>
     <li>{{localize "SOL.Roll.free"}} : {{free}}</li>
-    {{#if calledModifier}}
-    <li>{{calledLabel}} ({{calledModifier}})</li>
+    {{#if calledLabel}}
+    <li>{{calledLabel}}</li>
     {{/if}}
     {{#if aimModifier}}
     <li>{{localize "SOL.Roll.aim"}} : {{aimActions}} ({{aimModifier}})</li>
+    {{/if}}
+    {{#if statusLabel}}
+    <li>{{statusLabel}} ({{statusModifier}})</li>
     {{/if}}
     <li>{{localize "SOL.Roll.total"}} : {{total}}</li>
     <li>{{localize "SOL.Roll.target"}} : {{target}}</li>

@@ -48,8 +48,9 @@ export function findSkillByName(skills, name) {
  * caractéristique. Armes de poing / Armes d'épaule → COO,
  * Corps-à-corps → FOR. Ces trois compétences ne sont pas (F).
  * Le modèle d'arme ne porte pas de caractéristique : on n'en ajoute pas.
- * // À confirmer par Marc : un nom vide ou inconnu ne dit pas si l'arme
- * est de tir ou de corps-à-corps. On retombe sur COO.
+ * // Décision Marc 20/10/2026 : un nom vide ou inconnu ne dit pas
+ * si l'arme est de tir ou de corps-à-corps. On retombe sur COO.
+ * Corps-à-corps, nommé, retombe sur FOR.
  *
  * @param {string} name
  * @param {Record<string, string>} [defaults]

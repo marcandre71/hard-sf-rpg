@@ -1,0 +1,249 @@
+{
+  "_id": "EtatsLdRv02SolNE",
+  "_key": "!journal!EtatsLdRv02SolNE",
+  "name": "États",
+  "pages": [
+    {
+      "_id": "PgAncreFlottant1",
+      "name": "Ancré / Flottant / En vol",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Position en apesanteur. Réf. LdR v0.2 §11.</p><p>S'ancrer : un mouvement ; nécessaire pour tirer correctement en apesanteur. En apesanteur, on se déplace en s'élançant d'un point d'appui ; on avance en ligne droite et on ne peut plus changer de direction avant le prochain appui, sauf avec un propulseur dorsal. Un personnage en vol est une cible prévisible (+10 pour le toucher). Réf. LdR v0.2 §7.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgAncreFlottant1"
+    },
+    {
+      "_id": "PgHypoxieLdR0001",
+      "name": "Hypoxie",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Hypoxie (1 à 3) : −10 par stade, inconscience au stade 3. Réf. LdR v0.2 §11.</p><p>Hypoxie : −10 au premier stade, −20 au deuxième, inconscience au troisième. Chaque stade dure quelques tours à quelques minutes selon la pression. Réf. LdR v0.2 §8.</p><p>À confirmer par Marc : le §11 dit −10 par stade, le §8 dit −10 puis −20.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgHypoxieLdR0001"
+    },
+    {
+      "_id": "PgExposeLdR00001",
+      "name": "Exposé",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Exposé, Irradié, Condamné : paliers de radiation selon la dose aiguë ; un personnage Sain n'a aucune condition. Réf. LdR v0.2 §11.</p><p>Exposé (dose aiguë de 250 à 999 mSv) : nausées, fatigue (−10 pendant quelques jours). Réf. LdR v0.2 §8.</p><p>Le compteur de dose et la barre colorée sont une question ouverte du LdR : ils ne sont pas automatisés.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgExposeLdR00001"
+    },
+    {
+      "_id": "PgIrradieLdR0001",
+      "name": "Irradié",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Irradié (1 000 à 2 999 mSv) : syndrome d'irradiation (−20, test de CON pour éviter des complications, soins nécessaires). Réf. LdR v0.2 §8.</p><p>Le compteur de dose n'est pas automatisé (question ouverte du LdR).</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgIrradieLdR0001"
+    },
+    {
+      "_id": "PgCondamneLdR001",
+      "name": "Condamné",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Condamné (3 000 mSv et plus) : irradiation grave, mort probable en quelques semaines sans soins avancés. Au-delà de 6 000 mSv (toujours Condamné) : mort quasi certaine. Réf. LdR v0.2 §8.</p><p>Le compteur de dose n'est pas automatisé (question ouverte du LdR).</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgCondamneLdR001"
+    },
+    {
+      "_id": "PgSaignement0001",
+      "name": "Saignement",
+      "type": "text",
+      "sort": 600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Saignement : perte d'Endurance par tour. Réf. LdR v0.2 §11.</p><p>Blessure grave : saignement, perte d'1 point d'Endurance par tour jusqu'aux premiers secours. Réf. LdR v0.2 §7. Cette perte n'est pas automatisée.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgSaignement0001"
+    },
+    {
+      "_id": "PgSonneLdR000001",
+      "name": "Sonné",
+      "type": "text",
+      "sort": 700000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Sonné : pas d'action ce tour, réaction possible. Réf. LdR v0.2 §11.</p><p>Un personnage qui devient Sonné passe en fin d'ordre au tour suivant. Retirer la condition Sonné n'annule pas un renvoi en fin d'ordre déjà marqué. Réf. LdR v0.2 §7.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgSonneLdR000001"
+    },
+    {
+      "_id": "PgInconscient001",
+      "name": "Inconscient",
+      "type": "text",
+      "sort": 800000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Inconscient : aucune action. Réf. LdR v0.2 §11.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgInconscient001"
+    },
+    {
+      "_id": "PgAccelLdR000001",
+      "name": "Sous accélération",
+      "type": "text",
+      "sort": 900000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Sous accélération (X g) : pénalité selon la tolérance aux g. Réf. LdR v0.2 §11.</p><p>Jusqu'à la tolérance aux g : aucun effet notable en dehors de l'inconfort. Au-delà, par tranche de 1 g supplémentaire : −10 à toutes les actions et un test de CON par minute ; un échec fait perdre des points d'Endurance. Au-delà de 6 g : couchette anti-g obligatoire ; risque de perte de conscience (test de CON par tour) et de blessure interne en cas d'échec critique. Réf. LdR v0.2 §8. Ce malus n'est pas automatisé.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgAccelLdR000001"
+    },
+    {
+      "_id": "PgCombiPercee001",
+      "name": "Combinaison percée",
+      "type": "text",
+      "sort": 1000000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Combinaison percée : horloge de décompression active. Réf. LdR v0.2 §11.</p><p>Une perforation laisse 5 minutes de survie : à zéro, le personnage perd connaissance, puis meurt 2 minutes plus tard si la brèche n'est pas colmatée. Elle se gère avec les règles de décompression. Réf. LdR v0.2 §7.</p><p>Colmater : une rustine sur une combinaison est une action (aucun test au calme ; sous le feu, test simple, compétence au choix du meneur). Colmater une coque est un test prolongé. Réf. LdR v0.2 §8.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgCombiPercee001"
+    },
+    {
+      "_id": "PgEpuiseLdR00001",
+      "name": "Épuisé",
+      "type": "text",
+      "sort": 1100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Épuisé : −20 ; Endurance à 0 et test de CON réussi pour rester conscient. Réf. LdR v0.2 §11 et §3.</p><p>Le −20 s'applique à tous les jets tant que le statut est actif. Le meneur retire le statut depuis le pion.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgEpuiseLdR00001"
+    },
+    {
+      "_id": "PgChoqueLdR00001",
+      "name": "Choqué",
+      "type": "text",
+      "sort": 1200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Choqué : Sang-froid à 0, −20 aux actions sociales et techniques. Réf. LdR v0.2 §11.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!EtatsLdRv02SolNE.PgChoqueLdR00001"
+    }
+  ],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

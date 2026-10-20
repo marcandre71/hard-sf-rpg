@@ -7,16 +7,18 @@
  * La brèche ne dépend pas de la blessure : une armure pressurisée
  * équipée qui couvre la zone est percée quand les dégâts bruts
  * (avant armure) dépassent son seuil. Pas d'usure.
- * Le compte à rebours de perforation est hors périmètre (0.6.1) :
- * `resolveBreaches` renvoie une entrée par armure pour s'y brancher.
- * Critique et mortelle : pas de pénalité chiffrée. Les effets de zone
- * sont des rappels, sans automatisation.
+ * `resolveBreaches` renvoie une entrée par armure : le compte à rebours
+ * s'y branche. Critique et mortelle : pas de pénalité chiffrée.
+ * Les effets de zone sont des rappels, sans automatisation.
  *
  * À confirmer par Marc : une armure pressurisée équipée « couvre » la
  * zone dès que cette zone est une clé de `protection`, même à 0.
- * À confirmer par Marc : visière sur plusieurs couches, chaque
- * protection de tête est divisée par 2 (arrondi supérieur) puis
- * les couches s'additionnent. L'exemple du LdR n'a qu'une armure.
+ * Décision Marc 20/10/2026 : visière, on additionne d'abord la
+ * protection de tête des couches équipées, puis on divise le total
+ * par 2 (arrondi supérieur). 1 + 3 = 4 → 2.
+ * Décision Marc 20/10/2026 : le seuil de tête de chaque couche
+ * équipée est divisé par 2 (arrondi supérieur), et la brèche est
+ * vérifiée couche par couche. Les seuils ne s'additionnent pas.
  */
 import { ceilHalf } from "./derived.mjs";
 
@@ -59,8 +61,8 @@ export function seuilFromCharacteristics(characteristics) {
 }
 
 /**
- * Un Seuil utilisable est un entier ≥ 1.
- * À confirmer par Marc : 0 (FOR et CON à 0) refuse l'application.
+ * Un Seuil utilisable est un entier ≥ 1. En dessous, pas de blessure.
+ * La brèche, elle, s'applique quand même (0.6.1).
  *
  * @param {number|null} sb
  * @returns {boolean}
@@ -70,22 +72,44 @@ export function isUsableSeuil(sb) {
 }
 
 /**
- * Protection d'une armure sur la zone.
- * Visière : moitié de la tête, arrondie au supérieur, puis les couches
- * s'additionnent. Réf. LdR v0.2 §7.
+ * Nombre fini, ou chaîne numérique (« 3 »). Sinon `null`.
+ * Une protection stockée en chaîne ne doit pas compter pour 0.
  *
- * @param {number} value
- * @param {string} zone
- * @param {boolean} visor
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+export function numeric(value) {
+  if ( typeof value === "number" && Number.isFinite(value) ) return value;
+  if ( typeof value === "string" && value.trim() !== "" ) {
+    const parsed = Number(value);
+    if ( Number.isFinite(parsed) ) return parsed;
+  }
+  return null;
+}
+
+/**
+ * Protection de tête à la visière.
+ * Décision Marc 20/10/2026 : somme des couches équipées, puis
+ * une seule division par 2, arrondie au supérieur.
+ * Réf. LdR v0.2 §7. C'est le seul endroit de ce calcul.
+ *
+ * @param {Array<{ equipped?: boolean, protection?: object }>} armors
  * @returns {number}
  */
-function zoneValue(value, zone, visor) {
-  if ( visor && zone === "head" ) return ceilHalf(value);
-  return value;
+export function visorHeadProtection(armors) {
+  let sum = 0;
+  for ( const armor of armors ) {
+    if ( armor?.equipped !== true ) continue;
+    const value = numeric(armor.protection?.head);
+    if ( value == null ) continue;
+    sum += value;
+  }
+  return ceilHalf(sum);
 }
 
 /**
  * Somme des protections de la zone, armures équipées seulement.
+ * Visière : `visorHeadProtection`, pas une moitié par couche.
  *
  * @param {Array<{ equipped?: boolean, protection?: object }>} armors
  * @param {string} zone
@@ -93,12 +117,13 @@ function zoneValue(value, zone, visor) {
  * @returns {number}
  */
 export function sumZoneArmour(armors, zone, { visor = false } = {}) {
+  if ( visor && zone === "head" ) return visorHeadProtection(armors);
   let sum = 0;
   for ( const armor of armors ) {
     if ( armor?.equipped !== true ) continue;
-    const value = armor.protection?.[zone];
-    if ( typeof value !== "number" || !Number.isFinite(value) ) continue;
-    sum += zoneValue(value, zone, visor);
+    const value = numeric(armor.protection?.[zone]);
+    if ( value == null ) continue;
+    sum += value;
   }
   return sum;
 }
@@ -106,7 +131,9 @@ export function sumZoneArmour(armors, zone, { visor = false } = {}) {
 /**
  * Seuil utilisé pour cette armure. `null` s'il n'y a pas de nombre :
  * pas de brèche (on n'invente pas un seuil 0).
- * Visière, tête : moitié arrondie au supérieur. Réf. LdR v0.2 §7.
+ * // Décision Marc 20/10/2026 : visière, tête, chaque couche est
+ * divisée par 2 (arrondi supérieur). La brèche se vérifie couche
+ * par couche. Réf. LdR v0.2 §7.
  *
  * @param {unknown} threshold
  * @param {string} zone
@@ -114,9 +141,10 @@ export function sumZoneArmour(armors, zone, { visor = false } = {}) {
  * @returns {number|null}
  */
 export function effectiveThreshold(threshold, zone, visor) {
-  if ( typeof threshold !== "number" || !Number.isFinite(threshold) ) return null;
-  if ( visor && zone === "head" ) return ceilHalf(threshold);
-  return threshold;
+  const value = numeric(threshold);
+  if ( value == null ) return null;
+  if ( visor && zone === "head" ) return ceilHalf(value);
+  return value;
 }
 
 /**
@@ -184,8 +212,7 @@ export function classifyInjury(net, sb) {
  * Blessure et brèches d'un coup.
  * La brèche est indépendante de la gravité : des nets ≤ 0, ou un Seuil
  * inutilisable, n'empêchent pas une brèche si les bruts dépassent un seuil.
- * À confirmer par Marc : un Seuil inférieur à 1 refuse encore l'écriture
- * côté application (`apply-damage.mjs`), pas ce calcul.
+ * Un Seuil inférieur à 1 n'écrit pas de blessure. La brèche, si.
  *
  * @param {object} input
  * @param {number} input.gross Dégâts de l'arme + DR, avant armure.

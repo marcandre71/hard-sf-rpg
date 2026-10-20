@@ -23,8 +23,9 @@
  * @see https://foundryvtt.com/api/v14/functions/foundry.applications.api.HandlebarsApplicationMixin.html
  */
 import { characteristicRollLabel, SOL } from "../config.mjs";
+import { breachContext } from "../dice/breach-countdown.mjs";
 import { performRoll } from "../dice/chat.mjs";
-import { endurancePoints } from "../dice/derived.mjs";
+import { resolveEndurance } from "../dice/derived.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
@@ -193,8 +194,13 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       })
       : [];
     const con = actor.system.characteristics?.con?.value;
-    // Réf. LdR v0.2 §3. Affiché, pas écrit.
-    context.enduranceMax = typeof con === "number" ? endurancePoints(con) : null;
+    const endurance = resolveEndurance(stored.endurance ?? null, con);
+    context.showEndurance = endurance.max != null;
+    context.enduranceCurrent = endurance.current;
+    context.enduranceMax = endurance.max;
+    const breach = breachContext(actor);
+    context.breachText = breach.text;
+    context.breachAir = breach.air;
     context.sequelSection = byType.sequel;
     context.inventorySections = INVENTORY_TYPES.map(type => byType[type]).filter(Boolean);
 

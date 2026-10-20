@@ -1,0 +1,28 @@
+{
+  "_id": "InjSeriousMach01",
+  "_key": "!items!InjSeriousMach01",
+  "name": "Blessure de machine (grave)",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<p>À confirmer par Marc : blessures propres aux machines (synthétique, drone). Le LdR v0.2 §7 dit que la liste viendra ; en attendant, on utilise la blessure standard. Cette entrée est un repère du compendium, sans effet inventé.</p>",
+    "severity": "serious",
+    "penalty": 0,
+    "bleeding": false
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

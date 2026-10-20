@@ -66,6 +66,24 @@ export function ceilHalf(value) {
 }
 
 /**
+ * Endurance actuelle affichée et, le cas échéant, à écrire.
+ * Un nombre stocké, y compris 0, reste. Seule l'absence (null,
+ * undefined) prend le maximum. Décision Marc 19/10/2026 : un seul
+ * nombre, le maximum est calculé. Réf. LdR v0.2 §3 et §15.
+ *
+ * @param {unknown} stored
+ * @param {unknown} constitution
+ * @returns {{ current: number|null, max: number|null, filled: boolean }}
+ */
+export function resolveEndurance(stored, constitution) {
+  const max = endurancePoints(typeof constitution === "number" ? constitution : Number.NaN);
+  if ( typeof stored === "number" && Number.isFinite(stored) ) {
+    return { current: stored, max, filled: false };
+  }
+  return { current: max, max, filled: max != null };
+}
+
+/**
  * Passage de l'Endurance à 0. Réf. LdR v0.2 §3 et §11.
  * On propose le test seulement au moment où la valeur devient 0.
  * Rester à 0 ne le relance pas. Repasser au-dessus de 0 retire

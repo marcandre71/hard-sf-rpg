@@ -13,8 +13,9 @@
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { FOR_CON_PER_KEYS } from "../data/actors.mjs";
+import { breachContext } from "../dice/breach-countdown.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
-import { endurancePoints } from "../dice/derived.mjs";
+import { resolveEndurance } from "../dice/derived.mjs";
 import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
@@ -81,8 +82,14 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       });
       context.seuil = seuilFromCharacteristics(prepared);
       const con = prepared.con?.value;
-      context.enduranceMax = typeof con === "number" ? endurancePoints(con) : null;
+      const endurance = resolveEndurance(stored.endurance ?? null, con);
+      context.showEndurance = endurance.max != null;
+      context.enduranceCurrent = endurance.current;
+      context.enduranceMax = endurance.max;
     }
+    const breach = breachContext(actor);
+    context.breachText = breach.text;
+    context.breachAir = breach.air;
     context.groups = prepareFieldGroups(actor.system.schema.fields, stored, {
       prefix: "system",
       rootId: context.rootId,

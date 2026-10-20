@@ -2,8 +2,9 @@
  * Le MJ applique les dégâts d'une carte d'attaque à des jetons.
  *
  * Réf. LdR v0.2 §7. Rien n'est écrit tant que le MJ n'a pas confirmé.
- * Le saignement (−1 Endurance par tour) et l'horloge de décompression
- * ne sont pas automatisés. Décision Marc 18/10/2026 : la case
+ * Le saignement (−1 Endurance par tour) n'est pas automatisé.
+ * L'horloge de décompression part avec la condition Combinaison percée.
+ * Décision Marc 18/10/2026 : la case
  * « Envoie en fin d'ordre » est cochée si la blessure est grave ou pire,
  * et c'est cette case qui marque la fin d'ordre, pas la gravité seule.
  * Décision Marc 18/10/2026 :
@@ -17,13 +18,13 @@
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect
  */
-import { markDeferEnd, registerHudStatus } from "../combat/initiative.mjs";
+import { markInjuryDefer, registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { newInjuryEndsOrder } from "./initiative.mjs";
 import {
   cardReminders,
   consequenceKey,
-  isUsableSeuil,
+  numeric,
   resolveStrike,
   seuilFromCharacteristics
 } from "./damage.mjs";
@@ -170,19 +171,17 @@ function readArmor(item) {
   /** @type {Record<string, number>} */
   const protection = {};
   for ( const zone of Object.keys(SOL.bodyLocations) ) {
-    const value = item.system.protection?.[zone];
-    if ( typeof value === "number" && Number.isFinite(value) ) protection[zone] = value;
+    const value = numeric(item.system.protection?.[zone]);
+    if ( value != null ) protection[zone] = value;
   }
-  const rawThreshold = item.system.breachThreshold;
   return {
     id: item.id,
     equipped: item.system.equipped === true,
     pressurized: item.system.pressurized === true,
     protection,
     // null : pas de seuil, donc pas de brèche. On ne met pas 0.
-    breachThreshold: typeof rawThreshold === "number" && Number.isFinite(rawThreshold)
-      ? rawThreshold
-      : null
+    // Une chaîne numérique (« 8 ») compte. « abc » ne perce pas.
+    breachThreshold: numeric(item.system.breachThreshold)
   };
 }
 
@@ -202,10 +201,7 @@ function prepareTarget(actor, gross) {
     ui.notifications.warn(game.i18n.format("SOL.Damage.noSeuil", { name }));
     return null;
   }
-  if ( !isUsableSeuil(sb) ) {
-    ui.notifications.warn(game.i18n.format("SOL.Damage.sbTooLow", { name }));
-    return null;
-  }
+  // Seuil < 1 : pas de blessure, mais la brèche s'écrit quand même.
   const armors = actor.items.filter(item => item.type === "armor").map(readArmor);
   return { actor, name, sb, armors, gross };
 }
@@ -393,8 +389,10 @@ async function applyOne(target, zone, attack, source) {
     if ( strike.bleeding && !hasStatus(actor, BLEEDING) ) {
       await actor.toggleStatusEffect(BLEEDING, { active: true });
     }
-    // Réf. LdR v0.2 §7. Effet au round suivant, si la case est cochée.
-    if ( endOfOrder ) await markDeferEnd(actor);
+    // Réf. LdR v0.2 §7. La case est relue au passage de round.
+    // Décocher avant ce passage annule le déplacement de cette blessure.
+    // Le drapeau Sonné (`deferEnd`) n'est pas touché.
+    if ( endOfOrder ) await markInjuryDefer(actor, true);
   }
 
   if ( strike.breach ) {

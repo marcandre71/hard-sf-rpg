@@ -183,6 +183,37 @@ export function injuryDefersAtStart(injuries) {
 }
 
 /**
+ * Fin d'ordre à ce passage du round.
+ * `deferEnd` : Sonné, ou un renvoi déjà marqué. Le retirer n'efface pas
+ * ce drapeau. `injuryDefer` : la case d'une blessure a été cochée et
+ * n'a pas encore été consommée. Décocher la case retire `injuryDefer`
+ * sans toucher `deferEnd`.
+ * Décision Marc 18/10/2026 : la case, pas la gravité seule. Elle est
+ * relue quand on la coche ou la décoche pendant le combat.
+ *
+ * @param {boolean|undefined} deferEnd
+ * @param {boolean|undefined} injuryDefer
+ * @returns {boolean}
+ */
+export function wantsEndOfOrder(deferEnd, injuryDefer) {
+  return deferEnd === true || injuryDefer === true;
+}
+
+/**
+ * Passage de la case « Envoie en fin d'ordre » d'une blessure.
+ * `set` : elle vient d'être cochée. `clear` : elle vient d'être décochée.
+ *
+ * @param {boolean} was
+ * @param {boolean} now
+ * @returns {"set"|"clear"|"none"}
+ */
+export function injuryBoxChange(was, now) {
+  if ( now === true && was !== true ) return "set";
+  if ( was === true && now !== true ) return "clear";
+  return "none";
+}
+
+/**
  * Place `ids` en fin d'ordre. L'ordre relatif de ceux qui restent,
  * et celui de ceux qui partent, sont conservés.
  * `sorted` est déjà trié : index 0 joue en premier.
@@ -514,7 +545,9 @@ export function resolveDeferred(sorted) {
       : entry));
   }
 
-  const endIds = sorted.filter(entry => entry.deferEnd).map(entry => entry.id);
+  const endIds = sorted
+    .filter(entry => wantsEndOfOrder(entry.deferEnd, entry.injuryDefer))
+    .map(entry => entry.id);
   // Initiative encore vide : on garde le drapeau, sans nombre fictif.
   // Réf. TODO 0.6.0. Le déplacement attend un vrai jet.
   const waitingEnd = new Set();
@@ -545,8 +578,9 @@ export function resolveDeferred(sorted) {
       data.clearStep = true;
       touched = true;
     }
-    if ( entry.deferEnd && !waitingEnd.has(entry.id) ) {
-      data.clearEnd = true;
+    if ( wantsEndOfOrder(entry.deferEnd, entry.injuryDefer) && !waitingEnd.has(entry.id) ) {
+      if ( entry.deferEnd ) data.clearEnd = true;
+      if ( entry.injuryDefer ) data.clearInjury = true;
       touched = true;
     }
     if ( entry.pendingInitiative ) {

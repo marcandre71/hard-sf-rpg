@@ -10,10 +10,10 @@
  *
  * Échec : statut cœur `unconscious` (Inconscient). On ne le redéclare pas.
  * Réussite : `sol-nouvelle-ere.exhausted` (Épuisé).
- * // À confirmer par Marc : le −20 n'est pas retiré du score. Le moteur
- * de dés ne connaît pas de malus de statut. La carte de jet le rappelle.
- * Ignorer la carte, ou retirer le statut au HUD, annule. Rien n'est
- * posé si on ignore.
+ * Décision Marc 20/10/2026 : le −20 est appliqué par `status-mods.mjs`,
+ * dans le plafond ±50. Ignorer la carte ne pose aucun statut.
+ * La résolution est un drapeau d'acteur : le joueur n'est pas
+ * propriétaire d'une carte créée par le MJ, et `message.setFlag` échoue.
  *
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.statusEffects.html
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect
@@ -21,7 +21,7 @@
 import { registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { performRoll } from "./chat.mjs";
-import { enduranceZeroOffer } from "./derived.mjs";
+import { enduranceZeroOffer, resolveEndurance } from "./derived.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const EXHAUSTED = "sol-nouvelle-ere.exhausted";
@@ -45,7 +45,12 @@ export function registerEndurance() {
   Hooks.on("preUpdateActor", onPreUpdate);
   Hooks.on("updateActor", onUpdate);
   Hooks.on("renderChatMessageHTML", onCard);
-  Hooks.once("ready", localizeExhaustedHint);
+  Hooks.on("createActor", onCreate);
+  Hooks.once("ready", () => {
+    localizeExhaustedHint();
+    if ( game.user?.isActiveGM !== true ) return;
+    for ( const actor of game.actors ?? [] ) void fillEndurance(actor);
+  });
 }
 
 /**
@@ -92,8 +97,32 @@ function onPreUpdate(actor, changes, options) {
  * @param {string} userId
  * @returns {void}
  */
+function onCreate(actor) {
+  if ( game.user?.isActiveGM !== true ) return;
+  void fillEndurance(actor);
+}
+
+/**
+ * Absence seulement : null ou undefined. Un 0 stocké reste 0.
+ * Pas de `migrateData` : un diff partiel n'est pas rempli ici.
+ * Le drapeau évite qu'un remplissage vers 0 (CON à 0) propose le test.
+ *
+ * @param {Actor} actor
+ * @returns {Promise<void>}
+ */
+async function fillEndurance(actor) {
+  if ( !actor?.system?.schema?.fields?.endurance ) return;
+  const stored = actor.system.endurance;
+  if ( stored !== null && stored !== undefined ) return;
+  const con = actor.system.characteristics?.con?.value;
+  const resolved = resolveEndurance(stored, con);
+  if ( resolved.filled !== true || typeof resolved.current !== "number" ) return;
+  await actor.update({ "system.endurance": resolved.current }, { solFillEndurance: true });
+}
+
 function onUpdate(actor, changes, options, userId) {
   if ( !touchesEndurance(changes) ) return;
+  if ( options?.solFillEndurance === true ) return;
   if ( game.user.id !== userId ) return;
   const previous = options?.solEndurancePrevious ?? null;
   const next = actor.system?.endurance ?? null;
@@ -142,12 +171,39 @@ function allowed(uuid) {
  * @param {HTMLElement} html
  * @returns {void}
  */
+/**
+ * La carte du MJ n'est pas à jour par le joueur. Le drapeau est sur l'acteur.
+ *
+ * @param {ChatMessage} message
+ * @param {Actor|null|undefined} actor
+ * @returns {boolean}
+ */
+function cardResolved(message, actor) {
+  if ( message.getFlag(SYSTEM_ID, "enduranceResolved") === true ) return true;
+  const cards = actor?.getFlag?.(SYSTEM_ID, "enduranceCards");
+  return Boolean(cards && typeof cards === "object" && cards[message.id] === true);
+}
+
+/**
+ * @param {Actor|null|undefined} actor
+ * @param {string} messageId
+ * @returns {Promise<void>}
+ */
+async function markCardResolved(actor, messageId) {
+  if ( !actor || !messageId ) return;
+  const prior = actor.getFlag(SYSTEM_ID, "enduranceCards");
+  const cards = prior && typeof prior === "object" ? { ...prior } : {};
+  cards[messageId] = true;
+  await actor.setFlag(SYSTEM_ID, "enduranceCards", cards);
+}
+
 function onCard(message, html) {
   if ( message.getFlag(SYSTEM_ID, "type") !== "endurance" ) return;
   const uuid = message.getFlag(SYSTEM_ID, "actorUuid");
   const roll = html.querySelector("[data-action=sol-endurance-con]");
   const dismiss = html.querySelector("[data-action=sol-endurance-dismiss]");
-  if ( !allowed(uuid) || message.getFlag(SYSTEM_ID, "enduranceResolved") === true ) {
+  const actor = typeof uuid === "string" ? foundry.utils.fromUuidSync(uuid) : null;
+  if ( !allowed(uuid) || cardResolved(message, actor) ) {
     roll?.remove();
     dismiss?.remove();
     return;
@@ -164,7 +220,7 @@ function onCard(message, html) {
     dismiss.dataset.solBound = "1";
     dismiss.addEventListener("click", event => {
       event.preventDefault();
-      void message.setFlag(SYSTEM_ID, "enduranceResolved", true);
+      void markCardResolved(actor, message.id);
       roll?.remove();
       dismiss.remove();
     });
@@ -194,10 +250,10 @@ async function rollCon(message, button) {
   try {
     const outcome = await performRoll({ actor, label, score, type: "characteristic" });
     if ( !outcome ) return;
-    // Réf. LdR v0.2 §11. Inconscient : aucune action. Épuisé : −20, rappel.
+    // Réf. LdR v0.2 §11. Inconscient : aucune action. Épuisé : −20, appliqué au jet.
     if ( outcome.success ) await actor.toggleStatusEffect(EXHAUSTED, { active: true });
     else await actor.toggleStatusEffect(UNCONSCIOUS, { active: true });
-    await message.setFlag(SYSTEM_ID, "enduranceResolved", true);
+    await markCardResolved(actor, message.id);
   } finally {
     busy.delete(message.id);
     button.disabled = false;

@@ -22,6 +22,7 @@ import { SkillData } from "./data/skill.mjs";
 import { WeaponData } from "./data/weapon.mjs";
 import { registerInitiative } from "./combat/initiative.mjs";
 import { registerDamage } from "./dice/apply-damage.mjs";
+import { registerBreachCountdown } from "./dice/breach-countdown.mjs";
 import { registerEndurance } from "./dice/endurance.mjs";
 import { registerItemGuard } from "./guards.mjs";
 import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
@@ -117,6 +118,7 @@ function initializeSystem() {
   registerNpcReadyMigration(SYSTEM_ID);
   registerDamage();
   registerEndurance();
+  registerBreachCountdown();
   registerInitiative();
 }
 

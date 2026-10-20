@@ -16,6 +16,7 @@ import {
   flagDeletionUpdate,
   indexAfterRoll,
   initiativeRollPlan,
+  injuryBoxChange,
   injuryDefersAtStart,
   newInjuryEndsOrder,
   INITIATIVE_SUCCESS_BASE,
@@ -31,6 +32,7 @@ import {
   sortByInitiative,
   stepBack,
   stunnedAtStart,
+  wantsEndOfOrder,
   surprisedTurnIndex,
   vigilanceBaseScore
 } from "../module/dice/initiative.mjs";
@@ -701,6 +703,34 @@ check("modes de carte v13 et v14", () => {
   assert.equal(mapMessageMode("public", "v14"), "public");
   assert.equal(mapMessageMode("gmroll", "v13"), "gmroll");
   assert.equal(mapMessageMode(null, "v14"), null);
+});
+
+check("case fin d'ordre relue : cocher compte, décocher n'efface pas Sonné", () => {
+  assert.equal(injuryBoxChange(false, true), "set");
+  assert.equal(injuryBoxChange(true, false), "clear");
+  assert.equal(injuryBoxChange(true, true), "none");
+  assert.equal(wantsEndOfOrder(false, true), true);
+  assert.equal(wantsEndOfOrder(true, false), true);
+  assert.equal(wantsEndOfOrder(false, false), false);
+  const sorted = [
+    { id: "a", initiative: 30, injuryDefer: true },
+    { id: "b", initiative: 20 },
+    { id: "c", initiative: 10, deferEnd: true, injuryDefer: false }
+  ];
+  const updates = resolveDeferred(sorted);
+  const a = updates.find(update => update.id === "a");
+  const c = updates.find(update => update.id === "c");
+  assert.equal(a.clearInjury, true);
+  assert.equal(a.clearEnd, undefined);
+  assert.equal(a.initiative, 19);
+  assert.equal(c.clearEnd, true);
+  assert.equal(c.initiative, 18);
+  const unchecked = resolveDeferred([
+    { id: "a", initiative: 30, injuryDefer: false },
+    { id: "b", initiative: 20, deferEnd: true }
+  ]);
+  assert.equal(unchecked.find(update => update.id === "a"), undefined);
+  assert.equal(unchecked.find(update => update.id === "b").clearEnd, true);
 });
 
 console.log("initiative.test.mjs : ok");

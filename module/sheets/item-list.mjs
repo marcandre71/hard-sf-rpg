@@ -14,6 +14,8 @@
  */
 import { SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
+import { applySealAction } from "../dice/seal-apply.mjs";
+import { findSealMethod } from "../dice/seal.mjs";
 import { skillScore, weaponAttackScore } from "../dice/skill-score.mjs";
 
 /**
@@ -113,17 +115,22 @@ function itemFields(item) {
  */
 function presentItem(item, actor) {
   const rollable = actor.type === "character" || actor.type === "npc";
-  const equipped = item.type === "weapon" && Boolean(item.system.equipped);
+  const isWeapon = item.type === "weapon";
+  const isArmor = item.type === "armor";
+  const equipped = (isWeapon || isArmor) && item.system.equipped === true;
+  const seal = item.type === "gear" && findSealMethod(item.name, SOL.sealMethods);
   return {
     id: item.id,
     name: item.name,
     img: item.img,
     type: item.type,
     fields: itemFields(item),
-    // Case Équipé sur la ligne d'arme. Le dé n'apparaît que si elle est cochée.
-    showEquipped: rollable && item.type === "weapon",
+    // Arme : case sur personnage et PNJ (le dé n'apparaît que si elle est cochée).
+    // Armure : case sur toute fiche qui en porte. Seules les équipées comptent.
+    showEquipped: (rollable && isWeapon) || isArmor,
     equipped,
-    canRoll: rollable && (item.type === "skill" || (item.type === "weapon" && equipped))
+    showSeal: Boolean(seal) && Number(item.system.quantity) >= 1,
+    canRoll: rollable && (item.type === "skill" || (isWeapon && equipped))
   };
 }
 
@@ -174,7 +181,7 @@ export function prepareSections(actor, types = SOL.itemTypes) {
  * Actions `data-action` des gabarits de liste.
  * Foundry appelle ces fonctions avec la feuille comme `this`.
  */
-export const itemListActions = { openItem, deleteItem, createItem, rollItem, toggleEquipped };
+export const itemListActions = { openItem, deleteItem, createItem, rollItem, toggleEquipped, sealItem };
 
 /**
  * Ouvre la feuille de l'objet cliqué (le nom, ou le bouton Modifier).
@@ -250,8 +257,20 @@ async function toggleEquipped(event, target) {
   input.addEventListener("change", change => change.stopPropagation(), { once: true });
   const id = target.closest("[data-item-id]")?.dataset.itemId;
   const item = this.document.items.get(id);
-  if ( !item || item.type !== "weapon" ) return;
+  if ( !item || (item.type !== "weapon" && item.type !== "armor") ) return;
   await item.update({ "system.equipped": Boolean(input.checked) });
+}
+
+/**
+ * Rustine, ou une autre méthode du registre. Réf. LdR v0.2 §7.
+ *
+ * @param {PointerEvent} event
+ * @param {HTMLElement} target
+ * @returns {Promise<void>}
+ */
+async function sealItem(event, target) {
+  if ( event?.detail > 1 ) return;
+  await applySealAction(this.document, target);
 }
 
 /**

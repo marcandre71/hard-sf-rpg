@@ -19,8 +19,14 @@
   <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
   {{> "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs"}}
   <p class="sol-seuil">{{localize "SOL.Damage.sb"}} : <strong>{{seuil}}</strong></p>
-  {{#if enduranceMax}}
-  <p class="sol-seuil">{{localize "SOL.Actor.enduranceMax"}} : <strong>{{enduranceMax}}</strong></p>
+  {{#if showEndurance}}
+  <p class="sol-seuil">{{localize "SOL.Actor.endurance"}} : <strong>{{enduranceCurrent}} / {{enduranceMax}}</strong></p>
+  {{/if}}
+  {{#if breachText}}
+  <p class="sol-seuil">{{breachText}}</p>
+  {{#each breachAir as |line|}}
+  <p class="sol-seuil">{{line}}</p>
+  {{/each}}
   {{/if}}
   {{/if}}
 

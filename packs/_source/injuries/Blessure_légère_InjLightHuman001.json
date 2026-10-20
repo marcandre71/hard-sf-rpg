@@ -1,0 +1,28 @@
+{
+  "_id": "InjLightHuman001",
+  "_key": "!items!InjLightHuman001",
+  "name": "Blessure légère",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<p>Inférieurs au Seuil de blessure : blessure légère (−10 aux actions utilisant la zone, jusqu'aux soins). Réf. LdR v0.2 §7.</p>",
+    "severity": "light",
+    "penalty": -10,
+    "bleeding": false
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.5.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

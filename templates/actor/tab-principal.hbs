@@ -23,8 +23,14 @@
 
   <h2 class="sol-section-title">{{localize "SOL.Section.physical"}}</h2>
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=enduranceGroups}}
-  {{#if enduranceMax}}
-  <p class="sol-seuil">{{localize "SOL.Actor.enduranceMax"}} : <strong>{{enduranceMax}}</strong></p>
+  {{#if showEndurance}}
+  <p class="sol-seuil">{{localize "SOL.Actor.endurance"}} : <strong>{{enduranceCurrent}} / {{enduranceMax}}</strong></p>
+  {{/if}}
+  {{#if breachText}}
+  <p class="sol-seuil">{{breachText}}</p>
+  {{#each breachAir as |line|}}
+  <p class="sol-seuil">{{line}}</p>
+  {{/each}}
   {{/if}}
   {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=injurySection}}
   {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=sequelSection}}

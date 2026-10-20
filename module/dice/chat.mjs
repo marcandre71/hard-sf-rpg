@@ -11,11 +11,9 @@
  */
 import { SOL } from "../config.mjs";
 import { struckZone } from "./attack.mjs";
-import { formatModifier, resolveD100 } from "./d100.mjs";
+import { cappedModifier, formatModifier, resolveD100 } from "./d100.mjs";
 import { askRoll } from "./roll-dialog.mjs";
-
-/** Réf. LdR v0.2 §11. Le moteur ne retire pas encore ce malus du score. */
-const EXHAUSTED = "sol-nouvelle-ere.exhausted";
+import { statusRollModifiers, statusSituation } from "./status-mods.mjs";
 
 const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
 
@@ -123,7 +121,10 @@ export async function performRoll({
   messageMode = null,
   messageOptions = null
 }) {
-  const picked = choice ?? await askRoll({ title: label, score, attack: Boolean(weapon) });
+  const statusModifier = statusSituation(actorStatusIds(actor));
+  const picked = choice
+    ? stampStatus(choice, score, statusModifier)
+    : await askRoll({ title: label, score, attack: Boolean(weapon), statusModifier });
   if ( !picked ) return null;
 
   // Foundry : 1d100 va de 1 à 100. Un 00 physique vaut 100.
@@ -158,24 +159,24 @@ export async function performRoll({
     canApply: false,
     note,
     calledLabel: "",
-    calledModifier: "",
     aimModifier: "",
     aimActions: picked.aimActions ?? 0,
+    statusLabel: "",
+    statusModifier: "",
     visor: false
   };
 
   if ( picked.calledShot && picked.calledShot !== "none" ) {
+    // Le libellé porte déjà le malus (« Torse (−10) »). On ne le répète pas.
     card.calledLabel = game.i18n.localize(`SOL.Roll.called.${picked.calledShot}`);
-    card.calledModifier = formatModifier(picked.calledPenalty ?? 0);
   }
   if ( picked.aimActions ) {
     card.aimModifier = formatModifier(picked.aimBonus ?? 0);
   }
-  // À confirmer par Marc : Épuisé (−20, LdR v0.2 §11) n'est qu'un rappel.
-  // performRoll ne sait pas appliquer un malus de statut au score.
-  if ( actorHasStatus(actor, EXHAUSTED) ) {
-    const remind = game.i18n.localize("SOL.Status.exhaustedRemind");
-    card.note = card.note ? `${card.note} ${remind}` : remind;
+  const statusLine = statusRollModifiers(actorStatusIds(actor))[0];
+  if ( statusLine ) {
+    card.statusLabel = game.i18n.localize(statusLine.labelKey);
+    card.statusModifier = formatModifier(statusLine.value);
   }
 
   /** @type {string|null} */
@@ -238,18 +239,44 @@ export async function performRoll({
 }
 
 /**
- * @param {Actor|null|undefined} actor
- * @param {string} id
- * @returns {boolean}
+ * Ajoute le malus de statut à un choix déjà fait (test simple, jets groupés).
+ * Le plafond ±50 s'applique au total. Réf. LdR v0.2 §5.
+ *
+ * @param {object} choice
+ * @param {number} score
+ * @param {number} statusModifier
+ * @returns {object}
  */
-function actorHasStatus(actor, id) {
+function stampStatus(choice, score, statusModifier) {
+  const situation = Number(choice.situation ?? 0) + Number(statusModifier || 0);
+  const modifier = cappedModifier(choice.difficultyModifier ?? 0, choice.free ?? 0, situation);
+  return {
+    ...choice,
+    statusModifier,
+    modifier,
+    target: Number(score) + modifier
+  };
+}
+
+/**
+ * @param {Actor|null|undefined} actor
+ * @returns {string[]}
+ */
+function actorStatusIds(actor) {
+  if ( actor?.statuses && typeof actor.statuses[Symbol.iterator] === "function" ) {
+    return [...actor.statuses];
+  }
+  /** @type {string[]} */
+  const ids = [];
   const effects = actor?.effects;
-  if ( !effects ) return false;
+  if ( !effects ) return ids;
   for ( const effect of effects ) {
     const statuses = effect?.statuses;
     if ( !statuses ) continue;
-    if ( typeof statuses.has === "function" && statuses.has(id) ) return true;
-    if ( Array.isArray(statuses) && statuses.includes(id) ) return true;
+    const values = typeof statuses[Symbol.iterator] === "function" ? [...statuses] : [];
+    for ( const id of values ) {
+      if ( typeof id === "string" && !ids.includes(id) ) ids.push(id);
+    }
   }
-  return false;
+  return ids;
 }
