@@ -21,7 +21,7 @@
 import { registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { performRoll } from "./chat.mjs";
-import { enduranceZeroOffer, pruneResolvedCards, resolveEndurance } from "./derived.mjs";
+import { enduranceReadyFill, enduranceZeroOffer, pruneResolvedCards } from "./derived.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const EXHAUSTED = "sol-nouvelle-ere.exhausted";
@@ -47,12 +47,17 @@ export function registerEndurance() {
   Hooks.on("renderChatMessageHTML", onCard);
   // Pas de `createActor` : une CON par défaut (25) écrirait 5, puis la
   // fiche afficherait 5/8 après une CON à 40. `resolveEndurance` montre
-  // déjà le maximum tant que le champ est vide. Le MJ actif remplit
-  // les fiches déjà là, au ready seulement.
+  // déjà le maximum tant que le champ est vide. Une fiche récente
+  // n'est pas écrite au ready : l'Endurance commence pleine à l'affichage
+  // dès que la CON est posée. Seules les fiches d'avant la 0.6.1,
+  // encore vides, sont remplies.
   Hooks.once("ready", () => {
     localizeExhaustedHint();
     if ( game.user?.isActiveGM !== true ) return;
-    for ( const actor of game.actors ?? [] ) void fillEndurance(actor);
+    for ( const actor of game.actors ?? [] ) {
+      if ( foundry.utils.isNewerVersion("0.6.1", actor._stats?.systemVersion ?? "0") !== true ) continue;
+      void fillEndurance(actor);
+    }
   });
 }
 
@@ -110,12 +115,14 @@ function onPreUpdate(actor, changes, options) {
  */
 async function fillEndurance(actor) {
   if ( !actor?.system?.schema?.fields?.endurance ) return;
-  const stored = actor.system.endurance;
-  if ( stored !== null && stored !== undefined ) return;
-  const con = actor.system.characteristics?.con?.value;
-  const resolved = resolveEndurance(stored, con);
-  if ( resolved.filled !== true || typeof resolved.current !== "number" ) return;
-  await actor.update({ "system.endurance": resolved.current }, { solFillEndurance: true });
+  const next = enduranceReadyFill(
+    actor.system.endurance,
+    actor.system.characteristics?.con?.value,
+    actor._stats?.systemVersion,
+    foundry.utils.isNewerVersion
+  );
+  if ( next == null ) return;
+  await actor.update({ "system.endurance": next }, { solFillEndurance: true });
 }
 
 function onUpdate(actor, changes, options, userId) {

@@ -22,7 +22,7 @@
  * @see https://foundryvtt.com/api/v14/functions/foundry.utils.fromUuid.html
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.html
  */
-import { breachClock, clockIsStopped, clockParts, collectClockUuids } from "./breach-clock.mjs";
+import { breachClock, claimClockStart, clockIsStopped, clockParts, collectClockUuids } from "./breach-clock.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const SUIT = "sol-nouvelle-ere.suitBreach";
@@ -32,6 +32,9 @@ const UNCONSCIOUS = "unconscious";
 
 /** Une horloge à la fois par acteur : deux `advance` ne doublent pas l'échéance. */
 const busy = new Set();
+
+/** Démarrage en cours, par `clockIdentity` : un seul message « compte à rebours démarré ». */
+const starting = new Set();
 
 /**
  * @returns {void}
@@ -298,11 +301,23 @@ async function ensureClock(actor) {
     await remember(uuid);
     return;
   }
-  const startedAt = game.time?.worldTime;
-  if ( typeof startedAt !== "number" || !Number.isFinite(startedAt) ) return;
-  await actor.setFlag(SYSTEM_ID, CLOCK, { startedAt, unconscious: false, death: false });
-  await remember(uuid);
-  await postGm(actor, "SOL.Breach.started", airHtml(actor), true);
+  const held = claimClockStart(starting, uuid);
+  if ( uuid && !held ) return;
+  try {
+    const startedAt = game.time?.worldTime;
+    if ( typeof startedAt !== "number" || !Number.isFinite(startedAt) ) return;
+    const again = actor.getFlag(SYSTEM_ID, CLOCK);
+    if ( clockIsStopped(again) ) return;
+    if ( again && Number.isFinite(again.startedAt) ) {
+      await remember(uuid);
+      return;
+    }
+    await actor.setFlag(SYSTEM_ID, CLOCK, { startedAt, unconscious: false, death: false });
+    await remember(uuid);
+    await postGm(actor, "SOL.Breach.started", airHtml(actor), true);
+  } finally {
+    if ( held ) starting.delete(uuid);
+  }
 }
 
 /**

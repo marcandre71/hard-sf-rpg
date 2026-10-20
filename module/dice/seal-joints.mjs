@@ -5,17 +5,22 @@
  * pressurisée n'a pas de joints étanches. Percer les siens ne lance
  * aucun compte à rebours. Sur une armure équipée et pressurisée,
  * « Percée » pose Combinaison percée (l'horloge part comme après
- * des dégâts, jeton non lié compris). « Intacte » sur la dernière
- * de ces armures colmate, comme une Rustine, sans la consommer.
+ * des dégâts, jeton non lié compris).
+ * // Décision Marc 20/10/2026 : « Intacte » sur la dernière de ces
+ * armures est un outil du MJ. Ça vaut colmatage, sans Rustine ni test.
+ * Les règles de réparation viendront plus tard.
  * L'édition peut venir de n'importe quel client. Seul le MJ actif écrit.
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Actor.html#toggleStatusEffect
  * @see https://foundryvtt.com/api/v14/functions/hookEvents.updateWorldTime.html
  */
-import { jointEffect } from "./seal.mjs";
+import { jointEffect, shouldPoseSuit } from "./seal.mjs";
 import { repairBreach } from "./seal-apply.mjs";
 
 const SUIT = "sol-nouvelle-ere.suitBreach";
+
+/** Pose en cours : deux couches ensemble ne posent le statut qu'une fois. */
+const posing = new Set();
 
 /**
  * @returns {void}
@@ -53,11 +58,33 @@ async function onSealUpdate(item, changes, options, userId) {
   }
   if ( game.user?.isActiveGM !== true ) return;
   if ( effect === "start" ) {
-    if ( !actorHasStatus(actor, SUIT) ) await actor.toggleStatusEffect(SUIT, { active: true });
+    const key = poseIdentity(actor);
+    const pending = key.length > 0 && posing.has(key);
+    if ( !shouldPoseSuit({ hasStatus: actorHasStatus(actor, SUIT), pending }) ) return;
+    if ( key ) posing.add(key);
+    try {
+      await actor.toggleStatusEffect(SUIT, { active: true });
+    } finally {
+      if ( key ) posing.delete(key);
+    }
     return;
   }
   if ( otherBreached(actor, item.id) ) return;
+  // Décision Marc 20/10/2026 : Intact à la main est un outil du MJ.
+  // Ça vaut colmatage, sans Rustine ni test.
+  // Les règles de réparation viendront plus tard.
   await repairBreach(actor);
+}
+
+/**
+ * Même identité que l'horloge : jeton non lié, sinon acteur.
+ *
+ * @param {Actor} actor
+ * @returns {string}
+ */
+function poseIdentity(actor) {
+  if ( actor?.isToken && actor.parent?.uuid ) return actor.parent.uuid;
+  return actor?.uuid || "";
 }
 
 /**

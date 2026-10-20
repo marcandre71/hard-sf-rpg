@@ -1,9 +1,9 @@
 /**
  * États visibles sur la fiche, et dépôt d'une page du compendium États.
  *
- * La section lit `actor.statuses` et les ActiveEffects, donc le HUD
+ * La section lit `actor.statuses` et les ActiveEffects actifs, donc le HUD
  * et les automatismes (Épuisé, Inconscient, Combinaison percée…) s'y
- * voient. Déposer une page pose le statut dont l'id est dans
+ * voient. Un effet `disabled` n'est pas listé. Déposer une page pose le statut dont l'id est dans
  * `flags.sol-nouvelle-ere.statusId`. Pas de drapeau, ou id absent de
  * `CONFIG.statusEffects` : notification, aucun effet inventé.
  *
@@ -35,6 +35,7 @@ export function presentStatuses(actor) {
     for ( const id of actor.statuses ) add(id);
   }
   for ( const effect of actor?.effects ?? [] ) {
+    if ( effect?.disabled === true ) continue;
     const statuses = effect?.statuses;
     if ( !statuses ) continue;
     for ( const id of statuses ) add(id);

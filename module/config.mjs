@@ -237,8 +237,8 @@ export const SOL = {
 
   /**
    * Compétence du colmatage sous le feu.
-   * Décision Marc 20/10/2026 : Survie, par l'id du compendium Compétences,
-   * pas par le nom. Ce n'est pas « Systèmes de survie ».
+   * // À confirmer par Marc : Survie ou « Systèmes de survie ».
+   * En attendant, Survie, par l'id du compendium, pas par le nom.
    */
   sealSkillId: "Hs6fnCes2ZtRhEJK",
 

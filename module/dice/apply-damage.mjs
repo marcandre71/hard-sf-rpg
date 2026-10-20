@@ -402,7 +402,8 @@ async function applyOne(target, zone, attack, source) {
       .map(armor => actor.items.get(armor.id))
       .filter(item => item && item.system.sealState !== "breached")
       .map(item => ({ _id: item.id, "system.sealState": "breached" }));
-    if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates);
+    // solSealApply : le hook des joints ne repose pas le statut, une fois par couche.
+    if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates, { solSealApply: true });
     if ( !hasStatus(actor, SUIT_BREACH) ) {
       await actor.toggleStatusEffect(SUIT_BREACH, { active: true });
     }

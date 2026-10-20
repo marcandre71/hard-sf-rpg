@@ -84,6 +84,29 @@ export function resolveEndurance(stored, constitution) {
 }
 
 /**
+ * Valeur à écrire au `ready`, ou `null` pour ne rien écrire.
+ * Seulement une fiche d'avant la 0.6.1, et seulement si l'Endurance
+ * n'est pas déjà un nombre. Une fiche récente reste vide ici :
+ * l'affichage lit le maximum dès que la CON est posée.
+ * `isNewerVersion` est `foundry.utils.isNewerVersion`.
+ *
+ * @param {unknown} stored
+ * @param {unknown} constitution
+ * @param {unknown} systemVersion
+ * @param {(left: string, right: string) => boolean} isNewerVersion
+ * @returns {number|null}
+ */
+export function enduranceReadyFill(stored, constitution, systemVersion, isNewerVersion) {
+  if ( typeof isNewerVersion !== "function" ) return null;
+  const version = typeof systemVersion === "string" && systemVersion.length > 0 ? systemVersion : "0";
+  if ( isNewerVersion("0.6.1", version) !== true ) return null;
+  if ( typeof stored === "number" && Number.isFinite(stored) ) return null;
+  const resolved = resolveEndurance(stored, constitution);
+  if ( resolved.filled !== true || typeof resolved.current !== "number" ) return null;
+  return resolved.current;
+}
+
+/**
  * Passage de l'Endurance à 0. Réf. LdR v0.2 §3 et §11.
  * On propose le test seulement au moment où la valeur devient 0.
  * Rester à 0 ne le relance pas. Repasser au-dessus de 0 retire

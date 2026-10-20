@@ -61,6 +61,21 @@ export function clockIsStopped(clock) {
 }
 
 /**
+ * Une seule pose d'horloge à la fois pour cet uuid.
+ * Le second appel, tant que le premier n'a pas relâché, ne poste pas.
+ *
+ * @param {Set<string>|null|undefined} starting
+ * @param {string|null|undefined} uuid
+ * @returns {boolean}
+ */
+export function claimClockStart(starting, uuid) {
+  if ( !(starting instanceof Set) || typeof uuid !== "string" || uuid.length === 0 ) return false;
+  if ( starting.has(uuid) ) return false;
+  starting.add(uuid);
+  return true;
+}
+
+/**
  * Uuids à suivre. Un acteur du monde et un jeton non lié sont distincts.
  * Un jeton lié a le même uuid que l'acteur : `linked` l'écarte.
  * Deux fois le même uuid ne compte qu'une fois.

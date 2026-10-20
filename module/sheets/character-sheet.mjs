@@ -235,11 +235,15 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /**
    * Une page du compendium États pose un statut. Le reste suit le cœur.
+   * `_onDropDocument` reçoit un Document déjà résolu. Les handlers
+   * documentés en v13 et v14 sont Item, Actor, ActiveEffect et Folder.
+   * Un journal n'y est pas : on garde `_onDrop`.
    *
    * @override
    * @param {DragEvent} event
    * @returns {Promise<void>}
-   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
+   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html#_onDropDocument
+   * @see https://foundryvtt.com/api/v13/classes/foundry.applications.sheets.ActorSheetV2.html#_onDropDocument
    */
   async _onDrop(event) {
     if ( await applyDroppedState(this.document, dragData(event)) ) return;

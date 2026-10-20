@@ -198,19 +198,6 @@ function actorHasStatus(actor, id) {
   return false;
 }
 
-/**
- * Case « Envoie en fin d'ordre » cochée, pas encore consommée.
- * Décision Marc 18/10/2026. `injuryDefer` est la liste des ids.
- * Décocher retire cet id seulement, pas un renvoi Sonné (`deferEnd`).
- * Un booléen `true` (0.6.1) reste jusqu'au passage de round : le retirer
- * ici ne sait pas quel id il représentait. Seul le MJ actif écrit.
- * // À confirmer par Marc : hors du combat en cours, on ne pose rien.
- *
- * @param {Actor|null|undefined} actor
- * @param {string} injuryId
- * @param {boolean} active
- * @returns {Promise<void>}
- */
 /** Une écriture par acteur : deux cases cochées ensemble ne s'effacent pas. */
 const deferQueues = new Map();
 
@@ -226,6 +213,19 @@ function enqueueDefer(key, task) {
   return run;
 }
 
+/**
+ * Case « Envoie en fin d'ordre » cochée, pas encore consommée.
+ * Décision Marc 18/10/2026. `injuryDefer` est la liste des ids.
+ * Décocher retire cet id seulement, pas un renvoi Sonné (`deferEnd`).
+ * Un booléen `true` (0.6.1) reste jusqu'au passage de round : le retirer
+ * ici ne sait pas quel id il représentait. Seul le MJ actif écrit.
+ * // À confirmer par Marc : hors du combat en cours, on ne pose rien.
+ *
+ * @param {Actor|null|undefined} actor
+ * @param {string} injuryId
+ * @param {boolean} active
+ * @returns {Promise<void>}
+ */
 export async function markInjuryDefer(actor, injuryId, active) {
   if ( game.user?.isActiveGM !== true || !actor ) return;
   if ( typeof injuryId !== "string" || injuryId.length === 0 ) return;

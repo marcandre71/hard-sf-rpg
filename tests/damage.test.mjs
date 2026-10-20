@@ -23,17 +23,18 @@ import {
   sumZoneArmour,
   visorHeadProtection
 } from "../module/dice/damage.mjs";
-import { breachClock, clockIsStopped, collectClockUuids } from "../module/dice/breach-clock.mjs";
+import { breachClock, claimClockStart, clockIsStopped, collectClockUuids } from "../module/dice/breach-clock.mjs";
 import {
   ceilHalf,
   endurancePoints,
+  enduranceReadyFill,
   enduranceZeroOffer,
   gTolerance,
   pruneResolvedCards,
   resolveEndurance,
   sangFroid
 } from "../module/dice/derived.mjs";
-import { canSeal, findSealMethod, isSealSkill, jointEffect, pickSealSkillId } from "../module/dice/seal.mjs";
+import { canSeal, findSealMethod, isSealSkill, jointEffect, pickSealSkillId, shouldPoseSuit } from "../module/dice/seal.mjs";
 import { statusEffectKnown, statusIdFromFlags } from "../module/dice/state-status.mjs";
 import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
@@ -312,10 +313,11 @@ check("horloge : jeton non lié, et cartes d'endurance élaguées", () => {
 check("Survie par id, joints, et pages d'états", () => {
   const id = "Hs6fnCes2ZtRhEJK";
   const source = `Compendium.sol-nouvelle-ere.skills.Item.${id}`;
+  assert.equal(isSealSkill({ id: "autre", _stats: { compendiumSource: source } }, id), true);
   assert.equal(isSealSkill({ id: "autre", flags: { core: { sourceId: source } } }, id), true);
   assert.equal(isSealSkill({ id, name: "Systèmes de survie" }, id), true);
   assert.equal(isSealSkill({ id: "CYmXqUScf8aPhhYQ", name: "Survie" }, id), false);
-  assert.equal(pickSealSkillId([{ id: "a" }, { id: "emb", sourceId: source }], id), "emb");
+  assert.equal(pickSealSkillId([{ id: "a" }, { id: "emb", _stats: { compendiumSource: source } }], id), "emb");
   assert.equal(pickSealSkillId([{ id: "a", name: "Survie" }], id), null);
   assert.equal(jointEffect("breached", { equipped: true, pressurized: true }), "start");
   assert.equal(jointEffect("intact", { equipped: true, pressurized: true }), "seal");
@@ -326,6 +328,68 @@ check("Survie par id, joints, et pages d'états", () => {
   assert.equal(statusEffectKnown("unconscious", { unconscious: { id: "unconscious" } }), true);
   assert.equal(statusEffectKnown("unconscious", [{ id: "unconscious" }]), true);
   assert.equal(statusEffectKnown("sol-nouvelle-ere.hypoxia", { unconscious: { id: "unconscious" } }), false);
+});
+
+check("deux couches percées par dégâts : un effet et un message", () => {
+  const starting = new Set();
+  const actor = "Actor.cible";
+  const layers = ["pont", "sous-couche"];
+  let effects = 0;
+  let messages = 0;
+  let hasStatus = false;
+  let pending = false;
+  assert.equal(layers.length, 2);
+  // Deux couches, statut pas encore visible : la garde n'en pose qu'un.
+  // Le chemin des dégâts, lui, pose une fois et n'envoie qu'un message.
+  for ( const _layer of layers ) {
+    if ( !shouldPoseSuit({ hasStatus, pending }) ) continue;
+    pending = true;
+    effects += 1;
+  }
+  assert.equal(effects, 1);
+  effects = 0;
+  pending = false;
+  if ( shouldPoseSuit({ hasStatus, pending }) ) {
+    effects += 1;
+    hasStatus = true;
+    if ( claimClockStart(starting, actor) ) messages += 1;
+  }
+  if ( claimClockStart(starting, actor) ) messages += 1;
+  assert.equal(effects, 1);
+  assert.equal(messages, 1);
+  assert.equal(hasStatus, true);
+});
+
+/**
+ * Comparaison numérique des versions, assez proche de
+ * `foundry.utils.isNewerVersion` pour 0.6.x.
+ *
+ * @param {string} left
+ * @param {string} right
+ * @returns {boolean}
+ */
+function newer(left, right) {
+  const a = String(left).split(".");
+  const b = String(right).split(".");
+  const n = Math.max(a.length, b.length);
+  for ( let i = 0; i < n; i += 1 ) {
+    const x = Number(a[i] ?? 0);
+    const y = Number(b[i] ?? 0);
+    if ( x > y ) return true;
+    if ( x < y ) return false;
+  }
+  return false;
+}
+
+check("endurance au ready : avant 0.6.1 seulement", () => {
+  assert.equal(enduranceReadyFill(null, 40, "0.6.0", newer), 8);
+  assert.equal(enduranceReadyFill(null, 25, "0", newer), 5);
+  assert.equal(enduranceReadyFill(null, 40, "0.6.1", newer), null);
+  assert.equal(enduranceReadyFill(null, 40, "0.6.3", newer), null);
+  assert.equal(enduranceReadyFill(5, 40, "0.6.3", newer), null);
+  assert.equal(enduranceReadyFill(5, 40, "0.5.0", newer), null);
+  assert.equal(resolveEndurance(null, 40).current, 8);
+  assert.equal(resolveEndurance(null, 40).max, 8);
 });
 
 check("Épuisé et Rustine", () => {

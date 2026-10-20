@@ -5,6 +5,8 @@
  * D'autres (mousse expansive, etc.) s'ajoutent au registre,
  * elles ne sont pas inventées ici.
  * // Décision Marc 20/10/2026 : un test raté ne consomme pas l'objet.
+ * // À confirmer par Marc : sous le feu, Survie ou « Systèmes de survie ».
+ * En attendant, Survie, par l'id du compendium, pas par le nom.
  */
 
 /**
@@ -32,17 +34,19 @@ export function canSeal(quantity) {
 
 /**
  * La compétence embarquée est Survie si son id est celui du compendium,
- * ou si `flags.core.sourceId` s'y termine (glisser-déposer : nouvel id).
- * Décision Marc 20/10/2026. On ne compare pas le nom.
+ * ou si la source s'y termine (glisser-déposer : nouvel id).
+ * `_stats.compendiumSource`, sinon `flags.core.sourceId`.
+ * // À confirmer par Marc : Survie ou « Systèmes de survie ».
+ * On ne compare pas le nom.
  *
- * @param {{ id?: string, sourceId?: string, flags?: { core?: { sourceId?: string } } }|null|undefined} skill
+ * @param {{ id?: string, _stats?: { compendiumSource?: string }, flags?: { core?: { sourceId?: string } } }|null|undefined} skill
  * @param {string|null|undefined} compendiumId
  * @returns {boolean}
  */
 export function isSealSkill(skill, compendiumId) {
   if ( !skill || typeof compendiumId !== "string" || compendiumId.length === 0 ) return false;
   if ( skill.id === compendiumId ) return true;
-  const source = skill.sourceId ?? skill.flags?.core?.sourceId;
+  const source = skill._stats?.compendiumSource ?? skill.flags?.core?.sourceId;
   if ( typeof source !== "string" || source.length === 0 ) return false;
   return source.endsWith(`.Item.${compendiumId}`);
 }
@@ -50,7 +54,7 @@ export function isSealSkill(skill, compendiumId) {
 /**
  * Id embarqué de Survie, ou null si la fiche ne l'a pas.
  *
- * @param {Array<{ id?: string, sourceId?: string, flags?: { core?: { sourceId?: string } } }>|null|undefined} skills
+ * @param {Array<{ id?: string, _stats?: { compendiumSource?: string }, flags?: { core?: { sourceId?: string } } }>|null|undefined} skills
  * @param {string|null|undefined} compendiumId
  * @returns {string|null}
  */
@@ -61,8 +65,10 @@ export function pickSealSkillId(skills, compendiumId) {
 
 /**
  * Joints. Décision Marc 20/10/2026 : une armure non pressurisée n'a pas
- * de joints étanches. Percée ne lance rien. Intacte, sur une armure
- * équipée et pressurisée, se traite comme un colmatage.
+ * de joints étanches. Percée ne lance rien.
+ * // Décision Marc 20/10/2026 : Intact à la main, sur une armure
+ * équipée et pressurisée, est un outil du MJ. Ça vaut colmatage,
+ * sans Rustine ni test. Les règles de réparation viendront plus tard.
  *
  * @param {unknown} next
  * @param {{ equipped?: boolean, pressurized?: boolean }|null|undefined} armor
@@ -73,4 +79,16 @@ export function jointEffect(next, armor) {
   if ( next === "breached" ) return "start";
   if ( next === "intact" ) return "seal";
   return "ignore";
+}
+
+/**
+ * Le hook des joints pose Combinaison percée.
+ * Statut déjà là, ou pose déjà commencée : on ne fait rien.
+ *
+ * @param {{ hasStatus?: boolean, pending?: boolean }|null|undefined} state
+ * @returns {boolean}
+ */
+export function shouldPoseSuit(state) {
+  if ( state?.hasStatus === true || state?.pending === true ) return false;
+  return true;
 }
