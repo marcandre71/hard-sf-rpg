@@ -4,9 +4,10 @@
  * Réf. LdR v0.2 §7. 5 minutes, puis inconscience, puis mort 2 minutes
  * plus tard si la brèche n'est toujours pas colmatée. Seul le MJ actif
  * écrit. Les messages partent au MJ. Rien n'est silencieux.
- * // À confirmer par Marc : à l'échéance, le statut vaincu
+ * // Décision Marc 20/10/2026 : à l'échéance, le statut vaincu
  * (`CONFIG.specialStatusEffects.DEFEATED`, sinon `dead`) est appliqué,
- * avec un message. On ne se contente pas de le proposer.
+ * avec un message au MJ. Le retirer à la main annule : le drapeau
+ * `death` reste vrai, donc un tour d'horloge suivant ne le repose pas.
  * Le rappel de réserve d'air est du texte, pas une consommation.
  *
  * Un jeton non lié n'est pas dans `game.actors`. Son uuid est celui du
@@ -57,7 +58,8 @@ export function registerBreachCountdown() {
 
 /**
  * Statut vaincu du cœur. `dead` si la clé n'est pas posée.
- * // À confirmer par Marc : on l'applique, on ne le propose pas.
+ * // Décision Marc 20/10/2026 : on l'applique, on ne le propose pas.
+ * Le retirer à la main suffit : `advance` ne le repose que si `death` est faux.
  *
  * @returns {string}
  * @see https://foundryvtt.com/api/v14/variables/CONFIG.html
@@ -366,7 +368,8 @@ async function advance(actor, now) {
       changed = true;
     }
     if ( state.phase === "death" && !death ) {
-      // À confirmer par Marc : appliquer le statut vaincu, message au MJ, pas de proposition muette.
+      // Décision Marc 20/10/2026 : appliquer le statut vaincu, message au MJ.
+      // `death` passe à vrai dans le drapeau : le retirer ensuite ne le repose pas.
       const dead = defeatedId();
       if ( !actorHasStatus(actor, dead) ) await actor.toggleStatusEffect(dead, { active: true });
       await postGm(actor, "SOL.Breach.death");

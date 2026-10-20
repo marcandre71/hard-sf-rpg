@@ -4,7 +4,7 @@
  * Réf. LdR v0.2 §7 et §8. Rustine est la première méthode.
  * D'autres (mousse expansive, etc.) s'ajoutent au registre,
  * elles ne sont pas inventées ici.
- * // À confirmer par Marc : un test raté ne consomme pas l'objet.
+ * // Décision Marc 20/10/2026 : un test raté ne consomme pas l'objet.
  */
 
 /**

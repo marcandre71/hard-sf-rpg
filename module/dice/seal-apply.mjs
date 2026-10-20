@@ -9,7 +9,7 @@
  * Réussite : la condition Combinaison percée part, l'horloge s'arrête,
  * la quantité baisse d'un. Les armures équipées encore marquées
  * percées repassent intactes. Un message part au MJ.
- * // À confirmer par Marc : un échec ne consomme pas l'objet.
+ * // Décision Marc 20/10/2026 : un échec ne consomme pas l'objet.
  * Décision Marc 20/10/2026 : le propriétaire de la fiche peut ouvrir
  * la fenêtre, pas seulement le MJ.
  *
@@ -64,7 +64,7 @@ export async function applySealAction(actor, target) {
     type: "skill"
   });
   if ( !outcome ) return;
-  // À confirmer par Marc : l'échec laisse la quantité et la brèche.
+  // Décision Marc 20/10/2026 : l'échec laisse la quantité et la brèche.
   if ( !outcome.success ) {
     ui.notifications.info(game.i18n.localize("SOL.Seal.failed"));
     return;
