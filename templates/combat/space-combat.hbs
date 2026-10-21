@@ -9,6 +9,7 @@
     <button type="button" data-action="stepPost">{{localize "SOL.Space.nextPost"}}</button>
     <button type="button" data-action="stepRound">{{localize "SOL.Space.nextRound"}}</button>
     <button type="button" data-action="currentRoll">{{localize "SOL.Space.rollCurrent"}}</button>
+    <button type="button" data-action="endCombat">{{localize "SOL.Space.endCombat"}}</button>
   </p>
   <p>
     {{localize "SOL.Space.round"}}
@@ -19,7 +20,7 @@
   <div class="sol-ship-pair">
     {{#each picks as |pick|}}
     <label>
-      {{localize "SOL.Space.ship"}} {{pick.index}}
+      {{#if pick.name}}{{pick.name}}{{else}}{{localize "SOL.Space.shipUnset"}}{{/if}}
       <select data-field="ships.{{pick.index}}">
         <option value="">—</option>
         {{#each pick.options as |option|}}

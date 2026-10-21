@@ -231,7 +231,8 @@ const massSum = fortune.items.reduce((sum, item) => sum + item.system.mass, 0);
 check(massSum === 52, `masse des modules 52 t, reçu ${massSum}`);
 const embeddedEngine = fortune.items.find(item => item._id === "ModPFMoteur00001");
 const looseEngine = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModPFMoteur00001.json", import.meta.url), "utf8"));
-check(embeddedEngine?.system.effects.includes("350 s") && embeddedEngine.system.effects.includes("21 milli-g") && embeddedEngine.system.effects.includes("49 kN") && embeddedEngine.system.effects.includes("2,9 h"), "texte moteur embarqué");
+check(embeddedEngine?.system.effects.includes("350 s") && embeddedEngine.system.effects.includes("21 milli-g") && embeddedEngine.system.effects.includes("47 kN") && embeddedEngine.system.effects.includes("2,9 h") && !embeddedEngine.system.effects.includes("49 kN"), "texte moteur embarqué");
+check(looseEngine.system.effects === embeddedEngine.system.effects && looseEngine._stats.systemVersion === "0.7.1" && fortune._stats.systemVersion === "0.7.1", "les deux textes moteur et la version des documents changés");
 check(embeddedEngine.system.effects === looseEngine.system.effects, "le module moteur des deux packs a le même texte");
 check(fortune.system.description.includes("21 milli-g") && fortune.system.description.includes("3,6") && !fortune.system.description.includes("380"), "texte de l'acteur aligné");
 for ( const file of ["ModExLaserDef001.json", "ModExCanonEM0001.json", "ModExMissile0001.json"] ) {

@@ -50,7 +50,7 @@ Une station utilise la même feuille, avec la catégorie « objet fixe » : on i
 | Moyenne | de 1 000 à 10 000 km | canons électromagnétiques contre une cible en croisière, un habitat ou des radiateurs déployés (des milliers de km) ; missiles |
 | Lointaine | plus de 10 000 km | missiles seulement ; on se voit, on se parle, on négocie |
 
-Au début du combat, le meneur fixe la portée d'après la poursuite qui a précédé. Changer de portée demande de gagner un test opposé de Pilotage (voir le poste de pilote) et coûte du delta-v. Décision Marc 21/10/2026 : en cas d'égalité, la portée ne bouge pas.
+Au début du combat, le meneur fixe la portée d'après la poursuite qui a précédé. Changer de portée demande de gagner un test opposé de Pilotage (voir le poste de pilote). Décision Marc 21/10/2026 : on suit le LdR §6. À égalité de DR, le meilleur score gagne ; la portée ne bouge pas si le score est égal aussi. Le vaisseau qui a lancé la manœuvre perd le delta-v d'un tour de poussée (accélération × 60 s, arrondi à 3 décimales), qu'il réussisse ou non. Le MJ peut corriger ce delta-v à la main. À confirmer par Marc : ce retrait a-t-il aussi lieu en cas d'échec, et pour les deux vaisseaux ou seulement celui qui manœuvre ? Le choix retenu en attendant est : seulement le déclarant, réussite ou échec.
 
 ### Le tour de combat spatial
 
@@ -64,7 +64,7 @@ Un tour dure environ **une minute**. Au premier tour, les opérateurs des deux v
 6. **Ingénieur**  
 7. **Médecin**
 
-À chaque poste, le premier vaisseau agit, puis l'autre. Les effets s'appliquent tout de suite. Un personnage tient un seul poste par tour ; un poste vide ne fait rien. Un équipage de PNJ a un score unique : **bleu 35, entraîné 50, vétéran 65, élite 80** (Guide §6).
+À chaque poste, le premier vaisseau agit, puis l'autre. Les effets s'appliquent tout de suite. Un personnage tient un seul poste par tour. Décision Marc 21/10/2026 : un poste sans personnage est tenu par l'équipage PNJ, sans case supplémentaire. Score unique : **bleu 35, entraîné 50, vétéran 65, élite 80** (Guide §6). Le +10 de Calculer reste posé jusqu'au jet de Pilote du même tour : il n'est pas remis à zéro entre les deux postes.
 
 ### Les postes
 
@@ -73,14 +73,14 @@ Un tour dure environ **une minute**. Au premier tour, les opérateurs des deux v
 | Commandant | Commandement (PRÉ) | Donne \+10 à un poste ce tour (Guide §6). Valide les tirs létaux (Règle Sereguine). |
 | Opérateur | Opérations de bord (INT) | **Verrouiller** une cible : sans verrouillage réussi, tir à \-20 au-delà de la portée proche. Décision Marc 21/10/2026 : un verrouillage dure tout le combat, sauf si le MJ l'enlève. **Contre-mesures** : test opposé contre un missile qui arrive ; réussite, le missile est leurré. Communications. |
 | Navigateur | Mécanique orbitale (INT) | **Calculer** : une réussite donne \+10 au pilote ce tour. Décision Marc 21/10/2026 : ce poste agit avant le pilote, donc le bonus sert au jet de Pilotage du même tour. Hors combat, chaque DR économise environ 5 % du delta-v prévu ; chaque DE au-delà de 1 coûte 5 % de plus ou un jour de retard (Guide §6). |
-| Pilote | Pilotage (COO), spécialité du vaisseau | **Esquiver** : chaque DR donne \-10 aux attaques contre le vaisseau ce tour (maximum \-30). **Changer de portée** : test opposé contre le pilote adverse ; le gagnant rapproche ou éloigne d'une portée. Décision Marc 21/10/2026 : en cas d'égalité, la portée ne bouge pas. Échec à 3 DE ou plus : incident au choix du meneur (+1 chaleur, ou un module dégradé). |
+| Pilote | Pilotage (COO), spécialité du vaisseau | **Esquiver** : une réussite donne au moins \-10, puis \-10 par DR, au plus \-30. Décision Marc 21/10/2026 : une réussite à 0 DR donne \-10. Un échec donne 0. **Changer de portée** : test opposé contre le pilote adverse ; le gagnant rapproche ou éloigne d'une portée. Décision Marc 21/10/2026 : à égalité de DR, le meilleur score gagne ; la portée ne bouge pas si le score est égal aussi. Le déclarant perd le delta-v d'un tour de poussée, réussite ou échec. Échec à 3 DE ou plus : incident au choix du meneur (+1 chaleur, ou un module dégradé). |
 | Artilleur | Armement de bord (PER) | **Tirer** avec une arme du vaisseau (section 5). Viser une section précise : \-20 ; viser un module précis : \-40. |
 | Ingénieur | Réacteurs et propulsion (INT), Mécanique (INT) | **Pousser les moteurs ou le réacteur** (section 6). **Réparation de fortune** : test de Mécanique à \-20, 1 Pièce, un module hors service redevient dégradé jusqu'à la fin du combat. |
 | Médecin | Médecine (INT), Premiers secours (INT) | Soigne l'équipage avec les règles de blessures du Livre de règles. |
 
 Autres compétences utiles à bord : Électronique et Informatique (capteurs, greffiers), Systèmes de survie (air, eau, contrôle thermique), Manœuvre en apesanteur et Sortie extravéhiculaire (travail dans le vide, colmatage de coque), Robotique et télépilotage (drones de réparation).
 
-Chaque tour de poussée de combat coûte du delta-v : environ 12 m/s pour un vaisseau à 20 milli-g, 30 m/s à 50 milli-g (l'accélération multipliée par une minute). Décision Marc 21/10/2026 : on déduit la valeur exacte, sans arrondir (21 milli-g → 12,356 m/s).
+Chaque tour de poussée de combat coûte du delta-v : environ 12 m/s pour un vaisseau à 20 milli-g, 30 m/s à 50 milli-g (l'accélération multipliée par une minute). Décision Marc 21/10/2026 : on déduit la valeur exacte, sans arrondir à 12 (21 milli-g → 12,356 m/s), puis on l'écrit à 3 décimales. Simplification : coût constant par tour, la masse n'est pas recalculée.
 
 **Missiles** : un missile tiré à portée moyenne arrive au début du tour suivant ; à portée lointaine, deux tours plus tard. L'opérateur de la cible peut tenter des contre-mesures, et un laser de défense peut tirer dessus (une attaque normale ; un missile touché est détruit).
 
@@ -225,7 +225,7 @@ L'état du module se met à jour tout seul (hors service, dégradé, intact). Un
 - **Faction** : indépendant, sociétaire de la Mutuelle. **Économie** : mines.  
 - **Équipage** : 4 (2 au minimum, 6 au maximum) ; souvent une famille.  
 - **Masse** : 80 t à vide ; 150 t d'eau de masse de réaction au plein ; 230 t au départ.  
-- **Propulsion** : nucléaire thermique à l'eau, 350 s ; 21 milli-g au plein, environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total (un patrouilleur de la Veille monte à 50 milli-g : on ne le distance pas au plein). Ajusté le 21/10/2026.  
+- **Propulsion** : nucléaire thermique à l'eau, 350 s ; 21 milli-g au plein, environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total (un patrouilleur de la Veille monte à 50 milli-g : on ne le distance pas au plein). 21 milli-g pour 230 t font 47 kN. Ajusté le 21/10/2026.  
 - **Delta-v** : 3,6 km/s au plein (de quoi sauter d'un rocher à l'autre, pas de traverser la Ceinture sans refaire le plein). Ajusté le 21/10/2026.  
 - **Énergie** : le même cœur nucléaire, en mode électrique à l'arrêt, environ 100 kW électriques.  
 - **Radiateurs** : environ 50 m², repliables.  
@@ -247,7 +247,7 @@ L'état du module se met à jour tout seul (hors service, dégradé, intact). Un
 
 | Module | Catégorie | Section | Intégrité | Masse | Effets |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| Moteur nucléaire thermique | propulsion | poupe | 10 | 6 t | 21 milli-g au plein, eau, 350 s ; environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total. Ajusté le 21/10/2026 |
+| Moteur nucléaire thermique | propulsion | poupe | 10 | 6 t | 21 milli-g au plein, eau, 350 s ; environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total. Ajusté le 21/10/2026 |
 | Cœur du réacteur (bimodal) | réacteur | poupe | 8 | 12 t (avec le bouclier d'ombre) | porte la jauge de chaleur ; environ 100 kW électriques à l'arrêt |
 | Radiateurs repliables | radiateurs | radiateurs | 6 | 3 t | environ 50 m² |
 | Réservoir d'eau bâbord | autre | flanc bâbord | 8 | 3 t (vide) | 75 t d'eau ; percé, il perd sa masse de réaction et donc du delta-v |

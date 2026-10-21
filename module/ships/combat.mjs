@@ -25,6 +25,9 @@ export const LOCK_PENALTY = -20;
 export const AIM_SECTION = -20;
 export const AIM_MODULE = -40;
 
+/** Arme dégradée, proposée au jet de l'artilleur. Réf. Vaisseaux v0.1 §4. */
+export const DEGRADED_PENALTY = -20;
+
 /** +10 du commandant, +10 du navigateur. Réf. Vaisseaux v0.1 §3. */
 export const POST_BONUS = 10;
 
@@ -277,6 +280,7 @@ export function finishRound(state, statsByUuid = {}) {
  *
  * Décision Marc 21/10/2026 : on soustrait le produit exact
  * (21 milli-g → 12,356 m/s), sans arrondir à 12 ni au supérieur.
+ * Simplification : coût constant par tour, la masse n'est pas recalculée.
  * Réf. Vaisseaux v0.1 §3.
  *
  * @param {unknown} accelerationMilliG
@@ -303,7 +307,41 @@ export function deltaVAfterThrust(value, accelerationMilliG) {
 }
 
 /**
- * Chaque DR réussi : −10, au plus −30. Un échec ne donne rien.
+ * Trois décimales. 3,587… km/s s'écrit 3,588.
+ *
+ * @param {unknown} value
+ * @returns {number}
+ */
+export function roundDeltaV(value) {
+  const number = Number(value);
+  if ( !Number.isFinite(number) ) return 0;
+  return Math.round(number * 1000) / 1000;
+}
+
+/**
+ * Delta-v après un changement de portée.
+ * Le coût (accélération × 60 s) est arrondi à 3 décimales, puis le solde aussi.
+ *
+ * // À confirmer par Marc : le retrait se fait-il aussi en cas d'échec,
+ * et pour les deux vaisseaux ou seulement celui qui manœuvre ?
+ * Choix par défaut : seulement le vaisseau qui a lancé le changement,
+ * qu'il réussisse ou non.
+ *
+ * @param {unknown} value
+ * @param {unknown} accelerationMilliG
+ * @returns {number}
+ */
+export function deltaVAfterRangeChange(value, accelerationMilliG) {
+  const cost = roundDeltaV(thrustCostKmS(accelerationMilliG));
+  const current = Number(value);
+  const base = Number.isFinite(current) ? current : 0;
+  return roundDeltaV(Math.max(0, base - cost));
+}
+
+/**
+ * Esquive réussie : au moins −10, puis −10 par DR, au plus −30.
+ * Décision Marc 21/10/2026 : une réussite à 0 DR donne −10.
+ * Un échec ne donne rien.
  *
  * @param {unknown} dr
  * @param {boolean} success
@@ -311,16 +349,17 @@ export function deltaVAfterThrust(value, accelerationMilliG) {
  */
 export function evadeFromDr(dr, success) {
   if ( !success ) return 0;
-  const steps = Math.max(0, Math.trunc(Number(dr)));
-  if ( !Number.isFinite(steps) ) return 0;
-  return Math.max(EVADE_FLOOR, steps * EVADE_STEP);
+  const steps = Math.trunc(Number(dr));
+  const fromDr = Number.isFinite(steps) ? Math.max(0, steps) * EVADE_STEP : 0;
+  return Math.max(EVADE_FLOOR, Math.min(fromDr, EVADE_STEP));
 }
 
 /**
  * Modificateur proposé pour le dialogue (le MJ peut le changer).
- * Le plafond ±50 est celui du jet, pas ici.
+ * // À confirmer par Marc : le plafond ±50 du dialogue de jet est conservé.
+ * Il n'est pas réappliqué ici.
  *
- * @param {{ postId?: string, range?: string, ship?: { lock?: boolean, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string }} input
+ * @param {{ postId?: string, range?: string, ship?: { lock?: boolean, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string, weaponCondition?: string }} input
  * @returns {number}
  */
 export function suggestedModifier(input) {
@@ -331,6 +370,8 @@ export function suggestedModifier(input) {
   // est déjà posé quand le pilote jette, dans le même tour.
   if ( postId === "pilot" && input?.ship?.pilotBonus ) modifier += POST_BONUS;
   if ( postId !== "gunner" ) return modifier;
+  // Réf. Vaisseaux v0.1 §4 : dégradé, −20 aux tests qui utilisent l'arme.
+  if ( input?.weaponCondition === "degraded" ) modifier += DEGRADED_PENALTY;
   if ( input?.range && input.range !== "close" && !input?.ship?.lock ) modifier += LOCK_PENALTY;
   const evade = Number(input?.foe?.evade);
   if ( Number.isFinite(evade) ) modifier += evade;
@@ -377,10 +418,10 @@ export function shiftRange(range, direction) {
  * Ensuite, si `useScore`, le meilleur score (ouverture, Opérations de bord).
  * Encore égal : `"tie"`. Le MJ choisit.
  *
- * Décision Marc 21/10/2026 : à l'ouverture, le score tranche ;
- * s'il est égal aussi, le MJ choisit. Les DE ne départagent pas.
- * Décision Marc 21/10/2026 : à la portée, l'égalité laisse la portée
- * en place. On ne départage pas par le score.
+ * Décision Marc 21/10/2026 : à l'ouverture comme au changement de portée
+ * (LdR §6), le score tranche si le DR est égal. S'il est égal aussi, `"tie"`.
+ * À l'ouverture, le MJ choisit. À la portée, elle ne bouge pas.
+ * Les DE ne départagent pas.
  *
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} a
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} b

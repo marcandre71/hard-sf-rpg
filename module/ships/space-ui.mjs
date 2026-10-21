@@ -17,13 +17,16 @@ import { skillScore } from "../dice/skill-score.mjs";
 import { NPC_CREW_SCORES, SHIP_POST_IDS } from "./hull.mjs";
 import {
   actingOrder,
+  blankCombat,
   compareOpposed,
   currentStep,
+  deltaVAfterRangeChange,
   duplicateActors,
   evadeFromDr,
   finishRound,
   nextPost,
   normalizeCombat,
+  roundDeltaV,
   settle,
   shiftRange,
   suggestedModifier,
@@ -37,6 +40,7 @@ import { skillsForPost } from "./post-skills.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const SETTING = "spaceCombat";
+const SOCKET = `system.${SYSTEM_ID}`;
 
 /**
  * Boutons de l'onglet Postes. Réf. Vaisseaux v0.1 §3.
@@ -68,6 +72,9 @@ export function registerSpaceCombat() {
     onChange: () => refreshSpace()
   });
   registerShipCombatGuard();
+  // Le joueur ne peut pas écrire ce réglage. Le MJ actif le fait.
+  // @see https://foundryvtt.com/api/v14/classes/foundry.helpers.SocketInterface.html
+  game.socket?.on(SOCKET, onSpaceRelay);
 }
 
 /**
@@ -116,7 +123,7 @@ class SpaceCombatApp extends HandlebarsApplicationMixin(ApplicationV2) {
     tag: "form",
     position: { width: 720, height: 780 },
     window: { title: "SOL.Space.title", resizable: true },
-    actions: { opening, stepPost, stepRound, currentRoll }
+    actions: { opening, stepPost, stepRound, currentRoll, endCombat }
   };
 
   /** @override */
@@ -177,14 +184,20 @@ class SpaceCombatApp extends HandlebarsApplicationMixin(ApplicationV2) {
         name: order[side] ? (names.get(order[side]) ?? order[side]) : "",
         selected: side === state.side
       })),
-      picks: [0, 1].map(index => ({
-        index,
-        selected: state.ships[index] ?? "",
-        options: shipOptions.map(option => ({
-          ...option,
-          selected: option.uuid === state.ships[index]
-        }))
-      })),
+      picks: [0, 1].map(index => {
+        const other = state.ships[index === 0 ? 1 : 0];
+        return {
+          index,
+          name: names.get(state.ships[index]) || "",
+          selected: state.ships[index] ?? "",
+          options: shipOptions
+            .filter(option => option.uuid !== other)
+            .map(option => ({
+              ...option,
+              selected: option.uuid === state.ships[index]
+            }))
+        };
+      }),
       panels: state.ships.filter(Boolean).map(uuid => panel(state, uuid, names.get(uuid) ?? uuid)),
       schedule,
       stepLabel: step.postId ? SOL.shipPosts[step.postId] : "",
@@ -245,6 +258,12 @@ async function applyField(input) {
   const field = input.dataset.field;
   if ( field === "ships.0" || field === "ships.1" ) {
     const index = field.endsWith("1") ? 1 : 0;
+    const other = state.ships[index === 0 ? 1 : 0];
+    if ( input.value && input.value === other ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Space.sameShip"));
+      input.value = state.ships[index] ?? "";
+      return;
+    }
     state.ships[index] = input.value;
   } else if ( field === "range" ) {
     if ( input.value === "close" || input.value === "medium" || input.value === "long" ) state.range = input.value;
@@ -277,6 +296,10 @@ async function applyField(input) {
  */
 async function opening() {
   const state = readCombat();
+  if ( state.ships[0] && state.ships[0] === state.ships[1] ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.sameShip"));
+    return;
+  }
   const ships = [];
   for ( const uuid of state.ships ) {
     const ship = uuid ? await foundry.utils.fromUuid(uuid) : null;
@@ -327,11 +350,12 @@ async function stepRound() {
   for ( const uuid of state.ships ) {
     if ( !uuid ) continue;
     const actor = await foundry.utils.fromUuid(uuid);
-    const source = actor?.system?._source ?? {};
+    if ( !actor || actor.documentName !== "Actor" ) continue;
+    const source = actor.system?._source ?? {};
     stats[uuid] = {
       acceleration: source.propulsion?.acceleration,
       deltaV: source.propulsion?.deltaV?.value,
-      name: actor?.name ?? uuid
+      name: actor.name ?? uuid
     };
   }
   const done = finishRound(state, stats);
@@ -340,19 +364,34 @@ async function stepRound() {
   /** @type {string[]} */
   const lines = [];
   for ( const row of done.deductions ) {
+    if ( !stats[row.uuid] ) continue;
     const actor = await foundry.utils.fromUuid(row.uuid);
-    if ( actor ) await actor.update({ "system.propulsion.deltaV.value": row.value });
-    const meters = thrustCostKmS(stats[row.uuid]?.acceleration) * 1000;
+    if ( !actor || actor.documentName !== "Actor" ) continue;
+    const value = roundDeltaV(row.value);
+    await actor.update({ "system.propulsion.deltaV.value": value });
+    const meters = thrustCostKmS(stats[row.uuid].acceleration) * 1000;
     lines.push(game.i18n.format("SOL.Space.thrustLine", {
-      name: stats[row.uuid]?.name ?? row.uuid,
+      name: stats[row.uuid].name,
       meters: formatNumber(meters, 1),
-      value: formatNumber(row.value, 3)
+      value: formatNumber(value, 3)
     }));
   }
   if ( lines.length ) {
     const content = `<p>${lines.map(line => foundry.utils.escapeHTML(line)).join("<br>")}</p>`;
     await ChatMessage.create({ content });
   }
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+/**
+ * Remet le réglage de monde à un combat vide.
+ *
+ * @returns {Promise<void>}
+ */
+async function endCombat() {
+  await writeCombat(blankCombat());
 }
 
 /**
@@ -401,9 +440,41 @@ async function changeRange(ship) {
   const noteFor = outcome => outcome.de >= 3 ? game.i18n.localize("SOL.Space.incident") : "";
   const mine = await rollSingle(ship, "pilot", "changeRange", { noteFor, store: false });
   if ( !mine ) return null;
+  // Le joueur a jeté le sien. Le jet adverse et l'écriture sont sur le MJ :
+  // un seul saut, et l'équipage PNJ n'a pas de propriétaire.
+  if ( !game.user.isGM ) {
+    await relayToGm({
+      type: "changeRange",
+      shipUuid: ship.uuid,
+      success: mine.success === true,
+      dr: mine.dr,
+      de: mine.de,
+      score: mine.score
+    });
+    return mine;
+  }
+  return resolveRangeChange(ship, mine);
+}
+
+/**
+ * Le MJ lance le pilote adverse, retire le delta-v du déclarant, puis la portée.
+ *
+ * @param {Actor} ship Vaisseau qui a déclaré la manœuvre.
+ * @param {{ success: boolean, dr: number, de?: number, score: number }} mine
+ * @returns {Promise<object>}
+ */
+async function resolveRangeChange(ship, mine) {
+  const otherUuid = readCombat().ships.find(uuid => uuid && uuid !== ship.uuid);
+  const other = otherUuid ? await foundry.utils.fromUuid(otherUuid) : null;
+  if ( !other || other.documentName !== "Actor" ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.needTwo"));
+    return mine;
+  }
+  const noteFor = outcome => outcome.de >= 3 ? game.i18n.localize("SOL.Space.incident") : "";
   const theirs = await rollSingle(other, "pilot", "changeRange", { noteFor, store: false });
-  if ( !theirs ) return null;
-  const verdict = compareOpposed(mine, theirs);
+  if ( !theirs ) return mine;
+  await spendRangeDeltaV(ship);
+  const verdict = compareOpposed(mine, theirs, { useScore: true });
   if ( verdict === "tie" ) {
     ui.notifications.warn(game.i18n.localize("SOL.Space.rangeTie"));
     return mine;
@@ -421,6 +492,25 @@ async function changeRange(ship) {
 }
 
 /**
+ * Un tour de poussée, pour le vaisseau qui a lancé le changement.
+ *
+ * @param {Actor} ship
+ * @returns {Promise<void>}
+ */
+async function spendRangeDeltaV(ship) {
+  const source = ship.system?._source ?? {};
+  const next = deltaVAfterRangeChange(source.propulsion?.deltaV?.value, source.propulsion?.acceleration);
+  await ship.update({ "system.propulsion.deltaV.value": next });
+  const meters = roundDeltaV(thrustCostKmS(source.propulsion?.acceleration)) * 1000;
+  const text = game.i18n.format("SOL.Space.rangeCost", {
+    name: ship.name,
+    meters: formatNumber(meters, 1),
+    value: formatNumber(next, 3)
+  });
+  await ChatMessage.create({ content: `<p>${foundry.utils.escapeHTML(text)}</p>` });
+}
+
+/**
  * @param {Actor} ship
  * @param {string} postId
  * @param {string} action
@@ -431,6 +521,7 @@ async function rollSingle(ship, postId, action, options = {}) {
   const crew = await crewOf(ship, postId);
   if ( !crew ) return null;
   let aim = "";
+  let weaponCondition = "";
   let skill = crew.skills[0];
   if ( action === "command" ) {
     const post = await choose(game.i18n.localize("SOL.Space.pickPost"), SHIP_POST_IDS.map(id => ({
@@ -451,6 +542,7 @@ async function rollSingle(ship, postId, action, options = {}) {
       label: weapon.name
     })));
     if ( !weaponId ) return null;
+    weaponCondition = weapons.find(weapon => weapon.id === weaponId)?.condition ?? "";
     aim = await choose(game.i18n.localize("SOL.Space.pickAim"), [
       { id: "none", label: game.i18n.localize("SOL.Space.aimNone") },
       { id: "section", label: game.i18n.localize("SOL.Space.aimSection") },
@@ -469,7 +561,7 @@ async function rollSingle(ship, postId, action, options = {}) {
   if ( !skill ) return null;
   const score = crew.npc ? crew.score : ratedScore(crew.actor, skill);
   if ( score === null ) return null;
-  const suggested = modifierFor(ship.uuid, postId, aim);
+  const suggested = modifierFor(ship.uuid, postId, aim, weaponCondition);
   const noteFor = options.noteFor ?? (action === "fire"
     ? outcome => outcome.success ? game.i18n.localize("SOL.Space.hitLater") : ""
     : null);
@@ -501,15 +593,77 @@ async function storeEffect(ship, action, result, chosenPost) {
     ui.notifications.info(game.i18n.localize("SOL.Space.effectNotStored"));
     return;
   }
-  const turn = turnOf(readCombat(), ship.uuid);
-  if ( action === "command" && chosenPost ) turn.commanderPost = chosenPost;
+  if ( !game.user.isGM ) {
+    await relayToGm({
+      type: "effect",
+      shipUuid: ship.uuid,
+      action,
+      success: true,
+      dr: result.dr,
+      chosenPost: chosenPost ?? ""
+    });
+    return;
+  }
+  await writeStoredEffect(ship.uuid, action, result, chosenPost);
+}
+
+/**
+ * @param {string} shipUuid
+ * @param {string} action
+ * @param {{ success?: boolean, dr?: number }} result
+ * @param {string} [chosenPost]
+ * @returns {Promise<void>}
+ */
+async function writeStoredEffect(shipUuid, action, result, chosenPost) {
+  if ( result?.success !== true ) return;
+  if ( !readCombat().ships.includes(shipUuid) ) return;
+  const turn = turnOf(readCombat(), shipUuid);
+  if ( action === "command" && chosenPost && SHIP_POST_IDS.includes(chosenPost) ) turn.commanderPost = chosenPost;
   else if ( action === "lock" ) turn.lock = true;
   else if ( action === "evade" ) turn.evade = evadeFromDr(result.dr, true);
   else if ( action === "calculate" ) turn.pilotBonus = true;
   else return;
   const state = readCombat();
-  state.turns[ship.uuid] = turn;
+  state.turns[shipUuid] = turn;
   await writeCombat(state);
+}
+
+/**
+ * @param {object} message
+ * @returns {Promise<boolean>}
+ */
+async function relayToGm(message) {
+  if ( !game.users?.activeGM || !game.socket?.emit ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.noActiveGm"));
+    return false;
+  }
+  game.socket.emit(SOCKET, message);
+  ui.notifications.info(game.i18n.localize("SOL.Space.relaySent"));
+  return true;
+}
+
+/**
+ * @param {object} message
+ * @returns {Promise<void>}
+ */
+async function onSpaceRelay(message) {
+  if ( game.user?.isActiveGM !== true || !message || typeof message !== "object" ) return;
+  if ( message.type === "effect" ) {
+    await writeStoredEffect(String(message.shipUuid ?? ""), String(message.action ?? ""), {
+      success: message.success === true,
+      dr: Number(message.dr)
+    }, typeof message.chosenPost === "string" ? message.chosenPost : "");
+    return;
+  }
+  if ( message.type !== "changeRange" ) return;
+  const ship = message.shipUuid ? await foundry.utils.fromUuid(String(message.shipUuid)) : null;
+  if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
+  await resolveRangeChange(ship, {
+    success: message.success === true,
+    dr: Number(message.dr),
+    de: Number(message.de),
+    score: Number(message.score)
+  });
 }
 
 /**
@@ -518,10 +672,10 @@ async function storeEffect(ship, action, result, chosenPost) {
  * @param {string} aim
  * @returns {number}
  */
-function modifierFor(shipUuid, postId, aim) {
+function modifierFor(shipUuid, postId, aim, weaponCondition = "") {
   const state = readCombat();
   if ( !state.ships.includes(shipUuid) ) {
-    return suggestedModifier({ postId, range: "close", ship: {}, foe: {}, aim });
+    return suggestedModifier({ postId, range: "close", ship: {}, foe: {}, aim, weaponCondition });
   }
   const foe = state.ships.find(uuid => uuid && uuid !== shipUuid) ?? "";
   return suggestedModifier({
@@ -529,7 +683,8 @@ function modifierFor(shipUuid, postId, aim) {
     range: state.range,
     ship: turnOf(state, shipUuid),
     foe: turnOf(state, foe),
-    aim
+    aim,
+    weaponCondition
   });
 }
 
@@ -539,6 +694,8 @@ function modifierFor(shipUuid, postId, aim) {
  * @returns {Promise<null|{ actor: Actor, npc: boolean, score: number, skills: { name: string, system: object }[], chosenPost?: string }>}
  */
 async function crewOf(ship, postId) {
+  // Décision Marc 21/10/2026 : un poste sans personnage est tenu
+  // par l'équipage PNJ. Pas de case supplémentaire.
   const uuid = ship.system._source?.posts?.[postId]?.actorUuid ?? "";
   const npcScore = NPC_CREW_SCORES[ship.system._source?.npcCrew] ?? NPC_CREW_SCORES.trained;
   const virtual = skillsForPost(postId, []);

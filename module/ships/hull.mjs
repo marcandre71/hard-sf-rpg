@@ -76,8 +76,8 @@ export const MODULE_UNSET = "unset";
  * - dégradé sinon (moitié ou moins), tant que la valeur est encore positive.
  *
  * « Plus de la moitié » est lu tel quel : pas d'arrondi. Un maximum 5 a
- * sa moitié à 2,5 ; une valeur 3 est intacte. Le malus −20 du dégradé
- * est affiché, pas appliqué aux jets de poste (0.7.1).
+ * sa moitié à 2,5 ; une valeur 3 est intacte. Le −20 d'une arme dégradée
+ * est proposé au jet de l'artilleur. Les autres postes ne le reçoivent pas.
  *
  * @param {unknown} value
  * @param {unknown} max

@@ -10,6 +10,7 @@ import {
   blankCombat,
   compareOpposed,
   currentStep,
+  deltaVAfterRangeChange,
   deltaVAfterThrust,
   duplicateActors,
   evadeFromDr,
@@ -17,9 +18,11 @@ import {
   nextPost,
   normalizeCombat,
   settle,
+  roundDeltaV,
   shiftRange,
   suggestedModifier,
   thrustCostKmS,
+  turnOf,
   turnSchedule,
   weaponCanFire
 } from "../module/ships/combat.mjs";
@@ -54,6 +57,10 @@ check(near(thrustCostKmS(21), expectedCost), `21 milli-g → ${expectedCost} km/
 check(near(thrustCostKmS(21) * 1000, 12.356379), "21 milli-g → 12,356 m/s, sans arrondi à 12");
 check(thrustCostKmS(0) === 0 && thrustCostKmS(-3) === 0 && thrustCostKmS("x") === 0, "pas de poussée si l'accélération n'est pas positive");
 check(near(deltaVAfterThrust(3.6, 21), 3.6 - expectedCost), "3,6 km/s moins le produit exact");
+check(roundDeltaV(3.6 - expectedCost) === 3.588, "avant l'écriture, 3 décimales : 3,588");
+check(roundDeltaV(thrustCostKmS(21)) === 0.012, "le coût de manœuvre arrondi vaut 0,012 km/s");
+check(deltaVAfterRangeChange(3.6, 21) === 3.588, "changer de portée : 3,6 − 0,012 = 3,588");
+check(deltaVAfterRangeChange(0.001, 21) === 0, "la manœuvre ne passe pas sous 0");
 check(deltaVAfterThrust(3.6, 0) === 3.6, "accélération nulle : le delta-v ne bouge pas");
 check(deltaVAfterThrust(0.001, 21) === 0, "le delta-v ne passe pas sous 0");
 
@@ -61,7 +68,7 @@ check(evadeFromDr(1, true) === -10, "1 DR : −10");
 check(evadeFromDr(2, true) === -20, "2 DR : −20");
 check(evadeFromDr(4, true) === -30, "4 DR plafonnés à −30");
 check(evadeFromDr(2, false) === 0, "un échec n'esquive pas");
-check(evadeFromDr(0, true) === 0, "0 DR : pas de malus");
+check(evadeFromDr(0, true) === -10, "réussite à 0 DR : −10");
 
 const gunner = {
   postId: "gunner",
@@ -70,7 +77,9 @@ const gunner = {
   foe: { evade: -30 },
   aim: "module"
 };
-check(suggestedModifier(gunner) === 10 - 20 - 30 - 40, "canonnier : +10, sans verrou −20, esquive −30, module −40");
+check(suggestedModifier(gunner) === 10 - 20 - 30 - 40, "artilleur : +10, sans verrou −20, esquive −30, module −40");
+check(suggestedModifier({ ...gunner, weaponCondition: "degraded" }) === 10 - 20 - 30 - 40 - 20, "arme dégradée : −20 de plus pour l'artilleur");
+check(suggestedModifier({ postId: "pilot", ship: { pilotBonus: true }, weaponCondition: "degraded" }) === 10, "le −20 dégradé ne s'ajoute pas au pilote");
 check(suggestedModifier({
   postId: "gunner",
   range: "close",
@@ -111,7 +120,8 @@ check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 4
 check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 2, score: 65 }, { useScore: true }) === "b", "même DR : le score, à l'ouverture");
 check(compareOpposed({ success: true, dr: 2, score: 50 }, { success: true, dr: 2, score: 50 }, { useScore: true }) === "tie", "scores égaux : le MJ choisit");
 check(compareOpposed({ success: false, dr: 0, de: 4, score: 80 }, { success: false, dr: 0, de: 1, score: 40 }, { useScore: true }) === "a", "deux échecs : le score, pas les DE");
-check(compareOpposed({ success: true, dr: 1, score: 80 }, { success: true, dr: 1, score: 40 }) === "tie", "changement de portée : pas de départage par le score");
+check(compareOpposed({ success: true, dr: 1, score: 80 }, { success: true, dr: 1, score: 40 }, { useScore: true }) === "a", "changement de portée : à DR égal, le meilleur score");
+check(compareOpposed({ success: true, dr: 1, score: 40 }, { success: true, dr: 1, score: 40 }, { useScore: true }) === "tie", "scores égaux : la portée ne bouge pas");
 check(compareOpposed({ success: false, de: 5, score: 90 }, { success: false, de: 1, score: 10 }) === "tie", "les DE ne départagent pas");
 
 check(blocksCharacterCombat("ship") === true && blocksCharacterCombat("vehicle") === true, "vaisseau et véhicule : pas le tracker des personnages");
@@ -143,6 +153,19 @@ for ( let step = 0; step < 20; step++ ) {
   cursor = stepped.state;
 }
 check(seen.length === 14 && seen[0] === "commander:0:A" && seen[1] === "commander:1:B" && seen[2] === "operator:0:A" && seen[4] === "navigator:0:A" && seen[6] === "pilot:0:A", "le poste suivant avance, sans boucler");
+
+let kept = normalizeCombat({
+  ships: ["A", "B"],
+  postIndex: SHIP_POST_IDS.indexOf("navigator"),
+  side: 0,
+  turns: { A: { lock: true, pilotBonus: true } }
+});
+kept = nextPost(kept).state;
+kept = nextPost(kept).state;
+check(currentStep(kept).postId === "pilot" && currentStep(kept).shipUuid === "A", "après le navigateur, on arrive au pilote");
+check(turnOf(kept, "A").pilotBonus === true && suggestedModifier({ postId: "pilot", ship: turnOf(kept, "A") }) === 10, "le +10 de Calculer tient jusqu'au jet du pilote");
+const cleared = finishRound(kept);
+check(cleared.state.turns.A.pilotBonus === false && cleared.state.turns.A.lock === true, "le +10 part à la fin du tour, le verrouillage reste");
 check(nextPost(cursor).done === true, "après le dernier médecin, le tour est fini");
 
 const skip = nextPost(normalizeCombat({ ships: ["A", ""], postIndex: 0, side: 0 }));

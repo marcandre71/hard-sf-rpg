@@ -104,7 +104,7 @@
         "actorUuid": ""
       }
     },
-    "description": "<p>Petit prospecteur de la Ceinture, sociétaire de la Mutuelle. Réf. Vaisseaux v0.1 §8.</p><p>Équipage : 4 (minimum 2, maximum 6), souvent une famille. Ce n'est pas un champ séparé.</p><p>Le reste de la masse à vide (environ 28 t) est la structure de la coque, non détaillée en module.</p><p>L'accélération stockée est 21 milli-g au plein. Delta-v 3,6 km/s. Environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée, et 350 s, sont sur le module moteur. Décision Marc 21/10/2026 (avis Expert Science).</p>",
+    "description": "<p>Petit prospecteur de la Ceinture, sociétaire de la Mutuelle. Réf. Vaisseaux v0.1 §8.</p><p>Équipage : 4 (minimum 2, maximum 6), souvent une famille. Ce n'est pas un champ séparé.</p><p>Le reste de la masse à vide (environ 28 t) est la structure de la coque, non détaillée en module.</p><p>L'accélération stockée est 21 milli-g au plein. Delta-v 3,6 km/s. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée, et 350 s, sont sur le module moteur. Décision Marc 21/10/2026 (avis Expert Science).</p>",
     "notes": ""
   },
   "items": [
@@ -121,7 +121,7 @@
           "value": 10,
           "max": 10
         },
-        "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
+        "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
         "mass": 6,
         "weapon": {
           "damage": 0,
@@ -143,7 +143,7 @@
       "_stats": {
         "coreVersion": "14.369",
         "systemId": "sol-nouvelle-ere",
-        "systemVersion": "0.7.0",
+        "systemVersion": "0.7.1",
         "createdTime": 0,
         "modifiedTime": 0,
         "lastModifiedBy": "SolNouvelleEre00"
@@ -665,7 +665,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.7.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"
