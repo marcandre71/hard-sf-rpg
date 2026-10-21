@@ -6,12 +6,14 @@ Branche `dev/0.7.0`. **main reste en 0.6.3** tant que Marc n'a pas validé cette
 
 Décision Marc 21/10/2026. Réf. `docs/regles-vaisseaux-v0.1.md` (brouillon, chiffres provisoires).
 
-- Une fiche Vaisseau (onglets Général, Sections & modules, Postes, Notes). Type groupé, catégorie atmosphérique / vide / objet fixe. L'ancienne catégorie `station` devient `fixed`. L'ancienne clé `ship` devient `void` (à confirmer).
-- Intégrité par section, plaque de blindage, module. Les radiateurs n'ont pas de plaque : la fiche suit l'Intégrité du module Radiateurs. La plaque affichée ajoute les modules Blindage de la section (hors service : 0 ; dégradé : points entiers, à confirmer).
-- Jauge de chaleur du réacteur, 0 à 10, stockée seulement.
-- Un seul objet Module de vaisseau, onze catégories, armes comprises. État dérivé (intact, dégradé, hors service). Déplaçable de section.
-- Compendiums Vaisseaux (Petite Fortune, §8) et Modules de vaisseau (ses 13 modules, plus trois repères d'armes du §4).
-- Pas de jets, pas de dégâts, pas de chaleur ni de réparations automatisées (0.7.1 à 0.7.3).
+- Une fiche Vaisseau (onglets Général, Sections & modules, Postes, Notes). Type groupé, catégorie atmosphérique / vide / objet fixe. Décision Marc 21/10/2026 : `station` devient `fixed`, `ship` devient `void`.
+- Intégrité par section, plaque de blindage, module. Les radiateurs n'ont pas de plaque et la fiche ne saisit pas leur Intégrité de section : seul le module compte. La plaque affichée ajoute les modules Blindage de la section (hors service ou non renseigné : 0 ; dégradé : tous les points, Décision Marc 21/10/2026).
+- Jauge de chaleur du réacteur du vaisseau, 0 à 10, stockée seulement. Pas de lien avec la surchauffe du blindage (LdR §8).
+- Un seul objet Module de vaisseau, onze catégories, armes comprises. État dérivé : intact, dégradé, hors service, ou non renseigné si le maximum est 0. Un module neuf part en proue ; la section se change sur la fiche du module et sur celle du vaisseau. Une valeur au-dessus du maximum est ramenée au maximum, sans ajouter de champ à un diff qui ne le contient pas.
+- Compendiums Vaisseaux (Petite Fortune) et Modules de vaisseau (ses 13 modules, plus trois repères d'armes en Intégrité 4/4, effets « Intégrité provisoire, ajustable en jeu »). La masse de ces repères reste non écrite.
+- Petite Fortune ajustée le 21/10/2026 (avis Expert Science) : accélération 21 milli-g au plein, delta-v 3,6 / 3,6 km/s, Isp 350 s, environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée. Masses inchangées (80 t, 150 t, 230 t). Radiateurs inchangés (environ 50 m²). Le delta-v accepte les décimales.
+- Décision Marc 21/10/2026 : un PNJ peut tenir un poste. Un acteur encore dans un compendium est refusé. Abri anti-radiation, position, cap et champs de station ne sont pas codés. Une seule accélération, en milli-g au plein. Delta-v en km/s. Masse au départ calculée.
+- Pas de jets, pas de dégâts, pas de chaleur ni de réparations automatisées (0.7.1 à 0.7.3). Décision Marc 18/10/2026 : pas d'initiative de vaisseau, donc pas de garde de combat dans cette version.
 
 ## 0.6.3
 

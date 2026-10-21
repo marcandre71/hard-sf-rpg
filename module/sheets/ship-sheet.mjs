@@ -6,6 +6,8 @@
  * Tout est visible et modifiable par le propriétaire (le MJ, sur ses fiches).
  * Objet fixe : propulsion et delta-v grisés, les valeurs restent stockées.
  * Pas de jets, pas de dégâts, pas de chaleur automatisée.
+ * Décision Marc 18/10/2026 : pas d'initiative, donc pas de garde de combat
+ * (0.7.1). Un acteur encore dans un compendium ne tient pas un poste.
  *
  * Le glisser-déposer d'un personnage sur un poste écrit `actorUuid`.
  * Un module se déplace de section depuis cette fiche (pas de `name` sur
@@ -339,9 +341,9 @@ function presentPosts(actor, stored) {
   return SOL.shipPostOrder.map(id => {
     const uuid = stored.posts?.[id]?.actorUuid ?? "";
     let name = "";
-    if ( uuid && typeof fromUuidSync === "function" ) {
+    if ( uuid && typeof foundry?.utils?.fromUuidSync === "function" ) {
       try {
-        name = fromUuidSync(uuid)?.name ?? "";
+        name = foundry.utils.fromUuidSync(uuid)?.name ?? "";
       } catch {
         name = "";
       }
@@ -377,12 +379,16 @@ async function clearPost(event, target) {
  */
 async function assignPost(ship, postId, uuid) {
   if ( !SOL.shipPosts[postId] || !uuid ) return;
-  const dropped = await fromUuid(uuid);
+  const dropped = await foundry.utils.fromUuid(uuid);
   if ( !dropped || dropped.documentName !== "Actor" ) {
     ui.notifications.warn(game.i18n.localize("SOL.Ship.post.notCrew"));
     return;
   }
-  // // À confirmer par Marc : un PNJ (même feuille que le personnage) peut tenir un poste.
+  if ( dropped.pack ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.post.fromPack"));
+    return;
+  }
+  // Décision Marc 21/10/2026 : un PNJ peut tenir un poste.
   if ( dropped.type !== "character" && dropped.type !== "npc" ) {
     ui.notifications.warn(game.i18n.localize("SOL.Ship.post.notCrew"));
     return;

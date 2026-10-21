@@ -333,9 +333,8 @@ export const SOL = {
   /**
    * Catégorie de vaisseau.
    * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §2 et §9 Q1.
-   * Trois catégories. L'ancienne « station » devient `fixed`
-   * (`migrateShipSource`). L'ancienne clé `ship` devient `void`
-   * (à confirmer : ce n'était pas nommément le vide).
+   * Trois catégories. L'ancienne « station » devient `fixed`,
+   * l'ancienne clé `ship` devient `void` (`migrateShipSource`).
    */
   shipCategories: {
     atmospheric: "SOL.Ship.category.atmospheric",
@@ -375,7 +374,8 @@ export const SOL = {
   shipModuleConditions: {
     intact: "SOL.ShipModule.condition.intact",
     degraded: "SOL.ShipModule.condition.degraded",
-    out: "SOL.ShipModule.condition.out"
+    out: "SOL.ShipModule.condition.out",
+    unset: "SOL.ShipModule.condition.unset"
   },
 
   /** Nature de la masse de réaction. Réf. Vaisseaux v0.1 §2. */

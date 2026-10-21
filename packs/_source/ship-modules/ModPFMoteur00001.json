@@ -4,14 +4,14 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<p>Réf. Vaisseaux v0.1 §8. Décision Marc 21/10/2026 (avis Expert Science).</p>",
     "category": "propulsion",
     "section": "stern",
     "integrity": {
       "value": 10,
       "max": 10
     },
-    "effects": "<p>20 milli-g au plein, eau, environ 380 s. Environ 50 milli-g presque à vide (non stocké sur le vaisseau : un seul champ d'accélération). Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
     "mass": 6,
     "weapon": {
       "damage": 0,

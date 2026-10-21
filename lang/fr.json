@@ -279,7 +279,7 @@
         "acceleration": "Accélération (milli-g)",
         "accelerationHint": "Un seul nombre : milli-g au plein. Le chiffre à vide reste dans le module moteur.",
         "deltaV": "Delta-v (km/s)",
-        "deltaVHint": "Unité km/s : elle n'est écrite que pour la Petite Fortune. À confirmer par Marc.",
+        "deltaVHint": "km/s, au plein. Le champ accepte les décimales.",
         "fixedHint": "Sans effet : objet fixe. Les valeurs restent enregistrées."
       },
       "reserves": {
@@ -291,7 +291,7 @@
       "heat": {
         "label": "Chaleur du réacteur",
         "value": "Jauge",
-        "hint": "Maximum de la jauge (réacteur seul) :"
+        "hint": "Maximum de la jauge (réacteur du vaisseau seul, pas la surchauffe du blindage) :"
       },
       "spareParts": "Pièces de rechange",
       "npcCrew": {
@@ -314,7 +314,7 @@
         "stern": "Poupe",
         "radiators": "Radiateurs"
       },
-      "radiatorsFollow": "Pas de plaque. On suit l'Intégrité du module Radiateurs de cette section.",
+      "radiatorsFollow": "Pas de plaque, et pas d'Intégrité de section à saisir. Seule l'Intégrité du module Radiateurs compte.",
       "radiatorsMissing": "Aucun module Radiateurs dans cette section.",
       "posts": "Postes",
       "post": {
@@ -330,7 +330,8 @@
         "drop": "Déposer un personnage",
         "empty": "Équipage PNJ",
         "clear": "Retirer",
-        "notCrew": "Ce poste prend un personnage ou un PNJ."
+        "notCrew": "Ce poste prend un personnage ou un PNJ.",
+        "fromPack": "Importez d'abord l'acteur dans le monde : un acteur de compendium ne tient pas un poste."
       }
     },
     "Item": {
@@ -663,6 +664,7 @@
         "intact": "Intact",
         "degraded": "Dégradé",
         "out": "Hors service",
+        "unset": "Non renseigné",
         "degradedHint": "−20 aux tests qui s'en servent (rappel, non appliqué)."
       },
       "range": {

@@ -22,10 +22,10 @@
     },
     "propulsion": {
       "type": "nucléaire thermique à l'eau",
-      "acceleration": 20,
+      "acceleration": 21,
       "deltaV": {
-        "value": 4,
-        "max": 4
+        "value": 3.6,
+        "max": 3.6
       }
     },
     "reserves": {
@@ -79,12 +79,7 @@
           "max": 4
         }
       },
-      "radiators": {
-        "integrity": {
-          "value": 6,
-          "max": 6
-        }
-      }
+      "radiators": {}
     },
     "posts": {
       "commander": {
@@ -109,7 +104,7 @@
         "actorUuid": ""
       }
     },
-    "description": "<p>Petit prospecteur de la Ceinture, sociétaire de la Mutuelle. Tous les chiffres sont provisoires. Réf. Vaisseaux v0.1 §8.</p><p>Équipage : 4 (minimum 2, maximum 6), souvent une famille. Ce n'est pas un champ séparé.</p><p>Le reste de la masse à vide (environ 28 t) est la structure de la coque, non détaillée en module.</p><p>L'accélération stockée est 20 milli-g au plein. Environ 50 milli-g presque à vide, et environ 380 s, sont sur le module moteur.</p>",
+    "description": "<p>Petit prospecteur de la Ceinture, sociétaire de la Mutuelle. Réf. Vaisseaux v0.1 §8.</p><p>Équipage : 4 (minimum 2, maximum 6), souvent une famille. Ce n'est pas un champ séparé.</p><p>Le reste de la masse à vide (environ 28 t) est la structure de la coque, non détaillée en module.</p><p>L'accélération stockée est 21 milli-g au plein. Delta-v 3,6 km/s. Environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée, et 350 s, sont sur le module moteur. Décision Marc 21/10/2026 (avis Expert Science).</p>",
     "notes": ""
   },
   "items": [
@@ -119,14 +114,14 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Décision Marc 21/10/2026 (avis Expert Science).</p>",
         "category": "propulsion",
         "section": "stern",
         "integrity": {
           "value": 10,
           "max": 10
         },
-        "effects": "<p>20 milli-g au plein, eau, environ 380 s. Environ 50 milli-g presque à vide (non stocké sur le vaisseau : un seul champ d'accélération). Réf. Vaisseaux v0.1 §8.</p>",
+        "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
         "mass": 6,
         "weapon": {
           "damage": 0,

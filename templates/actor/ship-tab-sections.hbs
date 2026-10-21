@@ -1,7 +1,8 @@
 {{!--
   Sections et modules. Réf. Vaisseaux v0.1 §4 et §5.
   La plaque affichée ajoute les modules « blindage » de la section.
-  Les radiateurs n'ont pas de plaque : on suit l'Intégrité du module.
+  Les radiateurs n'ont pas de plaque ni d'Intégrité de section :
+  seule l'Intégrité du module compte. Décision Marc 21/10/2026.
   Intégrité et section d'un module : pas de name, data-field écrit l'objet.
 --}}
 <section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
@@ -16,13 +17,13 @@
     <legend>{{localize section.label}}</legend>
 
     <div class="sol-ship-pair">
+      {{#if section.hasPlate}}
       <label>
         {{localize "SOL.Ship.integrity"}}
         <input type="number" name="system.sections.{{section.id}}.integrity.value" value="{{section.integrityValue}}" min="0" step="1">
         /
         <input type="number" name="system.sections.{{section.id}}.integrity.max" value="{{section.integrityMax}}" min="0" step="1">
       </label>
-      {{#if section.hasPlate}}
       <label>
         {{localize "SOL.Ship.armor"}}
         <input type="number" name="system.sections.{{section.id}}.armor.value" value="{{section.armorValue}}" min="0" step="1">

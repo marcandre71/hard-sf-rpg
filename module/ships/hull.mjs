@@ -54,9 +54,18 @@ export const MODULE_DEGRADED = "degraded";
 export const MODULE_OUT = "out";
 
 /**
+ * Maximum absent ou nul : le MJ n'a pas encore saisi l'Intégrité.
+ * Ce n'est pas « hors service ». Décision Marc 21/10/2026.
+ */
+export const MODULE_UNSET = "unset";
+
+/**
  * État d'un module d'après son Intégrité.
  *
- * - hors service si la valeur est 0 ou moins, ou n'est pas un nombre ;
+ * - non renseigné si le maximum n'est pas un nombre, ou est 0 ou moins
+ *   (même si la valeur est déjà positive) ;
+ * - hors service si la valeur est 0 ou moins, ou n'est pas un nombre,
+ *   et que le maximum est un nombre positif ;
  * - intact si la valeur est strictement supérieure à la moitié du maximum ;
  * - dégradé sinon (moitié ou moins), tant que la valeur est encore positive.
  *
@@ -66,13 +75,13 @@ export const MODULE_OUT = "out";
  *
  * @param {unknown} value
  * @param {unknown} max
- * @returns {"intact"|"degraded"|"out"}
+ * @returns {"intact"|"degraded"|"out"|"unset"}
  */
 export function moduleCondition(value, max) {
+  const ceiling = Number(max);
+  if ( !Number.isFinite(ceiling) || ceiling <= 0 ) return MODULE_UNSET;
   const current = Number(value);
   if ( !Number.isFinite(current) || current <= 0 ) return MODULE_OUT;
-  const ceiling = Number(max);
-  if ( !Number.isFinite(ceiling) ) return MODULE_OUT;
   if ( current > ceiling / 2 ) return MODULE_INTACT;
   return MODULE_DEGRADED;
 }
@@ -92,8 +101,9 @@ export function sectionHasPlate(sectionId) {
  *
  * Un module hors service n'ajoute rien : à 0, il ne fonctionne plus
  * (Réf. Vaisseaux v0.1 §5, critique de module).
- * // À confirmer par Marc : un module dégradé ajoute encore tous ses points.
- * Aucune règle ne les réduit.
+ * Un maximum à 0 est « non renseigné » : on n'ajoute pas ses points
+ * avant que le MJ ait saisi l'Intégrité.
+ * Décision Marc 21/10/2026 : un module dégradé ajoute encore tous ses points.
  *
  * @param {Array<{ category?: string, section?: string, armorPoints?: unknown, integrity?: { value?: unknown, max?: unknown }, condition?: string }>} modules
  * @param {string} sectionId
@@ -104,7 +114,7 @@ export function armorBonus(modules, sectionId) {
   for ( const module of modules ?? [] ) {
     if ( module?.category !== "armor" || module?.section !== sectionId ) continue;
     const condition = module.condition ?? moduleCondition(module.integrity?.value, module.integrity?.max);
-    if ( condition === MODULE_OUT ) continue;
+    if ( condition === MODULE_OUT || condition === MODULE_UNSET ) continue;
     const points = Number(module.armorPoints);
     if ( !Number.isFinite(points) || points <= 0 ) continue;
     sum += points;
@@ -130,10 +140,9 @@ export function displayedArmor(sectionId, plateValue, modules) {
 
 /**
  * Total au départ : à vide + masse de réaction.
- * Choix technique, pas une règle nouvelle : 80 + 150 = 230 pour la
- * Petite Fortune (Réf. Vaisseaux v0.1 §8). La soute n'est pas ajoutée :
- * le reste de coque est déjà dans la masse à vide.
- * // À confirmer par Marc : le total n'est pas un champ saisi.
+ * Décision Marc 21/10/2026 : le total n'est pas un champ saisi.
+ * 80 + 150 = 230 pour la Petite Fortune (Réf. Vaisseaux v0.1 §8).
+ * La soute n'est pas ajoutée : le reste de coque est déjà dans la masse à vide.
  *
  * @param {unknown} dry
  * @param {unknown} reaction
@@ -168,4 +177,79 @@ export function followedRadiatorIntegrity(modules) {
     });
   }
   return followed;
+}
+
+/**
+ * Nombre fini, ou `null`.
+ *
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+function finiteNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+/**
+ * Ramène `value` au plus à `max`, dans une paire déjà présente.
+ *
+ * Ni la paire, ni une clé absente du diff, ne sont créées. Exception :
+ * si seul `max` est dans le diff et passe sous la valeur déjà stockée,
+ * on écrit `value` dans cette paire. Si seule `value` dépasse le maximum
+ * stocké, on la rabaisse et on n'ajoute pas `max`.
+ *
+ * @param {object|null|undefined} diffPair
+ * @param {{ value?: unknown, max?: unknown }|null|undefined} current
+ * @returns {void}
+ */
+export function clampValueMax(diffPair, current) {
+  if ( !diffPair || typeof diffPair !== "object" ) return;
+  const hasValue = Object.hasOwn(diffPair, "value");
+  const hasMax = Object.hasOwn(diffPair, "max");
+  if ( !hasValue && !hasMax ) return;
+  const max = finiteNumber(hasMax ? diffPair.max : current?.max);
+  if ( max === null ) return;
+  const value = finiteNumber(hasValue ? diffPair.value : current?.value);
+  if ( value === null ) return;
+  if ( value > max ) diffPair.value = max;
+}
+
+/**
+ * Intégrité de section, plaque et delta-v. Un diff sans ces clés
+ * (une description seule, par exemple) n'en reçoit pas.
+ *
+ * @param {object|null|undefined} diff Diff `system`, pas le document entier.
+ * @param {object|null|undefined} current Source déjà stockée.
+ * @returns {object|null|undefined}
+ */
+export function clampShipDiff(diff, current) {
+  if ( !diff || typeof diff !== "object" ) return diff;
+  const propulsion = diff.propulsion;
+  if ( Object.hasOwn(diff, "propulsion") && propulsion && typeof propulsion === "object" && Object.hasOwn(propulsion, "deltaV") ) {
+    clampValueMax(propulsion.deltaV, current?.propulsion?.deltaV);
+  }
+  if ( Object.hasOwn(diff, "sections") && diff.sections && typeof diff.sections === "object" ) {
+    for ( const id of Object.keys(diff.sections) ) {
+      const section = diff.sections[id];
+      if ( !section || typeof section !== "object" ) continue;
+      const stored = current?.sections?.[id];
+      if ( Object.hasOwn(section, "integrity") ) clampValueMax(section.integrity, stored?.integrity);
+      if ( Object.hasOwn(section, "armor") ) clampValueMax(section.armor, stored?.armor);
+    }
+  }
+  return diff;
+}
+
+/**
+ * Intégrité d'un module. Un diff qui n'a pas `integrity` ne le gagne pas.
+ *
+ * @param {object|null|undefined} diff Diff `system`.
+ * @param {object|null|undefined} current
+ * @returns {object|null|undefined}
+ */
+export function clampModuleDiff(diff, current) {
+  if ( !diff || typeof diff !== "object" ) return diff;
+  if ( !Object.hasOwn(diff, "integrity") ) return diff;
+  clampValueMax(diff.integrity, current?.integrity);
+  return diff;
 }

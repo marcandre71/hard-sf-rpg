@@ -4,14 +4,14 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Repère d'arme du §4, pas installé sur la Petite Fortune. Intégrité, masse et section ne sont pas dans le tableau : section proue, intégrité 0 et masse 0 en attendant. À confirmer par Marc.</p>",
+    "description": "<p>Repère d'arme du §4, pas installé sur la Petite Fortune. Section proue. Intégrité 4/4 : Décision Marc 21/10/2026. La masse n'est pas dans le tableau : 0 en attendant. À confirmer par Marc.</p>",
     "category": "weapon",
     "section": "bow",
     "integrity": {
-      "value": 0,
-      "max": 0
+      "value": 4,
+      "max": 4
     },
-    "effects": "<p>Repère provisoire. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Réf. Vaisseaux v0.1 §4.</p>",
+    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Réf. Vaisseaux v0.1 §4.</p>",
     "mass": 0,
     "weapon": {
       "damage": 12,

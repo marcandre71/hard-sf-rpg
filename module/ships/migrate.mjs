@@ -25,8 +25,7 @@ function escapeHtml(text) {
  * Ancienne catégorie d'acteur.
  *
  * Décision Marc 21/10/2026 : « station » devient « fixed » (objet fixe).
- * // À confirmer par Marc : l'ancienne clé « ship » (libellé « Vaisseau »,
- * qui n'était pas le vide en particulier) devient « void ».
+ * Décision Marc 21/10/2026 : l'ancienne clé « ship » devient « void ».
  *
  * @param {object|null|undefined} source
  * @returns {object|null|undefined}

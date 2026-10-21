@@ -10,7 +10,7 @@
  * les autres. Pas d'ActiveEffect, pas de calcul.
  */
 import { SOL } from "../config.mjs";
-import { moduleCondition } from "../ships/hull.mjs";
+import { clampModuleDiff, moduleCondition } from "../ships/hull.mjs";
 import { migrateShipModuleSource } from "../ships/migrate.mjs";
 import { BaseItemData } from "./base-item.mjs";
 import { boolField, htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
@@ -174,7 +174,8 @@ export class ShipModuleData extends BaseItemData {
         blank: false,
         choices: SOL.shipModuleCategories
       }),
-      // // À confirmer par Marc : un module neuf part en proue.
+      // Un module neuf part en proue. Décision Marc 21/10/2026.
+      // Le MJ change la section sur cette fiche et sur la fiche du vaisseau.
       section: stringField("SOL.ShipModule.section", {
         initial: "bow",
         blank: false,
@@ -197,12 +198,30 @@ export class ShipModuleData extends BaseItemData {
   }
 
   /**
-   * `condition` : intact, dégradé ou hors service. Jamais écrit dans `_source`.
+   * `condition` : intact, dégradé, hors service, ou non renseigné
+   * (maximum à 0). Jamais écrit dans `_source`.
    *
    * @override
    */
   prepareDerivedData() {
     super.prepareDerivedData();
     this.condition = moduleCondition(this.integrity?.value, this.integrity?.max);
+  }
+
+  /**
+   * Valeur ≤ maximum. Un diff sans `integrity` n'en reçoit pas.
+   * `changes` est le diff du document. On ne touche que `changes.system`.
+   *
+   * @override
+   * @param {object} changes
+   * @param {object} options
+   * @param {string} user
+   * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html#_preUpdate
+   */
+  _preUpdate(changes, options, user) {
+    if ( changes?.system && typeof changes.system === "object" ) {
+      clampModuleDiff(changes.system, this._source);
+    }
+    if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);
   }
 }

@@ -219,12 +219,14 @@ L'état du module se met à jour tout seul (hors service, dégradé, intact). Un
 
 *Un petit prospecteur de la Ceinture, sociétaire de la Mutuelle. Tous les chiffres sont provisoires, à tester. Ordres de grandeur cohérents avec la Bible (§7) et le Guide (§3b) : le moteur nucléaire thermique à l'eau est celui des remorqueurs de la Mutuelle, et l'eau se refait sur n'importe quel rocher glacé.*
 
+*Propulsion, accélération et delta-v ajustés le 21/10/2026 (avis Expert Science). Décision Marc 21/10/2026. Masses inchangées (80 t à vide, 150 t d'eau, 230 t au départ). Radiateurs inchangés (environ 50 m²).*
+
 - **Type de vaisseau** : prospecteur. **Catégorie** : vaisseau du vide.  
 - **Faction** : indépendant, sociétaire de la Mutuelle. **Économie** : mines.  
 - **Équipage** : 4 (2 au minimum, 6 au maximum) ; souvent une famille.  
 - **Masse** : 80 t à vide ; 150 t d'eau de masse de réaction au plein ; 230 t au départ.  
-- **Propulsion** : nucléaire thermique à l'eau, environ 380 s ; environ 20 milli-g au plein, environ 50 milli-g presque à vide (un patrouilleur de la Veille monte à 50 milli-g : on ne le distance pas).  
-- **Delta-v** : environ 4 km/s au plein (de quoi sauter d'un rocher à l'autre, pas de traverser la Ceinture sans refaire le plein).  
+- **Propulsion** : nucléaire thermique à l'eau, 350 s ; 21 milli-g au plein, environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total (un patrouilleur de la Veille monte à 50 milli-g : on ne le distance pas au plein). Ajusté le 21/10/2026.  
+- **Delta-v** : 3,6 km/s au plein (de quoi sauter d'un rocher à l'autre, pas de traverser la Ceinture sans refaire le plein). Ajusté le 21/10/2026.  
 - **Énergie** : le même cœur nucléaire, en mode électrique à l'arrêt, environ 100 kW électriques.  
 - **Radiateurs** : environ 50 m², repliables.  
 - **Réserves** : air 90 jours, eau 180 jours (recyclée), vivres 150 jours.  
@@ -245,7 +247,7 @@ L'état du module se met à jour tout seul (hors service, dégradé, intact). Un
 
 | Module | Catégorie | Section | Intégrité | Masse | Effets |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| Moteur nucléaire thermique | propulsion | poupe | 10 | 6 t | 20 milli-g au plein, eau, environ 380 s |
+| Moteur nucléaire thermique | propulsion | poupe | 10 | 6 t | 21 milli-g au plein, eau, 350 s ; environ 60 milli-g presque à vide, environ 49 kN, environ 2,9 h de poussée au total. Ajusté le 21/10/2026 |
 | Cœur du réacteur (bimodal) | réacteur | poupe | 8 | 12 t (avec le bouclier d'ombre) | porte la jauge de chaleur ; environ 100 kW électriques à l'arrêt |
 | Radiateurs repliables | radiateurs | radiateurs | 6 | 3 t | environ 50 m² |
 | Réservoir d'eau bâbord | autre | flanc bâbord | 8 | 3 t (vide) | 75 t d'eau ; percé, il perd sa masse de réaction et donc du delta-v |
@@ -263,7 +265,7 @@ Le reste de la masse à vide (environ 28 t) est la structure de la coque.
 
 ## 9\. Questions ouvertes
 
-1. **Catégorie de la feuille** : le système actuel distingue « vaisseau » et « station ». *Recommandation* : la remplacer par les trois catégories du Guide (atmosphérique, vide, objet fixe), « station » devenant « objet fixe ».  
+1. **Catégorie de la feuille** : le système actuel distingue « vaisseau » et « station ». *Recommandation* : la remplacer par les trois catégories du Guide (atmosphérique, vide, objet fixe), « station » devenant « objet fixe ». *Décision Marc 21/10/2026 : c'est en place (`atmospheric`, `void`, `fixed`). L'ancienne clé `ship` devient `void`.*  
 2. **Échelle des dégâts** : les dégâts des armes de bord et l'Intégrité des sections sont au jugé. *Recommandation* : tester un duel « Petite Fortune » contre un patrouilleur de la Veille, puis ajuster les deux ensemble.  
 3. **Missiles** : temps de vol et contre-mesures sont très simplifiés. *Recommandation* : garder « arrivée au tour suivant » tant que les tests ne montrent pas de problème.  
 4. **Laser de forage et armement civil** (Guide §8) : peut-on armer légalement un vaisseau civil ? *Recommandation* : le laser de forage reste un outil légal ; s'en servir contre un vaisseau est une infraction pour la Veille.  

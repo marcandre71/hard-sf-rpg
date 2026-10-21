@@ -167,15 +167,15 @@ La gravité natale fait foi sur `character.identity.gravityNative`. L'objet Orig
 
 Décision Marc 21/10/2026. Réf. Vaisseaux v0.1, fichier `docs/regles-vaisseaux-v0.1.md`.
 
-`module/ships/hull.mjs` ne charge pas Foundry. `tests/ship.test.mjs` s'en sert. L'état d'un module : hors service à 0, intact au-dessus de la moitié, dégradé à la moitié ou moins. Pas d'arrondi sur cette moitié. Le −20 est affiché, pas appliqué. La plaque affichée est la valeur stockée plus les points des modules `armor` de la section, sauf hors service. Les radiateurs n'ont pas de plaque : la fiche montre l'Intégrité des modules `radiators` posés dans cette section.
+`module/ships/hull.mjs` ne charge pas Foundry. `tests/ship.test.mjs` s'en sert. L'état d'un module : non renseigné si le maximum est absent, nul ou négatif ; hors service si la valeur est 0 et que le maximum est positif ; intact au-dessus de la moitié ; dégradé à la moitié ou moins. Pas d'arrondi sur cette moitié. Le −20 est affiché, pas appliqué. La plaque affichée est la valeur stockée plus les points des modules `armor` de la section, sauf hors service et non renseigné. Un module dégradé garde tous ses points. Les radiateurs n'ont pas de plaque : la fiche ne montre pas d'Intégrité de section, seulement celle des modules `radiators` posés dans cette section.
 
-`migrateData` ne touche une clé que si elle est déjà dans le diff. `station` devient `fixed`. `ship` devient `void` (à confirmer). L'ancien `state` texte d'un module est supprimé, pas converti en Intégrité.
+`migrateData` ne touche une clé que si elle est déjà dans le diff. Décision Marc 21/10/2026 : `station` devient `fixed`, `ship` devient `void`. L'ancien `state` texte d'un module est supprimé, pas converti en Intégrité. `_preUpdate` ramène une valeur au-dessus de son maximum (Intégrité de module, Intégrité de section, plaque, delta-v) sans créer la paire si le diff ne l'a pas. Le delta-v n'est pas un entier.
 
 Les choix du type de vaisseau sont une carte plate dans le schéma (`SOL.shipTypes`). Les groupes du menu sont `SOL.shipTypeGroups`, rendus dans le gabarit. Ne pas mettre les groupes dans `choices` : la validation Foundry prendrait les noms de groupe pour des valeurs.
 
 Le total au départ est dérivé (à vide + masse de réaction), pas stocké. La chaleur est un nombre 0 à 10. Un poste stocke un uuid. Vide : le score de l'équipage PNJ. Le glisser-déposer passe par `_onDrop`, pas `_onDropDocument`.
 
-Hors périmètre : jets par poste (0.7.1), dégâts localisés et dépressurisation (0.7.2), chaleur, Pousser, réparations (0.7.3). Ne pas les coder ici.
+Hors périmètre : jets par poste (0.7.1), dégâts localisés et dépressurisation (0.7.2), chaleur, Pousser, réparations (0.7.3). Décision Marc 18/10/2026 : véhicules et vaisseaux n'ont pas d'initiative. Ne pas ajouter de garde de combat dans cette version.
 
 ## Tester sous Foundry v14
 

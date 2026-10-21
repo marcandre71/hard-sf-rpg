@@ -3,8 +3,13 @@
  *
  * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §2.
  * Pas de carte vectorielle : postes et portées abstraites.
- * Pas de caractéristiques, pas d'initiative de vaisseau.
+ * Pas de caractéristiques. Décision Marc 18/10/2026 : véhicules et
+ * vaisseaux n'ont pas d'initiative. L'ordre des postes est pour 0.7.1.
+ * Pas de garde de combat dans cette version.
  * Le combat (jets, dégâts, chaleur, réparations) n'est pas joué ici.
+ *
+ * Décision Marc 21/10/2026 : abri anti-radiation, position, cap et
+ * champs de station ne sont pas codés.
  *
  * Le nom du document Foundry est le nom du vaisseau. On ne le redouble
  * pas dans `system`.
@@ -12,7 +17,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html
  */
 import { SOL } from "../config.mjs";
-import { departureMass } from "../ships/hull.mjs";
+import { clampShipDiff, departureMass } from "../ships/hull.mjs";
 import { migrateShipSource } from "../ships/migrate.mjs";
 import { htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
@@ -60,8 +65,7 @@ function postField(label) {
  */
 export class ShipData extends foundry.abstract.TypeDataModel {
   /**
-   * Décision Marc 21/10/2026 : `station` → `fixed`.
-   * // À confirmer par Marc : `ship` → `void`.
+   * Décision Marc 21/10/2026 : `station` → `fixed`, `ship` → `void`.
    * Aucun autre champ n'est ajouté ici.
    *
    * @override
@@ -92,7 +96,8 @@ export class ShipData extends foundry.abstract.TypeDataModel {
         choices: SOL.shipTypes
       }),
       shipTypeOther: stringField("SOL.Ship.type.otherText"),
-      // // À confirmer par Marc : défaut `void`, comme l'ancienne clé `ship` migrée.
+      // Défaut `void`. Décision Marc 21/10/2026 : trois catégories,
+      // et l'ancienne clé `ship` migre vers `void`.
       category: stringField("SOL.Actor.category", {
         initial: "void",
         blank: false,
@@ -117,7 +122,8 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       }, { label: "SOL.Ship.mass.label" }),
       propulsion: new SchemaField({
         type: stringField("SOL.Ship.propulsion.type"),
-        // Un seul nombre. // À confirmer par Marc : milli-g au plein, pas aussi à vide.
+        // Un seul nombre, milli-g au plein. Décision Marc 21/10/2026.
+        // Le chiffre presque à vide reste dans le texte du module moteur.
         acceleration: numberField("SOL.Ship.propulsion.acceleration", {
           initial: 0,
           min: 0,
@@ -125,7 +131,7 @@ export class ShipData extends foundry.abstract.TypeDataModel {
           step: 1,
           hint: "SOL.Ship.propulsion.accelerationHint"
         }),
-        // // À confirmer par Marc : l'unité km/s n'est écrite que pour la Petite Fortune.
+        // km/s. Décision Marc 21/10/2026. Pas `integer` : 3,6 est accepté.
         deltaV: valueMaxField("SOL.Ship.propulsion.deltaV", { min: 0, hint: "SOL.Ship.propulsion.deltaVHint" })
       }, { label: "SOL.Ship.propulsion.label" }),
       reserves: new SchemaField({
@@ -133,7 +139,9 @@ export class ShipData extends foundry.abstract.TypeDataModel {
         water: numberField("SOL.Ship.reserves.water", { initial: 0, min: 0, integer: true, step: 1 }),
         food: numberField("SOL.Ship.reserves.food", { initial: 0, min: 0, integer: true, step: 1 })
       }, { label: "SOL.Ship.reserves.label" }),
-      // Jauge du réacteur seul, 0 à 10. Réf. Vaisseaux v0.1 §6. Pas d'automatisation.
+      // Jauge du réacteur du vaisseau seul, 0 à 10. Réf. Vaisseaux v0.1 §6.
+      // Décision Marc 21/10/2026 : pas de lien avec la surchauffe du
+      // blindage (tests de CON par heure, LdR §8). Pas d'automatisation.
       heat: new SchemaField({
         value: numberField("SOL.Ship.heat.value", { initial: 0, min: 0, max: 10, integer: true, step: 1 })
       }, { label: "SOL.Ship.heat.label" }),
@@ -162,5 +170,23 @@ export class ShipData extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     super.prepareDerivedData();
     this.departureMass = departureMass(this.mass?.dry, this.mass?.reaction);
+  }
+
+  /**
+   * Valeur ≤ maximum, sans inventer de champ dans un diff partiel.
+   * `changes` est le diff du document, déjà déplié. On ne touche que
+   * `changes.system`.
+   *
+   * @override
+   * @param {object} changes
+   * @param {object} options
+   * @param {string} user
+   * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html#_preUpdate
+   */
+  _preUpdate(changes, options, user) {
+    if ( changes?.system && typeof changes.system === "object" ) {
+      clampShipDiff(changes.system, this._source);
+    }
+    if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);
   }
 }
