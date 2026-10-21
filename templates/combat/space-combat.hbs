@@ -70,7 +70,7 @@
   <fieldset class="sol-fieldset">
     <legend>{{panel.name}}</legend>
     <label>
-      <input type="checkbox" data-field="turn" data-uuid="{{panel.uuid}}" data-turn="thrust" {{#if panel.thrust}}checked{{/if}}>
+      <input type="checkbox" data-field="turn" data-uuid="{{panel.uuid}}" data-turn="thrust" {{#if panel.fixed}}disabled{{/if}} {{#if panel.thrust}}checked{{/if}}>
       {{localize "SOL.Space.thrust"}}
     </label>
     <label>

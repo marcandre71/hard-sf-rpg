@@ -307,7 +307,8 @@ export function deltaVAfterThrust(value, accelerationMilliG) {
 }
 
 /**
- * Trois décimales. 3,587… km/s s'écrit 3,588.
+ * Affichage à trois décimales. 3,587… km/s se lit 3,588.
+ * Ce nombre n'est pas celui qu'on stocke.
  *
  * @param {unknown} value
  * @returns {number}
@@ -319,8 +320,47 @@ export function roundDeltaV(value) {
 }
 
 /**
+ * Le delta-v restant couvre-t-il un tour de poussée ?
+ * Égal au coût : oui. Strictement inférieur : non.
+ *
+ * @param {unknown} value
+ * @param {unknown} accelerationMilliG
+ * @returns {boolean}
+ */
+export function canPayThrust(value, accelerationMilliG) {
+  const cost = thrustCostKmS(accelerationMilliG);
+  const current = Number(value);
+  const base = Number.isFinite(current) ? current : 0;
+  return base + 1e-9 >= cost;
+}
+
+/**
+ * La fiche montre le delta-v à 3 décimales. Renvoyer ce nombre
+ * au formulaire ne doit pas remplacer la valeur exacte stockée.
+ * Une saisie différente est une correction : on la garde.
+ *
+ * @param {object|null|undefined} diff Diff `system`.
+ * @param {object|null|undefined} current Source déjà stockée.
+ * @returns {void}
+ */
+export function keepExactDeltaV(diff, current) {
+  const pair = diff?.propulsion?.deltaV;
+  if ( !pair || typeof pair !== "object" || !Object.hasOwn(pair, "value") ) return;
+  const stored = Number(current?.propulsion?.deltaV?.value);
+  const proposed = Number(pair.value);
+  if ( !Number.isFinite(stored) || !Number.isFinite(proposed) ) return;
+  if ( Math.abs(proposed - stored) <= 1e-12 ) return;
+  if ( Math.abs(proposed - roundDeltaV(stored)) >= 5e-7 ) return;
+  delete pair.value;
+  if ( Object.keys(pair).length ) return;
+  delete diff.propulsion.deltaV;
+  if ( Object.keys(diff.propulsion).length ) return;
+  delete diff.propulsion;
+}
+
+/**
  * Delta-v après un changement de portée.
- * Le coût (accélération × 60 s) est arrondi à 3 décimales, puis le solde aussi.
+ * Même produit exact que la poussée, plancher 0. Pas d'arrondi à 0,012.
  *
  * // À confirmer par Marc : le retrait se fait-il aussi en cas d'échec,
  * et pour les deux vaisseaux ou seulement celui qui manœuvre ?
@@ -332,10 +372,7 @@ export function roundDeltaV(value) {
  * @returns {number}
  */
 export function deltaVAfterRangeChange(value, accelerationMilliG) {
-  const cost = roundDeltaV(thrustCostKmS(accelerationMilliG));
-  const current = Number(value);
-  const base = Number.isFinite(current) ? current : 0;
-  return roundDeltaV(Math.max(0, base - cost));
+  return deltaVAfterThrust(value, accelerationMilliG);
 }
 
 /**
@@ -415,20 +452,20 @@ export function shiftRange(range, direction) {
  * Test opposé.
  *
  * Une réussite bat un échec. Deux réussites : le plus gros DR.
- * Ensuite, si `useScore`, le meilleur score (ouverture, Opérations de bord).
- * Encore égal : `"tie"`. Le MJ choisit.
- *
- * Décision Marc 21/10/2026 : à l'ouverture comme au changement de portée
- * (LdR §6), le score tranche si le DR est égal. S'il est égal aussi, `"tie"`.
- * À l'ouverture, le MJ choisit. À la portée, elle ne bouge pas.
+ * Ensuite, si `useScore`, le meilleur score. Encore égal : `"tie"`.
  * Les DE ne départagent pas.
+ *
+ * Décision Marc 21/10/2026 : à l'ouverture, le score départage aussi
+ * deux échecs (`scoreOnFailure`, défaut). Encore égal, le MJ choisit.
+ * Au changement de portée (LdR §6), le score ne départage que deux
+ * réussites au même DR. Deux échecs : personne ne gagne, `"tie"`.
  *
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} a
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} b
- * @param {{ useScore?: boolean }} [options]
+ * @param {{ useScore?: boolean, scoreOnFailure?: boolean }} [options]
  * @returns {"a"|"b"|"tie"}
  */
-export function compareOpposed(a, b, { useScore = false } = {}) {
+export function compareOpposed(a, b, { useScore = false, scoreOnFailure = true } = {}) {
   const aHit = a?.success === true;
   const bHit = b?.success === true;
   if ( aHit !== bHit ) return aHit ? "a" : "b";
@@ -437,7 +474,7 @@ export function compareOpposed(a, b, { useScore = false } = {}) {
     const right = Number(b?.dr);
     if ( Number.isFinite(left) && Number.isFinite(right) && left !== right ) return left > right ? "a" : "b";
   }
-  if ( useScore ) {
+  if ( useScore && (aHit || scoreOnFailure) ) {
     const left = Number(a?.score);
     const right = Number(b?.score);
     if ( Number.isFinite(left) && Number.isFinite(right) && left !== right ) return left > right ? "a" : "b";

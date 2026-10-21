@@ -8,6 +8,7 @@ import {
   actingOrder,
   blocksCharacterCombat,
   blankCombat,
+  canPayThrust,
   compareOpposed,
   currentStep,
   deltaVAfterRangeChange,
@@ -15,6 +16,7 @@ import {
   duplicateActors,
   evadeFromDr,
   finishRound,
+  keepExactDeltaV,
   nextPost,
   normalizeCombat,
   settle,
@@ -57,10 +59,25 @@ check(near(thrustCostKmS(21), expectedCost), `21 milli-g → ${expectedCost} km/
 check(near(thrustCostKmS(21) * 1000, 12.356379), "21 milli-g → 12,356 m/s, sans arrondi à 12");
 check(thrustCostKmS(0) === 0 && thrustCostKmS(-3) === 0 && thrustCostKmS("x") === 0, "pas de poussée si l'accélération n'est pas positive");
 check(near(deltaVAfterThrust(3.6, 21), 3.6 - expectedCost), "3,6 km/s moins le produit exact");
-check(roundDeltaV(3.6 - expectedCost) === 3.588, "avant l'écriture, 3 décimales : 3,588");
-check(roundDeltaV(thrustCostKmS(21)) === 0.012, "le coût de manœuvre arrondi vaut 0,012 km/s");
-check(deltaVAfterRangeChange(3.6, 21) === 3.588, "changer de portée : 3,6 − 0,012 = 3,588");
+check(roundDeltaV(3.6 - expectedCost) === 3.588, "un tour s'affiche 3,588");
+check(roundDeltaV(thrustCostKmS(21) * 1000) === 12.356, "le coût s'affiche 12,356 m/s, pas 12");
+check(near(deltaVAfterRangeChange(3.6, 21), 3.6 - expectedCost), "changer de portée : produit exact, sans arrondi à 0,012");
 check(deltaVAfterRangeChange(0.001, 21) === 0, "la manœuvre ne passe pas sous 0");
+let tenTurns = 3.6;
+for ( let turn = 0; turn < 10; turn++ ) tenTurns = deltaVAfterThrust(tenTurns, 21);
+check(near(tenTurns, 3.6 - 10 * expectedCost), "dix tours : stocké exact");
+check(roundDeltaV(tenTurns) === 3.476, "dix tours : on lit 3,476");
+check(canPayThrust(3.6, 21) === true && canPayThrust(thrustCostKmS(21), 21) === true, "assez de delta-v : la manœuvre passe");
+check(canPayThrust(0.001, 21) === false && canPayThrust(thrustCostKmS(21) - 1e-6, 21) === false, "moins d'un tour : la manœuvre est refusée");
+const shown = { propulsion: { deltaV: { value: roundDeltaV(tenTurns) } } };
+keepExactDeltaV(shown, { propulsion: { deltaV: { value: tenTurns } } });
+check(!shown.propulsion, "l'affichage 3,476 ne réécrit pas le stock");
+const edited = { propulsion: { deltaV: { value: 3.5 } } };
+keepExactDeltaV(edited, { propulsion: { deltaV: { value: tenTurns } } });
+check(edited.propulsion.deltaV.value === 3.5, "une correction manuelle est gardée");
+const exactWrite = { propulsion: { deltaV: { value: 3.6 - expectedCost } } };
+keepExactDeltaV(exactWrite, { propulsion: { deltaV: { value: 3.6 } } });
+check(near(exactWrite.propulsion.deltaV.value, 3.6 - expectedCost), "l'écriture exacte n'est pas confondue avec l'affichage");
 check(deltaVAfterThrust(3.6, 0) === 3.6, "accélération nulle : le delta-v ne bouge pas");
 check(deltaVAfterThrust(0.001, 21) === 0, "le delta-v ne passe pas sous 0");
 
@@ -120,8 +137,9 @@ check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 4
 check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 2, score: 65 }, { useScore: true }) === "b", "même DR : le score, à l'ouverture");
 check(compareOpposed({ success: true, dr: 2, score: 50 }, { success: true, dr: 2, score: 50 }, { useScore: true }) === "tie", "scores égaux : le MJ choisit");
 check(compareOpposed({ success: false, dr: 0, de: 4, score: 80 }, { success: false, dr: 0, de: 1, score: 40 }, { useScore: true }) === "a", "deux échecs : le score, pas les DE");
-check(compareOpposed({ success: true, dr: 1, score: 80 }, { success: true, dr: 1, score: 40 }, { useScore: true }) === "a", "changement de portée : à DR égal, le meilleur score");
-check(compareOpposed({ success: true, dr: 1, score: 40 }, { success: true, dr: 1, score: 40 }, { useScore: true }) === "tie", "scores égaux : la portée ne bouge pas");
+check(compareOpposed({ success: true, dr: 1, score: 80 }, { success: true, dr: 1, score: 40 }, { useScore: true, scoreOnFailure: false }) === "a", "changement de portée : deux réussites au même DR, le score");
+check(compareOpposed({ success: true, dr: 1, score: 40 }, { success: true, dr: 1, score: 40 }, { useScore: true, scoreOnFailure: false }) === "tie", "scores égaux : la portée ne bouge pas");
+check(compareOpposed({ success: false, dr: 0, score: 80 }, { success: false, dr: 0, score: 40 }, { useScore: true, scoreOnFailure: false }) === "tie", "changement de portée : deux échecs, personne ne gagne");
 check(compareOpposed({ success: false, de: 5, score: 90 }, { success: false, de: 1, score: 10 }) === "tie", "les DE ne départagent pas");
 
 check(blocksCharacterCombat("ship") === true && blocksCharacterCombat("vehicle") === true, "vaisseau et véhicule : pas le tracker des personnages");

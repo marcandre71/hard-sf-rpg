@@ -27,7 +27,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
-import { duplicateActors } from "../ships/combat.mjs";
+import { duplicateActors, roundDeltaV } from "../ships/combat.mjs";
 import { POST_ACTIONS, openSpaceCombat, rollPostAction } from "../ships/space-ui.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
@@ -134,6 +134,14 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.identityGroups = groupsOf(["identity"]);
     context.massGroups = groupsOf(["mass"]);
     context.propulsionGroups = groupsOf(["propulsion"]);
+    for ( const group of context.propulsionGroups ) {
+      for ( const line of group.rows ) {
+        if ( line.name !== "system.propulsion.deltaV" || !line.value || typeof line.value !== "object" ) continue;
+        const exact = line.value.value;
+        if ( exact === "" || exact === null || exact === undefined ) continue;
+        line.value = { ...line.value, value: roundDeltaV(exact) };
+      }
+    }
     if ( context.fixed ) {
       for ( const group of context.propulsionGroups ) {
         group.inert = true;

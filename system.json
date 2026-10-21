@@ -274,7 +274,7 @@
       "folders": []
     }
   ],
-  "socket": false,
+  "socket": true,
   "flags": {
     "hotReload": {
       "extensions": ["css", "hbs", "json"],

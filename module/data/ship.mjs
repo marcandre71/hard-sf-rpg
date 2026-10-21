@@ -17,6 +17,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html
  */
 import { SOL } from "../config.mjs";
+import { keepExactDeltaV } from "../ships/combat.mjs";
 import { clampShipDiff, departureMass, effectiveClampCurrent } from "../ships/hull.mjs";
 import { migrateShipSource } from "../ships/migrate.mjs";
 import { htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
@@ -191,7 +192,9 @@ export class ShipData extends foundry.abstract.TypeDataModel {
     if ( changes?.system && typeof changes.system === "object" ) {
       // Token non lié : `_source` est le delta. Le maximum absent s'y
       // lit sur l'acteur de base (`token.baseActor`).
-      clampShipDiff(changes.system, effectiveClampCurrent(this._source, baseShipSource(this)));
+      const current = effectiveClampCurrent(this._source, baseShipSource(this));
+      keepExactDeltaV(changes.system, current);
+      clampShipDiff(changes.system, current);
     }
     if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);
   }

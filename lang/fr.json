@@ -279,7 +279,7 @@
         "acceleration": "Accélération (milli-g)",
         "accelerationHint": "Un seul nombre : milli-g au plein. Le chiffre à vide reste dans le module moteur.",
         "deltaV": "Delta-v (km/s)",
-        "deltaVHint": "km/s, au plein. Le champ accepte les décimales.",
+        "deltaVHint": "km/s. Affiché à 3 décimales ; la valeur stockée reste exacte. Une autre saisie la remplace.",
         "fixedHint": "Sans effet : objet fixe. Les valeurs restent enregistrées."
       },
       "reserves": {
@@ -695,7 +695,11 @@
       "duplicate": "Ce personnage tient déjà un autre poste. Un personnage ne tient qu'un poste par tour.",
       "missingCrew": "L'acteur du poste est introuvable. On lance l'équipage PNJ.",
       "effectNotStored": "Le jet est fait. L'effet n'est pas gardé : ce vaisseau n'est pas dans le combat spatial.",
-      "rangeTie": "Égalité de score : la portée ne bouge pas.",
+      "rangeTie": "Égalité : la portée ne bouge pas.",
+      "deltaVShort": "Delta-v insuffisant pour un tour de poussée. Le MJ peut corriger la fiche.",
+      "fixedNoManeuver": "Un objet fixe ne change pas de portée.",
+      "fixedNoThrust": "Un objet fixe ne pousse pas.",
+      "relayRefused": "Relais refusé : ce joueur ne possède ni le vaisseau ni l'acteur du poste.",
       "rangeCost": "{name} : changement de portée, {meters} m/s. Delta-v {value} km/s.",
       "sameShip": "Choisissez deux vaisseaux différents.",
       "shipUnset": "Aucun vaisseau",
