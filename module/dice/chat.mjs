@@ -106,6 +106,8 @@ function resultKey(critical, success) {
  * @param {"characteristic"|"skill"|"weapon"|"initiative"} [params.type] Pour l'étape dégâts.
  * @param {object|null} [params.choice] Déjà choisi : pas de fenêtre (jets groupés).
  * @param {string} [params.note] Rappel déjà traduit, sous le résultat.
+ * @param {(outcome: { success: boolean, dr: number, de: number }) => string} [params.noteFor] Rappel selon le résultat.
+ * @param {number} [params.suggested] Modificateur libre proposé. Le MJ peut le changer.
  * @param {string|null} [params.messageMode] Clé de `CONFIG.ChatMessage.modes`.
  * @param {object|null} [params.messageOptions] Champs ajoutés à la carte (`whisper`, `blind`, …).
  * @returns {Promise<null|{ success: boolean, dr: number, de: number, critical: "success"|"failure"|null, die: number, target: number }>}
@@ -118,13 +120,15 @@ export async function performRoll({
   type = "characteristic",
   choice = null,
   note = "",
+  noteFor = null,
+  suggested = 0,
   messageMode = null,
   messageOptions = null
 }) {
   const statusModifier = statusSituation(actorStatusIds(actor));
   const picked = choice
     ? stampStatus(choice, score, statusModifier)
-    : await askRoll({ title: label, score, attack: Boolean(weapon), statusModifier });
+    : await askRoll({ title: label, score, attack: Boolean(weapon), statusModifier, free: suggested });
   if ( !picked ) return null;
 
   // Foundry : 1d100 va de 1 à 100. Un 00 physique vaut 100.
@@ -157,7 +161,7 @@ export async function performRoll({
     location: "",
     damage: null,
     canApply: false,
-    note,
+    note: [note, typeof noteFor === "function" ? (noteFor(outcome) ?? "") : ""].filter(Boolean).join(" "),
     calledLabel: "",
     aimModifier: "",
     aimActions: picked.aimActions ?? 0,

@@ -148,10 +148,11 @@ function statusNote(statusModifier) {
 }
 
 /**
- * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number }} options
+ * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number, free?: number }} options
  * @returns {Promise<null|object>}
  */
-export async function askRoll({ title, score, attack = false, statusModifier = 0 }) {
+export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0 }) {
+  const initialFree = Number.isFinite(Number(free)) ? Math.trunc(Number(free)) : 0;
   const escape = foundry.utils.escapeHTML;
   const options = DIFFICULTY_ORDER.map(key => {
     const cfg = SOL.difficulties[key];
@@ -168,7 +169,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         <select name="difficulty">${options}</select>
       </label>
       <label>${escape(game.i18n.localize("SOL.Roll.free"))}
-        <input type="number" name="modifier" value="0" step="1">
+        <input type="number" name="modifier" value="${initialFree}" step="1">
       </label>
       ${attack ? attackFields() : ""}
       ${statusNote(statusModifier)}

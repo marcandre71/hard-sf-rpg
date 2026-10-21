@@ -3,7 +3,8 @@
  *
  * Réf. Vaisseaux v0.1 §4 (état dérivé) et §5 (plaque + module de blindage).
  * Décision Marc 21/10/2026 : l'Intégrité remplace le SA et le tableau d'avaries.
- * Pas de jets, pas de dégâts : 0.7.1 à 0.7.3.
+ * Pas de dégâts ici. Les jets de poste sont dans `space-ui.mjs` (0.7.1).
+ * La chaleur, Pousser et les réparations restent pour la 0.7.3.
  *
  * Les clés sont en anglais. Les libellés français sont dans `lang/fr.json`.
  */
@@ -27,7 +28,7 @@ export const NPC_CREW_SCORES = {
 /** Cinq sections fixes. Réf. Vaisseaux v0.1 §5. */
 export const SHIP_SECTION_IDS = ["bow", "port", "starboard", "stern", "radiators"];
 
-/** Sept postes, dans l'ordre du tour (non joué en 0.7.0). Réf. Vaisseaux v0.1 §3. */
+/** Sept postes, dans l'ordre du tour. Réf. Vaisseaux v0.1 §3. */
 export const SHIP_POST_IDS = ["commander", "operator", "pilot", "navigator", "gunner", "engineer", "medic"];
 
 /**
@@ -71,7 +72,7 @@ export const MODULE_UNSET = "unset";
  *
  * « Plus de la moitié » est lu tel quel : pas d'arrondi. Un maximum 5 a
  * sa moitié à 2,5 ; une valeur 3 est intacte. Le malus −20 du dégradé
- * est affiché, pas appliqué (pas de jets en 0.7.0).
+ * est affiché, pas appliqué aux jets de poste (0.7.1).
  *
  * @param {unknown} value
  * @param {unknown} max
@@ -252,4 +253,75 @@ export function clampModuleDiff(diff, current) {
   if ( !Object.hasOwn(diff, "integrity") ) return diff;
   clampValueMax(diff.integrity, current?.integrity);
   return diff;
+}
+
+/**
+ * Nombre saisi, ou `null` si la case est vide ou illisible.
+ * Une case vidée ne doit pas devenir 0.
+ *
+ * @param {unknown} raw
+ * @returns {number|null}
+ */
+export function parsedNumber(raw) {
+  if ( typeof raw === "string" && raw.trim() === "" ) return null;
+  if ( raw === null || raw === undefined ) return null;
+  const number = Number(raw);
+  return Number.isFinite(number) ? number : null;
+}
+
+/**
+ * Maximum effectif pour le bornage.
+ *
+ * Le delta d'un token non lié ne contient pas les clés inchangées.
+ * Si `max` n'y est pas, on prend celui de la source de base (l'acteur).
+ * On ne crée rien dans le diff : ceci ne sert que de lecture.
+ *
+ * @param {object|null|undefined} deltaSource `this._source` (souvent partiel).
+ * @param {object|null|undefined} baseSource Source de l'acteur de base.
+ * @returns {object}
+ */
+export function effectiveClampCurrent(deltaSource, baseSource) {
+  /** @type {object} */
+  const current = {};
+  const deltaProp = deltaSource?.propulsion?.deltaV;
+  const baseProp = baseSource?.propulsion?.deltaV;
+  if ( (deltaProp && typeof deltaProp === "object") || (baseProp && typeof baseProp === "object") ) {
+    current.propulsion = { deltaV: filledPair(deltaProp, baseProp) };
+  }
+  const sectionIds = new Set([
+    ...Object.keys(deltaSource?.sections ?? {}),
+    ...Object.keys(baseSource?.sections ?? {})
+  ]);
+  if ( sectionIds.size ) {
+    current.sections = {};
+    for ( const id of sectionIds ) {
+      const deltaSection = deltaSource?.sections?.[id];
+      const baseSection = baseSource?.sections?.[id];
+      /** @type {object} */
+      const section = {};
+      if ( deltaSection?.integrity || baseSection?.integrity ) {
+        section.integrity = filledPair(deltaSection?.integrity, baseSection?.integrity);
+      }
+      if ( deltaSection?.armor || baseSection?.armor ) {
+        section.armor = filledPair(deltaSection?.armor, baseSection?.armor);
+      }
+      if ( Object.keys(section).length ) current.sections[id] = section;
+    }
+  }
+  return current;
+}
+
+/**
+ * @param {object|null|undefined} deltaPair
+ * @param {object|null|undefined} basePair
+ * @returns {object}
+ */
+function filledPair(deltaPair, basePair) {
+  /** @type {object} */
+  const pair = {};
+  if ( deltaPair && Object.hasOwn(deltaPair, "value") ) pair.value = deltaPair.value;
+  else if ( basePair && Object.hasOwn(basePair, "value") ) pair.value = basePair.value;
+  if ( deltaPair && Object.hasOwn(deltaPair, "max") ) pair.max = deltaPair.max;
+  else if ( basePair && Object.hasOwn(basePair, "max") ) pair.max = basePair.max;
+  return pair;
 }

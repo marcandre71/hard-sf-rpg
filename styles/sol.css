@@ -409,3 +409,12 @@
 .sol-nouvelle-ere .sol-ship-module input[type="number"] {
   width: 4.5rem;
 }
+
+.sol-nouvelle-ere .sol-space-current {
+  font-weight: bold;
+}
+
+.sol-nouvelle-ere .sol-space-order {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}

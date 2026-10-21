@@ -374,6 +374,22 @@ try {
   const legacyShip = { category: "ship" };
   ShipData.migrateData(legacyShip);
   if ( legacyShip.category !== "void" ) throw new Error("l'ancienne clé ship doit devenir void");
+  const radiatorFields = new ShipData({}).schema.fields.sections.fields.radiators.fields;
+  if ( radiatorFields.integrity || radiatorFields.armor ) {
+    throw new Error("les radiateurs n'ont pas d'intégrité de section ni de plaque");
+  }
+  const bowFields = new ShipData({}).schema.fields.sections.fields.bow.fields;
+  if ( !bowFields.integrity || !bowFields.armor ) {
+    throw new Error("une section à plaque a une intégrité et un blindage");
+  }
+  const oldRadiators = { sections: { radiators: { integrity: { value: 6, max: 6 } } } };
+  ShipData.migrateData(oldRadiators);
+  if ( ("integrity" in oldRadiators.sections.radiators) || oldRadiators.sections.radiators["-=integrity"] !== null ) {
+    throw new Error("l'intégrité de section des radiateurs doit être retirée");
+  }
+  const bowOnly = { sections: { bow: { integrity: { value: 1, max: 1 } } } };
+  ShipData.migrateData(bowOnly);
+  if ( bowOnly.sections.radiators ) throw new Error("un diff de proue ne doit pas gagner de radiateurs");
   const moduleState = { category: "propulsion", state: "usé" };
   ShipModuleData.migrateData(moduleState);
   if ( ("state" in moduleState) || moduleState.integrity ) {

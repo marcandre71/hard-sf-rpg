@@ -4,9 +4,9 @@
  * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §2.
  * Pas de carte vectorielle : postes et portées abstraites.
  * Pas de caractéristiques. Décision Marc 18/10/2026 : véhicules et
- * vaisseaux n'ont pas d'initiative. L'ordre des postes est pour 0.7.1.
- * Pas de garde de combat dans cette version.
- * Le combat (jets, dégâts, chaleur, réparations) n'est pas joué ici.
+ * vaisseaux n'ont pas d'initiative. La garde est dans
+ * `module/ships/guard.mjs` (0.7.1). Les jets de poste sont dans
+ * `module/ships/space-ui.mjs`. Pas de dégâts ici (0.7.2).
  *
  * Décision Marc 21/10/2026 : abri anti-radiation, position, cap et
  * champs de station ne sont pas codés.
@@ -17,7 +17,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html
  */
 import { SOL } from "../config.mjs";
-import { clampShipDiff, departureMass } from "../ships/hull.mjs";
+import { clampShipDiff, departureMass, effectiveClampCurrent } from "../ships/hull.mjs";
 import { migrateShipSource } from "../ships/migrate.mjs";
 import { htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
@@ -33,17 +33,21 @@ function integrityField(label) {
 }
 
 /**
- * Une section. Les radiateurs n'ont pas de plaque.
+ * Une section à plaque : Intégrité et blindage.
+ * Les radiateurs n'ont ni plaque ni Intégrité de section.
+ * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §5.
  *
  * @param {string} label
  * @param {{ plate?: boolean }} [options]
  * @returns {foundry.data.fields.SchemaField}
  */
 function sectionField(label, { plate = true } = {}) {
-  const fields = {
-    integrity: integrityField("SOL.Ship.integrity")
-  };
-  if ( plate ) fields.armor = integrityField("SOL.Ship.armor");
+  /** @type {Record<string, foundry.data.fields.DataField>} */
+  const fields = {};
+  if ( plate ) {
+    fields.integrity = integrityField("SOL.Ship.integrity");
+    fields.armor = integrityField("SOL.Ship.armor");
+  }
   return new SchemaField(fields, { label });
 }
 
@@ -185,8 +189,26 @@ export class ShipData extends foundry.abstract.TypeDataModel {
    */
   _preUpdate(changes, options, user) {
     if ( changes?.system && typeof changes.system === "object" ) {
-      clampShipDiff(changes.system, this._source);
+      // Token non lié : `_source` est le delta. Le maximum absent s'y
+      // lit sur l'acteur de base (`token.baseActor`).
+      clampShipDiff(changes.system, effectiveClampCurrent(this._source, baseShipSource(this)));
     }
     if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);
   }
+}
+
+/**
+ * Source de l'acteur monde quand ce modèle est celui d'un token non lié.
+ * Un acteur du monde n'a pas de base séparée : on renvoie null.
+ *
+ * @param {foundry.abstract.TypeDataModel} model
+ * @returns {object|null}
+ */
+function baseShipSource(model) {
+  const doc = model?.parent;
+  if ( !doc ) return null;
+  const token = doc.token ?? (doc.documentName === "ActorDelta" ? doc.parent : null);
+  if ( !token || token.actorLink !== false ) return null;
+  const base = token.baseActor ?? globalThis.game?.actors?.get?.(token.actorId) ?? null;
+  return base?.system?._source ?? null;
 }

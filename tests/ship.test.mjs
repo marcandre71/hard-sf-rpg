@@ -19,8 +19,10 @@ import {
   clampValueMax,
   departureMass,
   displayedArmor,
+  effectiveClampCurrent,
   followedRadiatorIntegrity,
   moduleCondition,
+  parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
 import { migrateShipModuleSource, migrateShipSource } from "../module/ships/migrate.mjs";
@@ -140,9 +142,30 @@ check(radiators.length === 1 && radiators[0].condition === MODULE_INTACT && radi
 check(REACTOR_HEAT_MAX === 10, "jauge 0–10");
 check(NPC_CREW_SCORES.blue === 35 && NPC_CREW_SCORES.trained === 50 && NPC_CREW_SCORES.veteran === 65 && NPC_CREW_SCORES.elite === 80, "scores PNJ");
 
+check(parsedNumber("") === null && parsedNumber("  ") === null && parsedNumber(null) === null, "une case vide n'est pas un nombre");
+check(parsedNumber("0") === 0 && parsedNumber("4") === 4 && parsedNumber("abc") === null, "0 reste 0, un texte illisible est ignoré");
+
+const unlinkedDelta = { propulsion: { deltaV: { value: 5 } } };
+const unlinkedBase = { propulsion: { deltaV: { value: 3.6, max: 3.6 } } };
+const unlinkedCurrent = effectiveClampCurrent(unlinkedDelta, unlinkedBase);
+check(unlinkedCurrent.propulsion.deltaV.max === 3.6 && unlinkedCurrent.propulsion.deltaV.value === 5, "token non lié : le maximum se lit sur l'acteur de base");
+const unlinkedDiff = { propulsion: { deltaV: { value: 5 } } };
+clampShipDiff(unlinkedDiff, unlinkedCurrent);
+check(unlinkedDiff.propulsion.deltaV.value === 3.6 && !("max" in unlinkedDiff.propulsion.deltaV), "token non lié : 5 ramené à 3,6, max non injecté");
+const descriptionWithBase = { description: "<p>x</p>" };
+clampShipDiff(descriptionWithBase, effectiveClampCurrent(descriptionWithBase, unlinkedBase));
+check(!("propulsion" in descriptionWithBase) && !("sections" in descriptionWithBase), "lire le maximum de base n'écrit rien dans un diff de description");
+
 const descriptionOnly = { description: "<p>x</p>" };
 migrateShipSource(descriptionOnly);
-check(!("category" in descriptionOnly) && !("shipType" in descriptionOnly), "un diff sans catégorie n'en reçoit pas");
+check(!("category" in descriptionOnly) && !("shipType" in descriptionOnly) && !("sections" in descriptionOnly), "un diff sans catégorie n'en reçoit pas");
+
+const oldRadiators = { sections: { radiators: { integrity: { value: 6, max: 6 } } } };
+migrateShipSource(oldRadiators);
+check(!("integrity" in oldRadiators.sections.radiators) && oldRadiators.sections.radiators["-=integrity"] === null, "l'intégrité de section des radiateurs est retirée");
+const bowOnly = { sections: { bow: { integrity: { value: 1, max: 1 } } } };
+migrateShipSource(bowOnly);
+check(!("radiators" in bowOnly.sections) && bowOnly.sections.bow.integrity.value === 1, "une autre section ne gagne pas de radiateurs");
 
 const station = { category: "station", description: "<p>a</p>" };
 migrateShipSource(station);

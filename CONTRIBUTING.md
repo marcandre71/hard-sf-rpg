@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-La branche `dev/0.7.0` porte la fiche Vaisseau (données et feuille, pas de combat automatisé). **main reste en 0.6.3** tant que Marc n'a pas validé cette version : on n'y fusionne pas cette branche avant son feu vert. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) reste en place, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de jets de poste, pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées.
+La branche `dev/0.7.0` porte la 0.7.1 (postes et ordre du tour). Elle n'entre dans `main` qu'après la relecture : `main` reste en 0.7.0 jusque-là. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) est sur `main`, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -28,7 +28,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.7.0 sur cette branche, compatibilité 14,
+system.json                         Manifeste : id, version 0.7.1 sur cette branche, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -167,15 +167,25 @@ La gravité natale fait foi sur `character.identity.gravityNative`. L'objet Orig
 
 Décision Marc 21/10/2026. Réf. Vaisseaux v0.1, fichier `docs/regles-vaisseaux-v0.1.md`.
 
-`module/ships/hull.mjs` ne charge pas Foundry. `tests/ship.test.mjs` s'en sert. L'état d'un module : non renseigné si le maximum est absent, nul ou négatif ; hors service si la valeur est 0 et que le maximum est positif ; intact au-dessus de la moitié ; dégradé à la moitié ou moins. Pas d'arrondi sur cette moitié. Le −20 est affiché, pas appliqué. La plaque affichée est la valeur stockée plus les points des modules `armor` de la section, sauf hors service et non renseigné. Un module dégradé garde tous ses points. Les radiateurs n'ont pas de plaque : la fiche ne montre pas d'Intégrité de section, seulement celle des modules `radiators` posés dans cette section.
+`module/ships/hull.mjs` ne charge pas Foundry. `tests/ship.test.mjs` s'en sert. L'état d'un module : non renseigné si le maximum est absent, nul ou négatif ; hors service si la valeur est 0 et que le maximum est positif ; intact au-dessus de la moitié ; dégradé à la moitié ou moins. Pas d'arrondi sur cette moitié. Le −20 est affiché, pas appliqué. La plaque affichée est la valeur stockée plus les points des modules `armor` de la section, sauf hors service et non renseigné. Un module dégradé garde tous ses points. Les radiateurs n'ont pas de plaque : la fiche ne montre pas d'Intégrité de section, seulement celle des modules `radiators` posés dans cette section. Le schéma de la section Radiateurs est vide. Si une source a encore `sections.radiators.integrity`, `migrateShipSource` retire la clé et pose `-=integrity`, sans créer `sections` quand le diff ne l'a pas.
 
-`migrateData` ne touche une clé que si elle est déjà dans le diff. Décision Marc 21/10/2026 : `station` devient `fixed`, `ship` devient `void`. L'ancien `state` texte d'un module est supprimé, pas converti en Intégrité. `_preUpdate` ramène une valeur au-dessus de son maximum (Intégrité de module, Intégrité de section, plaque, delta-v) sans créer la paire si le diff ne l'a pas. Le delta-v n'est pas un entier.
+`migrateData` ne touche une clé que si elle est déjà dans le diff. Décision Marc 21/10/2026 : `station` devient `fixed`, `ship` devient `void`. L'ancien `state` texte d'un module est supprimé, pas converti en Intégrité. `_preUpdate` ramène une valeur au-dessus de son maximum (Intégrité de module, Intégrité de section, plaque, delta-v) sans créer la paire si le diff ne l'a pas. Un token non lié lit le maximum absent sur l'acteur de base (`effectiveClampCurrent`), toujours sans l'écrire dans le diff. Une case numérique de module vidée est ignorée (`parsedNumber`) : elle ne devient pas 0. Le delta-v n'est pas un entier.
 
 Les choix du type de vaisseau sont une carte plate dans le schéma (`SOL.shipTypes`). Les groupes du menu sont `SOL.shipTypeGroups`, rendus dans le gabarit. Ne pas mettre les groupes dans `choices` : la validation Foundry prendrait les noms de groupe pour des valeurs.
 
 Le total au départ est dérivé (à vide + masse de réaction), pas stocké. La chaleur est un nombre 0 à 10. Un poste stocke un uuid. Vide : le score de l'équipage PNJ. Le glisser-déposer passe par `_onDrop`, pas `_onDropDocument`.
 
-Hors périmètre : jets par poste (0.7.1), dégâts localisés et dépressurisation (0.7.2), chaleur, Pousser, réparations (0.7.3). Décision Marc 18/10/2026 : véhicules et vaisseaux n'ont pas d'initiative. Ne pas ajouter de garde de combat dans cette version.
+## Postes et combat spatial (0.7.1)
+
+Réf. Vaisseaux v0.1 §1 et §3. `module/ships/combat.mjs` et `module/ships/post-skills.mjs` ne chargent pas Foundry. `tests/space.test.mjs` s'en sert.
+
+L'état du combat est le réglage de monde `spaceCombat` (`module/ships/space-ui.mjs`, ApplicationV2). Ce n'est pas un document Combat : le tracker des personnages reste celui de l'initiative. Décision Marc 18/10/2026 : `module/ships/guard.mjs` refuse un vaisseau ou un véhicule dans ce tracker (`preCreateCombatant`, `return false`).
+
+Ordre fixe des sept postes, premier vaisseau puis l'autre (`firstSide`). Un uuid vide est sauté. Fin de tour : bonus effacés, verrouillage conservé, poussée cochée ôtée du delta-v par le produit exact accélération × 60 s. On n'avance pas `game.time` et on ne change pas `CONFIG.time.roundTime` (5 secondes).
+
+Le −20 d'un module dégradé reste un rappel, non appliqué au jet. Un tir de bord ne passe pas l'arme à `performRoll` : sinon la localisation des dégâts de personnage se lancerait. La carte dit « Touché (dégâts en 0.7.2) ».
+
+Hors périmètre : dégâts localisés, dépressurisation et missiles en vol (0.7.2), chaleur, Pousser, réparations (0.7.3). Pas d'initiative de personnage pour les vaisseaux.
 
 ## Tester sous Foundry v14
 
@@ -198,6 +208,10 @@ node --check module/data/ship.mjs
 node --check module/ships/hull.mjs
 node --check module/ships/migrate.mjs
 node --check module/ships/types.mjs
+node --check module/ships/combat.mjs
+node --check module/ships/post-skills.mjs
+node --check module/ships/guard.mjs
+node --check module/ships/space-ui.mjs
 node --check module/data/skill.mjs
 node --check module/data/weapon.mjs
 node --check module/data/armor.mjs
@@ -236,11 +250,13 @@ node --check tests/d100.test.mjs
 node --check tests/damage.test.mjs
 node --check tests/initiative.test.mjs
 node --check tests/ship.test.mjs
+node --check tests/space.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
 node tests/d100.test.mjs
 node tests/damage.test.mjs
 node tests/initiative.test.mjs
 node tests/ship.test.mjs
+node tests/space.test.mjs
 node tests/models.test.mjs
 ```
 

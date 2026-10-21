@@ -1,0 +1,109 @@
+{{!--
+  Combat spatial. Réf. Vaisseaux v0.1 §3.
+  Le MJ peut tout modifier à la main. Pas de carte vectorielle.
+--}}
+<section class="sol-space">
+  <p class="sol-hint">{{localize "SOL.Space.hint"}}</p>
+  <p>
+    <button type="button" data-action="opening">{{localize "SOL.Space.opening"}}</button>
+    <button type="button" data-action="stepPost">{{localize "SOL.Space.nextPost"}}</button>
+    <button type="button" data-action="stepRound">{{localize "SOL.Space.nextRound"}}</button>
+    <button type="button" data-action="currentRoll">{{localize "SOL.Space.rollCurrent"}}</button>
+  </p>
+  <p>
+    {{localize "SOL.Space.round"}}
+    <input type="number" data-field="round" value="{{round}}" min="1" step="1">
+    — {{localize stepLabel}} — {{stepName}}
+  </p>
+
+  <div class="sol-ship-pair">
+    {{#each picks as |pick|}}
+    <label>
+      {{localize "SOL.Space.ship"}} {{pick.index}}
+      <select data-field="ships.{{pick.index}}">
+        <option value="">—</option>
+        {{#each pick.options as |option|}}
+        <option value="{{option.uuid}}" {{#if option.selected}}selected{{/if}}>{{option.name}}</option>
+        {{/each}}
+      </select>
+    </label>
+    {{/each}}
+  </div>
+
+  <div class="sol-ship-pair">
+    <label>
+      {{localize "SOL.Space.range"}}
+      <select data-field="range">
+        {{#each rangeOptions as |option|}}
+        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{localize option.label}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>
+      {{localize "SOL.Space.actsFirst"}}
+      <select data-field="firstSide">
+        {{#each firstOptions as |option|}}
+        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{#if option.plain}}{{option.label}}{{else}}{{localize option.label}}{{/if}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>
+      {{localize "SOL.Space.post"}}
+      <select data-field="postIndex">
+        {{#each postOptions as |option|}}
+        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{localize option.label}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>
+      {{localize "SOL.Space.side"}}
+      <select data-field="side">
+        {{#each sideOptions as |option|}}
+        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{option.name}}</option>
+        {{/each}}
+      </select>
+    </label>
+  </div>
+
+  {{#each panels as |panel|}}
+  <fieldset class="sol-fieldset">
+    <legend>{{panel.name}}</legend>
+    <label>
+      <input type="checkbox" data-field="turn" data-uuid="{{panel.uuid}}" data-turn="thrust" {{#if panel.thrust}}checked{{/if}}>
+      {{localize "SOL.Space.thrust"}}
+    </label>
+    <label>
+      <input type="checkbox" data-field="turn" data-uuid="{{panel.uuid}}" data-turn="lock" {{#if panel.lock}}checked{{/if}}>
+      {{localize "SOL.Space.lock"}}
+    </label>
+    <label>
+      <input type="checkbox" data-field="turn" data-uuid="{{panel.uuid}}" data-turn="pilotBonus" {{#if panel.pilotBonus}}checked{{/if}}>
+      {{localize "SOL.Space.pilotBonus"}}
+    </label>
+    <label>
+      {{localize "SOL.Space.evade"}}
+      <select data-field="turn" data-uuid="{{panel.uuid}}" data-turn="evade">
+        {{#each panel.evadeOptions as |option|}}
+        <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.value}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>
+      {{localize "SOL.Space.commander"}}
+      <select data-field="turn" data-uuid="{{panel.uuid}}" data-turn="commanderPost">
+        {{#each panel.postOptions as |option|}}
+        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{localize option.label}}</option>
+        {{/each}}
+      </select>
+    </label>
+  </fieldset>
+  {{/each}}
+
+  <ol class="sol-space-order">
+    {{#each schedule as |row|}}
+    <li class="{{#if row.current}}sol-space-current{{/if}}">
+      {{localize row.postLabel}} — {{#if row.emptyLabel}}{{localize "SOL.Space.emptyPost"}}{{else}}{{row.name}}{{/if}}
+    </li>
+    {{/each}}
+  </ol>
+</section>

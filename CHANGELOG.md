@@ -1,8 +1,24 @@
 # Journal des versions
 
+## 0.7.1
+
+Branche `dev/0.7.0`. Elle n'entre dans `main` qu'après la relecture. `main` reste en 0.7.0 jusque-là. Le test pour Marc (TESTER §11) prend le ZIP de `main` une fois la branche fusionnée.
+
+Réf. Vaisseaux v0.1 §1 et §3. `// Réf. Vaisseaux v0.1 §3`.
+
+- Jets depuis l'onglet Postes. Commandement, Opérations de bord, Pilotage (spécialités « Pilotage : … »), Mécanique orbitale, Armement de bord. Ingénieur : Réacteurs et propulsion, ou Mécanique (pas Mécanique orbitale). Médecin : Médecine, ou Premiers secours. Un acteur au poste utilise sa compétence. Sinon le score de l'équipage PNJ (35/50/65/80). Le modificateur proposé est prérempli ; le MJ peut le changer. Le plafond ±50 reste celui du dialogue.
+- Combat spatial : fenêtre du MJ, état dans le réglage de monde `spaceCombat`. Pas un document Combat, pour ne pas mélanger avec le tracker des personnages. Deux vaisseaux, portée, ordre, tour, poste, côté, poussée, verrouillage, esquive, bonus : tout est modifiable à la main.
+- Ouverture : Opérations de bord opposées. Le vainqueur agit en premier à chaque poste. Égalité de DR : le meilleur score. Encore égal : le MJ choisit. Les DE ne départagent pas.
+- Ordre affiché : commandant, opérateur, pilote, navigateur, canonnier, ingénieur, médecin. À chaque poste, le premier vaisseau puis l'autre. Un côté sans vaisseau est sauté. « Poste suivant », « Tour suivant », compteur de tours (environ une minute). Le temps du monde n'avance pas.
+- Effets immédiats, proposés dans le dialogue, effacés en fin de tour sauf le verrouillage : commandant +10 sur un poste choisi ; verrouillage (sans lui, le canonnier tire à −20 au-delà de la portée proche) ; esquive −10 par DR, au plus −30, ce tour seulement ; changement de portée (test de pilotage opposé, une portée, égalité : le MJ, la portée ne bouge pas ; 3 DE ou plus : incident au choix du meneur) ; navigateur +10 au pilote ce tour ; tir : touche seulement, portées de l'arme, visée section −20 ou module −40, carte « Touché (dégâts en 0.7.2) ». Ingénieur et médecin : jet simple. Un même personnage sur deux postes : avertissement, sans blocage.
+- Poussée cochée : en fin de tour, accélération × 60 s ôtée du delta-v (21 milli-g → 12,356 m/s), plancher 0. Le MJ peut corriger le delta-v à la main.
+- Décision Marc 18/10/2026 : un vaisseau ou un véhicule ne peut pas être ajouté au combat des personnages.
+- Reliquats de relecture : la section Radiateurs n'a plus d'Intégrité (migration `-=integrity`, sans injecter `sections` dans un diff qui ne l'a pas). Le bornage valeur ≤ maximum lit le maximum de l'acteur de base pour un token non lié. Une case numérique vidée n'écrit pas 0.
+- Hors de cette version : dégâts, localisation, critiques, missiles en vol (0.7.2) ; chaleur, Pousser, réparations (0.7.3).
+
 ## 0.7.0
 
-Branche `dev/0.7.0`. **main reste en 0.6.3** tant que Marc n'a pas validé cette version. Pas de fusion avant son feu vert.
+Livrée sur `dev/0.7.0`, puis avancée sur `main` après la validation de la 0.6.3 par Marc.
 
 Décision Marc 21/10/2026. Réf. `docs/regles-vaisseaux-v0.1.md` (brouillon, chiffres provisoires).
 

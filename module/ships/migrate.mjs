@@ -32,10 +32,29 @@ function escapeHtml(text) {
  */
 export function migrateShipSource(source) {
   if ( !source || typeof source !== "object" ) return source;
-  if ( !Object.hasOwn(source, "category") ) return source;
-  if ( source.category === "station" ) source.category = "fixed";
-  else if ( source.category === "ship" ) source.category = "void";
+  if ( Object.hasOwn(source, "category") ) {
+    if ( source.category === "station" ) source.category = "fixed";
+    else if ( source.category === "ship" ) source.category = "void";
+  }
+  // Décision Marc 21/10/2026 : seule l'Intégrité du module Radiateurs compte.
+  // `-=integrity` est la suppression Foundry : un diff qui n'a pas la clé
+  // ne la crée pas, et on n'ajoute pas `sections` s'il n'y est pas.
+  dropRadiatorSectionIntegrity(source);
   return source;
+}
+
+/**
+ * @param {object} source
+ * @returns {void}
+ */
+function dropRadiatorSectionIntegrity(source) {
+  if ( !Object.hasOwn(source, "sections") ) return;
+  const sections = source.sections;
+  if ( !sections || typeof sections !== "object" || !Object.hasOwn(sections, "radiators") ) return;
+  const radiators = sections.radiators;
+  if ( !radiators || typeof radiators !== "object" || !Object.hasOwn(radiators, "integrity") ) return;
+  delete radiators.integrity;
+  radiators["-=integrity"] = null;
 }
 
 /**

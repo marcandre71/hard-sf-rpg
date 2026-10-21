@@ -5,9 +5,9 @@
  * Onglets : Général, Sections & modules, Postes, Notes.
  * Tout est visible et modifiable par le propriétaire (le MJ, sur ses fiches).
  * Objet fixe : propulsion et delta-v grisés, les valeurs restent stockées.
- * Pas de jets, pas de dégâts, pas de chaleur automatisée.
- * Décision Marc 18/10/2026 : pas d'initiative, donc pas de garde de combat
- * (0.7.1). Un acteur encore dans un compendium ne tient pas un poste.
+ * Jets de poste : 0.7.1. Réf. Vaisseaux v0.1 §3.
+ * Décision Marc 18/10/2026 : pas d'initiative de personnage.
+ * Un acteur encore dans un compendium ne tient pas un poste.
  *
  * Le glisser-déposer d'un personnage sur un poste écrit `actorUuid`.
  * Un module se déplace de section depuis cette fiche (pas de `name` sur
@@ -20,11 +20,15 @@ import { SOL } from "../config.mjs";
 import {
   NPC_CREW_SCORES,
   REACTOR_HEAT_MAX,
+  SHIP_POST_IDS,
   armorBonus,
   displayedArmor,
   followedRadiatorIntegrity,
+  parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
+import { duplicateActors } from "../ships/combat.mjs";
+import { POST_ACTIONS, openSpaceCombat, rollPostAction } from "../ships/space-ui.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
@@ -60,7 +64,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 760, height: 860 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, clearPost }
+    actions: { ...itemListActions, clearPost, rollPost, openSpace }
   };
 
   /** @override */
@@ -252,8 +256,13 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if ( !item || item.type !== "shipModule" ) return;
     const field = input.dataset.field;
     if ( !field ) return;
-    const value = input.type === "number" ? Number(input.value) : input.value;
-    await item.update({ [field]: value });
+    if ( input.type === "number" ) {
+      const parsed = parsedNumber(input.value);
+      if ( parsed === null ) return;
+      await item.update({ [field]: parsed });
+      return;
+    }
+    await item.update({ [field]: input.value });
   }
 }
 
@@ -338,24 +347,33 @@ function presentModule(item) {
  */
 function presentPosts(actor, stored) {
   const score = NPC_CREW_SCORES[stored.npcCrew] ?? "";
-  return SOL.shipPostOrder.map(id => {
-    const uuid = stored.posts?.[id]?.actorUuid ?? "";
+  const rows = SOL.shipPostOrder.map(id => ({
+    id,
+    uuid: stored.posts?.[id]?.actorUuid ?? ""
+  }));
+  const doubled = new Set(duplicateActors(rows));
+  return rows.map(row => {
     let name = "";
-    if ( uuid && typeof foundry?.utils?.fromUuidSync === "function" ) {
+    if ( row.uuid && typeof foundry?.utils?.fromUuidSync === "function" ) {
       try {
-        name = foundry.utils.fromUuidSync(uuid)?.name ?? "";
+        name = foundry.utils.fromUuidSync(row.uuid)?.name ?? "";
       } catch {
         name = "";
       }
     }
     return {
-      id,
-      label: SOL.shipPosts[id],
-      uuid,
+      id: row.id,
+      label: SOL.shipPosts[row.id],
+      uuid: row.uuid,
       name,
-      empty: uuid === "",
+      empty: row.uuid === "",
       npcScore: score,
-      unresolved: uuid !== "" && name === ""
+      unresolved: row.uuid !== "" && name === "",
+      duplicate: row.uuid !== "" && doubled.has(row.uuid),
+      actions: (POST_ACTIONS[row.id] ?? []).map(action => ({
+        id: action,
+        label: `SOL.Space.action.${action}`
+      }))
     };
   });
 }
@@ -394,7 +412,33 @@ async function assignPost(ship, postId, uuid) {
     return;
   }
   if ( dropped.uuid === ship.uuid ) return;
+  const posts = SHIP_POST_IDS.map(id => ({
+    id,
+    uuid: id === postId ? dropped.uuid : (ship.system._source?.posts?.[id]?.actorUuid ?? "")
+  }));
+  if ( duplicateActors(posts).includes(dropped.uuid) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.duplicate"));
+  }
   await ship.update({ [`system.posts.${postId}.actorUuid`]: dropped.uuid });
+}
+
+/**
+ * @returns {void}
+ */
+function openSpace() {
+  openSpaceCombat();
+}
+
+/**
+ * @param {PointerEvent} event
+ * @param {HTMLElement} target
+ * @returns {Promise<void>}
+ */
+async function rollPost(event, target) {
+  if ( event?.detail > 1 ) return;
+  const postId = target.closest("[data-post]")?.dataset.post;
+  const action = target.dataset.spaceAction;
+  await rollPostAction(this.document, postId, action);
 }
 
 /**
