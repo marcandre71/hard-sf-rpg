@@ -121,11 +121,13 @@ check(duplicateActors([{ uuid: "A" }, { uuid: "" }, { uuid: "A" }, { uuid: "B" }
 check(duplicateActors([{ uuid: "A" }, { uuid: "B" }]).length === 0, "postes distincts");
 
 const two = normalizeCombat({ ships: ["A", "B"], range: "long", firstSide: null });
-check(SHIP_POST_IDS.join() === "commander,operator,pilot,navigator,gunner,engineer,medic", "ordre des postes");
+check(SHIP_POST_IDS.join() === "commander,operator,navigator,pilot,gunner,engineer,medic", "ordre des postes");
 const schedule = turnSchedule(two);
 check(schedule.length === 14, "quatorze créneaux");
 check(schedule[0].postId === "commander" && schedule[0].uuid === "A" && schedule[0].side === 0, "commandant du premier");
 check(schedule[1].postId === "commander" && schedule[1].uuid === "B" && schedule[1].side === 1, "puis le commandant de l'autre");
+check(schedule[4].postId === "navigator" && schedule[5].postId === "navigator", "le navigateur passe avant le pilote");
+check(schedule[6].postId === "pilot" && schedule[7].postId === "pilot", "le pilote exécute après le calcul");
 check(schedule[13].postId === "medic" && schedule[13].uuid === "B", "le médecin du second ferme le tour");
 check(actingOrder({ ships: ["A", "B"], firstSide: 1 }).join() === "B,A", "le vainqueur de l'ouverture passe devant");
 const swapped = turnSchedule(normalizeCombat({ ships: ["A", "B"], firstSide: 1 }));
@@ -140,7 +142,7 @@ for ( let step = 0; step < 20; step++ ) {
   if ( stepped.done ) break;
   cursor = stepped.state;
 }
-check(seen.length === 14 && seen[0] === "commander:0:A" && seen[1] === "commander:1:B" && seen[2] === "operator:0:A", "le poste suivant avance, sans boucler");
+check(seen.length === 14 && seen[0] === "commander:0:A" && seen[1] === "commander:1:B" && seen[2] === "operator:0:A" && seen[4] === "navigator:0:A" && seen[6] === "pilot:0:A", "le poste suivant avance, sans boucler");
 check(nextPost(cursor).done === true, "après le dernier médecin, le tour est fini");
 
 const skip = nextPost(normalizeCombat({ ships: ["A", ""], postIndex: 0, side: 0 }));

@@ -38,12 +38,15 @@ import { skillsForPost } from "./post-skills.mjs";
 const SYSTEM_ID = "sol-nouvelle-ere";
 const SETTING = "spaceCombat";
 
-/** Boutons de l'onglet Postes. Réf. Vaisseaux v0.1 §3. */
+/**
+ * Boutons de l'onglet Postes. Réf. Vaisseaux v0.1 §3.
+ * L'ordre du tour est `SHIP_POST_IDS`, pas celui de cette carte.
+ */
 export const POST_ACTIONS = {
   commander: ["command"],
   operator: ["lock"],
-  pilot: ["evade", "changeRange"],
   navigator: ["calculate"],
+  pilot: ["evade", "changeRange"],
   gunner: ["fire"],
   engineer: ["simple"],
   medic: ["simple"]

@@ -358,7 +358,10 @@ export const SOL = {
   /** @type {Record<string, string>} */
   shipSections: choiceMap(SHIP_SECTION_IDS, "SOL.Ship.section."),
 
-  /** Sept postes. Réf. Vaisseaux v0.1 §3. L'ordre du tour n'est pas joué. */
+  /**
+   * Sept postes, dans l'ordre du tour. Réf. Vaisseaux v0.1 §3.
+   * Décision Marc 21/10/2026 : Navigateur avant Pilote.
+   */
   shipPostOrder: SHIP_POST_IDS,
 
   /** @type {Record<string, string>} */

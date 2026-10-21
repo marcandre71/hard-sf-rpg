@@ -227,7 +227,7 @@ export function settle(state) {
  * Fin de tour : les bonus du tour partent, le verrouillage reste.
  * La poussée cochée produit une déduction, appliquée par l'appelant.
  *
- * // À confirmer par Marc : le verrouillage dure tout le combat,
+ * Décision Marc 21/10/2026 : le verrouillage dure tout le combat,
  * sauf si le MJ le retire à la main.
  *
  * @param {object} state
@@ -275,7 +275,7 @@ export function finishRound(state, statsByUuid = {}) {
  * Coût d'un tour de poussée, en km/s.
  * Accélération en milli-g × 60 s. 21 milli-g → environ 12 m/s.
  *
- * // À confirmer par Marc : on soustrait le produit exact
+ * Décision Marc 21/10/2026 : on soustrait le produit exact
  * (21 milli-g → 12,356 m/s), sans arrondir à 12 ni au supérieur.
  * Réf. Vaisseaux v0.1 §3.
  *
@@ -327,6 +327,8 @@ export function suggestedModifier(input) {
   const postId = input?.postId ?? "";
   let modifier = 0;
   if ( input?.ship?.commanderPost && input.ship.commanderPost === postId ) modifier += POST_BONUS;
+  // Décision Marc 21/10/2026 : le navigateur agit avant, donc ce +10
+  // est déjà posé quand le pilote jette, dans le même tour.
   if ( postId === "pilot" && input?.ship?.pilotBonus ) modifier += POST_BONUS;
   if ( postId !== "gunner" ) return modifier;
   if ( input?.range && input.range !== "close" && !input?.ship?.lock ) modifier += LOCK_PENALTY;
@@ -375,9 +377,10 @@ export function shiftRange(range, direction) {
  * Ensuite, si `useScore`, le meilleur score (ouverture, Opérations de bord).
  * Encore égal : `"tie"`. Le MJ choisit.
  *
- * // À confirmer par Marc : deux échecs, ou deux réussites au même DR,
- * ne se départagent pas par les DE. À l'ouverture, le score tranche ;
- * s'il est égal aussi, le MJ choisit. À la portée, le MJ choisit dès l'égalité.
+ * Décision Marc 21/10/2026 : à l'ouverture, le score tranche ;
+ * s'il est égal aussi, le MJ choisit. Les DE ne départagent pas.
+ * Décision Marc 21/10/2026 : à la portée, l'égalité laisse la portée
+ * en place. On ne départage pas par le score.
  *
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} a
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} b

@@ -181,7 +181,7 @@ Réf. Vaisseaux v0.1 §1 et §3. `module/ships/combat.mjs` et `module/ships/post
 
 L'état du combat est le réglage de monde `spaceCombat` (`module/ships/space-ui.mjs`, ApplicationV2). Ce n'est pas un document Combat : le tracker des personnages reste celui de l'initiative. Décision Marc 18/10/2026 : `module/ships/guard.mjs` refuse un vaisseau ou un véhicule dans ce tracker (`preCreateCombatant`, `return false`).
 
-Ordre fixe des sept postes, premier vaisseau puis l'autre (`firstSide`). Un uuid vide est sauté. Fin de tour : bonus effacés, verrouillage conservé, poussée cochée ôtée du delta-v par le produit exact accélération × 60 s. On n'avance pas `game.time` et on ne change pas `CONFIG.time.roundTime` (5 secondes).
+Décision Marc 21/10/2026 : ordre Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin (`SHIP_POST_IDS`, repris par `SOL.shipPostOrder`). Le +10 de Calculer est donc déjà là pour le pilote du même tour. Premier vaisseau puis l'autre (`firstSide`). Un uuid vide est sauté. Décision Marc 21/10/2026 : égalité à l'ouverture, le MJ choisit après le score ; le verrouillage dure tout le combat sauf retrait par le MJ ; égalité de portée, la portée ne bouge pas ; la poussée déduit le produit exact accélération × 60 s. Fin de tour : les autres bonus s'effacent. On n'avance pas `game.time` et on ne change pas `CONFIG.time.roundTime` (5 secondes).
 
 Le −20 d'un module dégradé reste un rappel, non appliqué au jet. Un tir de bord ne passe pas l'arme à `performRoll` : sinon la localisation des dégâts de personnage se lancerait. La carte dit « Touché (dégâts en 0.7.2) ».
 

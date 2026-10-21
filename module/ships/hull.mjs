@@ -28,8 +28,13 @@ export const NPC_CREW_SCORES = {
 /** Cinq sections fixes. Réf. Vaisseaux v0.1 §5. */
 export const SHIP_SECTION_IDS = ["bow", "port", "starboard", "stern", "radiators"];
 
-/** Sept postes, dans l'ordre du tour. Réf. Vaisseaux v0.1 §3. */
-export const SHIP_POST_IDS = ["commander", "operator", "pilot", "navigator", "gunner", "engineer", "medic"];
+/**
+ * Sept postes, dans l'ordre du tour. Réf. Vaisseaux v0.1 §3.
+ * Décision Marc 21/10/2026 : le navigateur précède le pilote.
+ * Il calcule, le pilote exécute : le +10 de Calculer sert
+ * au jet de Pilotage du même tour.
+ */
+export const SHIP_POST_IDS = ["commander", "operator", "navigator", "pilot", "gunner", "engineer", "medic"];
 
 /**
  * Onze catégories d'un module, armes comprises.
