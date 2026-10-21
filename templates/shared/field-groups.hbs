@@ -7,8 +7,11 @@
 --}}
 {{#each groups as |group|}}
   {{#if group.label}}
-  <fieldset class="sol-fieldset">
+  <fieldset class="sol-fieldset{{#if group.inert}} sol-inert{{/if}}">
     <legend>{{localize group.label}}</legend>
+    {{#if group.hint}}
+    <p class="sol-hint">{{localize group.hint}}</p>
+    {{/if}}
     <div class="sol-fields">
       {{#each group.rows as |row|}}
         {{#if row.disabled}}

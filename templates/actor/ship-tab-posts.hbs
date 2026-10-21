@@ -1,0 +1,25 @@
+{{!--
+  Postes d'équipage. Réf. Vaisseaux v0.1 §3.
+  Glisser un personnage (ou un PNJ) sur la ligne. Vide = équipage PNJ.
+  Pas de jet : l'ordre du tour est pour la 0.7.1.
+--}}
+<section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <p class="sol-hint">{{localize "SOL.Ship.post.hint"}}</p>
+  <ul class="sol-ship-posts">
+    {{#each posts as |post|}}
+    <li class="sol-ship-post" data-post="{{post.id}}">
+      <span class="sol-block-label">{{localize post.label}}</span>
+      {{#if post.empty}}
+      <span class="sol-ship-drop">{{localize "SOL.Ship.post.drop"}}</span>
+      <span class="sol-hint">{{localize "SOL.Ship.post.empty"}} ({{post.npcScore}})</span>
+      {{else}}
+      <span>{{post.name}}</span>
+      {{#if post.unresolved}}
+      <span class="sol-hint">{{post.uuid}}</span>
+      {{/if}}
+      <button type="button" data-action="clearPost">{{localize "SOL.Ship.post.clear"}}</button>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+</section>

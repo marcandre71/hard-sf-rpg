@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-L'étape en cours est la **0.6.3** : case Fin d'ordre sur la ligne de blessure, Rustine sur Survie, joints à la main, section États. Le compte à rebours des jetons non liés (0.6.2) reste en place. L'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11) restent en place. Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines.
+La branche `dev/0.7.0` porte la fiche Vaisseau (données et feuille, pas de combat automatisé). **main reste en 0.6.3** tant que Marc n'a pas validé cette version : on n'y fusionne pas cette branche avant son feu vert. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) reste en place, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de jets de poste, pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -20,16 +20,15 @@ Hors périmètre (ne pas les ajouter) : tolérance aux g et Sang-froid comme cha
 
 ## Où sont les règles du jeu
 
-Les règles ne sont **pas dans ce dépôt**. Elles vivent dans des **Google Docs dont Marc est propriétaire**
-(Livre de règles v0.2, Fiche de personnage v0.2).
-Ce dépôt ne contient que le système Foundry. Ne pas recopier les règles ici, ne pas en créer une version parallèle, et ne pas deviner une formule absente du code ou d'une consigne de Marc.
+Les règles ne sont **pas dans ce dépôt**, sauf un brouillon copié tel quel pour les agents : `docs/regles-vaisseaux-v0.1.md` (Règles des vaisseaux v0.1, 21/10/2026, chiffres provisoires). Le Livre de règles v0.2 et la Fiche de personnage v0.2 restent dans des **Google Docs dont Marc est propriétaire**.
+Ne pas créer une version parallèle, et ne pas deviner une formule absente du code, du brouillon, ou d'une consigne de Marc. Dans le code vaisseau, citer `// Réf. Vaisseaux v0.1 §x`. Une décision écrite de Marc se cite `// Décision Marc 21/10/2026`. Un point non couvert se marque `// À confirmer par Marc`.
 
 Quand un champ est marqué « non défini » ou « à préciser » dans le code, c'est volontaire : les docs donnent le nom, pas le type. Ne pas le « compléter » sans une décision de Marc.
 
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.6.3, compatibilité 14,
+system.json                         Manifeste : id, version 0.7.0 sur cette branche, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -64,7 +63,11 @@ module/data/person.mjs              Schéma commun Personnage et PNJ.
 module/data/npc-migrate.mjs         PNJ étape 2 seulement (description + notes, sans biography).
 module/npc-ready-migration.mjs      Une fois par monde (MJ actif, migrationVersion 2) : réécrit system.biography.
 module/data/character.mjs           Personnage : étend PersonData, pas de migration.
-module/data/actors.mjs              PNJ (migrateData), Créature, Synthétique, Drone, Véhicule, Vaisseau.
+module/data/actors.mjs              PNJ (migrateData), Créature, Synthétique, Drone, Véhicule. Le Vaisseau est réexporté.
+module/data/ship.mjs                Vaisseau : type, catégorie, sections, postes. migrateData sans défauts injectés.
+module/ships/hull.mjs               État d'un module et plaque affichée, sans Foundry. Test : tests/ship.test.mjs.
+module/ships/migrate.mjs            station → fixed, ship → void ; ancien état de module retiré.
+module/ships/types.mjs              Liste groupée des types de vaisseau (Réf. Vaisseaux v0.1 §2).
 module/data/skill.mjs               Compétence. Le score n'est pas calculé.
 module/data/weapon.mjs              Arme portative. Portée = palier short / medium / long.
 module/data/armor.mjs               Armure/Vêtement.
@@ -72,10 +75,12 @@ module/data/gear.mjs                Équipement.
 module/data/augmentation.mjs        Augmentation (genre : thérapie, prothèse, organe cultivé, héréditaire).
 module/data/injury.mjs              Blessure.
 module/data/provisional.mjs         Atout, Origine, Milieu, Profession, Séquelle, Module de vaisseau.
-                                    Champs en String / Number / HTML, défauts neutres.
+                                    Le module a une Intégrité et un état dérivé (plus de texte libre).
 module/sheets/character-sheet.mjs   Feuille à onglets du Personnage et du PNJ (groupe main).
-module/sheets/actor-sheet.mjs       Feuille générique des autres acteurs, objets groupés par type.
+module/sheets/actor-sheet.mjs       Feuille générique des autres acteurs, objets groupés par type. Pas le vaisseau.
+module/sheets/ship-sheet.mjs        Feuille du Vaisseau, quatre onglets. Dépôt d'un personnage sur un poste.
 module/sheets/item-sheet.mjs        Une feuille pour tous les objets (formGroup sur le schéma).
+                                    Module : champs d'arme ou de blindage selon la catégorie.
 module/sheets/prepare-fields.mjs    Schéma → lignes de formulaire, valeurs lues dans _source.
 module/sheets/item-list.mjs         Liste d'objets embarqués (créer, ouvrir, retirer).
 templates/                          Gabarits. Pas de français en dur : {{localize}}.
@@ -158,6 +163,20 @@ Le hook compte aussi les objets du même appel (`createEmbeddedDocuments` avec d
 
 La gravité natale fait foi sur `character.identity.gravityNative`. L'objet Origine n'a pas ce champ (rien à migrer). La séquelle a une liste fermée `radiation` / `deconditioning` / `trauma` (LdR v0.2 §15) ; chaque séquelle reste un objet. La portée d'une arme est un palier, pas des mètres ; `migrateData` ramène un ancien objet `{ short, medium, long }` à `short`.
 
+## Vaisseaux (0.7.0)
+
+Décision Marc 21/10/2026. Réf. Vaisseaux v0.1, fichier `docs/regles-vaisseaux-v0.1.md`.
+
+`module/ships/hull.mjs` ne charge pas Foundry. `tests/ship.test.mjs` s'en sert. L'état d'un module : hors service à 0, intact au-dessus de la moitié, dégradé à la moitié ou moins. Pas d'arrondi sur cette moitié. Le −20 est affiché, pas appliqué. La plaque affichée est la valeur stockée plus les points des modules `armor` de la section, sauf hors service. Les radiateurs n'ont pas de plaque : la fiche montre l'Intégrité des modules `radiators` posés dans cette section.
+
+`migrateData` ne touche une clé que si elle est déjà dans le diff. `station` devient `fixed`. `ship` devient `void` (à confirmer). L'ancien `state` texte d'un module est supprimé, pas converti en Intégrité.
+
+Les choix du type de vaisseau sont une carte plate dans le schéma (`SOL.shipTypes`). Les groupes du menu sont `SOL.shipTypeGroups`, rendus dans le gabarit. Ne pas mettre les groupes dans `choices` : la validation Foundry prendrait les noms de groupe pour des valeurs.
+
+Le total au départ est dérivé (à vide + masse de réaction), pas stocké. La chaleur est un nombre 0 à 10. Un poste stocke un uuid. Vide : le score de l'équipage PNJ. Le glisser-déposer passe par `_onDrop`, pas `_onDropDocument`.
+
+Hors périmètre : jets par poste (0.7.1), dégâts localisés et dépressurisation (0.7.2), chaleur, Pousser, réparations (0.7.3). Ne pas les coder ici.
+
 ## Tester sous Foundry v14
 
 Cible : FoundryVTT 14 (`compatibility.minimum` et `compatibility.verified` valent `"14"` dans `system.json`).
@@ -175,6 +194,10 @@ node --check module/data/npc-migrate.mjs
 node --check module/npc-ready-migration.mjs
 node --check module/data/character.mjs
 node --check module/data/actors.mjs
+node --check module/data/ship.mjs
+node --check module/ships/hull.mjs
+node --check module/ships/migrate.mjs
+node --check module/ships/types.mjs
 node --check module/data/skill.mjs
 node --check module/data/weapon.mjs
 node --check module/data/armor.mjs
@@ -186,6 +209,7 @@ node --check module/sheets/prepare-fields.mjs
 node --check module/sheets/item-list.mjs
 node --check module/sheets/character-sheet.mjs
 node --check module/sheets/actor-sheet.mjs
+node --check module/sheets/ship-sheet.mjs
 node --check module/sheets/item-sheet.mjs
 node --check module/dice/d100.mjs
 node --check module/dice/derived.mjs
@@ -211,10 +235,12 @@ node --check tests/models.test.mjs
 node --check tests/d100.test.mjs
 node --check tests/damage.test.mjs
 node --check tests/initiative.test.mjs
+node --check tests/ship.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
 node tests/d100.test.mjs
 node tests/damage.test.mjs
 node tests/initiative.test.mjs
+node tests/ship.test.mjs
 node tests/models.test.mjs
 ```
 

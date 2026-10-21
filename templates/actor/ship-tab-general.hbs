@@ -1,0 +1,61 @@
+{{!--
+  Onglet Général du vaisseau. Réf. Vaisseaux v0.1 §2.
+  Décision Marc 21/10/2026 : type groupé + catégorie.
+  Le total au départ est calculé (à vide + masse de réaction), pas saisi.
+  Objet fixe : propulsion grisée, valeurs conservées.
+--}}
+<section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="sol-fields">
+    <div class="form-group">
+      <label for="{{rootId}}-ship-type">{{localize "SOL.Ship.type.label"}}</label>
+      <select id="{{rootId}}-ship-type" name="system.shipType">
+        {{#each shipTypeGroups as |group|}}
+        <optgroup label="{{localize group.label}}">
+          {{#each group.types as |type|}}
+          <option value="{{type.id}}" {{#if type.selected}}selected{{/if}}>{{localize type.label}}</option>
+          {{/each}}
+        </optgroup>
+        {{/each}}
+      </select>
+    </div>
+    {{#if shipTypeIsOther}}
+    <div class="form-group">
+      <label for="{{rootId}}-ship-type-other">{{localize "SOL.Ship.type.otherText"}}</label>
+      <input id="{{rootId}}-ship-type-other" type="text" name="system.shipTypeOther" value="{{shipTypeOther}}">
+    </div>
+    {{/if}}
+  </div>
+
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=categoryGroups}}
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityGroups}}
+
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=massGroups}}
+  <p class="sol-ship-computed">{{localize "SOL.Ship.mass.departure"}} : <strong>{{departureMass}}</strong></p>
+  <p class="sol-hint">{{localize "SOL.Ship.mass.departureHint"}}</p>
+
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=propulsionGroups}}
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=reserveGroups}}
+
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=heatGroups}}
+  <p class="sol-hint">{{localize "SOL.Ship.heat.hint"}} {{heatMax}}</p>
+
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=spareGroups}}
+
+  <div class="sol-fields">
+    <div class="form-group">
+      <label for="{{rootId}}-npc-crew">{{localize "SOL.Ship.npcCrew.label"}}</label>
+      <select id="{{rootId}}-npc-crew" name="system.npcCrew">
+        {{#each npcCrewOptions as |opt|}}
+        <option value="{{opt.id}}" {{#if opt.selected}}selected{{/if}}>{{localize opt.label}} ({{opt.score}})</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+  <p class="sol-hint">{{localize "SOL.Ship.npcCrew.hint"}}</p>
+
+  <div class="sol-item-groups">
+    {{#each otherSections as |section|}}
+      {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=section}}
+    {{/each}}
+  </div>
+</section>

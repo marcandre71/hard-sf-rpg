@@ -30,6 +30,7 @@ import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
 import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
+import { ShipSheet } from "./sheets/ship-sheet.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 
@@ -109,8 +110,15 @@ function initializeSystem() {
     label: "SOL.Sheet.Person"
   });
 
+  // Décision Marc 21/10/2026 : une feuille Vaisseau, pas la feuille générique.
+  foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, ShipSheet, {
+    types: ["ship"],
+    makeDefault: true,
+    label: "SOL.Sheet.Ship"
+  });
+
   foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, GenericActorSheet, {
-    types: SOL.actorTypes.filter(type => type !== "character" && type !== "npc"),
+    types: SOL.actorTypes.filter(type => type !== "character" && type !== "npc" && type !== "ship"),
     makeDefault: true,
     label: "SOL.Sheet.Actor"
   });

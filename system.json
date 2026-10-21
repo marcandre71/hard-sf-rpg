@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.6.3 : fin d'ordre sur la ligne, Rustine sur Survie, joints à la main, section États.",
-  "version": "0.6.3",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.7.0 (branche dev/0.7.0) : fiche Vaisseau et modules, Petite Fortune. Pas de combat de vaisseaux automatisé.",
+  "version": "0.7.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -49,7 +49,7 @@
         "htmlFields": ["description"]
       },
       "ship": {
-        "htmlFields": ["description"]
+        "htmlFields": ["description", "notes"]
       }
     },
     "Item": {
@@ -220,6 +220,13 @@
       "path": "packs/tables",
       "type": "RollTable",
       "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "ships",
+      "label": "Vaisseaux",
+      "path": "packs/ships",
+      "type": "Actor",
+      "system": "sol-nouvelle-ere"
     }
   ],
   "packFolders": [
@@ -257,6 +264,13 @@
       "sorting": "m",
       "color": "#6b5340",
       "packs": ["tables"],
+      "folders": []
+    },
+    {
+      "name": "Acteurs",
+      "sorting": "m",
+      "color": "#4a5a6b",
+      "packs": ["ships"],
       "folders": []
     }
   ],

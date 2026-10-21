@@ -361,6 +361,29 @@ try {
   if ( new VehicleData({}).schema.fields.characteristics || new ShipData({}).schema.fields.characteristics ) {
     throw new Error("véhicule et vaisseau n'ont pas de caractéristiques");
   }
+  const shipDiff = { description: "<p>x</p>" };
+  const migratedShip = ShipData.migrateData(foundry.utils.deepClone(shipDiff));
+  if ( migratedShip.category || migratedShip.shipType || migratedShip.sections ) {
+    throw new Error("un diff de description de vaisseau ne doit pas recevoir de défauts");
+  }
+  const station = { category: "station", description: "<p>a</p>" };
+  ShipData.migrateData(station);
+  if ( station.category !== "fixed" || station.shipType ) {
+    throw new Error("station doit devenir fixed, sans injecter shipType");
+  }
+  const legacyShip = { category: "ship" };
+  ShipData.migrateData(legacyShip);
+  if ( legacyShip.category !== "void" ) throw new Error("l'ancienne clé ship doit devenir void");
+  const moduleState = { category: "propulsion", state: "usé" };
+  ShipModuleData.migrateData(moduleState);
+  if ( ("state" in moduleState) || moduleState.integrity ) {
+    throw new Error("l'état libre d'un module ne doit pas devenir une Intégrité");
+  }
+  const moduleDiff = { mass: 2 };
+  ShipModuleData.migrateData(moduleDiff);
+  if ( "category" in moduleDiff || "section" in moduleDiff ) {
+    throw new Error("un diff de masse de module ne doit pas recevoir de catégorie");
+  }
 } catch (error) {
   console.error(error);
   process.exit(1);

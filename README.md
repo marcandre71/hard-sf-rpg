@@ -12,7 +12,13 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.6.3
+## État du système : version 0.7.0 (branche `dev/0.7.0`)
+
+Cette branche ajoute la fiche Vaisseau. **main est encore en 0.6.3** : on n'y fusionne qu'après le feu vert de Marc sur la 0.6.3.
+
+Décision Marc 21/10/2026. Une seule fiche pour les vaisseaux et les objets fixes : type (liste du brouillon, groupée, plus Autre), catégorie (atmosphérique, vide, objet fixe), identité, masse, propulsion, réserves, chaleur du réacteur (0 à 10), pièces de rechange, cinq sections, modules, sept postes, notes. Pas de carte vectorielle. Pas de combat automatisé. Le brouillon copié pour les agents est `docs/regles-vaisseaux-v0.1.md` (chiffres provisoires). Le compendium Vaisseaux contient la Petite Fortune ; le compendium Modules de vaisseau contient ses modules et trois repères d'armes.
+
+## État précédent, sur main : version 0.6.3
 
 On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. L'initiative est un test de Vigilance, conservé d'un round à l'autre. Des compendiums sont déclarés. L'interface est en français.
 
@@ -20,9 +26,9 @@ Acteurs : **Personnage** (`character`), **PNJ** (`npc`), **Créature** (`creatur
 
 Objets : **Compétence** (`skill`), **Atout** (`talent`), **Origine** (`origin`), **Milieu** (`background`), **Profession** (`profession`), **Arme** (`weapon`), **Armure/Vêtement** (`armor`), **Équipement** (`gear`), **Augmentation** (`augmentation`), **Substance** (`substance`), **Blessure** (`injury`), **Séquelle** (`sequel`), **Logiciel** (`software`), **Module de vaisseau** (`shipModule`).
 
-Le Personnage et le PNJ partagent la même feuille et les mêmes champs (caractéristiques, identité, textes). Les autres acteurs gardent une feuille simple, avec leurs objets groupés par type. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
+Le Personnage et le PNJ partagent la même feuille et les mêmes champs (caractéristiques, identité, textes). Créature, synthétique, drone et véhicule gardent une feuille simple, avec leurs objets groupés par type. Le vaisseau a sa feuille à onglets. Un objet d'un type interdit (par exemple un Module de vaisseau sur un Personnage) est refusé.
 
-Le Seuil de blessure est `ceil((FOR + CON) / 20)` (décision du 18/10/2026 : le LdR v0.2 disait /10). Sur le Personnage et le PNJ il n'est pas une colonne de la feuille : il apparaît dans la fenêtre d'application. Créature, synthétique et drone ont Force, Constitution et Perception (bornes du PNJ) et le Seuil est affiché sur leur feuille. Véhicule et vaisseau n'en ont pas.
+Le Seuil de blessure est `ceil((FOR + CON) / 20)` (décision du 18/10/2026 : le LdR v0.2 disait /10). Sur le Personnage et le PNJ il n'est pas une colonne de la feuille : il apparaît dans la fenêtre d'application. Créature, synthétique et drone ont Force, Constitution et Perception (bornes du PNJ) et le Seuil est affiché sur leur feuille. Véhicule et vaisseau n'ont pas de caractéristiques.
 
 L'initiative est un test de Vigilance (LdR v0.2 §7). On agit dans l'ordre des réussites, puis des échecs. À degré égal, la Réflexes départage, puis le score de Vigilance (réussites et échecs), puis l'identifiant. Une réussite critique passe avant une réussite normale du même degré. Cet ordre reste au round suivant. Une blessure grave ou pire, ou la condition Sonné, envoie en fin d'ordre. Sonné posé avant le combat le fait dès le round 1. Le meneur peut reculer un interrompu d'une place. Se replacer, seulement pendant son tour, relance la Vigilance et sacrifie le mouvement. Au round 1, un combattant marqué Surpris saute son tour. Jouer avant ne donne aucun bonus. La valeur dérivée Initiative (Réflexes / 10) n'est pas au programme : décision du 18/10/2026.
 
@@ -41,14 +47,18 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
    - **avec git** :
      ```bash
      cd <dossier de données>/Data/systems
-     git clone https://github.com/marcandre71/hard-sf-rpg.git sol-nouvelle-ere
+     git clone -b dev/0.7.0 https://github.com/marcandre71/hard-sf-rpg.git sol-nouvelle-ere
      ```
-     Si le dossier existe déjà : `git pull` dedans.
-   - **sans git** : téléchargez le dépôt (bouton *Code* → *Download ZIP*), décompressez-le, puis renommez le dossier obtenu
-     (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
+     Si le dossier existe déjà : `git fetch` puis `git checkout dev/0.7.0`.
+     `main` reste la 0.6.3.
+   - **sans git** : ZIP de la branche
+     https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.7.0.zip
+     Décompressez-le, puis renommez le dossier obtenu
+     (`hard-sf-rpg-dev-0.7.0`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
+     Le ZIP de `main` (`hard-sf-rpg-main`) est encore la 0.6.3.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version 0.6.3.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version **0.7.0** sur cette branche (le ZIP de `main` reste en 0.6.3).
 
 Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
 
@@ -67,8 +77,10 @@ module/combat/                      initiative dans le Combat Tracker
 packs/                              compendiums (JSON dans _source, LevelDB construit)
 module/data/                        un modèle par type (base commune des objets)
 module/sheets/character-sheet.mjs   feuille du Personnage
-module/sheets/actor-sheet.mjs       feuille des autres acteurs
+module/sheets/actor-sheet.mjs       feuille des autres acteurs (pas le vaisseau)
+module/sheets/ship-sheet.mjs        feuille du Vaisseau
 module/sheets/item-sheet.mjs        feuille unique des objets
+module/ships/                       état des modules, blindage, migrations, liste des types
 templates/                          gabarits Handlebars
 lang/fr.json                        tous les libellés français
 styles/sol.css                      mise en forme minimale

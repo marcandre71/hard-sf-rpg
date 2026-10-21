@@ -1,0 +1,42 @@
+{
+  "_id": "ModPFSoute000001",
+  "name": "Soute à échantillons",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "category": "cargo",
+    "section": "port",
+    "integrity": {
+      "value": 6,
+      "max": 6
+    },
+    "effects": "<p>20 t de carottes et d'échantillons. Réf. Vaisseaux v0.1 §8.</p>",
+    "mass": 5,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammunition": "",
+      "heatPerShot": 0
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModPFSoute000001"
+}

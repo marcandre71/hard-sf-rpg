@@ -1,6 +1,7 @@
 /**
  * Feuille minimale des acteurs qui ne sont ni Personnage ni PNJ
- * (Créature, Synthétique, Drone, Véhicule, Vaisseau).
+ * (Créature, Synthétique, Drone, Véhicule).
+ * Le Vaisseau a sa feuille (`ship-sheet.mjs`). Décision Marc 21/10/2026.
  *
  * Nom, image, champs du modèle (catégorie, description, notes) via
  * `{{formGroup}}`, puis les objets groupés par type (même partiel

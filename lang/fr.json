@@ -44,12 +44,17 @@
       "CreateItem": "Créer",
       "EditItem": "Modifier l'objet",
       "DeleteItem": "Retirer l'objet",
-      "ConfirmDelete": "Retirer « {name} » de cette fiche ?"
+      "ConfirmDelete": "Retirer « {name} » de cette fiche ?",
+      "Ship": "Feuille de vaisseau (Sol, Nouvelle Ère)"
     },
     "Tab": {
       "principal": "Principal",
       "inventory": "Inventaire",
-      "roleplay": "Roleplay"
+      "roleplay": "Roleplay",
+      "shipGeneral": "Général",
+      "shipSections": "Sections & modules",
+      "shipPosts": "Postes",
+      "shipNotes": "Notes"
     },
     "Section": {
       "physical": "État physique",
@@ -108,15 +113,42 @@
       "years": "ans"
     },
     "Characteristic": {
-      "for": { "label": "Force", "abbr": "FOR" },
-      "con": { "label": "Constitution", "abbr": "CON" },
-      "coo": { "label": "Coordination", "abbr": "COO" },
-      "ref": { "label": "Réflexes", "abbr": "RÉF" },
-      "ada": { "label": "Adaptation spatiale", "abbr": "ADA" },
-      "per": { "label": "Perception", "abbr": "PER" },
-      "int": { "label": "Intellect", "abbr": "INT" },
-      "vol": { "label": "Volonté", "abbr": "VOL" },
-      "pre": { "label": "Présence", "abbr": "PRÉ" }
+      "for": {
+        "label": "Force",
+        "abbr": "FOR"
+      },
+      "con": {
+        "label": "Constitution",
+        "abbr": "CON"
+      },
+      "coo": {
+        "label": "Coordination",
+        "abbr": "COO"
+      },
+      "ref": {
+        "label": "Réflexes",
+        "abbr": "RÉF"
+      },
+      "ada": {
+        "label": "Adaptation spatiale",
+        "abbr": "ADA"
+      },
+      "per": {
+        "label": "Perception",
+        "abbr": "PER"
+      },
+      "int": {
+        "label": "Intellect",
+        "abbr": "INT"
+      },
+      "vol": {
+        "label": "Volonté",
+        "abbr": "VOL"
+      },
+      "pre": {
+        "label": "Présence",
+        "abbr": "PRÉ"
+      }
     },
     "Character": {
       "identity": "Identité",
@@ -151,8 +183,154 @@
     },
     "Ship": {
       "category": {
-        "ship": "Vaisseau",
-        "station": "Station"
+        "atmospheric": "Vaisseau atmosphérique",
+        "void": "Vaisseau du vide",
+        "fixed": "Objet fixe"
+      },
+      "type": {
+        "label": "Type de vaisseau",
+        "otherText": "Autre type (texte libre)",
+        "heavyReusableLauncher": "Lanceur lourd réutilisable",
+        "lineShuttle": "Navette de ligne",
+        "suborbitalHopper": "Sauteur suborbital",
+        "orbitalTanker": "Citerne orbitale",
+        "lunarLander": "Atterrisseur lunaire",
+        "martianLander": "Atterrisseur martien",
+        "descentCargoCapsule": "Capsule cargo de descente",
+        "titanCargoAirship": "Dirigeable cargo de Titan",
+        "titanExplorerAircraft": "Aéronef d'exploration de Titan",
+        "lakeSkimmer": "Glisseur de lac",
+        "titanLauncher": "Lanceur de Titan",
+        "venusianShuttle": "Navette vénusienne",
+        "extractionAerostat": "Aérostat d'extraction et remonteur",
+        "atmosphericLifeboat": "Capsule de sauvetage atmosphérique",
+        "fusionLiner": "Long-courrier à fusion",
+        "fusionPassenger": "Paquebot à fusion",
+        "luxuryYacht": "Yacht de luxe",
+        "slowPlasmaFreighter": "Cargo lent à plasma",
+        "nuclearThermalTug": "Remorqueur nucléaire thermique",
+        "rockPusher": "Pousse-rocher",
+        "prospector": "Prospecteur",
+        "mobileRefinery": "Raffinerie mobile",
+        "waterCarrier": "Porteur d'eau",
+        "heliumCoffer": "Coffre d'hélium",
+        "reactionMassTender": "Ravitailleur de masse de réaction",
+        "watchPatrol": "Patrouilleur de la Veille",
+        "shepherd": "Berger",
+        "escort": "Escorteur",
+        "disguisedPrivateer": "Corsaire maquillé",
+        "doubleHull": "Double-coque",
+        "voidGuard": "Garde du vide",
+        "salvager": "Épaviste",
+        "hospitalShip": "Navire-hôpital",
+        "scienceVessel": "Vaisseau scientifique",
+        "courier": "Estafette",
+        "pressRelay": "Navire-relais de presse",
+        "colonistConvoy": "Convoi de colons",
+        "yardSpider": "Araignée de chantier",
+        "orbitalTaxi": "Taxi orbital",
+        "debrisDredge": "Drague à débris",
+        "roboticProbe": "Sonde robotisée",
+        "other": "Autre",
+        "rotatingHabitat": "Habitat en rotation",
+        "buriedHabitat": "Habitat enfoui",
+        "roadstead": "Rade",
+        "orbitalShipyard": "Chantier naval orbital",
+        "fuelDepot": "Dépôt de carburant",
+        "heliumVault": "Coffre-fort d'hélium",
+        "commRelay": "Relais de communication",
+        "satellites": "Satellites",
+        "orbitalHotel": "Hôtel orbital",
+        "refuge": "Refuge",
+        "rotatingMaternity": "Maternité tournante",
+        "scienceStation": "Station scientifique",
+        "quarantineLab": "Laboratoire de quarantaine",
+        "watchPost": "Poste de la Veille",
+        "electromagneticCatapult": "Catapulte électromagnétique",
+        "solarFoundry": "Fonderie solaire et raffinerie orbitale",
+        "floatingStation": "Station flottante",
+        "orbitalFarm": "Ferme orbitale",
+        "patienceYard": "Chantier de la Patience"
+      },
+      "typeGroup": {
+        "other": "Autre"
+      },
+      "identity": {
+        "label": "Identité",
+        "classBuilder": "Classe ou constructeur",
+        "faction": "Faction",
+        "economy": "Économie",
+        "transponderReal": "Transpondeur réel",
+        "transponderDisplayed": "Transpondeur affiché"
+      },
+      "mass": {
+        "label": "Masse",
+        "dry": "Masse à vide (t)",
+        "reaction": "Masse de réaction (t)",
+        "reactionNature": "Nature",
+        "water": "Eau",
+        "hydrogen": "Hydrogène",
+        "departure": "Total au départ (t)",
+        "departureHint": "Calculé : à vide + masse de réaction. Non stocké. La soute n'est pas ajoutée."
+      },
+      "propulsion": {
+        "label": "Propulsion",
+        "type": "Type de propulsion",
+        "acceleration": "Accélération (milli-g)",
+        "accelerationHint": "Un seul nombre : milli-g au plein. Le chiffre à vide reste dans le module moteur.",
+        "deltaV": "Delta-v (km/s)",
+        "deltaVHint": "Unité km/s : elle n'est écrite que pour la Petite Fortune. À confirmer par Marc.",
+        "fixedHint": "Sans effet : objet fixe. Les valeurs restent enregistrées."
+      },
+      "reserves": {
+        "label": "Réserves (jours)",
+        "air": "Air (jours)",
+        "water": "Eau (jours)",
+        "food": "Vivres (jours)"
+      },
+      "heat": {
+        "label": "Chaleur du réacteur",
+        "value": "Jauge",
+        "hint": "Maximum de la jauge (réacteur seul) :"
+      },
+      "spareParts": "Pièces de rechange",
+      "npcCrew": {
+        "label": "Équipage PNJ",
+        "hint": "Score unique d'un poste vide. Bleu 35, entraîné 50, vétéran 65, élite 80.",
+        "blue": "Bleu",
+        "trained": "Entraîné",
+        "veteran": "Vétéran",
+        "elite": "Élite"
+      },
+      "integrity": "Intégrité",
+      "armor": "Blindage",
+      "armorDisplayed": "Plaque affichée",
+      "armorBonus": "bonus des modules",
+      "sections": "Sections",
+      "section": {
+        "bow": "Proue",
+        "port": "Flanc bâbord",
+        "starboard": "Flanc tribord",
+        "stern": "Poupe",
+        "radiators": "Radiateurs"
+      },
+      "radiatorsFollow": "Pas de plaque. On suit l'Intégrité du module Radiateurs de cette section.",
+      "radiatorsMissing": "Aucun module Radiateurs dans cette section.",
+      "posts": "Postes",
+      "post": {
+        "commander": "Commandant",
+        "operator": "Opérateur",
+        "pilot": "Pilote",
+        "navigator": "Navigateur",
+        "gunner": "Artilleur",
+        "engineer": "Ingénieur",
+        "medic": "Médecin",
+        "actor": "Personne au poste",
+        "hint": "Glissez un personnage sur un poste. Vide : l'équipage PNJ. Retirer le laisse vide.",
+        "drop": "Déposer un personnage",
+        "empty": "Équipage PNJ",
+        "clear": "Retirer",
+        "notCrew": "Ce poste prend un personnage ou un PNJ."
       }
     },
     "Item": {
@@ -462,9 +640,42 @@
       "failed": "Échec : la brèche reste, l'objet n'est pas consommé."
     },
     "ShipModule": {
-      "category": "Type",
-      "state": "État",
-      "effects": "Effets"
+      "category": {
+        "label": "Catégorie",
+        "weapon": "Arme",
+        "propulsion": "Propulsion",
+        "reactor": "Réacteur",
+        "radiators": "Radiateurs",
+        "sensors": "Capteurs",
+        "communications": "Communications",
+        "lifeSupport": "Support vital",
+        "cabins": "Cabines",
+        "cargo": "Soute",
+        "armor": "Blindage",
+        "other": "Autre"
+      },
+      "section": "Section",
+      "effects": "Effets",
+      "mass": "Masse (t)",
+      "armorPoints": "Points de blindage",
+      "condition": {
+        "label": "État",
+        "intact": "Intact",
+        "degraded": "Dégradé",
+        "out": "Hors service",
+        "degradedHint": "−20 aux tests qui s'en servent (rappel, non appliqué)."
+      },
+      "range": {
+        "close": "Portée proche",
+        "medium": "Portée moyenne",
+        "long": "Portée lointaine"
+      },
+      "weapon": {
+        "label": "Arme",
+        "damage": "Dégâts",
+        "ammunition": "Munitions",
+        "heat": "Chaleur par tir"
+      }
     }
   }
 }

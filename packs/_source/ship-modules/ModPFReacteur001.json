@@ -1,0 +1,42 @@
+{
+  "_id": "ModPFReacteur001",
+  "name": "Cœur du réacteur (bimodal)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "category": "reactor",
+    "section": "stern",
+    "integrity": {
+      "value": 8,
+      "max": 8
+    },
+    "effects": "<p>Porte la jauge de chaleur du vaisseau. Environ 100 kW électriques à l'arrêt, avec le bouclier d'ombre. Réf. Vaisseaux v0.1 §8.</p>",
+    "mass": 12,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammunition": "",
+      "heatPerShot": 0
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModPFReacteur001"
+}

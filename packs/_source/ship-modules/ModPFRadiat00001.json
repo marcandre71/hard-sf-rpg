@@ -1,0 +1,42 @@
+{
+  "_id": "ModPFRadiat00001",
+  "name": "Radiateurs repliables",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "category": "radiators",
+    "section": "radiators",
+    "integrity": {
+      "value": 6,
+      "max": 6
+    },
+    "effects": "<p>Environ 50 m², repliables. L'intégrité de la section Radiateurs suit ce module. Réf. Vaisseaux v0.1 §5 et §8.</p>",
+    "mass": 3,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammunition": "",
+      "heatPerShot": 0
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModPFRadiat00001"
+}

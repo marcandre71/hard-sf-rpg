@@ -1,0 +1,42 @@
+{
+  "_id": "ModPFLaserFor001",
+  "name": "Laser de forage",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Outil légal. S'en servir contre un vaisseau est une infraction pour la Veille (non automatisée). Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §9 Q4.</p>",
+    "category": "weapon",
+    "section": "bow",
+    "integrity": {
+      "value": 4,
+      "max": 4
+    },
+    "effects": "<p>Outil légal : dégâts 6, portée proche au contact seulement (quelques km), énergie, +1 chaleur par tir. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §4 et §9 Q4.</p>",
+    "mass": 2,
+    "weapon": {
+      "damage": 6,
+      "rangeClose": true,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammunition": "énergie",
+      "heatPerShot": 1
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModPFLaserFor001"
+}

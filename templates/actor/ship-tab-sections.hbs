@@ -1,0 +1,85 @@
+{{!--
+  Sections et modules. Réf. Vaisseaux v0.1 §4 et §5.
+  La plaque affichée ajoute les modules « blindage » de la section.
+  Les radiateurs n'ont pas de plaque : on suit l'Intégrité du module.
+  Intégrité et section d'un module : pas de name, data-field écrit l'objet.
+--}}
+<section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <p>
+    <button type="button" data-action="createItem" data-item-type="shipModule">
+      {{localize "SOL.Sheet.CreateItem"}} — {{localize "TYPES.Item.shipModule"}}
+    </button>
+  </p>
+
+  {{#each sections as |section|}}
+  <fieldset class="sol-fieldset">
+    <legend>{{localize section.label}}</legend>
+
+    <div class="sol-ship-pair">
+      <label>
+        {{localize "SOL.Ship.integrity"}}
+        <input type="number" name="system.sections.{{section.id}}.integrity.value" value="{{section.integrityValue}}" min="0" step="1">
+        /
+        <input type="number" name="system.sections.{{section.id}}.integrity.max" value="{{section.integrityMax}}" min="0" step="1">
+      </label>
+      {{#if section.hasPlate}}
+      <label>
+        {{localize "SOL.Ship.armor"}}
+        <input type="number" name="system.sections.{{section.id}}.armor.value" value="{{section.armorValue}}" min="0" step="1">
+        /
+        <input type="number" name="system.sections.{{section.id}}.armor.max" value="{{section.armorMax}}" min="0" step="1">
+      </label>
+      <p class="sol-ship-computed">
+        {{localize "SOL.Ship.armorDisplayed"}} : <strong>{{section.displayedArmor}}</strong>
+        <span class="sol-hint">({{localize "SOL.Ship.armorBonus"}} +{{section.armorBonus}})</span>
+      </p>
+      {{else}}
+      <p class="sol-hint">{{localize "SOL.Ship.radiatorsFollow"}}</p>
+      {{#each section.followed as |mod|}}
+      <p class="sol-ship-computed">{{mod.name}} : <strong>{{mod.value}} / {{mod.max}}</strong> — {{localize mod.conditionLabel}}</p>
+      {{/each}}
+      {{#unless section.followed.length}}
+      <p class="sol-hint">{{localize "SOL.Ship.radiatorsMissing"}}</p>
+      {{/unless}}
+      {{/if}}
+    </div>
+
+    {{#if section.modules.length}}
+    <ul class="sol-ship-modules">
+      {{#each section.modules as |module|}}
+      <li class="sol-ship-module draggable" data-item-id="{{module.id}}" data-item-type="shipModule">
+        <img src="{{module.img}}" alt="">
+        <button type="button" class="sol-item-name" data-action="openItem">{{module.name}}</button>
+        <span>{{localize module.categoryLabel}}</span>
+        <span class="sol-ship-condition sol-ship-condition-{{module.condition}}">{{localize module.conditionLabel}}</span>
+        {{#if module.degraded}}
+        <span class="sol-hint">{{localize "SOL.ShipModule.condition.degradedHint"}}</span>
+        {{/if}}
+        <label>
+          {{localize "SOL.Ship.integrity"}}
+          <input type="number" data-field="system.integrity.value" value="{{module.integrityValue}}" min="0" step="1">
+          /
+          <input type="number" data-field="system.integrity.max" value="{{module.integrityMax}}" min="0" step="1">
+        </label>
+        <label>
+          {{localize "SOL.ShipModule.section"}}
+          <select data-field="system.section">
+            {{#each module.sections as |choice|}}
+            <option value="{{choice.id}}" {{#if choice.selected}}selected{{/if}}>{{localize choice.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <span>{{module.mass}} t</span>
+        {{#if module.showArmor}}
+        <span>+{{module.armorPoints}}</span>
+        {{/if}}
+        <button type="button" data-action="deleteItem">{{localize "SOL.Sheet.DeleteItem"}}</button>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p class="sol-hint">{{localize "SOL.Empty.shipModule"}}</p>
+    {{/if}}
+  </fieldset>
+  {{/each}}
+</section>

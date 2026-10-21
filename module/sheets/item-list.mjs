@@ -106,9 +106,11 @@ function itemFields(item) {
     case "sequel":
       return [{ label: "SOL.Sequel.category.label", value: choiceLabel(SOL.sequelCategories, source.category) }];
     case "shipModule":
+      // État dérivé, pas le texte libre de l'étape 2. Réf. Vaisseaux v0.1 §4.
       return [
-        { label: "SOL.ShipModule.category", value: source.category ?? "" },
-        { label: "SOL.ShipModule.state", value: source.state ?? "" }
+        { label: "SOL.ShipModule.category.label", value: choiceLabel(SOL.shipModuleCategories, source.category) },
+        { label: "SOL.ShipModule.section", value: choiceLabel(SOL.shipSections, source.section) },
+        { label: "SOL.ShipModule.condition.label", value: choiceLabel(SOL.shipModuleConditions, item.system.condition) }
       ];
     default:
       // Substance et logiciel : description seulement, rien à résumer sur la ligne.

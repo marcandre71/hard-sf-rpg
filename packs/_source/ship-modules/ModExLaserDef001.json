@@ -1,0 +1,42 @@
+{
+  "_id": "ModExLaserDef001",
+  "name": "Laser de défense",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Repère d'arme du §4, pas installé sur la Petite Fortune. Intégrité, masse et section ne sont pas dans le tableau : section proue, intégrité 0 et masse 0 en attendant. À confirmer par Marc.</p>",
+    "category": "weapon",
+    "section": "bow",
+    "integrity": {
+      "value": 0,
+      "max": 0
+    },
+    "effects": "<p>Repère provisoire. Dégâts 8, portée proche, énergie, +1 chaleur par tir. Réf. Vaisseaux v0.1 §4.</p>",
+    "mass": 0,
+    "weapon": {
+      "damage": 8,
+      "rangeClose": true,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammunition": "énergie",
+      "heatPerShot": 1
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModExLaserDef001"
+}

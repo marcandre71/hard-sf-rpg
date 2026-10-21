@@ -1,0 +1,42 @@
+{
+  "_id": "ModExMissile0001",
+  "name": "Missile",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Repère d'arme du §4, pas installé sur la Petite Fortune. Intégrité, masse et section ne sont pas dans le tableau : section proue, intégrité 0 et masse 0 en attendant. À confirmer par Marc.</p>",
+    "category": "weapon",
+    "section": "bow",
+    "integrity": {
+      "value": 0,
+      "max": 0
+    },
+    "effects": "<p>Repère provisoire. Dégâts 20, portées moyenne et lointaine, 4 munitions, chaleur 0. Le temps de vol n'est pas automatisé. Réf. Vaisseaux v0.1 §4 et §9 Q3.</p>",
+    "mass": 0,
+    "weapon": {
+      "damage": 20,
+      "rangeClose": false,
+      "rangeMedium": true,
+      "rangeLong": true,
+      "ammunition": "4",
+      "heatPerShot": 0
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModExMissile0001"
+}

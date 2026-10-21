@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.7.0
+
+Branche `dev/0.7.0`. **main reste en 0.6.3** tant que Marc n'a pas validé cette version. Pas de fusion avant son feu vert.
+
+Décision Marc 21/10/2026. Réf. `docs/regles-vaisseaux-v0.1.md` (brouillon, chiffres provisoires).
+
+- Une fiche Vaisseau (onglets Général, Sections & modules, Postes, Notes). Type groupé, catégorie atmosphérique / vide / objet fixe. L'ancienne catégorie `station` devient `fixed`. L'ancienne clé `ship` devient `void` (à confirmer).
+- Intégrité par section, plaque de blindage, module. Les radiateurs n'ont pas de plaque : la fiche suit l'Intégrité du module Radiateurs. La plaque affichée ajoute les modules Blindage de la section (hors service : 0 ; dégradé : points entiers, à confirmer).
+- Jauge de chaleur du réacteur, 0 à 10, stockée seulement.
+- Un seul objet Module de vaisseau, onze catégories, armes comprises. État dérivé (intact, dégradé, hors service). Déplaçable de section.
+- Compendiums Vaisseaux (Petite Fortune, §8) et Modules de vaisseau (ses 13 modules, plus trois repères d'armes du §4).
+- Pas de jets, pas de dégâts, pas de chaleur ni de réparations automatisées (0.7.1 à 0.7.3).
+
 ## 0.6.3
 
 - Case **Fin d'ordre** sur chaque ligne de blessure de l'onglet Principal. Le propriétaire peut la cocher. Si l'ancien état n'arrive pas jusqu'au MJ actif, on le relit dans la liste `injuryDefer`.

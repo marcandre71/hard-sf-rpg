@@ -11,14 +11,16 @@
  * Le Seuil en découle. La PER sert au test de Vigilance.
  * Véhicule et vaisseau n'en ont pas.
  *
- * Véhicule et Vaisseau : la catégorie est le seul champ nommé, plus la
- * description demandée par la consigne de l'étape 2. Masse, delta-v, etc.
- * (LdR v0.2 §15) n'ont ni type ni défaut : ils ne sont pas créés ici.
+ * Véhicule : la catégorie est le seul champ nommé, plus la description
+ * demandée par la consigne de l'étape 2.
+ * Vaisseau : fiche unique 0.7.0 (`module/data/ship.mjs`).
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { migrateNpcSource } from "./npc-migrate.mjs";
 import { characteristicSchema, deriveCharacteristicValues, PersonData } from "./person.mjs";
 import { htmlField, numberField, stringField } from "./fields.mjs";
+
+export { ShipData } from "./ship.mjs";
 
 /** FOR, CON et PER. Pas les six autres caractéristiques du personnage. */
 export const FOR_CON_PER_KEYS = ["for", "con", "per"];
@@ -149,23 +151,3 @@ export class VehicleData extends foundry.abstract.TypeDataModel {
   }
 }
 
-/**
- * Vaisseau : catégorie vaisseau ou station.
- * Réf. LdR v0.2 §15 (ship et habitat fusionnés), Fiche v0.2 §4.
- * Clés anglaises : consigne de l'étape 2.
- *
- * @extends foundry.abstract.TypeDataModel
- */
-export class ShipData extends foundry.abstract.TypeDataModel {
-  /** @override */
-  static defineSchema() {
-    return {
-      category: stringField("SOL.Actor.category", {
-        initial: "ship",
-        blank: false,
-        choices: SOL.shipCategories
-      }),
-      description: htmlField("SOL.Actor.description")
-    };
-  }
-}

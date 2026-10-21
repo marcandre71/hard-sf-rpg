@@ -1,0 +1,42 @@
+{
+  "_id": "ModPFSondes00001",
+  "name": "Sondes et foreuses",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "category": "other",
+    "section": "port",
+    "integrity": {
+      "value": 4,
+      "max": 4
+    },
+    "effects": "<p>6 sondes de forage. Réf. Vaisseaux v0.1 §8.</p>",
+    "mass": 2,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammunition": "",
+      "heatPerShot": 0
+    },
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  },
+  "_key": "!items!ModPFSondes00001"
+}

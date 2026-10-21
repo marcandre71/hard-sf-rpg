@@ -348,3 +348,60 @@
   gap: 0.5rem;
   align-items: center;
 }
+
+/* Vaisseau 0.7.0. Réf. Vaisseaux v0.1 §2. */
+.sol-nouvelle-ere .sol-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.sol-nouvelle-ere .sol-ship-computed {
+  margin: 0;
+}
+
+.sol-nouvelle-ere .sol-inert {
+  opacity: 0.55;
+}
+
+.sol-nouvelle-ere .sol-ship-pair,
+.sol-nouvelle-ere .sol-ship-module,
+.sol-nouvelle-ere .sol-ship-post {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+.sol-nouvelle-ere .sol-ship-modules,
+.sol-nouvelle-ere .sol-ship-posts {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sol-nouvelle-ere .sol-ship-module,
+.sol-nouvelle-ere .sol-ship-post {
+  padding: 0.35rem 0.5rem;
+  border: 1px dashed var(--color-border, #7a7971);
+}
+
+.sol-nouvelle-ere .sol-ship-drop {
+  font-style: italic;
+}
+
+.sol-nouvelle-ere .sol-ship-condition-degraded {
+  font-weight: bold;
+}
+
+.sol-nouvelle-ere .sol-ship-condition-out {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.sol-nouvelle-ere .sol-ship-module input[type="number"] {
+  width: 4.5rem;
+}

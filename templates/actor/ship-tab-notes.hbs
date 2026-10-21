@@ -1,0 +1,11 @@
+{{!--
+  Description (déjà là depuis l'étape 2) et notes. Réf. Vaisseaux v0.1 §2.
+--}}
+<section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#if description}}
+    {{formGroup description.field name="system.description" value=description.value rootId=rootId label=description.label localize=true}}
+  {{/if}}
+  {{#if notes}}
+    {{formGroup notes.field name="system.notes" value=notes.value rootId=rootId label=notes.label localize=true}}
+  {{/if}}
+</section>

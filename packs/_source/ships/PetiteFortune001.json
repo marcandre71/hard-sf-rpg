@@ -1,0 +1,678 @@
+{
+  "_id": "PetiteFortune001",
+  "_key": "!actors!PetiteFortune001",
+  "name": "Petite Fortune",
+  "type": "ship",
+  "img": "icons/svg/ship.svg",
+  "system": {
+    "shipType": "prospector",
+    "shipTypeOther": "",
+    "category": "void",
+    "identity": {
+      "classBuilder": "",
+      "faction": "indépendant, sociétaire de la Mutuelle",
+      "economy": "mines",
+      "transponderReal": "",
+      "transponderDisplayed": ""
+    },
+    "mass": {
+      "dry": 80,
+      "reaction": 150,
+      "reactionNature": "water"
+    },
+    "propulsion": {
+      "type": "nucléaire thermique à l'eau",
+      "acceleration": 20,
+      "deltaV": {
+        "value": 4,
+        "max": 4
+      }
+    },
+    "reserves": {
+      "air": 90,
+      "water": 180,
+      "food": 150
+    },
+    "heat": {
+      "value": 0
+    },
+    "spareParts": 6,
+    "npcCrew": "trained",
+    "sections": {
+      "bow": {
+        "integrity": {
+          "value": 20,
+          "max": 20
+        },
+        "armor": {
+          "value": 8,
+          "max": 8
+        }
+      },
+      "port": {
+        "integrity": {
+          "value": 15,
+          "max": 15
+        },
+        "armor": {
+          "value": 4,
+          "max": 4
+        }
+      },
+      "starboard": {
+        "integrity": {
+          "value": 15,
+          "max": 15
+        },
+        "armor": {
+          "value": 4,
+          "max": 4
+        }
+      },
+      "stern": {
+        "integrity": {
+          "value": 20,
+          "max": 20
+        },
+        "armor": {
+          "value": 4,
+          "max": 4
+        }
+      },
+      "radiators": {
+        "integrity": {
+          "value": 6,
+          "max": 6
+        }
+      }
+    },
+    "posts": {
+      "commander": {
+        "actorUuid": ""
+      },
+      "operator": {
+        "actorUuid": ""
+      },
+      "pilot": {
+        "actorUuid": ""
+      },
+      "navigator": {
+        "actorUuid": ""
+      },
+      "gunner": {
+        "actorUuid": ""
+      },
+      "engineer": {
+        "actorUuid": ""
+      },
+      "medic": {
+        "actorUuid": ""
+      }
+    },
+    "description": "<p>Petit prospecteur de la Ceinture, sociétaire de la Mutuelle. Tous les chiffres sont provisoires. Réf. Vaisseaux v0.1 §8.</p><p>Équipage : 4 (minimum 2, maximum 6), souvent une famille. Ce n'est pas un champ séparé.</p><p>Le reste de la masse à vide (environ 28 t) est la structure de la coque, non détaillée en module.</p><p>L'accélération stockée est 20 milli-g au plein. Environ 50 milli-g presque à vide, et environ 380 s, sont sur le module moteur.</p>",
+    "notes": ""
+  },
+  "items": [
+    {
+      "_id": "ModPFMoteur00001",
+      "name": "Moteur nucléaire thermique",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "propulsion",
+        "section": "stern",
+        "integrity": {
+          "value": 10,
+          "max": 10
+        },
+        "effects": "<p>20 milli-g au plein, eau, environ 380 s. Environ 50 milli-g presque à vide (non stocké sur le vaisseau : un seul champ d'accélération). Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 6,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFMoteur00001"
+    },
+    {
+      "_id": "ModPFReacteur001",
+      "name": "Cœur du réacteur (bimodal)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "reactor",
+        "section": "stern",
+        "integrity": {
+          "value": 8,
+          "max": 8
+        },
+        "effects": "<p>Porte la jauge de chaleur du vaisseau. Environ 100 kW électriques à l'arrêt, avec le bouclier d'ombre. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 12,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFReacteur001"
+    },
+    {
+      "_id": "ModPFRadiat00001",
+      "name": "Radiateurs repliables",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "radiators",
+        "section": "radiators",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Environ 50 m², repliables. L'intégrité de la section Radiateurs suit ce module. Réf. Vaisseaux v0.1 §5 et §8.</p>",
+        "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFRadiat00001"
+    },
+    {
+      "_id": "ModPFReservBab01",
+      "name": "Réservoir d'eau bâbord",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "other",
+        "section": "port",
+        "integrity": {
+          "value": 8,
+          "max": 8
+        },
+        "effects": "<p>75 t d'eau. Percé, il perd sa masse de réaction et donc du delta-v. Masse du module : 3 t à vide. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFReservBab01"
+    },
+    {
+      "_id": "ModPFReservTri01",
+      "name": "Réservoir d'eau tribord",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "other",
+        "section": "starboard",
+        "integrity": {
+          "value": 8,
+          "max": 8
+        },
+        "effects": "<p>75 t d'eau, comme le réservoir bâbord. Masse du module : 3 t à vide. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFReservTri01"
+    },
+    {
+      "_id": "ModPFCapteurs001",
+      "name": "Capteurs (radar, lidar, télescope infrarouge)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "sensors",
+        "section": "bow",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Prospection et veille. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 1,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFCapteurs001"
+    },
+    {
+      "_id": "ModPFAntenne0001",
+      "name": "Antenne et laser de communication",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "communications",
+        "section": "bow",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Liaison avec Cérès, avec le délai lumière. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 1,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFAntenne0001"
+    },
+    {
+      "_id": "ModPFCabines0001",
+      "name": "Passerelle, cabines et carré (4 couchettes de 2 m³)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "cabins",
+        "section": "bow",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Jusqu'à 6 personnes en se serrant. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 6,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFCabines0001"
+    },
+    {
+      "_id": "ModPFSupportV001",
+      "name": "Support vital et abri anti-éruption entouré d'eau",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "lifeSupport",
+        "section": "starboard",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Recyclage de l'air et de l'eau. Abri pour 6. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 6,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFSupportV001"
+    },
+    {
+      "_id": "ModPFSoute000001",
+      "name": "Soute à échantillons",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "cargo",
+        "section": "port",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>20 t de carottes et d'échantillons. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 5,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFSoute000001"
+    },
+    {
+      "_id": "ModPFSondes00001",
+      "name": "Sondes et foreuses",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "other",
+        "section": "port",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>6 sondes de forage. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 2,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFSondes00001"
+    },
+    {
+      "_id": "ModPFSas00000001",
+      "name": "Sas et propulseurs dorsaux",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "category": "other",
+        "section": "starboard",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Sorties extravéhiculaires. Réf. Vaisseaux v0.1 §8.</p>",
+        "mass": 2,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFSas00000001"
+    },
+    {
+      "_id": "ModPFLaserFor001",
+      "name": "Laser de forage",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Outil légal. S'en servir contre un vaisseau est une infraction pour la Veille (non automatisée). Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §9 Q4.</p>",
+        "category": "weapon",
+        "section": "bow",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Outil légal : dégâts 6, portée proche au contact seulement (quelques km), énergie, +1 chaleur par tir. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §4 et §9 Q4.</p>",
+        "mass": 2,
+        "weapon": {
+          "damage": 6,
+          "rangeClose": true,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "énergie",
+          "heatPerShot": 1
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!PetiteFortune001.ModPFLaserFor001"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.7.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

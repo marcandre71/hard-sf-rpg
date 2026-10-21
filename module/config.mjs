@@ -19,6 +19,19 @@
  * concerné. Ajouter un champ nouveau, avec une valeur `initial`, n'exige
  * pas de migration : Foundry complète les documents déjà créés.
  */
+import { NPC_CREW_SCORES, SHIP_MODULE_CATEGORIES, SHIP_POST_IDS, SHIP_SECTION_IDS } from "./ships/hull.mjs";
+import { SHIP_TYPE_GROUPS, shipTypeChoices } from "./ships/types.mjs";
+
+/**
+ * Objet valeur → clé i18n, dans l'ordre donné.
+ *
+ * @param {string[]} ids
+ * @param {string} prefix Préfixe de clé, avec le point final (`SOL.Ship.section.`).
+ * @returns {Record<string, string>}
+ */
+function choiceMap(ids, prefix) {
+  return Object.fromEntries(ids.map(id => [id, `${prefix}${id}`]));
+}
 
 /**
  * Retire des types d'objets d'une liste, sans la modifier.
@@ -318,14 +331,64 @@ export const SOL = {
   },
 
   /**
-   * Catégorie de vaisseau. Réf. LdR v0.2 §15 (vaisseau ou station ;
-   * les anciens types ship et habitat sont fusionnés).
-   * Clés fixées par la consigne de l'étape 2.
+   * Catégorie de vaisseau.
+   * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §2 et §9 Q1.
+   * Trois catégories. L'ancienne « station » devient `fixed`
+   * (`migrateShipSource`). L'ancienne clé `ship` devient `void`
+   * (à confirmer : ce n'était pas nommément le vide).
    */
   shipCategories: {
-    ship: "SOL.Ship.category.ship",
-    station: "SOL.Ship.category.station"
-  }
+    atmospheric: "SOL.Ship.category.atmospheric",
+    void: "SOL.Ship.category.void",
+    fixed: "SOL.Ship.category.fixed"
+  },
+
+  /**
+   * Type de vaisseau, menu groupé. Le schéma ne voit que `shipTypes`
+   * (carte plate) : Foundry refuse un groupe dans `choices`.
+   * Réf. Vaisseaux v0.1 §2.
+   */
+  shipTypeGroups: SHIP_TYPE_GROUPS,
+
+  /** Choix plats du champ `shipType`. */
+  shipTypes: shipTypeChoices(),
+
+  /** Cinq sections. `radiators` n'a pas de plaque. Réf. Vaisseaux v0.1 §5. */
+  shipSectionOrder: SHIP_SECTION_IDS,
+
+  /** @type {Record<string, string>} */
+  shipSections: choiceMap(SHIP_SECTION_IDS, "SOL.Ship.section."),
+
+  /** Sept postes. Réf. Vaisseaux v0.1 §3. L'ordre du tour n'est pas joué. */
+  shipPostOrder: SHIP_POST_IDS,
+
+  /** @type {Record<string, string>} */
+  shipPosts: choiceMap(SHIP_POST_IDS, "SOL.Ship.post."),
+
+  /**
+   * Onze catégories de module, armes comprises.
+   * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §4.
+   */
+  shipModuleCategories: choiceMap(SHIP_MODULE_CATEGORIES, "SOL.ShipModule.category."),
+
+  /** État dérivé, jamais stocké. Réf. Vaisseaux v0.1 §4. */
+  shipModuleConditions: {
+    intact: "SOL.ShipModule.condition.intact",
+    degraded: "SOL.ShipModule.condition.degraded",
+    out: "SOL.ShipModule.condition.out"
+  },
+
+  /** Nature de la masse de réaction. Réf. Vaisseaux v0.1 §2. */
+  reactionNatures: {
+    water: "SOL.Ship.mass.water",
+    hydrogen: "SOL.Ship.mass.hydrogen"
+  },
+
+  /**
+   * Équipage PNJ : la clé, le libellé, et le score de `NPC_CREW_SCORES`.
+   * Réf. Vaisseaux v0.1 §3.
+   */
+  npcCrewLevels: choiceMap(Object.keys(NPC_CREW_SCORES), "SOL.Ship.npcCrew.")
 };
 
 /**

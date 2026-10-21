@@ -50,6 +50,20 @@ export class GenericItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       prefix: "system",
       rootId: context.rootId
     });
+    if ( item.type === "shipModule" ) {
+      // Arme et blindage : champs affichés seulement pour leur catégorie.
+      // Les valeurs restent stockées quand on change de catégorie.
+      // Réf. Vaisseaux v0.1 §4. Décision Marc 21/10/2026.
+      const category = item.system._source?.category;
+      context.groups = context.groups.flatMap(group => {
+        const weapon = group.rows.some(line => line.name.startsWith("system.weapon."));
+        if ( weapon && category !== "weapon" ) return [];
+        return [{
+          ...group,
+          rows: group.rows.filter(line => line.name !== "system.armorPoints" || category === "armor")
+        }];
+      }).filter(group => group.rows.length);
+    }
     if ( item.type === "armor" && item.system?.pressurized !== true ) {
       // Décision Marc 20/10/2026 : joints sans effet si l'armure n'est pas pressurisée.
       for ( const group of context.groups ) {

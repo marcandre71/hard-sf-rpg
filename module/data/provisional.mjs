@@ -10,8 +10,10 @@
  * les autres. Pas d'ActiveEffect, pas de calcul.
  */
 import { SOL } from "../config.mjs";
+import { moduleCondition } from "../ships/hull.mjs";
+import { migrateShipModuleSource } from "../ships/migrate.mjs";
 import { BaseItemData } from "./base-item.mjs";
-import { boolField, htmlField, numberField, stringField } from "./fields.mjs";
+import { boolField, htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
 /**
  * Atout (`talent`). LdR v0.2 §15 : coût XP, prérequis, effet (texte).
@@ -142,28 +144,65 @@ export class SequelData extends BaseItemData {
 }
 
 /**
- * Module de vaisseau (`shipModule`). Porté par l'acteur `ship`, pas par
- * le personnage. Réf. LdR v0.2 §15, Fiche v0.2 §4.
- * LdR : type (arme de bord, blindage, propulsion…), état, effets.
- * Clés anglaises des valeurs non définies : `category` et `state` sont du texte.
- * `category` remplace `type` pour ne pas le confondre avec le type d'objet
- * Foundry. Le libellé reste « Type ». `state` est le nom anglais provisoire
- * de « état ». Pas de migrateData pour l'instant (revue étape 2 : pas encore
- * nécessaire), bien que `type` ait été publié une fois dans 5fa744e.
+ * Module de vaisseau (`shipModule`). Armes comprises.
+ *
+ * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §4.
+ * Un seul type d'objet. On peut le retirer, le remplacer, le déplacer
+ * de section. L'état n'est pas stocké : `prepareDerivedData` le calcule.
+ * L'ancien texte libre `state` est retiré par `migrateData`, pas recopié.
  *
  * @extends BaseItemData
  */
 export class ShipModuleData extends BaseItemData {
+  /**
+   * @override
+   * @param {object} source
+   * @returns {object}
+   */
+  static migrateData(source) {
+    migrateShipModuleSource(source);
+    return super.migrateData(source);
+  }
+
   /** @override */
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      // À préciser : types non définis dans LdR v0.2. Clé `category` (pas `type`).
-      category: stringField("SOL.ShipModule.category"),
-      // À préciser : types non définis dans LdR v0.2. Clé « state » pour « état ».
-      state: stringField("SOL.ShipModule.state"),
-      // À préciser : types non définis dans LdR v0.2.
-      effects: htmlField("SOL.ShipModule.effects")
+      // Onze clés. L'ancien texte libre qui n'en est pas une devient `other`.
+      category: stringField("SOL.ShipModule.category.label", {
+        initial: "other",
+        blank: false,
+        choices: SOL.shipModuleCategories
+      }),
+      // // À confirmer par Marc : un module neuf part en proue.
+      section: stringField("SOL.ShipModule.section", {
+        initial: "bow",
+        blank: false,
+        choices: SOL.shipSections
+      }),
+      integrity: valueMaxField("SOL.Ship.integrity", { integer: true, min: 0 }),
+      effects: htmlField("SOL.ShipModule.effects"),
+      mass: numberField("SOL.ShipModule.mass", { initial: 0, min: 0 }),
+      weapon: new SchemaField({
+        damage: numberField("SOL.ShipModule.weapon.damage", { initial: 0, min: 0, integer: true, step: 1 }),
+        rangeClose: boolField("SOL.ShipModule.range.close", false),
+        rangeMedium: boolField("SOL.ShipModule.range.medium", false),
+        rangeLong: boolField("SOL.ShipModule.range.long", false),
+        // // À confirmer par Marc : texte (« énergie », « 20 projectiles »), pas un compteur.
+        ammunition: stringField("SOL.ShipModule.weapon.ammunition"),
+        heatPerShot: numberField("SOL.ShipModule.weapon.heat", { initial: 0, min: 0, integer: true, step: 1 })
+      }, { label: "SOL.ShipModule.weapon.label" }),
+      armorPoints: numberField("SOL.ShipModule.armorPoints", { initial: 0, min: 0, integer: true, step: 1 })
     };
+  }
+
+  /**
+   * `condition` : intact, dégradé ou hors service. Jamais écrit dans `_source`.
+   *
+   * @override
+   */
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    this.condition = moduleCondition(this.integrity?.value, this.integrity?.max);
   }
 }

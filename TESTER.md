@@ -1,7 +1,9 @@
-# Tester le système « Sol, Nouvelle Ère » (0.6.3)
+# Tester le système « Sol, Nouvelle Ère » (0.7.0, branche `dev/0.7.0`)
 
-Pour Marc, sans connaissances techniques. Environ 25 minutes.
-Version attendue : **0.6.3**.
+Pour Marc, sans connaissances techniques.
+Version attendue sur **cette branche** : **0.7.0**. Le ZIP de `main` reste la 0.6.3 : ne le remplacez pas par celui-ci tant que vous n'avez pas fini de tester la 0.6.3.
+
+Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est nouvelle.
 
 L'initiative 0.5.11 est dans [docs/tests/initiative-0.5.md](docs/tests/initiative-0.5.md). Les dégâts 0.5.0 à 0.5.4 sont dans [docs/tests/etape-5.md](docs/tests/etape-5.md).
 
@@ -11,7 +13,7 @@ Gardez la console ouverte (**F12**, onglet **Console**). À la fin : aucune lign
 
 1. Fermez Foundry. Le dossier du système s'appelle exactement `sol-nouvelle-ere`, dans `Data/systems`.
 2. Mettez-le à jour (`git pull`, ou remplacez par le ZIP). `system.json` reste directement dans ce dossier.
-3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.6.3**.
+3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.7.0** si vous avez pris le ZIP de la branche (lien en section 10). Le ZIP de `main` affiche **0.6.3**.
 4. Ouvrez le monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, ouvrez une fois le compendium **Armures et vêtements** pour voir les trois combinaisons à jour.
@@ -99,3 +101,21 @@ Les points 1 à 6 ont déjà marché. Ici, seulement ce qui a changé.
 6. Onglet **Principal**, au-dessus des **Blessures**, section **États**. Elle liste ce qui est actif sur le pion (icône, nom). Posez **Épuisé** ou **Combinaison percée** depuis le pion : la ligne apparaît. Le bouton pour retirer est là pour le MJ et pour le propriétaire.
 7. Depuis le compendium **États**, glissez la page **Saignement** sur la fiche. La ligne **Saignement** apparaît. Glissez **Hypoxie** : un message dit qu'il n'y a pas de condition, et rien n'est posé. Glissez le journal entier (pas une page) : un message demande de glisser une page.
 8. Après la mort par perforation, retirer le statut vaincu (Mort) à la main suffit : il ne revient pas.
+
+## 10. 0.7.0 Vaisseaux
+
+À faire avec le ZIP de la branche, pas avec celui de `main` :
+
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.7.0.zip
+
+Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.7.0`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.0**.
+
+1. Compendiums, dossier **Acteurs**, pack **Vaisseaux**. Glissez **Petite Fortune** dans le monde (l'onglet Acteurs). Ouvrez la fiche.
+2. Onglet **Général**. Type : **Prospecteur**. Catégorie : **Vaisseau du vide**. Faction et économie sont remplies. Masse à vide **80**, masse de réaction **150**, nature **Eau**. Le total au départ affiche **230** (vous ne le tapez pas). Accélération **20**. Delta-v **4 / 4**. Réserves : air **90**, eau **180**, vivres **150**. Chaleur **0** (la jauge va jusqu'à 10). Pièces de rechange **6**. Équipage PNJ : **Entraîné (50)**.
+3. Onglet **Sections & modules**. Proue **20 / 20**, blindage **8 / 8**, plaque affichée **8**. Flancs **15 / 15** et blindage **4**. Poupe **20 / 20** et blindage **4**. Radiateurs : pas de case de blindage. La ligne **Radiateurs repliables** montre **6 / 6** et l'état **Intact**. Comptez les modules : **13**, répartis sur les sections (le laser de forage est en proue, catégorie Arme).
+4. Onglet **Postes**. Les sept postes sont vides, avec la mention équipage PNJ **50**. Depuis l'onglet Acteurs, glissez un **personnage** sur **Pilote**. Son nom apparaît. **Retirer** : le poste redevient vide.
+5. Onglet **Notes**. La description parle de l'équipage et de la coque. Vous pouvez écrire une note : fermez la fiche, rouvrez, elle est encore là.
+6. Sur la proue, le **Laser de forage** : passez son Intégrité de **4 / 4** à **2 / 4**. L'état devient **Dégradé**, avec le rappel −20. Passez-la à **0** : **Hors service**. Remettez **4 / 4** : **Intact**.
+7. Bouton **Créer — Module de vaisseau**. Ouvrez le nouveau module : catégorie **Blindage**, section **Proue**, points de blindage **3**, Intégrité **4 / 4**. Revenez à la Petite Fortune, onglet Sections. La plaque affichée de la proue passe de **8** à **11**. Mettez l'Intégrité de ce module à **0** : la plaque redescend à **8** (un blindage hors service n'ajoute rien).
+8. Onglet Général, catégorie **Objet fixe**. Propulsion et delta-v se grisent. Remettez **Vaisseau du vide** : les chiffres **20** et **4 / 4** sont encore là.
+9. Onglet Acteurs, créez un acteur **Vaisseau** vide (bouton de création, type Vaisseau). Ouvrez-le. Les quatre onglets sont là. Type **Autre**, avec une case de texte libre. Catégorie **Vaisseau du vide** (le défaut d'une fiche neuve). Les sections sont à **0**. Aucun module. Changez le type pour **Navette de ligne** (groupe Vaisseaux atmosphériques) : la liste est groupée.
