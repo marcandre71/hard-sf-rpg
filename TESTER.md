@@ -1,7 +1,7 @@
-# Tester le système « Sol, Nouvelle Ère » (0.7.0, branche `dev/0.7.0`)
+# Tester le système « Sol, Nouvelle Ère » (0.7.0)
 
 Pour Marc, sans connaissances techniques.
-Version attendue sur **cette branche** : **0.7.0**. Le ZIP de `main` reste la 0.6.3 : ne le remplacez pas par celui-ci tant que vous n'avez pas fini de tester la 0.6.3.
+Version attendue : **0.7.0**, sur `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est nouvelle.
 
@@ -13,7 +13,7 @@ Gardez la console ouverte (**F12**, onglet **Console**). À la fin : aucune lign
 
 1. Fermez Foundry. Le dossier du système s'appelle exactement `sol-nouvelle-ere`, dans `Data/systems`.
 2. Mettez-le à jour (`git pull`, ou remplacez par le ZIP). `system.json` reste directement dans ce dossier.
-3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.7.0** si vous avez pris le ZIP de la branche (lien en section 10). Le ZIP de `main` affiche **0.6.3**.
+3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère », version **0.7.0** (ZIP en section 10).
 4. Ouvrez le monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, ouvrez une fois le compendium **Armures et vêtements** pour voir les trois combinaisons à jour.
@@ -106,11 +106,9 @@ Les points 1 à 6 ont déjà marché. Ici, seulement ce qui a changé.
 
 **Testez dans une copie du monde ou un monde neuf, et ne rouvrez pas ce monde en 0.6.3.** Les catégories `void` et `fixed` sont refusées par la 0.6.3.
 
-À faire avec le ZIP de la branche, pas avec celui de `main` :
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.7.0.zip
-
-Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.7.0`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.0**.
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.0**.
 
 1. Compendiums, dossier **Acteurs**, pack **Vaisseaux**. Glissez **Petite Fortune** dans le monde (l'onglet Acteurs). Ouvrez la fiche.
 2. Onglet **Général**. Type : **Prospecteur**. Catégorie : **Vaisseau du vide**. Faction et économie sont remplies. Masse à vide **80**, masse de réaction **150**, nature **Eau**. Le total au départ affiche **230** (vous ne le tapez pas). Accélération **21**. Delta-v **3,6 / 3,6**. Réserves : air **90**, eau **180**, vivres **150**. Chaleur **0** (la jauge va jusqu'à 10, réacteur seul). Pièces de rechange **6**. Équipage PNJ : **Entraîné (50)**.

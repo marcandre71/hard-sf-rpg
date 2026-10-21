@@ -12,13 +12,13 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.7.0 (branche `dev/0.7.0`)
+## État du système : version 0.7.0
 
-Cette branche ajoute la fiche Vaisseau. **main est encore en 0.6.3** : on n'y fusionne qu'après le feu vert de Marc sur la 0.6.3.
+La 0.7.0 est sur `main`. Marc a validé la 0.6.3, puis cette version.
 
 Décision Marc 21/10/2026. Une seule fiche pour les vaisseaux et les objets fixes : type (liste du brouillon, groupée, plus Autre), catégorie (atmosphérique, vide, objet fixe), identité, masse, propulsion, réserves, chaleur du réacteur (0 à 10), pièces de rechange, cinq sections, modules, sept postes, notes. Pas de carte vectorielle. Pas de combat automatisé. Le brouillon copié pour les agents est `docs/regles-vaisseaux-v0.1.md` (chiffres provisoires). Le compendium Vaisseaux contient la Petite Fortune ; le compendium Modules de vaisseau contient ses modules et trois repères d'armes.
 
-## État précédent, sur main : version 0.6.3
+## État précédent : version 0.6.3
 
 On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. L'initiative est un test de Vigilance, conservé d'un round à l'autre. Des compendiums sont déclarés. L'interface est en français.
 
@@ -47,18 +47,16 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
    - **avec git** :
      ```bash
      cd <dossier de données>/Data/systems
-     git clone -b dev/0.7.0 https://github.com/marcandre71/hard-sf-rpg.git sol-nouvelle-ere
+     git clone https://github.com/marcandre71/hard-sf-rpg.git sol-nouvelle-ere
      ```
-     Si le dossier existe déjà : `git fetch` puis `git checkout dev/0.7.0`.
-     `main` reste la 0.6.3.
-   - **sans git** : ZIP de la branche
-     https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.7.0.zip
+     Si le dossier existe déjà : `git fetch` puis `git checkout main`.
+   - **sans git** : ZIP
+     https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
      Décompressez-le, puis renommez le dossier obtenu
-     (`hard-sf-rpg-dev-0.7.0`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
-     Le ZIP de `main` (`hard-sf-rpg-main`) est encore la 0.6.3.
+     (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version **0.7.0** sur cette branche (le ZIP de `main` reste en 0.6.3).
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*, version **0.7.0**.
 
 Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
 
