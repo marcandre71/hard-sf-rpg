@@ -1,8 +1,8 @@
-# Tester le système « Sol, Nouvelle Ère » (0.7.2)
+# Tester le système « Sol, Nouvelle Ère » (0.7.2.1)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
-La section 11 est la **0.7.2**. On fusionne `dev/0.7.2` dans `main` avant de vous envoyer ce test : prenez le ZIP de `main`.
+La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible). On fusionne `dev/0.7.2.1` dans `main` avant de vous envoyer ce test : prenez le ZIP de `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -14,7 +14,7 @@ Gardez la console ouverte (**F12**, onglet **Console**). À la fin : aucune lign
 
 1. Fermez Foundry. Le dossier du système s'appelle exactement `sol-nouvelle-ere`, dans `Data/systems`.
 2. Mettez-le à jour (`git pull`, ou remplacez par le ZIP). `system.json` reste directement dans ce dossier.
-3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère ». Pour la section 11, la version affichée est **0.7.2** (ZIP de `main`, en section 11). Les sections 1 à 10 se faisaient en **0.7.0**.
+3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère ». Pour la section 11, la version affichée est **0.7.2.1** (ZIP de `main`, en section 11). Les sections 1 à 10 se faisaient en **0.7.0**.
 4. Ouvrez le monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, ouvrez une fois le compendium **Armures et vêtements** pour voir les trois combinaisons à jour.
@@ -109,7 +109,7 @@ Les points 1 à 6 ont déjà marché. Ici, seulement ce qui a changé.
 
 https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.2** si la section 11 est déjà fusionnée, **0.7.0** sinon.
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.2.1** si la section 11 est déjà fusionnée, **0.7.0** sinon.
 
 1. Compendiums, dossier **Acteurs**, pack **Vaisseaux**. Glissez **Petite Fortune** dans le monde (l'onglet Acteurs). Ouvrez la fiche.
 2. Onglet **Général**. Type : **Prospecteur**. Catégorie : **Vaisseau du vide**. Faction et économie sont remplies. Masse à vide **80**, masse de réaction **150**, nature **Eau**. Le total au départ affiche **230** (vous ne le tapez pas). Accélération **21**. Delta-v **3,6 / 3,6**. Réserves : air **90**, eau **180**, vivres **150**. Chaleur **0** (la jauge va jusqu'à 10, réacteur seul). Pièces de rechange **6**. Équipage PNJ : **Entraîné (50)**.
@@ -125,14 +125,14 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 
 **Testez en MJ, dans une copie du monde.** Ne rouvrez pas cette copie en 0.6.3 : les catégories `void` et `fixed` y sont refusées.
 
-On fusionne cette branche dans `main` avant de vous envoyer le test. La version affichée au retour est **0.7.2**.
+On fusionne cette branche dans `main` avant de vous envoyer le test. La version affichée au retour est **0.7.2.1**. Les points 1 à 10 ont été validés par Marc le 25/10/2026, sauf le delta-v alors invisible (correctif 0.7.2.1).
 
 1. Quittez Foundry complètement.
    **Résultat attendu :** l'application est fermée. Recharger le monde ne suffit pas.
 2. Remplacez le dossier du système par le ZIP https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip . Le dossier décompressé s'appelle `hard-sf-rpg-main` : renommez-le `sol-nouvelle-ere`.
    **Résultat attendu :** le fichier `Data/systems/sol-nouvelle-ere/system.json` est là, sans dossier en double.
 3. Relancez Foundry. Jouez en MJ, dans une copie du monde.
-   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.7.2**.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.7.2.1**.
 4. Dans le compendium **Vaisseaux**, glissez **Petite Fortune** sur la scène, deux fois : deux jetons. Clic droit sur chaque jeton, icône Combat. Ouvrez chaque fiche **depuis son jeton** (double-clic sur le jeton), pas depuis la barre latérale.
    **Résultat attendu :** les deux jetons sont dans le Combat Tracker. La fiche ouverte est celle de ce jeton.
 5. Lancez l'initiative (« Lancer l'initiative », ou « Lancer pour les PNJ »).
@@ -145,8 +145,8 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
    **Résultat attendu :** le tir part. Une réussite dit « Touché (dégâts en 0.7.3) ».
 9. Dans le compendium **Modules de vaisseau**, glissez **Canon électromagnétique** (Proche et Moyenne) sur la fiche qui tire. Survolez le jeton adverse et appuyez sur **T** (une seule cible), puis réussissez **Verrouiller**. Ensuite **Donner +10** ou **Calculer**. Le MJ passe le round lui-même.
    **Résultat attendu :** l'onglet Postes affiche « Verrouillé : » et le nom de la cible. Le +10 n'est plus dans le modificateur du jet suivant. Repassez la fiche qui tire en **Moyenne**, gardez **T** sur la cible verrouillée : le tir ne propose pas −20. Retirez la cible (**T**) : le tir propose −20. Ce −20 se lit dans le modificateur de la fenêtre de jet. Le bouton **Retirer le verrouillage** (MJ) enlève le nom.
-10. Sur la fiche, modifiez le delta-v à la main, au dixième (par exemple 3,5). Si la virgule est refusée, tapez 3.5.
-    **Résultat attendu :** la fiche garde 3,5, ou 3.5 si la virgule a été refusée. Fermez et rouvrez : le nombre est encore là.
+10. Onglet Général, bloc Propulsion : **Delta-v (km/s)**, actuel et maximum. Tapez 3,5 dans l'actuel.
+    **Résultat attendu :** les deux saisies sont visibles. La fiche garde 3,5. Fermez et rouvrez : le nombre est encore là.
 11. Passez un vaisseau en **objet fixe**, puis essayez **Changer de portée**.
     **Résultat attendu :** un message refuse la manœuvre. Remettez **Vaisseau du vide** ensuite.
 12. Terminez le combat.
@@ -155,4 +155,5 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
     - Glissez un **véhicule** dans le tracker. **Résultat attendu :** il est refusé.
     - Sur un jet de poste, mettez un modificateur de −60 : le total reste −60. Faites de même pour l'initiative d'**un seul** vaisseau (pas « Lancer l'initiative » pour tout le monde) : −60 reste −60. Sur un jet de personnage, −60 devient −50. **Résultat attendu :** le vaisseau dépasse ±50, le personnage non.
     - Si vous avez encore une copie de monde en 0.7.1, ouvrez-la avec ce système. **Résultat attendu :** le monde s'ouvre, sans message d'erreur.
+    - Onglet Général : Delta-v actuel/max visible, saisie 3,5 acceptée, grisé sur objet fixe. **Résultat attendu :** les deux cases se voient, 3,5 reste, et un objet fixe a le bloc Propulsion grisé (les nombres restent).
     - Console (**F12**). **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

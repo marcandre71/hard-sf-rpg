@@ -4,6 +4,8 @@
   (nombre, case, liste, texte enrichi) vient du schéma, pas du gabarit.
   localize=true résout les clés i18n des libellés et des choix (valeur → clé).
   Un nombre reçoit type="number" : sinon min+max (Formation) devient un curseur.
+  Un SchemaField imbriqué (delta-v) est un groupe dans le groupe.
+  Réf. Vaisseaux v0.1 §2. Correctif 0.7.2.1.
 --}}
 {{#each groups as |group|}}
   {{#if group.label}}
@@ -14,31 +16,17 @@
     {{/if}}
     <div class="sol-fields">
       {{#each group.rows as |row|}}
-        {{#if row.disabled}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
-        {{else}}
-          {{#if row.number}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
-          {{else}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
-          {{/if}}
-        {{/if}}
+        {{> "systems/sol-nouvelle-ere/templates/shared/field-row.hbs" row=row}}
       {{/each}}
     </div>
+    {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=group.groups}}
   </fieldset>
   {{else}}
   <div class="sol-fields">
     {{#each group.rows as |row|}}
-        {{#if row.disabled}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
-        {{else}}
-          {{#if row.number}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
-          {{else}}
-          {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
-          {{/if}}
-        {{/if}}
+      {{> "systems/sol-nouvelle-ere/templates/shared/field-row.hbs" row=row}}
     {{/each}}
   </div>
+  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=group.groups}}
   {{/if}}
 {{/each}}

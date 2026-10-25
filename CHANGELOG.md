@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 0.7.2.1
+
+Branche `dev/0.7.2.1`. Elle n'entre dans `main` qu'après la relecture. `main` reste en 0.7.2 jusque-là.
+
+Marc a testé la 0.7.2 le 25/10/2026 (TESTER §11, points 1 à 10). Le delta-v de l'onglet Général ne s'affichait pas : `system.propulsion.deltaV` est un SchemaField dans le SchemaField Propulsion, et `{{formGroup}}` ne le dessine pas (doc v14).
+
+- Correctif : le bloc Propulsion montre « Delta-v (km/s) », actuel et maximum. Saisie au dixième. « 3,5 » devient 3,5. Objet fixe : ces champs sont grisés, les valeurs restent. La migration n'arrondit toujours que les clés déjà présentes.
+- Les autres paires value/max étaient déjà visibles : intégrité et blindage des sections, intégrité des modules (fiche vaisseau et fiche module), munitions, réserve d'air, réserve d'équipement. Leurs règles ne changent pas.
+- Version `0.7.2.1` : nombres séparés par des points, forme acceptée par `system.json` et `isNewerVersion` (doc v14). Pas de suffixe `0.7.2-1`.
+
 ## 0.7.2
 
 Branche `dev/0.7.2`. Elle n'entre dans `main` qu'après le test de Marc. `main` reste en 0.7.1 jusque-là. Le test (TESTER §11) prend le ZIP de `main` une fois la branche fusionnée.

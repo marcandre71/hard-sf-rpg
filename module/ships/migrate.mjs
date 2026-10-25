@@ -47,8 +47,24 @@ export function migrateShipSource(source) {
 }
 
 /**
+ * « 3,5 » devient 3.5. Sans virgule, la valeur est rendue telle quelle.
+ * Une chaîne illisible (« x ») n'est pas remplacée.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
+ *
+ * @param {unknown} value
+ * @returns {unknown}
+ */
+export function normalizeDecimalText(value) {
+  if ( typeof value !== "string" || !value.includes(",") ) return value;
+  const text = value.trim().replace(",", ".");
+  if ( text === "" ) return value;
+  const number = Number(text);
+  return Number.isFinite(number) ? number : value;
+}
+
+/**
  * Arrondit `value` et `max` au dixième, seulement si la clé est déjà là.
- * Une valeur illisible n'est pas remplacée par 0.
+ * Une valeur illisible n'est pas remplacée par 0. Une virgule est lue.
  * Décision Marc 23/10/2026. Pas d'autre clé : `exact` et `exactValue`
  * n'ont jamais été écrites.
  *
@@ -76,7 +92,8 @@ export function roundPresentDeltaV(source) {
  * @returns {number|undefined}
  */
 function roundTenth(value) {
-  const number = Number(value);
+  const normalized = normalizeDecimalText(value);
+  const number = typeof normalized === "number" ? normalized : Number(normalized);
   if ( !Number.isFinite(number) ) return undefined;
   return Math.round(number * 10) / 10;
 }

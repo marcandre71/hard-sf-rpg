@@ -43,6 +43,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       template: "systems/sol-nouvelle-ere/templates/actor/actor-sheet.hbs",
       templates: [
         "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+        "systems/sol-nouvelle-ere/templates/shared/field-row.hbs",
         "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs",
         "systems/sol-nouvelle-ere/templates/actor/item-section.hbs",
         "systems/sol-nouvelle-ere/templates/actor/status-section.hbs"

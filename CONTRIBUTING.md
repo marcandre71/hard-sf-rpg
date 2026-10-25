@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-La branche `dev/0.7.2` porte la 0.7.2 (combat spatial dans le Combat Tracker). Elle n'entre dans `main` qu'après le test de Marc : `main` reste en 0.7.1 jusque-là. La 0.7.0 (fiche Vaisseau) et la 0.7.1 (première fenêtre de combat, remplacée ici) sont derrière. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) est sur `main`, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées. La suite est dans [ROADMAP.md](ROADMAP.md).
+La branche `dev/0.7.2.1` porte le correctif 0.7.2.1 (delta-v visible). Elle n'entre dans `main` qu'après la relecture : `main` reste en 0.7.2 jusque-là. La 0.7.2 (combat spatial dans le Combat Tracker) est testée par Marc le 25/10/2026. La 0.7.0 (fiche Vaisseau) et la 0.7.1 (première fenêtre de combat, remplacée ici) sont derrière. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) est sur `main`, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées. La suite est dans [ROADMAP.md](ROADMAP.md).
 
 ## Petites étapes jouables, validées par Marc
 
@@ -28,7 +28,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.7.2 sur cette branche, compatibilité 14,
+system.json                         Manifeste : id, version 0.7.2.1 sur cette branche, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,

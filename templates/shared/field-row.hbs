@@ -1,0 +1,22 @@
+{{!--
+  Une ligne de prepareFieldGroups.
+  decimal : texte au pas 0,1. L'input number refuse souvent la virgule.
+  Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
+--}}
+{{#if row.disabled}}
+  {{#if row.decimal}}
+  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true type="text" inputmode="decimal" hint=row.hint}}
+  {{else}}
+  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
+  {{/if}}
+{{else}}
+  {{#if row.decimal}}
+  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="text" inputmode="decimal"}}
+  {{else}}
+    {{#if row.number}}
+    {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
+    {{else}}
+    {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+    {{/if}}
+  {{/if}}
+{{/if}}

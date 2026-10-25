@@ -9,10 +9,7 @@ Cette feuille est mise à jour à chaque version.
 - [x] 0.6.1 à 0.6.3 — compendiums, états, combinaison percée, Rustine, fin d'ordre.
 - [x] 0.7.0 — fiche Vaisseau : sections, modules, postes, Petite Fortune.
 - [x] 0.7.1 — premier combat spatial (fenêtre à part). Remplacé par la 0.7.2.
-
-## À tester
-
-- [ ] 0.7.2 — combat spatial simplifié, dans le Combat Tracker habituel.
+- [x] 0.7.2 — combat spatial simplifié, dans le Combat Tracker habituel. Testée par Marc le 25/10/2026, correctif 0.7.2.1 delta-v.
 
 ## Ensuite
 

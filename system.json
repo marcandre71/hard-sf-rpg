@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.7.2 : combat spatial simplifié dans le Combat Tracker. Pas de dégâts de vaisseau.",
-  "version": "0.7.2",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.7.2.1 : delta-v visible sur la fiche vaisseau. Pas de dégâts de vaisseau.",
+  "version": "0.7.2.1",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

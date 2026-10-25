@@ -29,7 +29,8 @@ export class GenericItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     sheet: {
       template: "systems/sol-nouvelle-ere/templates/item/item-sheet.hbs",
       templates: [
-        "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs"
+        "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+        "systems/sol-nouvelle-ere/templates/shared/field-row.hbs"
       ]
     }
   };

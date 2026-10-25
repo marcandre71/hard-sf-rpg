@@ -27,11 +27,12 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
+import { normalizeDecimalText } from "../ships/migrate.mjs";
 import { POST_ACTIONS, clearShipLock, readLock, rollPostAction } from "../ships/actions.mjs";
-import { duplicateActors } from "../ships/combat.mjs";
+import { duplicateActors, refusesManeuver } from "../ships/combat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
-import { prepareFieldGroups } from "./prepare-fields.mjs";
+import { markGroupDisabled, prepareFieldGroups } from "./prepare-fields.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -44,6 +45,7 @@ const OTHER_ITEMS = ["weapon", "armor", "gear", "software"];
 
 const PARTIALS = [
   "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+  "systems/sol-nouvelle-ere/templates/shared/field-row.hbs",
   "systems/sol-nouvelle-ere/templates/actor/item-section.hbs"
 ];
 
@@ -122,7 +124,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.docSource = actor._source;
     context.systemSource = stored;
     context.typeLabel = `TYPES.Actor.${actor.type}`;
-    context.fixed = stored.category === "fixed";
+    context.fixed = refusesManeuver(stored.category);
     context.heatMax = REACTOR_HEAT_MAX;
     context.departureMass = actor.system.departureMass;
 
@@ -135,16 +137,9 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.identityGroups = groupsOf(["identity"]);
     context.massGroups = groupsOf(["mass"]);
     context.propulsionGroups = groupsOf(["propulsion"]);
-    if ( context.fixed ) {
-      for ( const group of context.propulsionGroups ) {
-        group.inert = true;
-        group.hint = "SOL.Ship.propulsion.fixedHint";
-        for ( const line of group.rows ) {
-          line.disabled = true;
-          line.hint = "SOL.Ship.propulsion.fixedHint";
-        }
-      }
-    }
+    // Objet fixe : propulsion et delta-v grisés. Réf. Vaisseaux v0.1 §2.
+    // Décision Marc 21/10/2026. Même critère que le refus de manœuvre.
+    if ( context.fixed ) markGroupDisabled(context.propulsionGroups, "SOL.Ship.propulsion.fixedHint");
     context.reserveGroups = groupsOf(["reserves"]);
     context.heatGroups = groupsOf(["heat"]);
     context.spareGroups = groupsOf(["spareParts"]);
@@ -189,6 +184,28 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.group = TAB_GROUP;
     context.tabs = this._prepareTabs(TAB_GROUP);
     return context;
+  }
+
+  /**
+   * « 3,5 » devient 3.5 avant le nettoyage du NumberField.
+   * L'arrondi au dixième reste dans le modèle (`roundPresentDeltaV`).
+   * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
+   *
+   * @override
+   * @param {SubmitEvent|null} event
+   * @param {HTMLFormElement} form
+   * @param {FormDataExtended} formData
+   * @returns {object}
+   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DocumentSheetV2.html#_processFormData
+   */
+  _processFormData(event, form, formData) {
+    const data = super._processFormData(event, form, formData);
+    const delta = data?.system?.propulsion?.deltaV;
+    if ( delta && typeof delta === "object" ) {
+      if ( Object.hasOwn(delta, "value") ) delta.value = normalizeDecimalText(delta.value);
+      if ( Object.hasOwn(delta, "max") ) delta.max = normalizeDecimalText(delta.max);
+    }
+    return data;
   }
 
   /**

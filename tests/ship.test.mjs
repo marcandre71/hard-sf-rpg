@@ -25,7 +25,8 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
-import { migrateShipModuleSource, migrateShipSource, roundPresentDeltaV } from "../module/ships/migrate.mjs";
+import { migrateShipModuleSource, migrateShipSource, normalizeDecimalText, roundPresentDeltaV } from "../module/ships/migrate.mjs";
+import { markGroupDisabled, prepareFieldGroups } from "../module/sheets/prepare-fields.mjs";
 import { SHIP_TYPE_GROUPS } from "../module/ships/types.mjs";
 
 const fr = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));
@@ -267,6 +268,79 @@ const deltaBlock = shipModel.slice(deltaAt, deltaAt + 280);
 check(deltaAt >= 0 && !deltaBlock.includes("integer") && deltaBlock.includes("step: 0.1"), "le delta-v accepte 3,6, au pas de 0,1");
 check(shipModel.includes("choices: SOL.shipRanges"), "la fiche a un champ Portée");
 check(!shipModel.includes("keepExactDeltaV"), "le stockage exact du delta-v est retiré");
+
+const number = (label, step) => ({ label, number: true, options: { step } });
+const schema = (label, fields) => ({ label, fields });
+const sheetFields = {
+  propulsion: schema("SOL.Ship.propulsion.label", {
+    type: { label: "SOL.Ship.propulsion.type" },
+    acceleration: number("SOL.Ship.propulsion.acceleration", 1),
+    deltaV: schema("SOL.Ship.propulsion.deltaV", {
+      value: number("SOL.Field.value", 0.1),
+      max: number("SOL.Field.max", 0.1)
+    })
+  }),
+  integrity: schema("SOL.Ship.integrity", {
+    value: number("SOL.Field.value", 1),
+    max: number("SOL.Field.max", 1)
+  }),
+  ammo: schema("SOL.Weapon.ammo", {
+    value: number("SOL.Field.value", 1),
+    max: number("SOL.Field.max", 1)
+  }),
+  airReserve: schema("SOL.Armor.airReserve", {
+    value: number("SOL.Field.value"),
+    max: number("SOL.Field.max")
+  }),
+  reserve: schema("SOL.Gear.reserve.label", {
+    type: { label: "SOL.Gear.reserve.type" },
+    value: number("SOL.Field.value"),
+    max: number("SOL.Field.max")
+  })
+};
+const prepared = prepareFieldGroups(sheetFields, {
+  propulsion: { type: "fusion", acceleration: 21, deltaV: { value: 3.6, max: 3.6 } },
+  integrity: { value: 4, max: 4 },
+  ammo: { value: 12, max: 20 },
+  airReserve: { value: 0.5, max: 1 },
+  reserve: { type: "air", value: 1, max: 2 }
+});
+/**
+ * @param {{ rows?: { name: string, decimal?: boolean, value?: unknown, disabled?: boolean }[], groups?: object[] }[]} groups
+ * @returns {{ name: string, decimal?: boolean, value?: unknown, disabled?: boolean }[]}
+ */
+function flatRows(groups) {
+  /** @type {{ name: string, decimal?: boolean, value?: unknown, disabled?: boolean }[]} */
+  const rows = [];
+  for ( const group of groups ?? [] ) {
+    rows.push(...(group.rows ?? []));
+    rows.push(...flatRows(group.groups));
+  }
+  return rows;
+}
+const byName = Object.fromEntries(flatRows(prepared).map(line => [line.name, line]));
+check(byName["system.propulsion.deltaV.value"]?.value === 3.6 && byName["system.propulsion.deltaV.value"]?.decimal === true, "propulsion : delta-v actuel, saisie au dixième");
+check(byName["system.propulsion.deltaV.max"]?.value === 3.6 && byName["system.propulsion.deltaV.max"]?.decimal === true, "propulsion : delta-v maximum");
+check(byName["system.propulsion.type"] && byName["system.propulsion.acceleration"]?.decimal !== true, "type et accélération restent dans le bloc");
+check(byName["system.integrity.value"]?.value === 4 && byName["system.integrity.max"]?.value === 4, "intégrité value/max déjà au premier niveau");
+check(byName["system.ammo.value"] && byName["system.ammo.max"], "munitions value/max");
+check(byName["system.airReserve.value"] && byName["system.airReserve.max"], "réserve d'air value/max");
+check(byName["system.reserve.value"] && byName["system.reserve.max"], "réserve d'équipement value/max");
+const propulsion = prepared.find(group => group.label === "SOL.Ship.propulsion.label");
+check(propulsion?.groups?.some(group => group.label === "SOL.Ship.propulsion.deltaV") === true, "le delta-v est un groupe dans Propulsion");
+markGroupDisabled(prepared.filter(group => group.label === "SOL.Ship.propulsion.label"), "SOL.Ship.propulsion.fixedHint");
+check(byName["system.propulsion.deltaV.value"].disabled === true && byName["system.propulsion.acceleration"].disabled === true, "objet fixe : propulsion et delta-v grisés");
+const sectionsTemplate = readFileSync(new URL("../templates/actor/ship-tab-sections.hbs", import.meta.url), "utf8");
+check(sectionsTemplate.includes("integrity.value") && sectionsTemplate.includes("integrity.max") && sectionsTemplate.includes("armor.value") && sectionsTemplate.includes("armor.max"), "sections : intégrité et blindage déjà saisis");
+check(sectionsTemplate.includes("system.integrity.value") && sectionsTemplate.includes("system.integrity.max"), "modules sur la fiche vaisseau : intégrité déjà saisie");
+check(normalizeDecimalText("3,5") === 3.5 && normalizeDecimalText(" 1,26 ") === 1.26, "la virgule devient un point");
+check(normalizeDecimalText("3.5") === "3.5" && normalizeDecimalText("x") === "x" && normalizeDecimalText(3.6) === 3.6, "sans virgule, ou illisible, on ne réécrit pas");
+const commaDelta = { propulsion: { deltaV: { value: "3,5" } } };
+roundPresentDeltaV(commaDelta);
+check(commaDelta.propulsion.deltaV.value === 3.5 && !("max" in commaDelta.propulsion.deltaV), "saisie 3,5 : 3,5, sans ajouter max");
+const commaFine = { propulsion: { deltaV: { value: "1,26", max: "3,64" } } };
+roundPresentDeltaV(commaFine);
+check(commaFine.propulsion.deltaV.value === 1.3 && commaFine.propulsion.deltaV.max === 3.6, "virgule puis arrondi au dixième");
 
 if ( failed ) {
   console.error(`${failed} échec(s)`);

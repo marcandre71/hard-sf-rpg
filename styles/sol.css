@@ -122,6 +122,10 @@
   padding: 0 0.35rem;
 }
 
+.sol-nouvelle-ere fieldset.sol-fieldset fieldset.sol-fieldset {
+  margin-top: 0.4rem;
+}
+
 .sol-nouvelle-ere .sol-fields .form-group {
   margin: 0.15rem 0;
 }

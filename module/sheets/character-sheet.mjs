@@ -53,6 +53,7 @@ const INVENTORY_TYPES = ["weapon", "armor", "gear", "augmentation", "substance",
 
 const PARTIALS = [
   "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs",
+  "systems/sol-nouvelle-ere/templates/shared/field-row.hbs",
   "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs",
   "systems/sol-nouvelle-ere/templates/actor/item-section.hbs",
   "systems/sol-nouvelle-ere/templates/actor/status-section.hbs"

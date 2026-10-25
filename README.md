@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.7.2 sur `dev/0.7.2`
+## État du système : version 0.7.2.1 sur `dev/0.7.2.1`
 
-Cette branche simplifie le combat spatial. Elle n'entre dans `main` qu'après le test de Marc. `main` reste en 0.7.1 jusque-là. Le test pour Marc utilise le ZIP de `main` une fois la branche fusionnée ([TESTER.md](TESTER.md), section 11). La suite des versions est dans [ROADMAP.md](ROADMAP.md).
+`main` est en 0.7.2 (combat spatial dans le Combat Tracker, testé par Marc le 25/10/2026). Cette branche corrige le delta-v invisible de l'onglet Général. Elle n'entre dans `main` qu'après la relecture. Le test pour Marc utilise le ZIP de `main` une fois la branche fusionnée ([TESTER.md](TESTER.md), section 11). La suite des versions est dans [ROADMAP.md](ROADMAP.md).
 
 Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Pas de dégâts de vaisseau (0.7.3).
 
@@ -64,7 +64,7 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*. Sur `main`, la version affichée est **0.7.1**. Cette branche affiche **0.7.2**.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*. Sur `main`, la version affichée est **0.7.2**. Cette branche affiche **0.7.2.1**.
 
 Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
 
