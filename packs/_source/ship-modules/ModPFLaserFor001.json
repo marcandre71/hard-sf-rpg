@@ -18,7 +18,10 @@
       "rangeClose": true,
       "rangeMedium": false,
       "rangeLong": false,
-      "ammunition": "énergie",
+      "ammo": {
+        "value": null,
+        "max": null
+      },
       "heatPerShot": 1
     },
     "armorPoints": 0
@@ -33,7 +36,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.7.3",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

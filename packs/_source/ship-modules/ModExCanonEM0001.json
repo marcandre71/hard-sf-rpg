@@ -11,14 +11,17 @@
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Réf. Vaisseaux v0.1 §4.</p>",
+    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Le compteur ne baisse pas tout seul : le MJ le diminue à la main (automatisation en 0.7.4). Décision Marc 26/10/2026. Réf. Vaisseaux v0.1 §4.</p>",
     "mass": 0,
     "weapon": {
       "damage": 12,
       "rangeClose": true,
       "rangeMedium": true,
       "rangeLong": false,
-      "ammunition": "20 projectiles",
+      "ammo": {
+        "value": 20,
+        "max": 20
+      },
       "heatPerShot": 0
     },
     "armorPoints": 0
@@ -33,7 +36,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.7.3",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

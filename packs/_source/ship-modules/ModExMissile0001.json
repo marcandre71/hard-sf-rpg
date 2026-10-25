@@ -11,14 +11,17 @@
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 20, portées moyenne et lointaine, 4 munitions, chaleur 0. Le temps de vol n'est pas automatisé. Réf. Vaisseaux v0.1 §4 et §9 Q3.</p>",
+    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 20, portées moyenne et lointaine, 4 munitions, chaleur 0. Le temps de vol est automatisé : arrivée au round suivant en moyenne, deux rounds plus tard en lointaine. Décision Marc 26/10/2026. Réf. Vaisseaux v0.1 §4.</p>",
     "mass": 0,
     "weapon": {
       "damage": 20,
       "rangeClose": false,
       "rangeMedium": true,
       "rangeLong": true,
-      "ammunition": "4",
+      "ammo": {
+        "value": 4,
+        "max": 4
+      },
       "heatPerShot": 0
     },
     "armorPoints": 0
@@ -33,7 +36,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.7.3",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

@@ -269,6 +269,7 @@ function cleanShipStrike(strike, outcome) {
   const aim = strike.aim === "section" || strike.aim === "module" ? strike.aim : "none";
   return {
     targetUuid,
+    attackerUuid: typeof strike.attackerUuid === "string" ? strike.attackerUuid : "",
     tokenId: typeof strike.tokenId === "string" ? strike.tokenId : "",
     weaponId: typeof strike.weaponId === "string" ? strike.weaponId : "",
     weaponDamage: damage,

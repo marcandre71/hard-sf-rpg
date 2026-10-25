@@ -2,6 +2,7 @@
  * Dégâts des vaisseaux, sans Foundry.
  *
  * Réf. Vaisseaux v0.1 §4 et §5. Décision Marc 25/10/2026.
+ * Décision Marc 26/10/2026 : rupture, éventration à max 1, missile raté.
  * La chaleur, Pousser et les réparations restent pour la 0.7.4.
  * Les effets sur l'équipage sont des textes : pas de compte à rebours.
  */
@@ -13,6 +14,12 @@ export const MISSILE_DAMAGE = 20;
 
 /** −20 capteurs hors service, structure tordue. Réf. Vaisseaux v0.1 §4 et §5. */
 export const HULL_PENALTY = -20;
+
+/**
+ * Plafond du DR relu sur une carte. Le relais borne déjà 0–10.
+ * Un DR forgé ne gonfle pas les dégâts. Un vrai DR (dizaines) tient dessous.
+ */
+const DR_CAP = 10;
 
 /**
  * Inverse les deux chiffres du dé. 100 s'écrit « 00 » et le reste.
@@ -60,6 +67,8 @@ export function sectionFromInverted(inverted, fleeing) {
  * Plaque, puis module, puis section. Le surplus est perdu.
  * `null` : cette couche n'existe pas (radiateurs : pas de plaque,
  * pas d'intégrité de section). Une couche déjà à 0 ne « passe » pas à 0.
+ * Décision Marc 26/10/2026 : seule la plaque de la section est ce pool.
+ * Les points des modules Blindage restent un bonus affiché.
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
  *
  * @param {{ plate?: number|null, module?: number|null, section?: number|null, amount?: unknown }} input
@@ -98,7 +107,9 @@ export function applyHullDamage(input) {
 
 /**
  * Valeur qui rend le module dégradé (moitié du maximum, vers le bas).
- * Déjà dégradé, hors service, ou maximum 1 : on ne change pas.
+ * Déjà dégradé ou hors service : on ne change pas.
+ * Maximum 1 : la moitié tombe à 0, cette fonction ne dégrade pas.
+ * L'éventration, elle, met alors hors service. Décision Marc 26/10/2026.
  * On ne remonte jamais une Intégrité. Réf. Vaisseaux v0.1 §4 et §5.
  *
  * @param {unknown} value
@@ -164,7 +175,8 @@ function cloneHull(state) {
 /**
  * Applique les dégâts puis les critiques qui passent à 0.
  * `dice.d6` et `dice.d10` renvoient 1–6 et 1–10. `dice.pick` choisit un index.
- * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+ * La plaque lue ici est celle de la section, pas le bonus des modules.
+ * Décision Marc 26/10/2026. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
  *
  * @param {HullState} state
  * @param {{ sectionId: string, moduleId?: string|null, amount: number }} strike
@@ -178,6 +190,7 @@ export function resolveShipStrike(state, strike, dice) {
   const sectionId = strike?.sectionId;
   const section = next.sections[sectionId];
   if ( !section ) return { state: next, logs, spent: { plate: 0, module: 0, section: 0, lost: whole(strike?.amount) } };
+  // Décision Marc 26/10/2026 : la plaque de la section seule. Pas le bonus Blindage.
   const hasPlate = sectionId !== "radiators";
   const module = strike?.moduleId
     ? next.modules.find(entry => entry.id === strike.moduleId && entry.section === sectionId) ?? null
@@ -193,7 +206,7 @@ export function resolveShipStrike(state, strike, dice) {
   if ( hasPlate && applied.section !== null ) section.integrity = applied.section;
   /** @type {Set<string>} */
   const moduleCritted = new Set();
-  if ( applied.plateZeroed ) plateCrit(next, sectionId, logs, dice);
+  if ( applied.plateZeroed ) plateCrit(next, sectionId, logs, dice, moduleCritted);
   if ( applied.moduleZeroed && module ) moduleCrit(next, section, module, logs, dice, moduleCritted, hasPlate);
   if ( applied.sectionZeroed ) sectionCrit(next, sectionId, section, logs, dice, moduleCritted);
   return {
@@ -207,10 +220,11 @@ export function resolveShipStrike(state, strike, dice) {
  * @param {HullState} state
  * @param {string} sectionId
  * @param {HullLog[]} logs
- * @param {{ d6: () => number, pick: (count: number) => number }} dice
+ * @param {{ d6: () => number, d10: () => number, pick: (count: number) => number }} dice
+ * @param {Set<string>} moduleCritted
  * @returns {void}
  */
-function plateCrit(state, sectionId, logs, dice) {
+function plateCrit(state, sectionId, logs, dice, moduleCritted) {
   const roll = face(dice.d6(), 6);
   if ( roll <= 2 ) {
     logs.push({ key: "SOL.Ship.crit.plateTorn", data: { roll } });
@@ -237,7 +251,15 @@ function plateCrit(state, sectionId, logs, dice) {
     logs.push({ key: "SOL.Ship.crit.plateEviscerate", data: { roll, name: picked.name ?? "" } });
     return;
   }
-  // Maximum 1 : la moitié tombe à 0, ce serait hors service. On ne le fait pas.
+  // Décision Marc 26/10/2026 : Intégrité max 1, l'éventration met hors service.
+  const ceiling = Number(picked.integrityMax);
+  if ( ceiling === 1 && Number(picked.integrity) > 0 ) {
+    picked.integrity = 0;
+    logs.push({ key: "SOL.Ship.crit.plateEviscerateOut", data: { roll, name: picked.name ?? "" } });
+    const section = state.sections[sectionId] ?? {};
+    moduleCrit(state, section, picked, logs, dice, moduleCritted, true);
+    return;
+  }
   logs.push({ key: "SOL.Ship.crit.plateEviscerateSame", data: { roll, name: picked.name ?? "" } });
 }
 
@@ -268,6 +290,7 @@ function moduleCrit(state, section, module, logs, dice, moduleCritted, hasPlate)
   }
   const shock = face(dice.d10(), 10);
   logs.push({ key: "SOL.Ship.crit.moduleExplode", data: { roll, name: module.name ?? "", shock } });
+  // Décision Marc 26/10/2026 : radiateurs, le 1D10 est annoncé puis perdu.
   if ( !hasPlate ) {
     logs.push({ key: "SOL.Ship.crit.noSection", data: { shock } });
     return;
@@ -314,6 +337,13 @@ function sectionCrit(state, sectionId, section, logs, dice, moduleCritted) {
   section.destroyed = true;
   section.integrity = 0;
   logs.push({ key: "SOL.Ship.crit.sectionRupture", data: { roll } });
+  // Décision Marc 26/10/2026 : tous les modules encore vivants passent hors service.
+  for ( const entry of state.modules ) {
+    if ( entry.section !== sectionId ) continue;
+    if ( !(Number(entry.integrity) > 0) ) continue;
+    entry.integrity = 0;
+    moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
+  }
 }
 
 /**
@@ -361,6 +391,7 @@ function sectionDown(state, id) {
 
 /**
  * Capteurs hors service : −20 à l'opérateur et à l'artilleur.
+ * Décision Marc 26/10/2026 : seulement dégradé, pas de malus automatique.
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
  *
  * @param {Array<{ category?: string, condition?: string }>|null|undefined} modules
@@ -424,6 +455,86 @@ export function missilesDue(missiles, round) {
     const arrival = Number(entry.arrivalRound);
     return Number.isFinite(arrival) && arrival <= current;
   });
+}
+
+/**
+ * Marque les missiles à rappeler avant d'en poster la carte.
+ * Un second passage sur la liste renvoyée n'a plus rien à rappeler.
+ *
+ * @param {Array<{ id?: string, state?: string, arrivalRound?: unknown, reminded?: boolean }>|null|undefined} missiles
+ * @param {unknown} round
+ * @returns {{ list: object[], due: object[] }}
+ */
+export function claimMissileReminders(missiles, round) {
+  const source = Array.isArray(missiles) ? missiles : [];
+  const dueIds = new Set(missilesDue(source, round).map(entry => entry?.id).filter(id => typeof id === "string" && id));
+  /** @type {object[]} */
+  const due = [];
+  const list = source.map(entry => {
+    if ( !entry || typeof entry !== "object" || !dueIds.has(entry.id) ) {
+      return entry && typeof entry === "object" ? { ...entry } : entry;
+    }
+    const marked = { ...entry, reminded: true };
+    due.push(marked);
+    return marked;
+  });
+  return { list, due };
+}
+
+/**
+ * DR relu sur une carte : entier, plancher 0, plafond 10.
+ *
+ * @param {unknown} value
+ * @returns {number}
+ */
+export function boundDr(value) {
+  const number = Number(value);
+  if ( !Number.isFinite(number) || number < 0 ) return 0;
+  return Math.min(DR_CAP, Math.trunc(number));
+}
+
+/**
+ * Dégâts relus sur l'arme, plus le DR borné. Un missile ignore
+ * un nombre de dégâts forgé : 20 + DR du lancement.
+ *
+ * @param {unknown} weaponDamage
+ * @param {unknown} dr
+ * @param {{ missile?: boolean }} [options]
+ * @returns {number|null}
+ */
+export function shipStrikeAmount(weaponDamage, dr, options = {}) {
+  const bounded = boundDr(dr);
+  if ( options?.missile === true ) return MISSILE_DAMAGE + bounded;
+  const weapon = Number(weaponDamage);
+  if ( !Number.isFinite(weapon) || weapon < 0 ) return null;
+  return Math.trunc(weapon) + bounded;
+}
+
+/**
+ * Le MJ actif réclame l'application. Déjà faite : refus.
+ * L'appelant note `applied` avant d'écrire la coque.
+ *
+ * @param {{ activeGm?: boolean, applied?: boolean }} input
+ * @returns {{ ok: boolean, reason: string, applied: boolean }}
+ */
+export function beginShipApply(input = {}) {
+  const applied = input?.applied === true;
+  if ( input?.activeGm !== true ) return { ok: false, reason: "gm", applied };
+  if ( applied ) return { ok: false, reason: "applied", applied: true };
+  return { ok: true, reason: "", applied: true };
+}
+
+/**
+ * Un jet de missile terminé consomme une munition, touché ou raté.
+ * Un jet annulé (`null`) n'en consomme pas.
+ * Décision Marc 26/10/2026. Réf. Vaisseaux v0.1 §4.
+ *
+ * @param {null|undefined|{ success?: boolean }} outcome
+ * @returns {boolean}
+ */
+export function missileAmmoSpent(outcome) {
+  if ( !outcome || typeof outcome !== "object" ) return false;
+  return outcome.success === true || outcome.success === false;
 }
 
 /**

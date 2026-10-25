@@ -7,19 +7,24 @@ import { ammoBlocksFire } from "../module/ships/combat.mjs";
 import {
   MISSILE_DAMAGE,
   applyHullDamage,
+  beginShipApply,
+  boundDr,
+  claimMissileReminders,
   degradedValue,
   hullFromDocument,
   invertDie,
   isMissileWeapon,
   isLaserWeapon,
   isWreck,
+  missileAmmoSpent,
   missileArrivalRound,
   missileDecoyed,
   missilesDue,
   pickLivingModule,
   resolveShipStrike,
   sectionFromInverted,
-  sensorsAreOut
+  sensorsAreOut,
+  shipStrikeAmount
 } from "../module/ships/damage.mjs";
 
 const fr = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));
@@ -179,6 +184,29 @@ const rupture = resolveShipStrike(hull({
 }), { sectionId: "stern", amount: 4 }, scripted([6]));
 check(rupture.state.sections.stern.destroyed === true && rupture.state.sections.stern.integrity === 0, "section 6 : détruite, compte comme à 0");
 
+const ruptureModules = resolveShipStrike(hull({
+  sections: { stern: { armor: 0, integrity: 4 } },
+  modules: [
+    { id: "live", name: "Moteur", section: "stern", category: "propulsion", integrity: 3, integrityMax: 8 },
+    { id: "dead", name: "Mort", section: "stern", integrity: 0, integrityMax: 4 },
+    { id: "radio", name: "Radio", section: "stern", category: "communications", integrity: 2, integrityMax: 2 },
+    { id: "bowmod", name: "Cabine", section: "bow", integrity: 5, integrityMax: 5 }
+  ]
+}), { sectionId: "stern", amount: 4 }, scripted([6, 1, 1]));
+check(ruptureModules.state.sections.stern.destroyed === true, "rupture : la section est détruite");
+check(ruptureModules.state.modules.filter(entry => entry.section === "stern").every(entry => entry.integrity === 0), "rupture : les modules de la section sont hors service");
+check(ruptureModules.state.modules.find(entry => entry.id === "bowmod").integrity === 5, "rupture : une autre section n'est pas touchée");
+check(ruptureModules.logs.filter(entry => entry.key === "SOL.Ship.crit.moduleOut").length === 2, "rupture : un module déjà à 0 n'est pas recritiqué");
+check(ruptureModules.logs.some(entry => entry.key === "SOL.Ship.crit.sectionRupture"), "rupture : le chat le dit");
+
+const thin = resolveShipStrike(hull({
+  sections: { port: { armor: 1, integrity: 10 } },
+  modules: [{ id: "a", name: "Sonde", section: "port", category: "sensors", integrity: 1, integrityMax: 1 }]
+}), { sectionId: "port", moduleId: null, amount: 1 }, scripted([6, 1], [], [0]));
+check(thin.state.modules[0].integrity === 0, "éventration, max 1 : hors service");
+check(thin.logs.some(entry => entry.key === "SOL.Ship.crit.plateEviscerateOut"), "éventration, max 1 : le chat le dit");
+check(thin.logs.some(entry => entry.key === "SOL.Ship.crit.moduleOut"), "éventration, max 1 : le passage à 0 lance le critique de module");
+
 const rad = resolveShipStrike(hull({
   modules: [{ id: "rad", name: "Radiateurs", section: "radiators", category: "radiators", integrity: 2, integrityMax: 6 }]
 }), { sectionId: "radiators", moduleId: "rad", amount: 2 }, scripted([6], [4]));
@@ -239,7 +267,29 @@ check(isWreck(hullFromDocument({
 }, [])) === true, "épave lue sur la source");
 
 check(fr.SOL.Space.linkedActor === "Un vaisseau = un acteur : dupliquez l'acteur pour avoir deux vaisseaux", "deux jetons liés : la phrase demandée");
-check(typeof fr.SOL.Ship.applyDamage === "string" && typeof fr.SOL.Ship.crit.sectionRupture === "string", "textes de dégâts dans fr.json");
+check(typeof fr.SOL.Ship.applyDamage === "string" && fr.SOL.Ship.crit.sectionRupture.includes("hors service"), "rupture : le texte dit les modules hors service");
+check(fr.SOL.Ship.crit.plateEviscerateOut.includes("hors service"), "éventration max 1 : le texte dit hors service");
+check(fr.SOL.Ship.missileLost.includes("missile perdu"), "missile raté : le texte dit missile perdu");
+
+const firstApply = beginShipApply({ activeGm: true, applied: false });
+const secondApply = beginShipApply({ activeGm: true, applied: firstApply.applied });
+check(firstApply.ok === true && firstApply.applied === true, "première application acceptée");
+check(secondApply.ok === false && secondApply.reason === "applied", "seconde application refusée");
+check(beginShipApply({ activeGm: false, applied: false }).ok === false, "un joueur n'applique pas");
+
+const reminder = claimMissileReminders([
+  { id: "a", state: "flying", arrivalRound: 4, reminded: false },
+  { id: "b", state: "flying", arrivalRound: 5, reminded: false }
+], 4);
+check(reminder.due.length === 1 && reminder.due[0].id === "a" && reminder.due[0].reminded === true, "rappel marqué avant la carte");
+check(claimMissileReminders(reminder.list, 4).due.length === 0, "second rappel : plus rien à poster");
+
+check(shipStrikeAmount(6, 99) === 16, "DR forgé borné à 10, plus les dégâts de l'arme");
+check(shipStrikeAmount(6, -3) === 6, "DR négatif : l'arme seule");
+check(shipStrikeAmount(999, 4, { missile: true }) === 24, "missile : 20 + DR, le drapeau de dégâts est ignoré");
+check(shipStrikeAmount(-1, 3) === null && boundDr(3.9) === 3, "dégâts illisibles : on n'applique pas");
+check(missileAmmoSpent({ success: true }) === true && missileAmmoSpent({ success: false }) === true, "missile touché ou raté : une munition");
+check(missileAmmoSpent(null) === false && missileAmmoSpent({}) === false, "jet annulé : la munition reste");
 
 if ( failed ) {
   console.error(`${failed} échec(s)`);

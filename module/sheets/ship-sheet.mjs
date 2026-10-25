@@ -25,6 +25,7 @@ import {
   armorBonus,
   displayedArmor,
   followedRadiatorIntegrity,
+  normalizeAmmoEdit,
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
@@ -320,6 +321,16 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if ( !field ) return;
     if ( input.type === "number" ) {
       const parsed = parsedNumber(input.value);
+      if ( field === "system.weapon.ammo.value" || field === "system.weapon.ammo.max" ) {
+        const which = field.endsWith(".max") ? "max" : "value";
+        const ammo = item.system?._source?.weapon?.ammo ?? item.system?.weapon?.ammo ?? {};
+        const next = normalizeAmmoEdit(ammo, which, parsed);
+        await item.update({
+          "system.weapon.ammo.value": next.value,
+          "system.weapon.ammo.max": next.max
+        });
+        return;
+      }
       if ( parsed === null ) return;
       await item.update({ [field]: parsed });
       return;

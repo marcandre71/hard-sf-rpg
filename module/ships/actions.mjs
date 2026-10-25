@@ -60,6 +60,7 @@ import {
   isLaserWeapon,
   isMissileWeapon,
   isWreck,
+  missileAmmoSpent,
   missileArrivalRound,
   sensorsAreOut
 } from "./damage.mjs";
@@ -363,7 +364,7 @@ async function rollSingle(ship, postId, action, options = {}) {
     if ( !weapon ) return null;
     weaponCondition = weapon.condition ?? "";
     // Un missile ne se vise pas : l'impact lit le dé inversé.
-    // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
+    // Décision Marc 26/10/2026. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
     if ( !aim ) {
       if ( options.defense || isMissileWeapon(weapon) ) aim = "none";
       else {
@@ -404,6 +405,7 @@ async function rollSingle(ship, postId, action, options = {}) {
   const shipStrike = action === "fire" && !missileLaunch && options.defense !== true && single && weapon
     ? {
       targetUuid: targetIdentity(single),
+      attackerUuid: ship.uuid,
       tokenId: single.tokenId,
       weaponId: weapon.id,
       damage: weapon.damage,
@@ -427,7 +429,8 @@ async function rollSingle(ship, postId, action, options = {}) {
   if ( options.store !== false && !missileLaunch ) {
     await storeEffect(ship, postId, action, result, crew.chosenPost, options.token ?? null);
   }
-  if ( missileLaunch && outcome.success ) await launchMissile(ship, weapon, result, options.token ?? null);
+  // Décision Marc 26/10/2026 : réussi ou raté, une munition. Canon et laser : non, jusqu'en 0.7.4.
+  if ( missileLaunch && missileAmmoSpent(result) ) await launchMissile(ship, weapon, result, options.token ?? null);
   return result;
 }
 
@@ -607,6 +610,7 @@ async function onSpaceRelay(message) {
 function modifierFor(ship, postId, aim, weaponCondition = "", token = null, extra = {}) {
   const held = combatantFor(ship, token);
   const shipTurn = held ? normalizeTurn(readTurns(held.combat)[held.combatant.id]) : normalizeTurn(null);
+  // Décision Marc 26/10/2026 : le laser anti-missile n'a pas le malus d'esquive.
   const foe = extra.ignoreEvade ? { evade: 0 } : foeTurn(ship, held?.combat ?? null, token);
   const targets = targetedShipTokens(ship, token);
   const fireTarget = lockRollAllowed(targets.length) ? targetIdentity(targets[0]) : "";
@@ -943,9 +947,9 @@ export async function rollOperatorOpposed(ship, token = null) {
 }
 
 /**
- * Laser de défense : tir à portée proche, sans malus de verrouillage,
- * sans esquive du vaisseau (la cible est le missile).
- * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
+ * Laser de défense : l'artilleur du vaisseau ciblé, portée proche,
+ * sans malus de verrouillage, sans esquive (la cible est le missile).
+ * Décision Marc 26/10/2026. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
  *
  * @param {Actor} ship
  * @param {TokenDocument|null} [token]
@@ -990,15 +994,17 @@ export async function relayMissileResolve(ship, postId, fields) {
  * @returns {Promise<void>}
  */
 async function launchMissile(ship, weapon, result, token = null) {
-  const targets = targetedShipTokens(ship, token);
-  if ( !lockRollAllowed(targets.length) ) {
+  if ( !missileAmmoSpent(result) ) return;
+  const die = boundedDie(result?.die);
+  if ( die === null ) return;
+  const success = result.success === true;
+  const targets = success ? targetedShipTokens(ship, token) : [];
+  if ( success && !lockRollAllowed(targets.length) ) {
     const key = targets.length === 0 ? "SOL.Ship.missileNoTarget" : "SOL.Ship.missileOneTarget";
     ui.notifications.warn(game.i18n.localize(key));
     return;
   }
-  const die = boundedDie(result?.die);
-  if ( die === null ) return;
-  if ( game.user.isGM !== true ) {
+  if ( !isActiveGm() ) {
     await relayOwned(ship, "gunner", {
       type: "missile",
       shipUuid: ship.uuid,
@@ -1007,12 +1013,16 @@ async function launchMissile(ship, weapon, result, token = null) {
       action: "fire",
       userId: game.user.id,
       weaponId: weapon.id,
-      targetUuid: targetIdentity(targets[0]),
-      success: true,
+      targetUuid: success ? targetIdentity(targets[0]) : "",
+      success,
       dr: result.dr,
       score: result.score,
       die
     });
+    return;
+  }
+  if ( !success ) {
+    await loseMissile(ship, weapon.id);
     return;
   }
   await commitMissile(ship, weapon.id, { die, dr: result.dr, score: result.score }, targets[0], token);
@@ -1035,11 +1045,16 @@ async function onMissileRelay(message) {
     return;
   }
   const roll = boundedRoll(message);
-  if ( roll.success !== true ) return;
   const die = boundedDie(message.die);
   if ( die === null ) return;
   const weaponId = typeof message.weaponId === "string" ? message.weaponId : "";
   if ( !weaponId || weaponId.length > 80 ) return;
+  if ( !missileAmmoSpent(roll) ) return;
+  // Décision Marc 26/10/2026 : un raté consomme, sans carte et sans cible.
+  if ( roll.success !== true ) {
+    await loseMissile(ship, weaponId);
+    return;
+  }
   const held = combatantFor(ship, hintedToken(message, ship));
   if ( !held ) {
     ui.notifications.warn(game.i18n.localize("SOL.Ship.missileNoCombat"));
@@ -1095,8 +1110,67 @@ async function onMissileResolveRelay(message) {
 }
 
 /**
- * Consomme une munition et pose le missile. Le MJ seul.
- * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+ * MJ actif : `game.users.activeGM`, comparé par identifiant.
+ * Un autre MJ relaie, comme un joueur.
+ * @see https://foundryvtt.com/api/v14/classes/foundry.documents.collections.Users.html#activeGM
+ * @returns {boolean}
+ */
+function isActiveGm() {
+  const active = game.users?.activeGM;
+  return Boolean(active && game.user?.id === active.id);
+}
+
+/**
+ * Baisse d'une munition si le compteur est un nombre.
+ * Vide : le missile est quand même traité, le compteur ne baisse pas.
+ * Déjà à 0 : rien n'est consommé.
+ * Décision Marc 26/10/2026. Réf. Vaisseaux v0.1 §4.
+ *
+ * @param {Actor} ship
+ * @param {string} weaponId
+ * @returns {Promise<boolean>}
+ */
+async function spendMissileAmmo(ship, weaponId) {
+  const weapon = weaponsOf(ship).find(entry => entry.id === weaponId);
+  if ( !weapon || !isMissileWeapon(weapon) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.noWeapon"));
+    return false;
+  }
+  if ( ammoBlocksFire(weapon.ammo) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.ammoEmpty"));
+    return false;
+  }
+  const item = ship.items.get(weaponId);
+  const ammo = item?.system?.weapon?.ammo?.value;
+  if ( typeof ammo === "number" ) {
+    await item.update({ "system.weapon.ammo.value": Math.max(0, Math.trunc(ammo) - 1) });
+  } else {
+    ui.notifications.info(game.i18n.localize("SOL.Ship.ammoUnset"));
+  }
+  return true;
+}
+
+/**
+ * Missile raté : il part et manque. Pas de carte, pas d'impact.
+ * Décision Marc 26/10/2026. Réf. Vaisseaux v0.1 §4.
+ *
+ * @param {Actor} ship
+ * @param {string} weaponId
+ * @returns {Promise<void>}
+ */
+async function loseMissile(ship, weaponId) {
+  const spent = await spendMissileAmmo(ship, weaponId);
+  if ( !spent ) return;
+  const name = foundry.utils.escapeHTML(ship.name ?? "");
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: ship }),
+    content: `<article class="sol-nouvelle-ere"><p>${game.i18n.format("SOL.Ship.missileLost", { name })}</p></article>`
+  });
+}
+
+/**
+ * Consomme une munition et pose le missile. Le MJ actif seul.
+ * Un raté ne passe pas ici. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
  *
  * @param {Actor} ship
  * @param {string} weaponId
@@ -1118,13 +1192,8 @@ async function commitMissile(ship, weaponId, launch, target, token = null) {
     ui.notifications.warn(game.i18n.localize("SOL.Ship.missileNoCombat"));
     return;
   }
-  const item = ship.items.get(weaponId);
-  const ammo = item?.system?.weapon?.ammo?.value;
-  if ( typeof ammo === "number" ) {
-    await item.update({ "system.weapon.ammo.value": Math.max(0, Math.trunc(ammo) - 1) });
-  } else {
-    ui.notifications.info(game.i18n.localize("SOL.Ship.ammoUnset"));
-  }
+  const spent = await spendMissileAmmo(ship, weaponId);
+  if ( !spent ) return;
   await enqueueMissile(held.combat, {
     id: foundry.utils.randomID(),
     targetUuid: targetIdentity(target),

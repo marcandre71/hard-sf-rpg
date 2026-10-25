@@ -275,6 +275,40 @@ export function parsedNumber(raw) {
 }
 
 /**
+ * Case de munitions vidée : le compteur revient à vide.
+ * Une valeur au-dessus du maximum est ramenée au maximum.
+ * Décision Marc 26/10/2026.
+ *
+ * @param {{ value?: unknown, max?: unknown }|null|undefined} current
+ * @param {string} field `value` ou `max`.
+ * @param {number|null} parsed `null` si la case est vidée.
+ * @returns {{ value: number|null, max: number|null }}
+ */
+export function normalizeAmmoEdit(current, field, parsed) {
+  if ( parsed === null ) return { value: null, max: null };
+  const number = Number(parsed);
+  if ( !Number.isFinite(number) ) {
+    return { value: ammoCount(current?.value), max: ammoCount(current?.max) };
+  }
+  const whole = Math.max(0, Math.trunc(number));
+  let value = ammoCount(current?.value);
+  let max = ammoCount(current?.max);
+  if ( field === "max" ) max = whole;
+  else value = whole;
+  if ( typeof value === "number" && typeof max === "number" && value > max ) value = max;
+  return { value, max };
+}
+
+/**
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+function ammoCount(value) {
+  if ( typeof value !== "number" || !Number.isFinite(value) ) return null;
+  return Math.max(0, Math.trunc(value));
+}
+
+/**
  * Maximum effectif pour le bornage.
  *
  * Le delta d'un token non lié ne contient pas les clés inchangées.

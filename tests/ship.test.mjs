@@ -22,6 +22,7 @@ import {
   effectiveClampCurrent,
   followedRadiatorIntegrity,
   moduleCondition,
+  normalizeAmmoEdit,
   parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
@@ -248,6 +249,12 @@ check(keptAmmo.weapon.ammo.value === 1 && keptAmmo.weapon.ammo.max === 4 && !("a
 const alreadyText = { weapon: { ammunition: "énergie" }, effects: "énergie" };
 migrateShipModuleSource(alreadyText);
 check(alreadyText.effects === "énergie", "le texte déjà présent n'est pas recopié");
+const clearedAmmo = normalizeAmmoEdit({ value: 4, max: 4 }, "value", null);
+check(clearedAmmo.value === null && clearedAmmo.max === null, "vider les munitions remet le compteur à vide");
+const clampedAmmo = normalizeAmmoEdit({ value: 2, max: 4 }, "value", 10);
+check(clampedAmmo.value === 4 && clampedAmmo.max === 4, "une valeur au-dessus du maximum est ramenée");
+const loweredMax = normalizeAmmoEdit({ value: 4, max: 4 }, "max", 2);
+check(loweredMax.value === 2 && loweredMax.max === 2, "baisser le maximum ramène la valeur");
 
 const typeIds = SHIP_TYPE_GROUPS.flatMap(group => group.types.map(type => type.id));
 check(new Set(typeIds).size === typeIds.length, "types de vaisseau uniques");
@@ -286,7 +293,18 @@ for ( const file of ["ModExLaserDef001.json", "ModExCanonEM0001.json", "ModExMis
   check(weapon.system.integrity.value === 4 && weapon.system.integrity.max === 4, `${file} : intégrité 4/4`);
   check(weapon.system.effects.includes("Intégrité provisoire, ajustable en jeu"), `${file} : effets décidés`);
   check(weapon.system.mass === 0, `${file} : masse encore non écrite`);
+  check(!("ammunition" in weapon.system.weapon), `${file} : plus d'ancien texte de munitions`);
 }
+const cannonPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModExCanonEM0001.json", import.meta.url), "utf8"));
+const missilePack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModExMissile0001.json", import.meta.url), "utf8"));
+const laserPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModExLaserDef001.json", import.meta.url), "utf8"));
+const drillPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModPFLaserFor001.json", import.meta.url), "utf8"));
+check(cannonPack.system.weapon.ammo.value === 20 && cannonPack.system.weapon.ammo.max === 20, "canon : 20/20");
+check(cannonPack.system.effects.includes("ne baisse pas tout seul"), "canon : le compteur n'est pas automatique");
+check(missilePack.system.weapon.ammo.value === 4 && missilePack.system.weapon.ammo.max === 4, "missile : 4/4");
+check(missilePack.system.effects.includes("est automatisé") && !missilePack.system.effects.includes("n'est pas automatisé"), "missile : le temps de vol est automatisé");
+check(laserPack.system.weapon.ammo.value === null && laserPack.system.weapon.ammo.max === null, "laser de défense : compteur vide");
+check(drillPack.system.weapon.ammo.value === null && drillPack.system.weapon.ammo.max === null, "laser de forage : compteur vide");
 const shipModel = readFileSync(new URL("../module/data/ship.mjs", import.meta.url), "utf8");
 const deltaAt = shipModel.indexOf("deltaV:");
 const deltaBlock = shipModel.slice(deltaAt, deltaAt + 280);

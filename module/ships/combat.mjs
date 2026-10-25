@@ -396,6 +396,8 @@ export function weaponCanFire(module, range) {
 
 /**
  * Compteur à 0 : l'arme ne tire plus. Absent ou vide : non.
+ * Décision Marc 26/10/2026 : canon et laser ne baissent pas tout seuls
+ * (0.7.4). Seul un missile, réussi ou raté, consomme une munition.
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
  *
  * @param {unknown} ammo Nombre, ou `{ value }`.
