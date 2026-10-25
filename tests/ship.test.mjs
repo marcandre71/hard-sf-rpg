@@ -25,7 +25,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
-import { applySheetDeltaV, migrateShipModuleSource, migrateShipSource, normalizeDecimalText, roundPresentDeltaV } from "../module/ships/migrate.mjs";
+import { applySheetDeltaV, formatStoredDeltaV, migrateShipModuleSource, migrateShipSource, nextDeltaVWarning, normalizeDecimalText, roundPresentDeltaV, writeDeltaVInput } from "../module/ships/migrate.mjs";
 import { markGroupDisabled, prepareFieldGroups } from "../module/sheets/prepare-fields.mjs";
 import { SHIP_TYPE_GROUPS } from "../module/ships/types.mjs";
 
@@ -360,6 +360,25 @@ check(sheetTenth.system.propulsion.deltaV.value === 1.3, "fiche : 1,26 arrondi a
 const sheetNull = { system: { propulsion: { deltaV: { value: null, max: "0" } } } };
 applySheetDeltaV(sheetNull);
 check(!("value" in sheetNull.system.propulsion.deltaV) && sheetNull.system.propulsion.deltaV.max === 0, "fiche : null retiré, 0 reste 0");
+for ( const bad of ["-1", "1e3", "0x10", "Infinity"] ) {
+  const refused = { system: { propulsion: { deltaV: { value: bad, max: 3.6 } } } };
+  const refusedIgnored = applySheetDeltaV(refused);
+  check(refusedIgnored.length === 1 && refusedIgnored[0].raw === bad && !("value" in refused.system.propulsion.deltaV) && refused.system.propulsion.deltaV.max === 3.6, `fiche : ${bad} ignoré`);
+}
+const keptNegative = { propulsion: { deltaV: { value: -1 } } };
+roundPresentDeltaV(keptNegative);
+check(keptNegative.propulsion.deltaV.value === -1 && !("max" in keptNegative.propulsion.deltaV), "migration : un nombre déjà stocké reste, max non injecté");
+const noDelta = { description: "<p>x</p>" };
+roundPresentDeltaV(noDelta);
+check(!("propulsion" in noDelta), "migration : un diff sans propulsion n'en gagne pas");
+const restored = { value: "abc" };
+writeDeltaVInput({ elements: { "system.propulsion.deltaV.value": restored } }, "value", 3.64);
+check(restored.value === "3.6" && formatStoredDeltaV(3.6) === "3.6", "saisie ignorée : l'ancienne valeur réapparaît, au dixième");
+const firstWarn = nextDeltaVWarning(undefined, "abc");
+const secondWarn = nextDeltaVWarning(firstWarn.token, " abc ");
+const otherWarn = nextDeltaVWarning(firstWarn.token, "-1");
+const againWarn = nextDeltaVWarning(undefined, "abc");
+check(firstWarn.warn === true && secondWarn.warn === false && otherWarn.warn === true && againWarn.warn === true, "une saisie invalide n'avertit qu'une fois");
 const fieldRow = readFileSync(new URL("../templates/shared/field-row.hbs", import.meta.url), "utf8");
 check(fieldRow.includes('type="text"') && fieldRow.includes('inputmode="decimal"') && fieldRow.includes("createNumberInput"), "delta-v : input texte écrit à la main");
 

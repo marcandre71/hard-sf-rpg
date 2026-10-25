@@ -104,9 +104,18 @@ function roundTenth(value) {
 }
 
 /**
+ * Saisie de la fiche : un nombre simple, virgule ou point, rien d'autre.
+ * « -1 », « 1e3 », « 0x10 », « Infinity » ne passent pas.
+ * Le delta-v est une réserve, jamais négative. Le NumberField a déjà min 0.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
+ */
+const SHEET_DELTA_V = /^\d+([.,]\d+)?$/;
+
+/**
  * Delta-v soumis par la fiche, déjà expansé.
- * « 3,5 » devient 3.5, au dixième. Vide, null ou illisible : la clé
+ * « 3,5 » devient 3.5, au dixième. Vide, null ou refusé : la clé
  * est retirée. On n'envoie ni null ni 0, sinon le nombre revient à 0.
+ * Ceci ne change pas la migration : `roundTenth` garde les nombres déjà stockés.
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
  *
  * @param {object|null|undefined} data
@@ -130,14 +139,68 @@ export function applySheetDeltaV(data) {
 }
 
 /**
+ * Le delta-v est une réserve, jamais négative.
+ * Une chaîne doit coller à `SHEET_DELTA_V` après trim. Un nombre déjà
+ * numérique (l'autre case, non retouchée) est gardé s'il est fini et ≥ 0.
+ * `roundTenth` n'est pas appelé ici : la migration des données stockées
+ * ne passe pas par ce filtre.
+ *
  * @param {unknown} raw
  * @returns {number|undefined} `undefined` : ne pas écrire la clé.
  */
 function sheetDeltaV(raw) {
-  if ( raw === null || raw === undefined ) return undefined;
-  if ( typeof raw === "string" && raw.trim() === "" ) return undefined;
-  const text = typeof raw === "string" ? raw.trim() : raw;
-  return roundTenth(text);
+  if ( typeof raw === "number" ) {
+    if ( !Number.isFinite(raw) || raw < 0 ) return undefined;
+    return Math.round(raw * 10) / 10;
+  }
+  if ( typeof raw !== "string" || !SHEET_DELTA_V.test(raw.trim()) ) return undefined;
+  const number = Number(raw.trim().replace(",", "."));
+  if ( !Number.isFinite(number) ) return undefined;
+  return Math.round(number * 10) / 10;
+}
+
+/**
+ * Valeur stockée, affichée au dixième dans la case.
+ *
+ * @param {unknown} value
+ * @returns {string}
+ */
+export function formatStoredDeltaV(value) {
+  if ( typeof value !== "number" || !Number.isFinite(value) ) return "";
+  return String(Math.round(value * 10) / 10);
+}
+
+/**
+ * Remet la valeur enregistrée dans l'input. Le diff vide ne rerend pas
+ * la fiche : sans ça, la case reste vide ou sur « abc ».
+ *
+ * @param {{ elements?: { namedItem?: (name: string) => { value?: string }|null, [key: string]: { value?: string }|undefined } }|null|undefined} form
+ * @param {"value"|"max"} key
+ * @param {unknown} stored
+ * @returns {void}
+ */
+export function writeDeltaVInput(form, key, stored) {
+  if ( typeof stored !== "number" || !Number.isFinite(stored) ) return;
+  const name = `system.propulsion.deltaV.${key}`;
+  const elements = form?.elements;
+  if ( !elements ) return;
+  const named = typeof elements.namedItem === "function" ? elements.namedItem(name) : null;
+  const input = named ?? elements[name];
+  if ( !input || !("value" in input) ) return;
+  input.value = formatStoredDeltaV(stored);
+}
+
+/**
+ * Une même saisie invalide ne prévient qu'une fois.
+ * `previous` est le jeton déjà signalé pour cette case.
+ *
+ * @param {string|undefined} previous
+ * @param {unknown} raw
+ * @returns {{ warn: boolean, token: string }}
+ */
+export function nextDeltaVWarning(previous, raw) {
+  const token = raw == null || String(raw).trim() === "" ? "" : String(raw).trim();
+  return { warn: previous !== token, token };
 }
 
 /**

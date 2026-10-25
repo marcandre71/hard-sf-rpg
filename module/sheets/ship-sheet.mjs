@@ -28,7 +28,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
-import { applySheetDeltaV } from "../ships/migrate.mjs";
+import { applySheetDeltaV, nextDeltaVWarning, writeDeltaVInput } from "../ships/migrate.mjs";
 import { POST_ACTIONS, clearShipLock, readLock, rollPostAction } from "../ships/actions.mjs";
 import { duplicateActors, refusesManeuver } from "../ships/combat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
@@ -60,6 +60,13 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /** Annule l'écoute du rendu précédent. */
   #changeAbort = null;
+
+  /**
+   * Dernière saisie invalide déjà signalée, par case.
+   * submitOnChange renvoie tout le formulaire : sans ce souvenir,
+   * le même texte referait l'avertissement à chaque autre champ.
+   */
+  #deltaVWarned = { value: undefined, max: undefined };
 
   /** @override */
   static DEFAULT_OPTIONS = {
@@ -190,9 +197,10 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   /**
    * « 3,5 » devient 3.5, au dixième, avant le nettoyage du NumberField.
-   * Vide ou illisible : la clé est retirée. On n'envoie pas null,
-   * et on ne remplace pas par 0 : la valeur déjà enregistrée reste.
-   * Un avertissement le dit.
+   * Vide ou refusé : la clé est retirée. On n'envoie pas null,
+   * et on ne remplace pas par 0. La case retrouve tout de suite
+   * la valeur enregistrée, au dixième. L'avertissement part une fois
+   * par saisie invalide.
    * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
    *
    * @override
@@ -204,11 +212,21 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    */
   _processFormData(event, form, formData) {
     const data = super._processFormData(event, form, formData);
-    for ( const entry of applySheetDeltaV(data) ) {
-      const blank = entry.raw == null || String(entry.raw).trim() === "";
+    const ignored = applySheetDeltaV(data);
+    const delta = data?.system?.propulsion?.deltaV;
+    const stored = this.document?.system?._source?.propulsion?.deltaV ?? {};
+    for ( const key of /** @type {const} */ (["value", "max"]) ) {
+      if ( delta && Object.hasOwn(delta, key) ) this.#deltaVWarned[key] = undefined;
+    }
+    for ( const entry of ignored ) {
+      writeDeltaVInput(form, entry.key, stored[entry.key]);
+      const next = nextDeltaVWarning(this.#deltaVWarned[entry.key], entry.raw);
+      this.#deltaVWarned[entry.key] = next.token;
+      if ( !next.warn ) continue;
+      const blank = next.token === "";
       const value = blank
         ? game.i18n.localize("SOL.Ship.propulsion.deltaVBlank")
-        : String(entry.raw);
+        : next.token;
       const field = game.i18n.localize(entry.key === "max" ? "SOL.Field.max" : "SOL.Field.value");
       ui.notifications.warn(game.i18n.format("SOL.Ship.propulsion.deltaVIgnored", { field, value }));
     }
