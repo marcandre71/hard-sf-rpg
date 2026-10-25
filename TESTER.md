@@ -3,7 +3,7 @@
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
 La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible), déjà sur `main`.
-La section 12 est la **0.7.3** (dégâts, critiques, missiles). C'est un brouillon : ne la fusionnez pas. Prenez le ZIP de la branche `dev/0.7.3`, pas celui de `main`.
+La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main`. Prenez le ZIP de `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -163,17 +163,17 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
 
 **Testez en MJ, dans une copie du monde.** Ne rouvrez pas cette copie avec un système plus ancien.
 
-Cette section n'est pas sur `main`. Prenez le ZIP de la branche :
+La 0.7.3 est sur `main`. Prenez le ZIP :
 
-https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.7.3.zip
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.7.3`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
 
 Il vous faut **deux Petite Fortune**, chacune ouverte **depuis son jeton**.
 
 **Astuce pour aller vite à 0.** Vous n'êtes pas obligé de tirer dix fois. Sur l'onglet **Sections & modules**, baissez à la main la plaque, l'Intégrité d'un module, ou l'Intégrité d'une section. Mettez par exemple la plaque de proue à **1**, ou un module à **1**. Le prochain tir qui touche fera passer à 0. Pour annuler une section détruite, remontez l'Intégrité **et** décochez **Section détruite**.
 
-1. Quittez Foundry. Remplacez le système par le ZIP ci-dessus. Relancez. Jouez en MJ, dans une copie du monde.
+1. Quittez Foundry. Remplacez le système par le ZIP de `main` : https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip . Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Relancez. Jouez en MJ, dans une copie du monde.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.7.3**. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`. Pas de ligne rouge, hors l'icône manquante déjà connue.
 2. Glissez **Petite Fortune** deux fois sur la scène. Mettez les deux jetons dans le Combat Tracker. Ouvrez chaque fiche **depuis son jeton**. Lancez l'initiative. Cliquez sur **Commencer le combat** pour passer du round 0 au round 1. Mettez les deux fiches à portée **Proche**.
    **Résultat attendu :** les deux vaisseaux sont dans le tracker. Les fiches ouvertes sont celles des jetons.
@@ -190,17 +190,19 @@ Il vous faut **deux Petite Fortune**, chacune ouverte **depuis son jeton**.
    **Résultat attendu :** un critique de section. Le **5** et le **6** sont chacun une chance sur 6 : il faut cette face sur le dé, quitte à retirer. Sur un **5**, la case **Structure tordue** se coche et le jet suivant du Pilote propose **−20**. Sur un **6**, la case **Section détruite** se coche (la section compte comme à 0) et tous les modules de la section sont **Hors service**. Si vous en aviez laissé un au-dessus de 0, choisissez **Aucun** dans la fenêtre pour que le coup aille à la section : le 6 met aussi ce module hors service. Entre deux essais, remettez l'Intégrité de la section à **1**, et décochez **Structure tordue** ou **Section détruite** si la case s'est cochée.
 8. Sur la cible, onglet Général, cochez **En fuite**. Tirez sans visée, réussite, ouvrez **Appliquer les dégâts** sans confirmer tout de suite. Notez le dé du tir (par exemple 61, qui s'inverse en 16).
    **Résultat attendu :** la section proposée est l'autre bout. Sans la case, 16 à 35 c'est la poupe. Avec **En fuite**, c'est la proue. Décochez ensuite **En fuite**. Annulez la fenêtre si vous ne voulez pas appliquer.
+> **Munitions :** chaque lancement, réussi ou raté, retire 1 missile. Si elles tombent à 0, retapez **4 / 4** sur la fiche.
+
 9. Glissez le module **Missile** (compendium **Modules de vaisseau**) sur le vaisseau qui tire. Les munitions doivent montrer **4 / 4** sans que vous les tapiez. Mettez les deux fiches en portée **Moyenne**. **T** sur l'autre jeton. **Tirer**, choisissez le missile. Il n'y a pas de choix de visée. Réussite.
-   **Résultat attendu :** les munitions affichent **3 / 4** si le lancement réussit du premier coup, sinon 1 de moins par essai (un lancement raté consomme aussi le missile). Si les munitions tombent à 0, retapez **4 / 4** sur la fiche. Une carte **Missile en vol** donne la cible et le round d'arrivée (le round actuel + 1). Il n'y a pas de bouton **Appliquer les dégâts** sur le jet de lancement. À portée **Proche**, le missile n'est pas dans la liste des armes.
+   **Résultat attendu :** les munitions baissent de 1 (**3 / 4** si c'était le premier lancement). Une carte **Missile en vol** donne la cible et le round d'arrivée (le round actuel + 1). Il n'y a pas de bouton **Appliquer les dégâts** sur le jet de lancement. À portée **Proche**, le missile n'est pas dans la liste des armes.
 10. Toujours en **Moyenne**, une seule cible, **Tirer** le missile et ratez le jet (échec).
-    **Résultat attendu :** les munitions affichent **3 / 4** si le lancement réussit du premier coup, sinon 1 de moins par essai (un lancement raté consomme aussi le missile). Si les munitions tombent à 0, retapez **4 / 4** sur la fiche. Le chat dit **missile perdu**. Il n'y a pas de carte **Missile en vol**, et pas d'impact.
+    **Résultat attendu :** les munitions baissent de 1. Le chat dit **missile perdu**. Il n'y a pas de carte **Missile en vol**, et pas d'impact.
 11. Cliquez sur **Commencer le combat** pour passer du round 0 au round 1 si ce n'est pas déjà fait, puis passez au round suivant (le MJ, dans le Combat Tracker), pour le missile de l'étape 9.
-    **Résultat attendu :** une carte **Missile à l'arrivée**, avec **Contre-mesures**, **Laser de défense** et **Appliquer les dégâts**. Le texte dit que le missile arrive à ce round. Le missile perdu de l'étape 10 n'a pas cette carte. Munitions : **3 / 4** si le lancement réussit du premier coup, sinon 1 de moins par essai (un lancement raté consomme aussi le missile). Si les munitions tombent à 0, retapez **4 / 4** sur la fiche.
+    **Résultat attendu :** les munitions ne changent pas. Une carte **Missile à l'arrivée**, avec **Contre-mesures**, **Laser de défense** et **Appliquer les dégâts**. Le texte dit que le missile arrive à ce round. Le missile perdu de l'étape 10 n'a pas cette carte.
 12. Sur cette carte, **Contre-mesures**. C'est un jet d'Opérations de bord du vaisseau ciblé. S'il gagne contre le jet de lancement, le missile est leurré.
-    **Résultat attendu :** le chat dit si le missile est leurré. S'il l'est, **Appliquer les dégâts** ne l'applique plus. À égalité, le missile n'est pas leurré. Vous pouvez relancer un missile si celui-ci a été leurré, pour l'étape suivante. Munitions : **3 / 4** si le lancement réussit du premier coup, sinon 1 de moins par essai (un lancement raté consomme aussi le missile). Si les munitions tombent à 0, retapez **4 / 4** sur la fiche.
+    **Résultat attendu :** les munitions ne changent pas. Le chat dit si le missile est leurré. S'il l'est, **Appliquer les dégâts** ne l'applique plus. À égalité, le missile n'est pas leurré. Vous pouvez relancer un missile si celui-ci a été leurré, pour l'étape suivante.
 13. Envoyez un autre missile en **Moyenne**, passez le round, et sur la carte d'arrivée cliquez **Laser de défense**. Choisissez le **Laser de forage** (ou un laser de défense). Si besoin, remettez l'Intégrité du laser de forage de la cible : il a pu être mis hors service aux étapes 6 ou 7. Réussite.
-    **Résultat attendu :** les munitions affichent **3 / 4** si le lancement réussit du premier coup, sinon 1 de moins par essai (un lancement raté consomme aussi le missile). Si les munitions tombent à 0, retapez **4 / 4** sur la fiche. Le chat dit que le missile est détruit. **Appliquer les dégâts** ne pose pas l'impact. Un échec laisse le missile : **Appliquer les dégâts** ouvre alors la fenêtre, dégâts **20 + le DR du lancement**.
+    **Résultat attendu :** le nouveau missile retire 1 munition. Le chat dit que le missile est détruit. **Appliquer les dégâts** ne pose pas l'impact. Un échec laisse le missile : **Appliquer les dégâts** ouvre alors la fenêtre, dégâts **20 + le DR du lancement**.
 14. Sur une fiche, mettez l'Intégrité de la **poupe** à **0**, et celle de la **proue** à **0** (les maximums restent au-dessus de 0).
-    **Résultat attendu :** le badge **Épave** apparaît en haut de la fiche. Le chat le dit. **Esquiver** et **Changer de portée** sont refusés. Remontez une des deux Intégrités au-dessus de 0 : le badge disparaît, et ces boutons fonctionnent de nouveau. Si une section est cochée **Section détruite**, décochez-la aussi, sinon elle compte encore comme à 0.
+    **Résultat attendu :** le badge **Épave** apparaît en haut de la fiche. Le chat le dit. **Esquiver** et **Changer de portée** sont refusés. L'avertissement dit « Piloter, Esquiver et Changer de portée » : il n'y a pas de troisième bouton, le code ne bloque que ces deux actions du poste Pilote. Remontez une des deux Intégrités au-dessus de 0 : le badge disparaît, et ces deux boutons fonctionnent de nouveau. Si une section est cochée **Section détruite**, décochez-la aussi, sinon elle compte encore comme à 0.
 15. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
