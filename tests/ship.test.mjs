@@ -161,13 +161,12 @@ migrateShipSource(descriptionOnly);
 check(!("category" in descriptionOnly) && !("shipType" in descriptionOnly) && !("sections" in descriptionOnly), "un diff sans catégorie n'en reçoit pas");
 check(!("propulsion" in descriptionOnly) && !("range" in descriptionOnly), "un diff de description ne gagne ni delta-v ni portée");
 
-const exactDelta = { propulsion: { deltaV: { value: 3.587644, max: 3.64, exact: 3.587644 } } };
+const exactDelta = { propulsion: { deltaV: { value: 3.587644, max: 3.64 } } };
 migrateShipSource(exactDelta);
 check(exactDelta.propulsion.deltaV.value === 3.6 && exactDelta.propulsion.deltaV.max === 3.6, "le delta-v existant est arrondi au dixième");
-check(!("exact" in exactDelta.propulsion.deltaV), "la clé exacte est retirée seulement parce qu'elle était là");
 const valueOnly = { propulsion: { deltaV: { value: 3.54 } } };
 migrateShipSource(valueOnly);
-check(valueOnly.propulsion.deltaV.value === 3.5 && !("max" in valueOnly.propulsion.deltaV) && !("exact" in valueOnly.propulsion.deltaV), "sans max ni clé ancienne, on n'en ajoute pas");
+check(valueOnly.propulsion.deltaV.value === 3.5 && !("max" in valueOnly.propulsion.deltaV), "sans max, on n'en ajoute pas");
 const typeOnlyDelta = { propulsion: { type: "eau" } };
 migrateShipSource(typeOnlyDelta);
 check(!("deltaV" in typeOnlyDelta.propulsion), "un type de propulsion ne gagne pas de delta-v");
@@ -177,9 +176,9 @@ check(alreadyTenth.propulsion.deltaV.value === 3.6 && alreadyTenth.propulsion.de
 const unreadable = { propulsion: { deltaV: { value: "x" } } };
 roundPresentDeltaV(unreadable);
 check(unreadable.propulsion.deltaV.value === "x", "une valeur illisible n'est pas remplacée par 0");
-const withExactValue = { propulsion: { deltaV: { value: 1.26, exactValue: 1.255 } } };
-roundPresentDeltaV(withExactValue);
-check(withExactValue.propulsion.deltaV.value === 1.3 && !("exactValue" in withExactValue.propulsion.deltaV), "exactValue part, value est arrondie");
+const typed = { propulsion: { deltaV: { value: 1.26 } } };
+roundPresentDeltaV(typed);
+check(typed.propulsion.deltaV.value === 1.3, "une saisie 1,26 est arrondie au dixième");
 
 const oldRadiators = { sections: { radiators: { integrity: { value: 6, max: 6 } } } };
 migrateShipSource(oldRadiators);

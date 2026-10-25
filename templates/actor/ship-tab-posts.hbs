@@ -5,6 +5,14 @@
 --}}
 <section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   <p class="sol-hint">{{localize "SOL.Ship.post.hint"}}</p>
+  {{#if lock.uuid}}
+  <p class="sol-hint">
+    {{localize "SOL.Space.lockedOn" name=lock.name}}
+    {{#if lock.gm}}
+    <button type="button" data-action="clearLock">{{localize "SOL.Space.clearLock"}}</button>
+    {{/if}}
+  </p>
+  {{/if}}
   <ul class="sol-ship-posts">
     {{#each posts as |post|}}
     <li class="sol-ship-post" data-post="{{post.id}}">

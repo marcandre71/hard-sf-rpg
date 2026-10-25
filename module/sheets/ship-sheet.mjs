@@ -27,7 +27,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
-import { POST_ACTIONS, rollPostAction } from "../ships/actions.mjs";
+import { POST_ACTIONS, clearShipLock, readLock, rollPostAction } from "../ships/actions.mjs";
 import { duplicateActors } from "../ships/combat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
@@ -64,7 +64,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 760, height: 860 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, clearPost, rollPost }
+    actions: { ...itemListActions, clearPost, rollPost, clearLock }
   };
 
   /** @override */
@@ -171,6 +171,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     context.sections = presentSections(actor, stored);
     context.posts = presentPosts(actor, stored);
+    context.lock = presentLock(actor);
     context.otherSections = prepareSections(actor, OTHER_ITEMS);
 
     const labelOf = field => field.label ?? field.options?.label ?? "";
@@ -433,6 +434,25 @@ async function rollPost(event, target) {
   const postId = target.closest("[data-post]")?.dataset.post;
   const action = target.dataset.spaceAction;
   await rollPostAction(this.document, postId, action);
+  if ( action === "lock" ) this.render();
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+async function clearLock() {
+  await clearShipLock(this.document);
+  this.render();
+}
+
+/**
+ * @param {Actor} actor
+ * @returns {{ uuid: string, name: string, gm: boolean }}
+ */
+function presentLock(actor) {
+  const lock = readLock(actor);
+  const name = lock.name || game.i18n.localize("SOL.Space.lockedUnknown");
+  return { uuid: lock.uuid, name, gm: game.user?.isGM === true };
 }
 
 /**

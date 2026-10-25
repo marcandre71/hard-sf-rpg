@@ -128,14 +128,31 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 On fusionne cette branche dans `main` avant de vous envoyer le test. La version affichée au retour est **0.7.2**.
 
 1. Quittez Foundry complètement.
+   **Résultat attendu :** l'application est fermée. Recharger le monde ne suffit pas.
 2. Remplacez le dossier du système par le ZIP https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip . Le dossier décompressé s'appelle `hard-sf-rpg-main` : renommez-le `sol-nouvelle-ere`.
+   **Résultat attendu :** le fichier `Data/systems/sol-nouvelle-ere/system.json` est là, sans dossier en double.
 3. Relancez Foundry. Jouez en MJ, dans une copie du monde.
-4. Posez deux vaisseaux sur la scène et ajoutez-les au Combat Tracker (clic droit sur le pion, icône Combat).
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.7.2**.
+4. Dans le compendium **Vaisseaux**, glissez **Petite Fortune** sur la scène, deux fois : deux jetons. Clic droit sur chaque jeton, icône Combat. Ouvrez chaque fiche **depuis son jeton** (double-clic sur le jeton), pas depuis la barre latérale.
+   **Résultat attendu :** les deux jetons sont dans le Combat Tracker. La fiche ouverte est celle de ce jeton.
 5. Lancez l'initiative (« Lancer l'initiative », ou « Lancer pour les PNJ »).
+   **Résultat attendu :** chaque vaisseau a une initiative. Poste Opérateur vide : l'équipage PNJ, score 50.
 6. Sur le tour d'un vaisseau, onglet Postes : un bouton par poste (Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin).
-7. Ciblez l'autre vaisseau, puis changez la portée : les deux fiches se mettent à jour.
-8. Tirez.
-9. Passez au round suivant : les bonus du tour partent, le verrouillage reste.
-10. Modifiez le delta-v à la main (au dixième de km/s).
-11. Passez un vaisseau en objet fixe : il refuse la manœuvre (changer de portée).
+   **Résultat attendu :** chaque bouton ouvre un jet. Vous pouvez annuler.
+7. Sur les deux fiches ouvertes depuis les jetons, mettez d'abord la **même** portée (par exemple Moyenne). Survolez le jeton adverse et appuyez sur **T** : une seule cible. Puis **Changer de portée**.
+   **Résultat attendu :** l'issue dépend des jets. Deux échecs : la portée ne change pas. Sinon le gagnant rapproche ou éloigne, et les deux fiches affichent la même nouvelle portée.
+8. Passez les deux fiches à **Proche**. Le laser de forage ne tire qu'en proche, et une fiche neuve est en Moyenne. Puis **Tirer**.
+   **Résultat attendu :** le tir part. Une réussite dit « Touché (dégâts en 0.7.3) ».
+9. Survolez le jeton adverse et appuyez sur **T** (une seule cible), puis réussissez **Verrouiller**. Ensuite **Donner +10** ou **Calculer**. Passez au round suivant.
+   **Résultat attendu :** l'onglet Postes affiche « Verrouillé : » et le nom de la cible. Le +10 n'est plus dans le modificateur du jet suivant. Repassez la fiche qui tire en **Moyenne**, gardez **T** sur la cible verrouillée : le tir ne propose pas −20. Visez l'autre jeton : le tir propose −20. Le bouton **Retirer le verrouillage** (MJ) enlève le nom.
+10. Sur la fiche, modifiez le delta-v à la main, au dixième (par exemple 3,5).
+    **Résultat attendu :** la fiche garde 3,5. Fermez et rouvrez : le nombre est encore là.
+11. Passez un vaisseau en **objet fixe**, puis essayez **Changer de portée**.
+    **Résultat attendu :** un message refuse la manœuvre. Remettez **Vaisseau du vide** ensuite.
 12. Terminez le combat.
+    **Résultat attendu :** le tracker se vide. Un combat neuf ne garde pas l'ancien verrouillage.
+13. Contrôles courts.
+    - Glissez un **véhicule** dans le tracker. **Résultat attendu :** il est refusé.
+    - Sur un jet de poste, mettez un modificateur de −60 : le total reste −60. Faites de même pour l'initiative d'**un seul** vaisseau (pas « Lancer l'initiative » pour tout le monde) : −60 reste −60. Sur un jet de personnage, −60 devient −50. **Résultat attendu :** le vaisseau dépasse ±50, le personnage non.
+    - Si vous avez encore une copie de monde en 0.7.1, ouvrez-la avec ce système. **Résultat attendu :** le monde s'ouvre, sans message d'erreur.
+    - Console (**F12**). **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

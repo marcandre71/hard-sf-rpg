@@ -8,7 +8,9 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.helpers.ClientSettings.html
  *
  * Les bonus du tour sont un drapeau du document Combat.
- * `updateCombat` les vide quand `round` change, chez le MJ actif.
+ * `updateCombat` les vide chez le MJ actif, seulement si le round augmente.
+ * Reculer d'un round les garde. `preUpdateCombat` retient l'ancien round
+ * (ce hook ne part que chez celui qui écrit, doc v14).
  * Le verrouillage reste. `deleteCombat` emporte le document,
  * donc le verrouillage avec.
  * @see https://foundryvtt.com/api/v14/functions/hookEvents.updateDocument.html
@@ -35,9 +37,16 @@ import {
   compareOpposed,
   duplicateActors,
   evadeFromDr,
+  isOwnTarget,
+  lockAfterRoll,
+  lockCleared,
+  lockRollAllowed,
   normalizeTurn,
+  rangeDifferWarning,
   refusesManeuver,
+  roundAdvanced,
   sharedRange,
+  targetIdentity,
   suggestedModifier,
   weaponCanFire
 } from "./combat.mjs";
@@ -48,6 +57,9 @@ import { registerShipCombatGuard } from "./guard.mjs";
 const SYSTEM_ID = "sol-nouvelle-ere";
 const SOCKET = `system.${SYSTEM_ID}`;
 const TURNS = "spaceTurns";
+
+/** Ancien round, posé dans `preUpdateCombat` avant l'écriture. */
+const roundBefore = new WeakMap();
 
 export { POST_ACTIONS };
 
@@ -60,7 +72,19 @@ export { POST_ACTIONS };
 export function registerShipPlay() {
   registerShipCombatGuard();
   game.socket?.on(SOCKET, onSpaceRelay);
+  Hooks.on("preUpdateCombat", rememberRound);
   Hooks.on("updateCombat", onCombatRound);
+}
+
+/**
+ * @param {Combat} combat
+ * @param {object} changed
+ * @returns {void}
+ * @see https://foundryvtt.com/api/v14/functions/hookEvents.preUpdateDocument.html
+ */
+function rememberRound(combat, changed) {
+  if ( !changed || !Object.hasOwn(changed, "round") ) return;
+  roundBefore.set(combat, combat.round);
 }
 
 /**
@@ -73,7 +97,97 @@ export async function rollPostAction(ship, postId, action) {
   if ( !ship || ship.type !== "ship" || !actionBelongsToPost(postId, action) ) return null;
   warnIfDuplicate(ship, postId);
   if ( action === "changeRange" ) return changeRange(ship);
+  if ( action === "lock" ) return lockShip(ship);
   return rollSingle(ship, postId, action);
+}
+
+/**
+ * Une seule cible, sinon pas de jet.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {Actor} ship
+ * @returns {Promise<null|{ success: boolean, dr: number, de: number, score: number }>}
+ */
+async function lockShip(ship) {
+  const targets = targetedShipTokens(ship);
+  if ( !lockRollAllowed(targets.length) ) {
+    const key = targets.length === 0 ? "SOL.Space.lockNoTarget" : "SOL.Space.lockOneTarget";
+    ui.notifications.warn(game.i18n.localize(key));
+    return null;
+  }
+  const identity = targetIdentity(targets[0]);
+  if ( !identity ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.lockNoTarget"));
+    return null;
+  }
+  const outcome = await rollSingle(ship, "operator", "lock", { store: false });
+  if ( !outcome?.success ) return outcome;
+  if ( !game.user.isGM ) {
+    await relayOwned(ship, "operator", {
+      type: "effect",
+      shipUuid: ship.uuid,
+      postId: "operator",
+      action: "lock",
+      userId: game.user.id,
+      success: true,
+      dr: outcome.dr,
+      score: outcome.score,
+      targetUuid: identity
+    });
+    return outcome;
+  }
+  const held = combatantFor(ship);
+  if ( !held ) {
+    ui.notifications.info(game.i18n.localize("SOL.Space.effectNotStored"));
+    return outcome;
+  }
+  await writeStoredEffect(held.combat, held.combatant.id, "lock", {
+    success: true,
+    dr: outcome.dr,
+    lockTarget: identity
+  });
+  refreshShip(ship);
+  return outcome;
+}
+
+/**
+ * Le MJ retire le verrouillage. Le reste du tour reste.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {Actor} ship
+ * @returns {Promise<void>}
+ */
+export async function clearShipLock(ship) {
+  if ( game.user?.isGM !== true || !ship || ship.type !== "ship" ) return;
+  const held = combatantFor(ship);
+  if ( !held ) return;
+  const turns = readTurns(held.combat);
+  const current = normalizeTurn(turns[held.combatant.id]);
+  if ( !current.lock ) return;
+  turns[held.combatant.id] = lockCleared(current);
+  await held.combat.setFlag(SYSTEM_ID, TURNS, turns);
+  refreshShip(ship);
+}
+
+/**
+ * Nom affiché sur l'onglet Postes. Vide s'il n'y a pas de verrouillage.
+ *
+ * @param {Actor} ship
+ * @returns {{ uuid: string, name: string }}
+ */
+export function readLock(ship) {
+  const held = combatantFor(ship);
+  if ( !held ) return { uuid: "", name: "" };
+  const uuid = normalizeTurn(readTurns(held.combat)[held.combatant.id]).lock;
+  if ( !uuid ) return { uuid: "", name: "" };
+  let name = "";
+  try {
+    const doc = foundry.utils.fromUuidSync?.(uuid);
+    name = doc?.name || doc?.actor?.name || "";
+  } catch {
+    name = "";
+  }
+  return { uuid, name };
 }
 
 /**
@@ -84,6 +198,9 @@ export async function rollPostAction(ship, postId, action) {
 function onCombatRound(combat, changed) {
   if ( game.user?.isActiveGM !== true ) return;
   if ( !changed || !Object.hasOwn(changed, "round") ) return;
+  const previous = roundBefore.get(combat);
+  roundBefore.delete(combat);
+  if ( !roundAdvanced(previous, changed.round) ) return;
   const turns = readTurns(combat);
   /** @type {Record<string, ReturnType<typeof bonusesCleared>>} */
   const next = {};
@@ -160,9 +277,12 @@ async function resolveRangeChange(ship, target, mine) {
     { id: "closer", label: game.i18n.localize("SOL.Space.closer") },
     { id: "farther", label: game.i18n.localize("SOL.Space.farther") }
   ]);
-  const next = sharedRange(shipRange(ship), direction);
+  // Décision Marc 25/10/2026 : la portée du vaisseau qui manœuvre.
+  const maneuverRange = shipRange(ship);
+  const targetRange = shipRange(target);
+  const next = sharedRange(maneuverRange, direction);
   if ( !next ) return mine;
-  if ( next === shipRange(ship) && next === shipRange(target) ) {
+  if ( next === maneuverRange && next === targetRange ) {
     ui.notifications.info(game.i18n.localize("SOL.Space.rangeSame"));
     return mine;
   }
@@ -172,8 +292,22 @@ async function resolveRangeChange(ship, target, mine) {
     name: winner.name,
     range: game.i18n.localize(SOL.shipRanges[next] ?? next)
   });
-  await ChatMessage.create({ content: `<p>${foundry.utils.escapeHTML(text)}</p>` });
+  const warning = rangeDifferWarning(rangeLabel(maneuverRange), rangeLabel(targetRange));
+  const escape = foundry.utils.escapeHTML;
+  const content = warning
+    ? `<p>${escape(text)}</p><p>${escape(warning)}</p>`
+    : `<p>${escape(text)}</p>`;
+  await ChatMessage.create({ content });
   return mine;
+}
+
+/**
+ * @param {string} range
+ * @returns {string}
+ */
+function rangeLabel(range) {
+  const key = SOL.shipRanges[range] ?? range;
+  return game.i18n.localize(key);
 }
 
 /**
@@ -293,7 +427,11 @@ async function writeStoredEffect(combat, combatantId, action, result, chosenPost
   if ( result?.success !== true || !combat || !combatantId ) return;
   const turn = normalizeTurn(readTurns(combat)[combatantId]);
   if ( action === "command" && chosenPost && SHIP_POST_IDS.includes(chosenPost) ) turn.commanderPost = chosenPost;
-  else if ( action === "lock" ) turn.lock = true;
+  else if ( action === "lock" ) {
+    const next = lockAfterRoll(turn, result?.success === true, result?.lockTarget);
+    if ( next.lock === turn.lock ) return;
+    turn.lock = next.lock;
+  }
   else if ( action === "evade" ) turn.evade = evadeFromDr(result.dr, true);
   else if ( action === "calculate" ) turn.pilotBonus = true;
   else return;
@@ -355,6 +493,15 @@ async function onSpaceRelay(message) {
   if ( message.type === "effect" ) {
     const held = combatantFor(ship);
     if ( !held ) return;
+    if ( action === "lock" ) {
+      if ( roll.success !== true ) return;
+      const lockTarget = await acceptedLockTarget(String(message.targetUuid ?? ""), ship);
+      if ( !lockTarget ) {
+        ui.notifications.warn(game.i18n.localize("SOL.Space.lockNoTarget"));
+        return;
+      }
+      roll.lockTarget = lockTarget;
+    }
     await writeStoredEffect(
       held.combat,
       held.combatant.id,
@@ -362,6 +509,7 @@ async function onSpaceRelay(message) {
       roll,
       typeof message.chosenPost === "string" ? message.chosenPost : ""
     );
+    if ( action === "lock" ) refreshShip(ship);
     return;
   }
   const target = message.targetUuid ? await foundry.utils.fromUuid(String(message.targetUuid)) : null;
@@ -379,9 +527,12 @@ function modifierFor(ship, postId, aim, weaponCondition = "") {
   const held = combatantFor(ship);
   const shipTurn = held ? normalizeTurn(readTurns(held.combat)[held.combatant.id]) : normalizeTurn(null);
   const foe = foeTurn(ship, held?.combat ?? null);
+  const targets = targetedShipTokens(ship);
+  const fireTarget = lockRollAllowed(targets.length) ? targetIdentity(targets[0]) : "";
   return suggestedModifier({
     postId,
     range: shipRange(ship),
+    fireTarget,
     ship: shipTurn,
     foe,
     aim,
@@ -398,9 +549,9 @@ function modifierFor(ship, postId, aim, weaponCondition = "") {
  * @returns {{ evade: number }}
  */
 function foeTurn(ship, combat) {
-  const targets = targetedShips(ship);
-  if ( targets.length !== 1 || !combat ) return { evade: 0 };
-  const foe = combatantFor(targets[0]);
+  const targets = targetedShipTokens(ship);
+  if ( !lockRollAllowed(targets.length) || !combat ) return { evade: 0 };
+  const foe = combatantFor(targets[0].actor);
   if ( !foe || foe.combat !== combat ) return { evade: 0 };
   return normalizeTurn(readTurns(combat)[foe.combatant.id]);
 }
@@ -468,26 +619,99 @@ function readTurns(combat) {
 
 /**
  * Cibles Foundry du joueur : un Set de Token.
- * On ne garde que les vaisseaux autres que le déclarant.
+ * On ne garde que les autres vaisseaux. Le jeton prime sur l'acteur :
+ * deux jetons du même acteur sont deux cibles.
+ * // Décision Marc 25/10/2026
  *
  * @param {Actor} ship
- * @returns {Actor[]}
+ * @returns {{ actor: Actor, tokenUuid: string, actorUuid: string }[]}
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.User.html
  */
-function targetedShips(ship) {
+function targetedShipTokens(ship) {
   const targets = game.user?.targets;
   if ( !targets ) return [];
-  /** @type {Actor[]} */
+  const own = ownIdentity(ship);
+  /** @type {{ actor: Actor, tokenUuid: string, actorUuid: string }[]} */
   const found = [];
   const seen = new Set();
   for ( const token of targets ) {
     const actor = token?.actor;
-    if ( !actor || actor.type !== "ship" || actor.uuid === ship?.uuid ) continue;
-    if ( seen.has(actor.uuid) ) continue;
-    seen.add(actor.uuid);
-    found.push(actor);
+    if ( !actor || actor.type !== "ship" ) continue;
+    const doc = token.document ?? token;
+    const row = {
+      actor,
+      tokenUuid: typeof doc.uuid === "string" ? doc.uuid : "",
+      actorUuid: typeof actor.uuid === "string" ? actor.uuid : ""
+    };
+    if ( isOwnTarget(own, row) ) continue;
+    const key = targetIdentity(row);
+    if ( !key || seen.has(key) ) continue;
+    seen.add(key);
+    found.push(row);
   }
   return found;
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {Actor[]}
+ */
+function targetedShips(ship) {
+  return targetedShipTokens(ship).map(row => row.actor);
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {{ tokenUuid: string, actorUuid: string }}
+ */
+function ownIdentity(ship) {
+  const held = combatantFor(ship);
+  const token = held?.combatant?.token;
+  return {
+    tokenUuid: typeof token?.uuid === "string" ? token.uuid : "",
+    actorUuid: typeof ship?.uuid === "string" ? ship.uuid : ""
+  };
+}
+
+/**
+ * Le relais n'accepte qu'un vaisseau adverse, jeton de préférence.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {string} uuid
+ * @param {Actor} ship
+ * @returns {Promise<string>}
+ * @see https://foundryvtt.com/api/v14/classes/foundry.utils.html#fromUuid
+ */
+async function acceptedLockTarget(uuid, ship) {
+  if ( !uuid || uuid.length > 300 ) return "";
+  const doc = await foundry.utils.fromUuid(uuid);
+  if ( !doc ) return "";
+  const own = ownIdentity(ship);
+  if ( doc.documentName === "Token" ) {
+    const actor = doc.actor;
+    if ( !actor || actor.type !== "ship" ) return "";
+    const row = {
+      tokenUuid: typeof doc.uuid === "string" ? doc.uuid : uuid,
+      actorUuid: typeof actor.uuid === "string" ? actor.uuid : ""
+    };
+    if ( isOwnTarget(own, row) ) return "";
+    return targetIdentity(row);
+  }
+  if ( doc.documentName === "Actor" && doc.type === "ship" ) {
+    const row = { tokenUuid: "", actorUuid: doc.uuid };
+    if ( isOwnTarget(own, row) ) return "";
+    return targetIdentity(row);
+  }
+  return "";
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {void}
+ */
+function refreshShip(ship) {
+  const sheet = ship?.sheet;
+  if ( sheet?.rendered ) void sheet.render(false);
 }
 
 /**

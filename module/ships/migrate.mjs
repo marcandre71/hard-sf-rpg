@@ -47,15 +47,10 @@ export function migrateShipSource(source) {
 }
 
 /**
- * Anciennes clés du stockage exact, retirées seulement si elles sont là.
- * La valeur elle-même reste dans `value` : on l'arrondit, on ne la duplique pas.
- */
-const RETIRED_DELTA_KEYS = ["exact", "exactValue"];
-
-/**
  * Arrondit `value` et `max` au dixième, seulement si la clé est déjà là.
  * Une valeur illisible n'est pas remplacée par 0.
- * Décision Marc 23/10/2026.
+ * Décision Marc 23/10/2026. Pas d'autre clé : `exact` et `exactValue`
+ * n'ont jamais été écrites.
  *
  * @param {object|null|undefined} source
  * @returns {void}
@@ -73,9 +68,6 @@ export function roundPresentDeltaV(source) {
   if ( Object.hasOwn(delta, "max") ) {
     const rounded = roundTenth(delta.max);
     if ( rounded !== undefined ) delta.max = rounded;
-  }
-  for ( const key of RETIRED_DELTA_KEYS ) {
-    if ( Object.hasOwn(delta, key) ) delete delta[key];
   }
 }
 

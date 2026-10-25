@@ -577,6 +577,8 @@ export class SolCombat extends Combat {
       // Décision Marc 18/10/2026 : un jet groupé (tout lancer, lancer les PNJ)
       // est en difficulté Normale, sans une fenêtre par combattant.
       // `rollAll` et `rollNPC` passent par ici (doc v14).
+      // Décision Marc 25/10/2026 : l'initiative du vaisseau est un jet de
+      // poste, sans plafond ±50. Celle des personnages garde le plafond.
       const choice = batch ? rollChoice(score, "normal", 0, { shipPost: ship }) : null;
       // Combatant caché : carte privée MJ (`gm`, doc ChatMessage.applyMode).
       // Sinon le mode du cœur, ou celui porté par messageOptions.
@@ -599,6 +601,8 @@ export class SolCombat extends Combat {
       });
       if ( !outcome ) continue;
       // Même encodage que Vigilance : réussite, DR/DE, critique, RÉF, score.
+      // Décision Marc 25/10/2026 : à égalité, le vaisseau passe après les
+      // personnages. Le nombre ne change pas. Le MJ réordonne dans le tracker.
       const initiative = encodeInitiative({
         success: outcome.success,
         dr: outcome.dr,

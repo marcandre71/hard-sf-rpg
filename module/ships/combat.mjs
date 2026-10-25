@@ -56,18 +56,22 @@ export const POST_ACTIONS = {
  */
 export function actionBelongsToPost(postId, action) {
   if ( typeof postId !== "string" || typeof action !== "string" ) return false;
-  return (POST_ACTIONS[postId] ?? []).includes(action);
+  if ( !Object.hasOwn(POST_ACTIONS, postId) ) return false;
+  return POST_ACTIONS[postId].includes(action);
 }
 
 /**
  * Bonus du tour d'un vaisseau. Pas de poussée : le delta-v est manuel.
  * Décision Marc 23/10/2026.
  *
- * @returns {{ lock: boolean, evade: number, commanderPost: string, pilotBonus: boolean }}
+ * `lock` est l'identité de la cible (jeton de préférence), ou "".
+ * // Décision Marc 25/10/2026 : une seule cible.
+ *
+ * @returns {{ lock: string, evade: number, commanderPost: string, pilotBonus: boolean }}
  */
 export function blankTurn() {
   return {
-    lock: false,
+    lock: "",
     evade: 0,
     commanderPost: "",
     pilotBonus: false
@@ -86,11 +90,107 @@ export function normalizeTurn(raw) {
     ? row.commanderPost
     : "";
   return {
-    lock: Boolean(row.lock),
+    lock: lockId(row.lock),
     evade: snappedEvade(row.evade),
     commanderPost: post,
     pilotBonus: Boolean(row.pilotBonus)
   };
+}
+
+/**
+ * Un booléen hérité d'un essai sans cible n'est pas une identité.
+ *
+ * @param {unknown} value
+ * @returns {string}
+ */
+function lockId(value) {
+  if ( typeof value !== "string" ) return "";
+  return value.trim();
+}
+
+/**
+ * Jeton de préférence, sinon l'acteur.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {{ tokenUuid?: unknown, actorUuid?: unknown }|null|undefined} target
+ * @returns {string}
+ */
+export function targetIdentity(target) {
+  const tokenUuid = typeof target?.tokenUuid === "string" ? target.tokenUuid.trim() : "";
+  if ( tokenUuid ) return tokenUuid;
+  return typeof target?.actorUuid === "string" ? target.actorUuid.trim() : "";
+}
+
+/**
+ * Le jeton visé est celui qui manœuvre.
+ * Même acteur, autre jeton : ce n'est pas soi.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {{ tokenUuid?: string, actorUuid?: string }} own
+ * @param {{ tokenUuid?: string, actorUuid?: string }} target
+ * @returns {boolean}
+ */
+export function isOwnTarget(own, target) {
+  const ownToken = targetIdentity({ tokenUuid: own?.tokenUuid });
+  const targetToken = targetIdentity({ tokenUuid: target?.tokenUuid });
+  if ( ownToken && targetToken ) return ownToken === targetToken;
+  const ownActor = typeof own?.actorUuid === "string" ? own.actorUuid : "";
+  const targetActor = typeof target?.actorUuid === "string" ? target.actorUuid : "";
+  return ownActor !== "" && ownActor === targetActor;
+}
+
+/**
+ * Verrouiller ne se lance qu'avec une seule cible.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {number} count
+ * @returns {boolean}
+ */
+export function lockRollAllowed(count) {
+  return count === 1;
+}
+
+/**
+ * Réussite : cette cible remplace l'ancienne. Échec ou identité vide :
+ * on garde le verrouillage déjà là.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {unknown} turn
+ * @param {boolean} success
+ * @param {unknown} uuid
+ * @returns {ReturnType<typeof blankTurn>}
+ */
+export function lockAfterRoll(turn, success, uuid) {
+  const current = normalizeTurn(turn);
+  if ( success !== true ) return current;
+  const id = lockId(uuid);
+  if ( !id ) return current;
+  return { ...current, lock: id };
+}
+
+/**
+ * Le MJ retire le verrouillage. Le reste du tour ne bouge pas.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {unknown} turn
+ * @returns {ReturnType<typeof blankTurn>}
+ */
+export function lockCleared(turn) {
+  return { ...normalizeTurn(turn), lock: "" };
+}
+
+/**
+ * Le tir vise la cible verrouillée.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {unknown} lock
+ * @param {unknown} fireTarget
+ * @returns {boolean}
+ */
+export function lockCovers(lock, fireTarget) {
+  const id = lockId(lock);
+  const fire = lockId(fireTarget);
+  return id !== "" && id === fire;
 }
 
 /**
@@ -104,6 +204,21 @@ export function normalizeTurn(raw) {
 export function bonusesCleared(turn) {
   const current = normalizeTurn(turn);
   return { ...blankTurn(), lock: current.lock };
+}
+
+/**
+ * Les bonus partent seulement si le nouveau round est plus grand.
+ * Reculer d'un round ne les vide pas. Un round illisible non plus.
+ *
+ * @param {unknown} previous
+ * @param {unknown} next
+ * @returns {boolean}
+ */
+export function roundAdvanced(previous, next) {
+  const before = Number(previous);
+  const after = Number(next);
+  if ( !Number.isFinite(before) || !Number.isFinite(after) ) return false;
+  return after > before;
 }
 
 /**
@@ -143,7 +258,10 @@ export function evadeFromDr(dr, success) {
  * Décision Marc 21/10/2026 : le +10 de Calculer vaut pour tous
  * les jets du Pilote du tour (Esquiver et Changer de portée).
  *
- * @param {{ postId?: string, range?: string, ship?: { lock?: boolean, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string, weaponCondition?: string }} input
+ * `fireTarget` est l'identité du tir (jeton de préférence).
+ * // Décision Marc 25/10/2026 : le −20 ne tombe pas si c'est la cible verrouillée.
+ *
+ * @param {{ postId?: string, range?: string, fireTarget?: string, ship?: { lock?: string, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string, weaponCondition?: string }} input
  * @returns {number}
  */
 export function suggestedModifier(input) {
@@ -154,7 +272,9 @@ export function suggestedModifier(input) {
   if ( postId !== "gunner" ) return modifier;
   // Réf. Vaisseaux v0.1 §4 : dégradé, −20 aux tests qui utilisent l'arme.
   if ( input?.weaponCondition === "degraded" ) modifier += DEGRADED_PENALTY;
-  if ( input?.range && input.range !== "close" && !input?.ship?.lock ) modifier += LOCK_PENALTY;
+  if ( input?.range && input.range !== "close" && !lockCovers(input?.ship?.lock, input?.fireTarget) ) {
+    modifier += LOCK_PENALTY;
+  }
   const evade = Number(input?.foe?.evade);
   if ( Number.isFinite(evade) ) modifier += evade;
   if ( input?.aim === "section" ) modifier += AIM_SECTION;
@@ -195,16 +315,30 @@ export function shiftRange(range, direction) {
 
 /**
  * Portée écrite sur les deux vaisseaux quand la manœuvre est gagnée.
- * Même cran, à partir de la portée du déclarant. Direction inconnue : null.
- * Décision Marc 23/10/2026.
+ * // Décision Marc 25/10/2026 : c'est la portée du vaisseau qui manœuvre
+ * qui compte, pas celle de l'autre fiche. Direction inconnue : null.
  *
- * @param {string} current
+ * @param {string} current Portée du vaisseau qui manœuvre.
  * @param {unknown} direction
  * @returns {string|null}
  */
 export function sharedRange(current, direction) {
   if ( direction !== "closer" && direction !== "farther" ) return null;
   return shiftRange(current, direction);
+}
+
+/**
+ * Avertissement de chat si les deux fiches n'ont pas la même portée.
+ * Chaîne vide si elles concordent. On manœuvre quand même.
+ * // Décision Marc 25/10/2026
+ *
+ * @param {string} maneuverLabel
+ * @param {string} otherLabel
+ * @returns {string}
+ */
+export function rangeDifferWarning(maneuverLabel, otherLabel) {
+  if ( maneuverLabel === otherLabel ) return "";
+  return `les portées des deux fiches diffèrent : ${maneuverLabel} / ${otherLabel}`;
 }
 
 /**
@@ -300,8 +434,11 @@ export function emptyPostScore(npcCrew) {
  *
  * Le jet est Opérations de bord, par l'acteur du poste Opérateur.
  * Poste vide : équipage PNJ, RÉF 0 (le vaisseau n'a pas de caractéristiques).
- * La formule et le départage sont ceux des personnages : on passe
- * ce score et cette RÉF à `encodeInitiative`, sans autre encodage.
+ * La formule est celle des personnages : on passe ce score et cette
+ * RÉF à `encodeInitiative`, sans autre encodage.
+ * // Décision Marc 25/10/2026 : ce jet n'est pas plafonné à ±50.
+ * // Décision Marc 25/10/2026 : à égalité, le vaisseau passe après
+ * les personnages. Le nombre ne change pas : le MJ réordonne.
  *
  * @param {{ npcCrew?: unknown, operatorScore?: unknown, operatorRef?: unknown }} [input]
  * @returns {{ score: number, ref: number, npc: boolean }}

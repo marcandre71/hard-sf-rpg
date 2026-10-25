@@ -206,7 +206,8 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       // Token non lié : `_source` est le delta. Le maximum absent s'y
       // lit sur l'acteur de base (`token.baseActor`).
       const current = effectiveClampCurrent(this._source, baseShipSource(this));
-      // Décision Marc 23/10/2026 : au dixième, seulement si la clé est dans le diff.
+      // Saisie de la fiche : 1,26 devient 1,3 dans le diff, avant le bornage.
+      // migrateData arrondit une source déjà en base. Ici c'est le diff saisi.
       roundPresentDeltaV(changes.system);
       clampShipDiff(changes.system, current);
     }
