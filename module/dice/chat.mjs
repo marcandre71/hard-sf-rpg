@@ -109,6 +109,7 @@ function resultKey(critical, success) {
  * @param {(outcome: { success: boolean, dr: number, de: number }) => string} [params.noteFor] Rappel selon le résultat.
  * @param {number} [params.suggested] Modificateur libre proposé. Le MJ peut le changer.
  * @param {boolean} [params.shipPost] Poste de vaisseau : pas de plafond ±50. Décision Marc 25/10/2026.
+ * @param {object|null} [params.shipStrike] Tir de vaisseau qui touche : bouton du MJ, pas les dégâts de personnage.
  * @param {string|null} [params.messageMode] Clé de `CONFIG.ChatMessage.modes`.
  * @param {object|null} [params.messageOptions] Champs ajoutés à la carte (`whisper`, `blind`, …).
  * @returns {Promise<null|{ success: boolean, dr: number, de: number, critical: "success"|"failure"|null, die: number, target: number }>}
@@ -124,6 +125,7 @@ export async function performRoll({
   noteFor = null,
   suggested = 0,
   shipPost = false,
+  shipStrike = null,
   messageMode = null,
   messageOptions = null
 }) {
@@ -163,6 +165,7 @@ export async function performRoll({
     location: "",
     damage: null,
     canApply: false,
+    canApplyShip: false,
     note: [note, typeof noteFor === "function" ? (noteFor(outcome) ?? "") : ""].filter(Boolean).join(" "),
     calledLabel: "",
     aimModifier: "",
@@ -201,6 +204,11 @@ export async function performRoll({
     card.canApply = Number.isFinite(card.damage);
   }
 
+  // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+  // Le bouton personnage (`canApply`) ne sert pas : autre action, autre drapeau.
+  const shipHit = shipStrike && outcome.success ? cleanShipStrike(shipStrike, outcome) : null;
+  if ( shipHit ) card.canApplyShip = true;
+
   const content = await foundry.applications.handlebars.renderTemplate(CARD, card);
   const extra = { ...(messageOptions ?? {}) };
   delete extra.messageMode;
@@ -226,7 +234,8 @@ export async function performRoll({
         visor,
         // Dégâts de l'arme + DR. L'étape d'application s'en sert tels quels.
         damage: card.damage,
-        label
+        label,
+        shipStrike: shipHit
       }
     }
   }, { inplace: false });
@@ -241,6 +250,34 @@ export async function performRoll({
     critical: outcome.critical,
     die: outcome.die,
     target: picked.target
+  };
+}
+
+/**
+ * Drapeau du tir de vaisseau. On ne garde que des scalaires.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+ *
+ * @param {object} strike
+ * @param {{ die: number, dr: number }} outcome
+ * @returns {object|null}
+ */
+function cleanShipStrike(strike, outcome) {
+  const targetUuid = typeof strike.targetUuid === "string" ? strike.targetUuid : "";
+  if ( !targetUuid ) return null;
+  const damage = Number(strike.damage);
+  if ( !Number.isFinite(damage) ) return null;
+  const aim = strike.aim === "section" || strike.aim === "module" ? strike.aim : "none";
+  return {
+    targetUuid,
+    tokenId: typeof strike.tokenId === "string" ? strike.tokenId : "",
+    weaponId: typeof strike.weaponId === "string" ? strike.weaponId : "",
+    weaponDamage: damage,
+    aim,
+    sectionId: typeof strike.sectionId === "string" ? strike.sectionId : "",
+    moduleId: typeof strike.moduleId === "string" ? strike.moduleId : "",
+    die: outcome.die,
+    dr: outcome.dr,
+    missileId: typeof strike.missileId === "string" ? strike.missileId : ""
   };
 }
 

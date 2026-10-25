@@ -119,11 +119,13 @@ const SHEET_DELTA_V = /^\d+([.,]\d+)?$/;
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
  *
  * @param {object|null|undefined} data
- * @returns {{ key: "value"|"max", raw: unknown }[]} Clés ignorées.
+ * @returns {{ key: "value"|"max", raw: unknown, adjusted?: { key: "value"|"max", value: number }[] }[]} Clés ignorées.
+ * `adjusted` : le texte saisi n'est pas la valeur arrondie affichée.
  */
 export function applySheetDeltaV(data) {
-  /** @type {{ key: "value"|"max", raw: unknown }[]} */
+  /** @type {{ key: "value"|"max", raw: unknown }[] & { adjusted: { key: "value"|"max", value: number }[] }} */
   const ignored = [];
+  ignored.adjusted = [];
   const delta = data?.system?.propulsion?.deltaV;
   if ( !delta || typeof delta !== "object" ) return ignored;
   for ( const key of /** @type {const} */ (["value", "max"]) ) {
@@ -133,7 +135,12 @@ export function applySheetDeltaV(data) {
     if ( parsed === undefined ) {
       delete delta[key];
       ignored.push({ key, raw });
-    } else delta[key] = parsed;
+    } else {
+      delta[key] = parsed;
+      if ( typeof raw === "string" && raw.trim() !== formatStoredDeltaV(parsed) ) {
+        ignored.adjusted.push({ key, value: parsed });
+      }
+    }
   }
   return ignored;
 }
@@ -180,14 +187,15 @@ export function formatStoredDeltaV(value) {
  * @returns {void}
  */
 export function writeDeltaVInput(form, key, stored) {
-  if ( typeof stored !== "number" || !Number.isFinite(stored) ) return;
+  if ( typeof stored !== "number" || !Number.isFinite(stored) ) return false;
   const name = `system.propulsion.deltaV.${key}`;
   const elements = form?.elements;
-  if ( !elements ) return;
+  if ( !elements ) return false;
   const named = typeof elements.namedItem === "function" ? elements.namedItem(name) : null;
   const input = named ?? elements[name];
-  if ( !input || !("value" in input) ) return;
+  if ( !input || !("value" in input) ) return false;
   input.value = formatStoredDeltaV(stored);
+  return true;
 }
 
 /**
@@ -233,6 +241,9 @@ function dropRadiatorSectionIntegrity(source) {
 export function migrateShipModuleSource(source) {
   if ( !source || typeof source !== "object" ) return source;
   if ( Object.hasOwn(source, "state") ) delete source.state;
+  // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+  // Un diff sans `weapon.ammunition` ne gagne pas de compteur.
+  migrateWeaponAmmo(source);
   if ( !Object.hasOwn(source, "category") ) return source;
   const category = source.category;
   if ( typeof category !== "string" ) return source;
@@ -246,4 +257,44 @@ export function migrateShipModuleSource(source) {
   }
   source.category = "other";
   return source;
+}
+
+/**
+ * Ancien texte de munitions. Un nombre entier (« 4 », « 20 ») devient
+ * valeur et maximum. « énergie » ou « 20 projectiles » ne sont pas
+ * un nombre : on n'écrit pas 0, le MJ saisit. On n'ajoute pas `weapon`
+ * s'il n'y est pas.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+ *
+ * @param {object} source
+ * @returns {void}
+ */
+function migrateWeaponAmmo(source) {
+  if ( !Object.hasOwn(source, "weapon") ) return;
+  const weapon = source.weapon;
+  if ( !weapon || typeof weapon !== "object" || !Object.hasOwn(weapon, "ammunition") ) return;
+  const parsed = parseAmmoText(weapon.ammunition);
+  const previous = typeof weapon.ammunition === "string" ? weapon.ammunition.trim() : "";
+  delete weapon.ammunition;
+  if ( parsed === null ) {
+    if ( !previous || !Object.hasOwn(source, "effects") || typeof source.effects !== "string" ) return;
+    if ( source.effects.includes(previous) ) return;
+    source.effects = `${source.effects}<p>Anciennes munitions : ${escapeHtml(previous)}</p>`;
+    return;
+  }
+  if ( Object.hasOwn(weapon, "ammo") ) return;
+  weapon.ammo = { value: parsed, max: parsed };
+}
+
+/**
+ * Entier positif ou zéro, sinon `null`.
+ * Décision Marc 25/10/2026.
+ *
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+export function parseAmmoText(value) {
+  if ( typeof value === "number" && Number.isInteger(value) && value >= 0 ) return value;
+  if ( typeof value !== "string" || !/^\d+$/.test(value.trim()) ) return null;
+  return Number(value.trim());
 }

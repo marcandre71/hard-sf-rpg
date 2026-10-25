@@ -189,8 +189,16 @@ export class ShipModuleData extends BaseItemData {
         rangeClose: boolField("SOL.ShipModule.range.close", false),
         rangeMedium: boolField("SOL.ShipModule.range.medium", false),
         rangeLong: boolField("SOL.ShipModule.range.long", false),
-        // // À confirmer par Marc : texte (« énergie », « 20 projectiles »), pas un compteur.
-        ammunition: stringField("SOL.ShipModule.weapon.ammunition"),
+        // Compteur. Vide (null) : le MJ n'a pas saisi. 0 : l'arme ne tire plus.
+        // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4. La migration
+        // ne remplit pas un diff qui n'a pas l'ancien texte.
+        ammo: valueMaxField("SOL.ShipModule.weapon.ammunition", {
+          integer: true,
+          min: 0,
+          nullable: true,
+          initialValue: null,
+          initialMax: null
+        }),
         heatPerShot: numberField("SOL.ShipModule.weapon.heat", { initial: 0, min: 0, integer: true, step: 1 })
       }, { label: "SOL.ShipModule.weapon.label" }),
       armorPoints: numberField("SOL.ShipModule.armorPoints", { initial: 0, min: 0, integer: true, step: 1 })

@@ -52,8 +52,18 @@ import {
   sharedRange,
   targetIdentity,
   suggestedModifier,
-  weaponCanFire
+  weaponCanFire,
+  linkedActorTwins,
+  ammoBlocksFire
 } from "./combat.mjs";
+import {
+  isLaserWeapon,
+  isMissileWeapon,
+  isWreck,
+  missileArrivalRound,
+  sensorsAreOut
+} from "./damage.mjs";
+import { enqueueMissile, finishCounter, finishLaser, missileRecord, readHull, remindMissiles } from "./strike.mjs";
 import { crewOf } from "./crew.mjs";
 import { SHIP_POST_IDS } from "./hull.mjs";
 import { registerShipCombatGuard } from "./guard.mjs";
@@ -89,6 +99,8 @@ export function registerShipPlay() {
 export async function rollPostAction(ship, postId, action, token = null) {
   if ( !ship || ship.type !== "ship" || !actionBelongsToPost(postId, action) ) return null;
   warnIfDuplicate(ship, postId);
+  warnLinkedTwins(ship, token);
+  if ( (action === "evade" || action === "changeRange") && wreckBlocks(ship) ) return null;
   if ( action === "changeRange" ) return changeRange(ship, token);
   if ( action === "lock" ) return lockShip(ship, token);
   return rollSingle(ship, postId, action, { token });
@@ -208,8 +220,10 @@ function onCombatRound(combat, changed) {
       differ = true;
     }
   }
-  if ( !differ ) return;
-  void combat.setFlag(SYSTEM_ID, TURNS, next);
+  void (async () => {
+    if ( differ ) await combat.setFlag(SYSTEM_ID, TURNS, next);
+    await remindMissiles(combat);
+  })();
 }
 
 /**
@@ -318,8 +332,11 @@ function rangeLabel(range) {
 async function rollSingle(ship, postId, action, options = {}) {
   const crew = await crewOf(ship, postId);
   if ( !crew ) return null;
-  let aim = "";
+  let aim = typeof options.aim === "string" ? options.aim : "";
   let weaponCondition = "";
+  /** @type {ReturnType<typeof weaponsOf>[number]|null} */
+  let weapon = null;
+  let aimed = { sectionId: "", moduleId: "" };
   let skill = crew.skills[0];
   if ( action === "command" ) {
     const post = await choose(game.i18n.localize("SOL.Space.pickPost"), SHIP_POST_IDS.map(id => ({
@@ -330,24 +347,39 @@ async function rollSingle(ship, postId, action, options = {}) {
     crew.chosenPost = post;
   }
   if ( action === "fire" ) {
-    const range = shipRange(ship);
-    const weapons = weaponsOf(ship).filter(weapon => weaponCanFire(weapon, range));
+    const range = options.rangeOverride || shipRange(ship);
+    let weapons = weaponsOf(ship).filter(entry => weaponCanFire(entry, range));
+    if ( options.defense ) weapons = weapons.filter(entry => isLaserWeapon(entry));
     if ( !weapons.length ) {
-      ui.notifications.warn(game.i18n.localize("SOL.Space.noWeapon"));
+      ui.notifications.warn(game.i18n.localize(options.defense ? "SOL.Ship.noLaser" : "SOL.Space.noWeapon"));
       return null;
     }
-    const weaponId = await choose(game.i18n.localize("SOL.Space.pickWeapon"), weapons.map(weapon => ({
-      id: weapon.id,
-      label: weapon.name
+    const weaponId = options.weaponId || await choose(game.i18n.localize("SOL.Space.pickWeapon"), weapons.map(entry => ({
+      id: entry.id,
+      label: entry.name
     })));
     if ( !weaponId ) return null;
-    weaponCondition = weapons.find(weapon => weapon.id === weaponId)?.condition ?? "";
-    aim = await choose(game.i18n.localize("SOL.Space.pickAim"), [
-      { id: "none", label: game.i18n.localize("SOL.Space.aimNone") },
-      { id: "section", label: game.i18n.localize("SOL.Space.aimSection") },
-      { id: "module", label: game.i18n.localize("SOL.Space.aimModule") }
-    ]);
-    if ( !aim ) return null;
+    weapon = weapons.find(entry => entry.id === weaponId) ?? null;
+    if ( !weapon ) return null;
+    weaponCondition = weapon.condition ?? "";
+    // Un missile ne se vise pas : l'impact lit le dé inversé.
+    // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
+    if ( !aim ) {
+      if ( options.defense || isMissileWeapon(weapon) ) aim = "none";
+      else {
+        aim = await choose(game.i18n.localize("SOL.Space.pickAim"), [
+          { id: "none", label: game.i18n.localize("SOL.Space.aimNone") },
+          { id: "section", label: game.i18n.localize("SOL.Space.aimSection") },
+          { id: "module", label: game.i18n.localize("SOL.Space.aimModule") }
+        ]);
+        if ( !aim ) return null;
+      }
+    }
+    if ( aim === "section" || aim === "module" ) {
+      const picked = await aimAt(ship, aim, options.token ?? null);
+      if ( !picked ) return null;
+      aimed = picked;
+    }
   }
   if ( crew.skills.length > 1 ) {
     const picked = await choose(game.i18n.localize("SOL.Space.pickSkill"), crew.skills.map((entry, index) => ({
@@ -360,10 +392,26 @@ async function rollSingle(ship, postId, action, options = {}) {
   if ( !skill ) return null;
   const score = crew.npc ? crew.score : ratedScore(crew.actor, skill);
   if ( score === null ) return null;
-  const suggested = modifierFor(ship, postId, aim, weaponCondition, options.token ?? null);
+  const suggested = modifierFor(ship, postId, aim, weaponCondition, options.token ?? null, {
+    range: options.rangeOverride,
+    ignoreEvade: options.ignoreEvade === true
+  });
+  const missileLaunch = action === "fire" && weapon && isMissileWeapon(weapon) && options.defense !== true;
+  const single = action === "fire" ? singleTarget(ship, options.token ?? null) : null;
   const noteFor = options.noteFor ?? (action === "fire"
-    ? outcome => outcome.success ? game.i18n.localize("SOL.Space.hitLater") : ""
+    ? outcome => fireNote(outcome, { missile: missileLaunch, defense: options.defense === true, single: Boolean(single) })
     : null);
+  const shipStrike = action === "fire" && !missileLaunch && options.defense !== true && single && weapon
+    ? {
+      targetUuid: targetIdentity(single),
+      tokenId: single.tokenId,
+      weaponId: weapon.id,
+      damage: weapon.damage,
+      aim,
+      sectionId: aimed.sectionId,
+      moduleId: aimed.moduleId
+    }
+    : null;
   const outcome = await performRoll({
     actor: crew.actor,
     label: `${ship.name} — ${game.i18n.localize(SOL.shipPosts[postId])} — ${skill.name}`,
@@ -371,12 +419,29 @@ async function rollSingle(ship, postId, action, options = {}) {
     type: "skill",
     suggested,
     shipPost: true,
+    shipStrike,
     noteFor: noteFor ?? undefined
   });
   if ( !outcome ) return null;
   const result = { ...outcome, score };
-  if ( options.store !== false ) await storeEffect(ship, postId, action, result, crew.chosenPost, options.token ?? null);
+  if ( options.store !== false && !missileLaunch ) {
+    await storeEffect(ship, postId, action, result, crew.chosenPost, options.token ?? null);
+  }
+  if ( missileLaunch && outcome.success ) await launchMissile(ship, weapon, result, options.token ?? null);
   return result;
+}
+
+/**
+ * @param {{ success?: boolean }} outcome
+ * @param {{ missile?: boolean, defense?: boolean, single?: boolean }} context
+ * @returns {string}
+ */
+function fireNote(outcome, context) {
+  if ( outcome?.success !== true ) return "";
+  if ( context.defense ) return game.i18n.localize("SOL.Ship.laserShot");
+  if ( context.missile ) return game.i18n.localize("SOL.Ship.missileLaunched");
+  if ( !context.single ) return game.i18n.localize("SOL.Ship.hitNoTarget");
+  return game.i18n.localize("SOL.Ship.hitApply");
 }
 
 /**
@@ -483,6 +548,14 @@ async function onSpaceRelay(message) {
     return;
   }
   if ( game.user?.isActiveGM !== true ) return;
+  if ( message.type === "missile" ) {
+    await onMissileRelay(message);
+    return;
+  }
+  if ( message.type === "missileResolve" ) {
+    await onMissileResolveRelay(message);
+    return;
+  }
   if ( message.type !== "effect" && message.type !== "changeRange" ) return;
   const ship = message.shipUuid ? await foundry.utils.fromUuid(String(message.shipUuid)) : null;
   if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
@@ -531,20 +604,22 @@ async function onSpaceRelay(message) {
  * @param {TokenDocument|null} [token]
  * @returns {number}
  */
-function modifierFor(ship, postId, aim, weaponCondition = "", token = null) {
+function modifierFor(ship, postId, aim, weaponCondition = "", token = null, extra = {}) {
   const held = combatantFor(ship, token);
   const shipTurn = held ? normalizeTurn(readTurns(held.combat)[held.combatant.id]) : normalizeTurn(null);
-  const foe = foeTurn(ship, held?.combat ?? null, token);
+  const foe = extra.ignoreEvade ? { evade: 0 } : foeTurn(ship, held?.combat ?? null, token);
   const targets = targetedShipTokens(ship, token);
   const fireTarget = lockRollAllowed(targets.length) ? targetIdentity(targets[0]) : "";
   return suggestedModifier({
     postId,
-    range: shipRange(ship),
+    range: extra.range || shipRange(ship),
     fireTarget,
     ship: shipTurn,
     foe,
     aim,
-    weaponCondition
+    weaponCondition,
+    twisted: ship?.system?.twisted === true,
+    sensorsOut: sensorsOutOf(ship)
   });
 }
 
@@ -811,6 +886,8 @@ function weaponsOf(ship) {
     name: item.name,
     category: item.system.category,
     condition: item.system.condition,
+    damage: Number(item.system.weapon?.damage ?? 0),
+    ammo: item.system.weapon?.ammo ?? null,
     rangeClose: item.system.weapon?.rangeClose === true,
     rangeMedium: item.system.weapon?.rangeMedium === true,
     rangeLong: item.system.weapon?.rangeLong === true
@@ -846,6 +923,319 @@ async function choose(title, options) {
   });
   if ( !result || result === "cancel" ) return null;
   return String(result);
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {boolean}
+ */
+/**
+ * Contre-mesures : jet d'Opérations de bord, sans verrouillage.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+ *
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|{ success: boolean, dr: number, de: number, score: number }>}
+ */
+export async function rollOperatorOpposed(ship, token = null) {
+  if ( !ship || ship.type !== "ship" ) return null;
+  return rollSingle(ship, "operator", "lock", { token, store: false });
+}
+
+/**
+ * Laser de défense : tir à portée proche, sans malus de verrouillage,
+ * sans esquive du vaisseau (la cible est le missile).
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
+ *
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|{ success: boolean, dr: number, de: number, score: number }>}
+ */
+export async function rollDefenseLaser(ship, token = null) {
+  if ( !ship || ship.type !== "ship" ) return null;
+  return rollSingle(ship, "gunner", "fire", {
+    token,
+    store: false,
+    defense: true,
+    aim: "none",
+    rangeOverride: "close",
+    ignoreEvade: true
+  });
+}
+
+/**
+ * Le joueur envoie le résultat. Le MJ écrit le missile.
+ * Décision Marc 25/10/2026.
+ *
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {object} fields
+ * @returns {Promise<boolean>}
+ */
+export async function relayMissileResolve(ship, postId, fields) {
+  return relayOwned(ship, postId, {
+    type: "missileResolve",
+    shipUuid: ship.uuid,
+    postId,
+    userId: game.user.id,
+    ...fields
+  });
+}
+
+/**
+ * @param {Actor} ship
+ * @param {{ id: string }} weapon
+ * @param {{ die?: number, dr: number, score?: number }} result
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<void>}
+ */
+async function launchMissile(ship, weapon, result, token = null) {
+  const targets = targetedShipTokens(ship, token);
+  if ( !lockRollAllowed(targets.length) ) {
+    const key = targets.length === 0 ? "SOL.Ship.missileNoTarget" : "SOL.Ship.missileOneTarget";
+    ui.notifications.warn(game.i18n.localize(key));
+    return;
+  }
+  const die = boundedDie(result?.die);
+  if ( die === null ) return;
+  if ( game.user.isGM !== true ) {
+    await relayOwned(ship, "gunner", {
+      type: "missile",
+      shipUuid: ship.uuid,
+      tokenId: tokenIdOf(ship, token),
+      postId: "gunner",
+      action: "fire",
+      userId: game.user.id,
+      weaponId: weapon.id,
+      targetUuid: targetIdentity(targets[0]),
+      success: true,
+      dr: result.dr,
+      score: result.score,
+      die
+    });
+    return;
+  }
+  await commitMissile(ship, weapon.id, { die, dr: result.dr, score: result.score }, targets[0], token);
+}
+
+/**
+ * @param {object} message
+ * @returns {Promise<void>}
+ */
+async function onMissileRelay(message) {
+  const ship = message.shipUuid ? await foundry.utils.fromUuid(String(message.shipUuid)) : null;
+  if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
+  if ( !actionBelongsToPost("gunner", "fire") ) return;
+  if ( message.postId !== "gunner" ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayAction"));
+    return;
+  }
+  if ( !await userOwnsShipOrPost(message.userId, ship, "gunner") ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayRefused"));
+    return;
+  }
+  const roll = boundedRoll(message);
+  if ( roll.success !== true ) return;
+  const die = boundedDie(message.die);
+  if ( die === null ) return;
+  const weaponId = typeof message.weaponId === "string" ? message.weaponId : "";
+  if ( !weaponId || weaponId.length > 80 ) return;
+  const held = combatantFor(ship, hintedToken(message, ship));
+  if ( !held ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.missileNoCombat"));
+    return;
+  }
+  const targetUuid = await acceptedLockTarget(String(message.targetUuid ?? ""), ship, held.combat, hintedToken(message, ship));
+  if ( !targetUuid ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.missileNoTarget"));
+    return;
+  }
+  const target = await foundry.utils.fromUuid(targetUuid);
+  const row = target?.documentName === "Token"
+    ? {
+      actor: target.actor,
+      tokenId: target.id,
+      tokenUuid: target.uuid,
+      actorUuid: target.actor?.uuid ?? ""
+    }
+    : null;
+  if ( !row?.actor || row.actor.type !== "ship" ) return;
+  await commitMissile(ship, weaponId, { die, dr: roll.dr, score: roll.score }, row, hintedToken(message, ship));
+}
+
+/**
+ * @param {object} message
+ * @returns {Promise<void>}
+ */
+async function onMissileResolveRelay(message) {
+  const ship = message.shipUuid ? await foundry.utils.fromUuid(String(message.shipUuid)) : null;
+  if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
+  const postId = message.kind === "laser" ? "gunner" : "operator";
+  if ( message.postId !== postId ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayAction"));
+    return;
+  }
+  if ( !await userOwnsShipOrPost(message.userId, ship, postId) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayRefused"));
+    return;
+  }
+  const combatId = typeof message.combatId === "string" ? message.combatId : "";
+  const missileId = typeof message.missileId === "string" ? message.missileId : "";
+  const combat = game.combats?.get(combatId);
+  if ( !combat || !missileId ) return;
+  const missile = missileRecord(combatId, missileId);
+  if ( !missile || missile.state !== "flying" ) return;
+  if ( Number(combat.round) < Number(missile.arrivalRound) ) return;
+  const target = await foundry.utils.fromUuid(missile.targetUuid);
+  const targetActor = target?.documentName === "Token" ? target.actor : target;
+  if ( !targetActor || targetActor.uuid !== ship.uuid ) return;
+  const roll = boundedRoll(message);
+  if ( message.kind === "laser" ) await finishLaser(combatId, missile, roll.success === true);
+  else await finishCounter(combatId, missile, roll);
+}
+
+/**
+ * Consomme une munition et pose le missile. Le MJ seul.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+ *
+ * @param {Actor} ship
+ * @param {string} weaponId
+ * @param {{ die: number, dr: number, score?: number }} launch
+ * @param {{ actor?: Actor, tokenUuid?: string, actorUuid?: string }} target
+ * @param {TokenDocument|{ id?: string }|null} [token]
+ * @returns {Promise<void>}
+ */
+async function commitMissile(ship, weaponId, launch, target, token = null) {
+  const weapon = weaponsOf(ship).find(entry => entry.id === weaponId);
+  const range = shipRange(ship);
+  if ( !weapon || !isMissileWeapon(weapon) || !weaponCanFire(weapon, range) ) {
+    ui.notifications.warn(game.i18n.localize(ammoBlocksFire(weapon?.ammo) ? "SOL.Ship.ammoEmpty" : "SOL.Space.noWeapon"));
+    return;
+  }
+  const held = combatantFor(ship, token);
+  const arrival = held ? missileArrivalRound(held.combat.round, range) : null;
+  if ( !held || arrival === null ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.missileNoCombat"));
+    return;
+  }
+  const item = ship.items.get(weaponId);
+  const ammo = item?.system?.weapon?.ammo?.value;
+  if ( typeof ammo === "number" ) {
+    await item.update({ "system.weapon.ammo.value": Math.max(0, Math.trunc(ammo) - 1) });
+  } else {
+    ui.notifications.info(game.i18n.localize("SOL.Ship.ammoUnset"));
+  }
+  await enqueueMissile(held.combat, {
+    id: foundry.utils.randomID(),
+    targetUuid: targetIdentity(target),
+    targetName: target.actor?.name ?? "",
+    attackerName: ship.name ?? "",
+    launch: { success: true, dr: launch.dr, score: launch.score ?? 0, die: launch.die },
+    range,
+    arrivalRound: arrival,
+    reminded: false,
+    state: "flying"
+  });
+}
+
+/**
+ * Deux jetons liés du même acteur, fiche sans jeton.
+ * Décision Marc 25/10/2026.
+ *
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {void}
+ */
+function warnLinkedTwins(ship, token = null) {
+  if ( tokenIdOf(ship, token) ) return;
+  const uuid = ship?.uuid;
+  if ( typeof uuid !== "string" || !uuid ) return;
+  for ( const combat of eachCombat() ) {
+    if ( !linkedActorTwins(combat.combatants ?? [], uuid) ) continue;
+    ui.notifications.warn(game.i18n.localize("SOL.Space.linkedActor"));
+    return;
+  }
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {boolean}
+ */
+function wreckBlocks(ship) {
+  if ( !isWreck(readHull(ship)) ) return false;
+  ui.notifications.warn(game.i18n.localize("SOL.Ship.wreckRefuse"));
+  return true;
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {boolean}
+ */
+function sensorsOutOf(ship) {
+  const items = ship?.items;
+  if ( !items ) return false;
+  /** @type {{ category?: string, condition?: string }[]} */
+  const modules = [];
+  for ( const item of items ) {
+    if ( item.type !== "shipModule" ) continue;
+    modules.push({ category: item.system?.category, condition: item.system?.condition });
+  }
+  return sensorsAreOut(modules);
+}
+
+/**
+ * Tir visé : section, puis module, sur l'unique cible.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+ *
+ * @param {Actor} ship
+ * @param {"section"|"module"} aim
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|{ sectionId: string, moduleId: string }>}
+ */
+async function aimAt(ship, aim, token = null) {
+  const single = singleTarget(ship, token);
+  if ( !single?.actor ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.aimOneTarget"));
+    return null;
+  }
+  const sectionId = await choose(game.i18n.localize("SOL.Ship.pickSection"), ["bow", "port", "starboard", "stern", "radiators"].map(id => ({
+    id,
+    label: game.i18n.localize(SOL.shipSections[id])
+  })));
+  if ( !sectionId ) return null;
+  if ( aim === "section" ) return { sectionId, moduleId: "" };
+  const modules = single.actor.items.filter(item => item.type === "shipModule" && item.system.section === sectionId);
+  if ( !modules.length ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.aimNoModule"));
+    return null;
+  }
+  const moduleId = await choose(game.i18n.localize("SOL.Ship.pickModule"), modules.map(item => ({
+    id: item.id,
+    label: item.name
+  })));
+  if ( !moduleId ) return null;
+  return { sectionId, moduleId };
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {{ actor: Actor, tokenId: string, tokenUuid: string, actorUuid: string }|null}
+ */
+function singleTarget(ship, token = null) {
+  const targets = targetedShipTokens(ship, token);
+  if ( !lockRollAllowed(targets.length) ) return null;
+  return targets[0];
+}
+
+/**
+ * @param {unknown} value
+ * @returns {number|null}
+ */
+function boundedDie(value) {
+  const number = Math.trunc(Number(value));
+  if ( !Number.isFinite(number) || number < 1 || number > 100 ) return null;
+  return number;
 }
 
 /**

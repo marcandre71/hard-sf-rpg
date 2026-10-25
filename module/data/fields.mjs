@@ -83,13 +83,13 @@ export function boolField(label, initial = false) {
  * Réf. Fiche v0.2 §4.
  *
  * @param {string} label Clé i18n du groupe.
- * @param {{ initialValue?: number, initialMax?: number, integer?: boolean, min?: number, max?: number, step?: number, hint?: string }} [options]
+ * @param {{ initialValue?: number|null, initialMax?: number|null, integer?: boolean, min?: number, max?: number, step?: number, hint?: string, nullable?: boolean }} [options]
  * @returns {foundry.data.fields.SchemaField}
  */
-export function valueMaxField(label, { initialValue = 0, initialMax = 0, integer = false, min, max, step, hint } = {}) {
+export function valueMaxField(label, { initialValue = 0, initialMax = 0, integer = false, min, max, step, hint, nullable = false } = {}) {
   return new SchemaField({
-    value: numberField("SOL.Field.value", { initial: initialValue, integer, min, max, step, hint }),
-    max: numberField("SOL.Field.max", { initial: initialMax, integer, min, max, step, hint })
+    value: numberField("SOL.Field.value", { initial: initialValue, integer, min, max, step, hint, nullable }),
+    max: numberField("SOL.Field.max", { initial: initialMax, integer, min, max, step, hint, nullable })
   }, { label });
 }
 

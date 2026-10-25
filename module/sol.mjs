@@ -32,6 +32,7 @@ import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
 import { ShipSheet } from "./sheets/ship-sheet.mjs";
 import { registerShipPlay } from "./ships/actions.mjs";
+import { registerShipStrike } from "./ships/strike.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 
@@ -138,6 +139,7 @@ function initializeSystem() {
   registerSealJoints();
   registerInitiative();
   registerShipPlay();
+  registerShipStrike();
 }
 
 Hooks.once("init", initializeSystem);

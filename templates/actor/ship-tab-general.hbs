@@ -28,6 +28,23 @@
 
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=categoryGroups}}
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=rangeGroups}}
+
+  <div class="sol-fields">
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="system.fleeing" {{#if fleeing}}checked{{/if}}>
+        {{localize "SOL.Ship.fleeing"}}
+      </label>
+      <p class="sol-hint">{{localize "SOL.Ship.fleeingHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="system.twisted" {{#if twisted}}checked{{/if}}>
+        {{localize "SOL.Ship.twisted"}}
+      </label>
+      <p class="sol-hint">{{localize "SOL.Ship.twistedHint"}}</p>
+    </div>
+  </div>
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityGroups}}
 
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=massGroups}}

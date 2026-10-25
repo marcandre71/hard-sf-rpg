@@ -30,6 +30,8 @@ import {
   targetIdentity,
   shiftRange,
   shipInitiativeBasis,
+  ammoBlocksFire,
+  linkedActorTwins,
   suggestedModifier,
   weaponCanFire
 } from "../module/ships/combat.mjs";
@@ -134,6 +136,22 @@ check(suggestedModifier({
   foe: {},
   aim: "section"
 }) === -20, "visée d'une section : −20");
+check(suggestedModifier({ postId: "operator", sensorsOut: true }) === -20, "capteurs hors service : −20 à l'opérateur");
+check(suggestedModifier({
+  postId: "gunner",
+  range: "close",
+  sensorsOut: true,
+  aim: "none",
+  foe: { evade: 0 }
+}) === -20, "capteurs hors service : −20 à l'artilleur");
+check(suggestedModifier({ postId: "pilot", ship: { pilotBonus: true }, twisted: true }) === -10, "structure tordue : −20 au pilote, avec Calculer");
+check(suggestedModifier({
+  postId: "gunner",
+  range: "close",
+  twisted: true,
+  aim: "none",
+  foe: { evade: 0 }
+}) === 0, "structure tordue : pas de malus à l'artilleur");
 
 const closeOnly = { category: "weapon", condition: "intact", rangeClose: true, rangeMedium: false, rangeLong: false };
 check(weaponCanFire(closeOnly, "close") === true && weaponCanFire(closeOnly, "medium") === false, "une arme de portée proche ne tire pas à moyenne");
@@ -142,6 +160,12 @@ check(weaponCanFire({ ...closeOnly, condition: "unset" }, "close") === false, "n
 check(weaponCanFire({ ...closeOnly, condition: "degraded" }, "close") === true, "dégradé : le tir reste possible");
 const missile = { category: "weapon", condition: "intact", rangeClose: false, rangeMedium: true, rangeLong: true };
 check(weaponCanFire(missile, "medium") === true && weaponCanFire(missile, "long") === true && weaponCanFire(missile, "close") === false, "missile : moyenne et lointaine");
+check(weaponCanFire({ ...missile, ammo: null }, "medium") === true && weaponCanFire({ ...missile, ammo: { value: null, max: null } }, "long") === true, "munitions non saisies : le missile peut partir");
+check(weaponCanFire({ ...closeOnly, ammo: 0 }, "close") === false && weaponCanFire({ ...closeOnly, ammo: { value: 0, max: 4 } }, "close") === false, "munitions à 0 : pas de tir");
+check(weaponCanFire({ ...closeOnly, ammo: 1 }, "close") === true, "une munition : le tir part");
+check(ammoBlocksFire({ value: 0 }) === true && ammoBlocksFire(null) === false, "le compteur vide ne bloque pas");
+check(linkedActorTwins([{ actor: { uuid: "Actor.A" } }, { actorUuid: "Actor.A" }], "Actor.A") === true, "deux lignes du même acteur");
+check(linkedActorTwins([{ actor: { uuid: "Actor.A" } }, { actor: { uuid: "Actor.B" } }], "Actor.A") === false, "un seul jeton : pas le message");
 check(weaponCanFire({ category: "propulsion", condition: "intact", rangeClose: true }, "close") === false, "un moteur n'est pas une arme");
 
 check(shiftRange("close", "closer") === "close", "déjà proche : on ne se rapproche plus");

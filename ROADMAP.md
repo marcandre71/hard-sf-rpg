@@ -13,7 +13,7 @@ Cette feuille est mise à jour à chaque version.
 
 ## Ensuite
 
-- [ ] 0.7.3 — dégâts localisés des vaisseaux, critiques, dépressurisation, missiles.
+- [ ] 0.7.3 — dégâts localisés des vaisseaux, critiques, dépressurisation, missiles. Branche `dev/0.7.3`, pas encore testée par Marc.
 - [ ] 0.7.4 — chaleur du réacteur, Pousser, réparations.
 - [ ] 0.8.0 — fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines.
 - [ ] 0.9.0 — catalogues (armes, armures, équipement, atouts, augmentations, logiciels, substances, autres vaisseaux) et journaux d'univers dans les compendiums.

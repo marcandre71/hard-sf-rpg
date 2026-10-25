@@ -1,0 +1,21 @@
+{{!--
+  Missile en vol, ou missile à l'arrivée.
+  Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
+  Les libellés passent par localize. Les noms sont déjà échappés.
+--}}
+<article class="sol-nouvelle-ere sol-missile-card">
+  <h4 class="sol-roll-title">{{title}}</h4>
+  <ul class="sol-roll-lines">
+    <li>{{localize "SOL.Ship.missileTarget"}} : {{target}}</li>
+    <li>{{localize "SOL.Ship.missileArrival"}} : {{round}}</li>
+    {{#if impact}}
+    <li>{{remind}}</li>
+    <li>{{localize "SOL.Ship.missileDamage"}} : {{damage}}</li>
+    {{/if}}
+  </ul>
+  {{#if impact}}
+  <button type="button" data-action="sol-missile-counter">{{localize "SOL.Ship.counter"}}</button>
+  <button type="button" data-action="sol-missile-laser">{{localize "SOL.Ship.laser"}}</button>
+  <button type="button" data-action="sol-apply-ship">{{localize "SOL.Ship.applyDamage"}}</button>
+  {{/if}}
+</article>

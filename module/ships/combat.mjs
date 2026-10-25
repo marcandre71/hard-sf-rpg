@@ -5,7 +5,7 @@
  * trois portées abstraites, sept postes.
  * Décision Marc 23/10/2026 : le suivi tour par tour (fenêtre,
  * poussée, delta-v exact) est retiré. Le Combat Tracker tient l'ordre.
- * Les dégâts, la localisation et les missiles sont pour la 0.7.3.
+ * Les dégâts, la localisation et les missiles sont dans `damage.mjs` (0.7.3).
  * La chaleur, Pousser et les réparations sont pour la 0.7.4.
  */
 import { NPC_CREW_SCORES, SHIP_POST_IDS } from "./hull.mjs";
@@ -350,7 +350,7 @@ export function evadeFromDr(dr, success) {
  * `fireTarget` est l'identité du tir (jeton de préférence).
  * // Décision Marc 25/10/2026 : le −20 ne tombe pas si c'est la cible verrouillée.
  *
- * @param {{ postId?: string, range?: string, fireTarget?: string, ship?: { lock?: string, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string, weaponCondition?: string }} input
+ * @param {{ postId?: string, range?: string, fireTarget?: string, ship?: { lock?: string, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string, weaponCondition?: string, twisted?: boolean, sensorsOut?: boolean }} input
  * @returns {number}
  */
 export function suggestedModifier(input) {
@@ -358,7 +358,11 @@ export function suggestedModifier(input) {
   let modifier = 0;
   if ( input?.ship?.commanderPost && input.ship.commanderPost === postId ) modifier += POST_BONUS;
   if ( postId === "pilot" && input?.ship?.pilotBonus ) modifier += POST_BONUS;
+  // Réf. Vaisseaux v0.1 §5. Décision Marc 25/10/2026.
+  if ( postId === "pilot" && input?.twisted === true ) modifier += DEGRADED_PENALTY;
+  if ( postId === "operator" && input?.sensorsOut === true ) modifier += DEGRADED_PENALTY;
   if ( postId !== "gunner" ) return modifier;
+  if ( input?.sensorsOut === true ) modifier += DEGRADED_PENALTY;
   // Réf. Vaisseaux v0.1 §4 : dégradé, −20 aux tests qui utilisent l'arme.
   if ( input?.weaponCondition === "degraded" ) modifier += DEGRADED_PENALTY;
   if ( input?.range && input.range !== "close" && !lockCovers(input?.ship?.lock, input?.fireTarget) ) {
@@ -381,10 +385,48 @@ export function suggestedModifier(input) {
 export function weaponCanFire(module, range) {
   if ( !module || module.category !== "weapon" ) return false;
   if ( module.condition === "out" || module.condition === "unset" ) return false;
+  // 0 : plus de munitions. Vide (null) : le MJ n'a pas saisi, le tir n'est pas bloqué.
+  // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+  if ( ammoBlocksFire(module.ammo) ) return false;
   if ( range === "close" ) return module.rangeClose === true;
   if ( range === "medium" ) return module.rangeMedium === true;
   if ( range === "long" ) return module.rangeLong === true;
   return false;
+}
+
+/**
+ * Compteur à 0 : l'arme ne tire plus. Absent ou vide : non.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+ *
+ * @param {unknown} ammo Nombre, ou `{ value }`.
+ * @returns {boolean}
+ */
+export function ammoBlocksFire(ammo) {
+  if ( ammo === null || ammo === undefined || ammo === "" ) return false;
+  const value = typeof ammo === "object" ? /** @type {{ value?: unknown }} */ (ammo).value : ammo;
+  if ( value === null || value === undefined || value === "" ) return false;
+  const number = Number(value);
+  return Number.isFinite(number) && number <= 0;
+}
+
+/**
+ * Deux combattants du même acteur. Un jeton lié partage l'uuid :
+ * ce sont deux vaisseaux qu'on ne sait pas séparer sans dupliquer l'acteur.
+ * Décision Marc 25/10/2026.
+ *
+ * @param {Array<{ actor?: { uuid?: string }, actorUuid?: string }>|Iterable<{ actor?: { uuid?: string } }>|null|undefined} combatants
+ * @param {unknown} actorUuid
+ * @returns {boolean}
+ */
+export function linkedActorTwins(combatants, actorUuid) {
+  if ( typeof actorUuid !== "string" || !actorUuid ) return false;
+  if ( !combatants || typeof combatants[Symbol.iterator] !== "function" ) return false;
+  let count = 0;
+  for ( const row of combatants ) {
+    const uuid = row?.actor?.uuid || row?.actorUuid || "";
+    if ( uuid === actorUuid ) count += 1;
+  }
+  return count >= 2;
 }
 
 /**

@@ -1,8 +1,9 @@
-# Tester le système « Sol, Nouvelle Ère » (0.7.2.1)
+# Tester le système « Sol, Nouvelle Ère » (0.7.3)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
-La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible). On fusionne `dev/0.7.2.1` dans `main` avant de vous envoyer ce test : prenez le ZIP de `main`.
+La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible), déjà sur `main`.
+La section 12 est la **0.7.3** (dégâts, critiques, missiles). C'est un brouillon : ne la fusionnez pas. Prenez le ZIP de la branche `dev/0.7.3`, pas celui de `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -142,7 +143,7 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
 7. Sur les deux fiches ouvertes depuis les jetons, mettez d'abord la **même** portée (par exemple Moyenne). Survolez le jeton adverse et appuyez sur **T** : une seule cible. Puis **Changer de portée**.
    **Résultat attendu :** l'issue dépend des jets. Deux échecs : la portée ne change pas. Sinon le gagnant rapproche ou éloigne, et les deux fiches affichent la même nouvelle portée.
 8. Passez les deux fiches à **Proche**. Le laser de forage ne tire qu'en proche, et une fiche neuve est en Moyenne. Puis **Tirer**.
-   **Résultat attendu :** le tir part. Une réussite dit « Touché (dégâts en 0.7.3) ».
+   **Résultat attendu :** le tir part. Une réussite dit « Touché. Le bouton « Appliquer les dégâts » est sur la carte. » S'il n'y a pas une seule cible, la carte le dit et le bouton n'est pas là. Le détail du bouton est en section 12.
 9. Dans le compendium **Modules de vaisseau**, glissez **Canon électromagnétique** (Proche et Moyenne) sur la fiche qui tire. Survolez le jeton adverse et appuyez sur **T** (une seule cible), puis réussissez **Verrouiller**. Ensuite **Donner +10** ou **Calculer**. Le MJ passe le round lui-même.
    **Résultat attendu :** l'onglet Postes affiche « Verrouillé : » et le nom de la cible. Le +10 n'est plus dans le modificateur du jet suivant. Repassez la fiche qui tire en **Moyenne**, gardez **T** sur la cible verrouillée : le tir ne propose pas −20. Retirez la cible (**T**) : le tir propose −20. Ce −20 se lit dans le modificateur de la fenêtre de jet. Le bouton **Retirer le verrouillage** (MJ) enlève le nom.
 10. Onglet Général, bloc Propulsion : **Delta-v (km/s)**, actuel et maximum. Tapez « 3,5 » dans l'actuel. Fermez la fiche et rouvrez-la. Effacez ensuite la case de l'actuel, ou tapez « abc », puis cliquez ailleurs.
@@ -157,3 +158,44 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
     - Si vous avez encore une copie de monde en 0.7.1, ouvrez-la avec ce système. **Résultat attendu :** le monde s'ouvre, sans message d'erreur.
     - Onglet Général : Delta-v actuel/max visible, saisie 3,5 acceptée, grisé sur objet fixe. **Résultat attendu :** les deux cases se voient, 3,5 reste après fermeture et réouverture. Effacer une case ou taper « abc » affiche un avertissement et l'ancienne valeur réapparaît tout de suite. Un objet fixe a le bloc Propulsion grisé (les nombres restent).
     - Console (**F12**). **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 12. 0.7.3 Dégâts, critiques et missiles
+
+**Testez en MJ, dans une copie du monde.** Ne rouvrez pas cette copie avec un système plus ancien.
+
+Cette section n'est pas sur `main`. Prenez le ZIP de la branche :
+
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.7.3.zip
+
+Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.7.3`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+
+Il vous faut **deux Petite Fortune**, chacune ouverte **depuis son jeton**.
+
+**Astuce pour aller vite à 0.** Vous n'êtes pas obligé de tirer dix fois. Sur l'onglet **Sections & modules**, baissez à la main la plaque, l'Intégrité d'un module, ou l'Intégrité d'une section. Mettez par exemple la plaque de proue à **1**, ou un module à **1**. Le prochain tir qui touche fera passer à 0. Pour annuler une section détruite, remontez l'Intégrité **et** décochez **Section détruite**.
+
+1. Quittez Foundry. Remplacez le système par le ZIP ci-dessus. Relancez. Jouez en MJ, dans une copie du monde.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.7.3**. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`. Pas de ligne rouge, hors l'icône manquante déjà connue.
+2. Glissez **Petite Fortune** deux fois sur la scène. Mettez les deux jetons dans le Combat Tracker. Ouvrez chaque fiche **depuis son jeton**. Lancez l'initiative. Mettez les deux fiches à portée **Proche**.
+   **Résultat attendu :** les deux vaisseaux sont dans le tracker. Les fiches ouvertes sont celles des jetons.
+3. Survolez le jeton adverse et appuyez sur **T** (une seule cible). Onglet Postes, **Tirer**, avec le **Laser de forage**. Choisissez **Sans visée particulière**. Relancez jusqu'à une **réussite**.
+   **Résultat attendu :** la carte dit touché, et elle a un bouton **Appliquer les dégâts**.
+4. Cliquez **Appliquer les dégâts**.
+   **Résultat attendu :** une petite fenêtre montre la **section** (lue sur le dé inversé), un **module** déjà choisi que vous pouvez changer, et le détail : plaque, module, section, perdus. Confirmez. Le chat dit ce qui a été retiré. Le bouton devient **Dégâts appliqués** et il est grisé. Un second clic ne rouvre pas la fenêtre.
+5. Sur la cible, onglet Sections, mettez la **plaque** de la section touchée à **1** (valeur, pas le maximum). Laissez le module au-dessus de 0. Tirez encore, réussite, **Appliquer les dégâts**, et confirmez un montant qui dépasse 1 (le laser fait 6, plus le DR : c'est assez).
+   **Résultat attendu :** la plaque passe à **0**. Le chat annonce un critique de plaque (Vaisseaux v0.1 §5). Si le dé de critique est 6, un module de la section passe à **Dégradé**. Les éclats et la décompression sont écrits dans le chat : rien ne se coche tout seul sur l'équipage.
+6. Mettez l'Intégrité d'un module de cette section à **1** (la valeur, pas le maximum). Tirez, réussite, **Appliquer les dégâts**, et choisissez ce module dans la fenêtre.
+   **Résultat attendu :** le module passe à **0** et l'état devient **Hors service**. Le chat annonce le critique de module. S'il s'agit des capteurs, le jet suivant de l'Opérateur et de l'Artilleur propose **−20**. Une arme hors service n'apparaît plus dans **Tirer**. Si le module est les communications ou le support vital, le chat le rappelle, et rien d'autre ne se coupe.
+7. Sur la cible, onglet Général, cochez **En fuite**. Tirez sans visée, réussite, ouvrez **Appliquer les dégâts** sans confirmer tout de suite. Notez le dé du tir (par exemple 61, qui s'inverse en 16).
+   **Résultat attendu :** la section proposée est l'autre bout. Sans la case, 16 à 35 c'est la poupe. Avec **En fuite**, c'est la proue. Décochez ensuite **En fuite**. Annulez la fenêtre si vous ne voulez pas appliquer.
+8. Glissez le module **Missile** (compendium **Modules de vaisseau**) sur le vaisseau qui tire. Mettez les deux fiches en portée **Moyenne**. Si les munitions ne montrent pas **4 / 4**, tapez 4 et 4. **T** sur l'autre jeton. **Tirer**, choisissez le missile. Réussite.
+   **Résultat attendu :** les munitions passent à **3 / 4**. Une carte **Missile en vol** donne la cible et le round d'arrivée (le round actuel + 1). Il n'y a pas de bouton **Appliquer les dégâts** sur le jet de lancement. À portée **Proche**, le missile n'est pas dans la liste des armes.
+9. Passez au round suivant (le MJ, dans le Combat Tracker).
+   **Résultat attendu :** une carte **Missile à l'arrivée**, avec **Contre-mesures**, **Laser de défense** et **Appliquer les dégâts**. Le texte dit que le missile arrive à ce round.
+10. Sur cette carte, **Contre-mesures**. C'est un jet d'Opérations de bord du vaisseau ciblé. S'il gagne contre le jet de lancement, le missile est leurré.
+    **Résultat attendu :** le chat dit si le missile est leurré. S'il l'est, **Appliquer les dégâts** ne l'applique plus. À égalité, le missile n'est pas leurré. Vous pouvez relancer un missile si celui-ci a été leurré, pour l'étape suivante.
+11. Envoyez un autre missile en **Moyenne**, passez le round, et sur la carte d'arrivée cliquez **Laser de défense**. Choisissez le **Laser de forage** (ou un laser de défense). Réussite.
+    **Résultat attendu :** le chat dit que le missile est détruit. **Appliquer les dégâts** ne pose pas l'impact. Un échec laisse le missile : **Appliquer les dégâts** ouvre alors la fenêtre, dégâts **20 + le DR du lancement**.
+12. Sur une fiche, mettez l'Intégrité de la **poupe** à **0**, et celle de la **proue** à **0** (les maximums restent au-dessus de 0).
+    **Résultat attendu :** le badge **Épave** apparaît en haut de la fiche. Le chat le dit. **Esquiver** et **Changer de portée** sont refusés. Remontez une des deux Intégrités au-dessus de 0 : le badge disparaît, et ces boutons fonctionnent de nouveau. Si une section est cochée **Section détruite**, décochez-la aussi, sinon elle compte encore comme à 0.
+13. Console (**F12**).
+    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

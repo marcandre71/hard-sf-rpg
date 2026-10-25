@@ -1,5 +1,21 @@
 # Journal des versions
 
+## 0.7.3
+
+Branche `dev/0.7.3`, PR brouillon vers `main`. Ne pas fusionner avant la relecture. `main` est en 0.7.2.1 (`bb0aaa7`). Le test pour Marc est TESTER §12, ZIP de `dev/0.7.3`, pas de `main`.
+
+Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5. La chaleur, Pousser et les réparations restent en 0.7.4.
+
+- Bouton « Appliquer les dégâts » sur la carte d'un tir qui touche, réservé au MJ, une fois par carte, puis grisé. La cible est le jeton visé au moment du tir. Dégâts = valeur de l'arme + DR. Plaque de la section, puis module, puis Intégrité de la section. Le surplus est perdu. Les radiateurs n'ont pas de plaque.
+- Localisation : dé du tir inversé, tableau §5. Case « En fuite » (MJ) : proue et poupe s'échangent. Un tir visé réussi touche la section ou le module choisi, sans localisation. Le module est tiré au hasard parmi ceux de la section dont l'Intégrité est > 0. Fenêtre de confirmation : section, module modifiable, détail des dégâts.
+- Critique 1D6 une seule fois quand une plaque, un module ou une section passe à 0. Plaque 6 : un module de la section devient dégradé. Module à 0 : hors service. Module 6 : 1D10 à l'Intégrité de la section, sans blindage. Section 3–4 : modules de la section hors service. Section 5 : case « Structure tordue », −20 aux tests de Pilotage tant que le MJ ne la décoche pas. Section 6 : section détruite, elle compte comme à 0, y compris pour l'épave. Éclats, décompression, fuite, incendie, survie, combinaison percée : annoncés dans le chat avec la référence, pas de compte à rebours sur le vaisseau.
+- Capteurs hors service : −20 à l'Opérateur et à l'Artilleur. Arme hors service : elle ne tire pas. Communications et support vital hors service : rappel dans le chat.
+- Épave (poupe et une autre section à 0) : badge « Épave », message dans le chat, Piloter / Esquiver / Changer de portée refusés.
+- Munitions du module arme : compteur valeur/max. « 4 » devient 4/4. Un texte qui n'est pas un nombre n'écrit pas 0 : le MJ saisit. Un diff sans l'ancien texte ne gagne pas de compteur. À 0, l'arme ne tire plus. Le MJ recharge à la main. Seul un missile réussi consomme une munition.
+- Missile : tir d'Armement de bord, interdit à portée proche. Réussite : le missile part, garde son DR, consomme une munition. Arrivée au round suivant en moyenne, deux rounds plus tard en lointaine. Carte « Missile en vol », puis rappel au round d'arrivée (MJ actif) avec contre-mesures, laser de défense et « Appliquer les dégâts ». Contre-mesures : test opposé d'Opérations de bord contre le jet de lancement. S'il l'emporte, le missile est leurré. Laser : n'importe quel laser, portée proche, sans malus de verrouillage. Touché : missile détruit. Sinon impact automatique, 20 + DR du lancement, localisation par le dé de lancement inversé. Les actions ne sont pas bloquées toutes seules.
+- Deux jetons liés du même acteur, fiche sans jeton : « Un vaisseau = un acteur : dupliquez l'acteur pour avoir deux vaisseaux ».
+- Delta-v : le souvenir d'avertissement repart dès que la valeur enregistrée est remise dans la case. Si le texte saisi n'est pas la valeur arrondie affichée, la case est réécrite.
+
 ## 0.7.2.1
 
 Branche `dev/0.7.2.1`. Elle n'entre dans `main` qu'après la relecture. `main` reste en 0.7.2 jusque-là.

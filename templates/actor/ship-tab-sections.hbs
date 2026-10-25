@@ -34,6 +34,11 @@
         {{localize "SOL.Ship.armorDisplayed"}} : <strong>{{section.displayedArmor}}</strong>
         <span class="sol-hint">({{localize "SOL.Ship.armorBonus"}} +{{section.armorBonus}})</span>
       </p>
+      <label>
+        <input type="checkbox" name="system.sections.{{section.id}}.destroyed" {{#if section.destroyed}}checked{{/if}}>
+        {{localize "SOL.Ship.destroyed"}}
+      </label>
+      <p class="sol-hint">{{localize "SOL.Ship.destroyedHint"}}</p>
       {{else}}
       <p class="sol-hint">{{localize "SOL.Ship.radiatorsFollow"}}</p>
       {{#each section.followed as |mod|}}
@@ -73,6 +78,14 @@
         <span>{{module.mass}} t</span>
         {{#if module.showArmor}}
         <span>+{{module.armorPoints}}</span>
+        {{/if}}
+        {{#if module.showAmmo}}
+        <label>
+          {{localize "SOL.Ship.ammoLabel"}}
+          <input type="number" data-field="system.weapon.ammo.value" value="{{module.ammoValue}}" min="0" step="1">
+          /
+          <input type="number" data-field="system.weapon.ammo.max" value="{{module.ammoMax}}" min="0" step="1">
+        </label>
         {{/if}}
         <button type="button" data-action="deleteItem">{{localize "SOL.Sheet.DeleteItem"}}</button>
       </li>

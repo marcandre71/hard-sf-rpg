@@ -410,6 +410,11 @@
   font-style: italic;
 }
 
+.sol-nouvelle-ere .sol-wreck {
+  margin: 0;
+  font-weight: bold;
+}
+
 .sol-nouvelle-ere .sol-ship-module input[type="number"] {
   width: 4.5rem;
 }

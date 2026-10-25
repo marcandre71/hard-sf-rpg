@@ -28,6 +28,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
+import { hullFromDocument, isWreck } from "../ships/damage.mjs";
 import { applySheetDeltaV, nextDeltaVWarning, writeDeltaVInput } from "../ships/migrate.mjs";
 import { POST_ACTIONS, clearShipLock, readLock, rollPostAction } from "../ships/actions.mjs";
 import { duplicateActors, refusesManeuver } from "../ships/combat.mjs";
@@ -173,6 +174,9 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }));
     context.npcScore = NPC_CREW_SCORES[npc] ?? "";
 
+    context.fleeing = stored.fleeing === true;
+    context.twisted = stored.twisted === true;
+    context.wreck = isWreck(hullFromDocument(stored, actor.items));
     context.sections = presentSections(actor, stored);
     context.posts = presentPosts(actor, stored);
     context.lock = presentLock(actor, this.token);
@@ -212,16 +216,30 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    */
   _processFormData(event, form, formData) {
     const data = super._processFormData(event, form, formData);
+    // FormData omet une case décochée. On lit l'élément : décoché veut dire faux.
+    // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+    // @see https://foundryvtt.com/api/v14/classes/foundry.applications.ux.FormDataExtended.html
+    writeCheckbox(data, form, "system.fleeing");
+    writeCheckbox(data, form, "system.twisted");
+    for ( const id of SOL.shipSectionOrder ) {
+      if ( !sectionHasPlate(id) ) continue;
+      writeCheckbox(data, form, `system.sections.${id}.destroyed`);
+    }
     const ignored = applySheetDeltaV(data);
     const delta = data?.system?.propulsion?.deltaV;
     const stored = this.document?.system?._source?.propulsion?.deltaV ?? {};
     for ( const key of /** @type {const} */ (["value", "max"]) ) {
       if ( delta && Object.hasOwn(delta, key) ) this.#deltaVWarned[key] = undefined;
     }
+    for ( const entry of ignored.adjusted ?? [] ) {
+      writeDeltaVInput(form, entry.key, entry.value);
+    }
     for ( const entry of ignored ) {
-      writeDeltaVInput(form, entry.key, stored[entry.key]);
+      const restored = writeDeltaVInput(form, entry.key, stored[entry.key]);
       const next = nextDeltaVWarning(this.#deltaVWarned[entry.key], entry.raw);
-      this.#deltaVWarned[entry.key] = next.token;
+      // La case montre de nouveau le nombre stocké : le souvenir repart.
+      // Décision Marc 25/10/2026.
+      this.#deltaVWarned[entry.key] = restored ? undefined : next.token;
       if ( !next.warn ) continue;
       const blank = next.token === "";
       const value = blank
@@ -340,6 +358,7 @@ function presentSections(actor, stored) {
       integrityMax: source.integrity?.max ?? 0,
       armorValue: source.armor?.value ?? 0,
       armorMax: source.armor?.max ?? 0,
+      destroyed: source.destroyed === true,
       armorBonus: hasPlate ? armorBonus(raw, id) : 0,
       displayedArmor: displayedArmor(id, plate, raw),
       followed: id === "radiators"
@@ -376,6 +395,9 @@ function presentModule(item) {
     mass: source.mass ?? 0,
     showArmor: source.category === "armor",
     armorPoints: source.armorPoints ?? 0,
+    showAmmo: source.category === "weapon",
+    ammoValue: source.weapon?.ammo?.value ?? "",
+    ammoMax: source.weapon?.ammo?.max ?? "",
     sections: SOL.shipSectionOrder.map(id => ({
       id,
       label: SOL.shipSections[id],
@@ -496,6 +518,18 @@ function presentLock(actor, token) {
   const lock = readLock(actor, token);
   const name = lock.name || game.i18n.localize("SOL.Space.lockedUnknown");
   return { uuid: lock.uuid, name, gm: game.user?.isGM === true };
+}
+
+/**
+ * @param {object} data
+ * @param {HTMLFormElement} form
+ * @param {string} name
+ * @returns {void}
+ */
+function writeCheckbox(data, form, name) {
+  const input = form?.elements?.namedItem?.(name) ?? form?.elements?.[name];
+  if ( !input || input.type !== "checkbox" ) return;
+  foundry.utils.setProperty(data, name, input.checked === true);
 }
 
 /**

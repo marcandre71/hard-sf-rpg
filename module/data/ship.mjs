@@ -6,7 +6,7 @@
  * Pas de caractéristiques. Décision Marc 23/10/2026 : le vaisseau
  * entre dans le Combat Tracker. Le véhicule, non (`guard.mjs`).
  * Les jets de poste sont dans `module/ships/actions.mjs`.
- * Pas de dégâts ici (0.7.3).
+ * Les dégâts, les critiques et les missiles sont dans `damage.mjs` (0.7.3).
  *
  * Décision Marc 21/10/2026 : abri anti-radiation, position, cap et
  * champs de station ne sont pas codés.
@@ -19,7 +19,7 @@
 import { SOL } from "../config.mjs";
 import { clampShipDiff, departureMass, effectiveClampCurrent } from "../ships/hull.mjs";
 import { migrateShipSource, roundPresentDeltaV } from "../ships/migrate.mjs";
-import { htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
+import { boolField, htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
 /**
  * Intégrité {valeur, maximum}, entier, plancher 0.
@@ -47,6 +47,8 @@ function sectionField(label, { plate = true } = {}) {
   if ( plate ) {
     fields.integrity = integrityField("SOL.Ship.integrity");
     fields.armor = integrityField("SOL.Ship.armor");
+    // Critique de section 6. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+    fields.destroyed = boolField("SOL.Ship.destroyed", false);
   }
   return new SchemaField(fields, { label });
 }
@@ -171,6 +173,12 @@ export class ShipData extends foundry.abstract.TypeDataModel {
         choices: SOL.shipRanges,
         hint: "SOL.Ship.range.hint"
       }),
+      // Le MJ coche. On échange proue et poupe à la localisation.
+      // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+      fleeing: boolField("SOL.Ship.fleeing", false),
+      // Critique de section 5. Le MJ décoche. −20 aux tests de Pilotage.
+      // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+      twisted: boolField("SOL.Ship.twisted", false),
       sections: new SchemaField(sections, { label: "SOL.Ship.sections" }),
       posts: new SchemaField(posts, { label: "SOL.Ship.posts" }),
       // Description déjà publiée à l'étape 2 : on la garde à côté des notes.
