@@ -12,15 +12,17 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.7.1 sur `dev/0.7.0`
+## État du système : version 0.7.2 sur `dev/0.7.2`
 
-Cette branche ajoute les postes et l'ordre du tour (combat spatial). Elle n'entre dans `main` qu'après la relecture. `main` reste en 0.7.0 jusque-là. Le test pour Marc utilise le ZIP de `main` une fois la branche fusionnée ([TESTER.md](TESTER.md), section 11).
+Cette branche simplifie le combat spatial. Elle n'entre dans `main` qu'après le test de Marc. `main` reste en 0.7.1 jusque-là. Le test pour Marc utilise le ZIP de `main` une fois la branche fusionnée ([TESTER.md](TESTER.md), section 11). La suite des versions est dans [ROADMAP.md](ROADMAP.md).
 
-Depuis la fiche, chaque poste jette sa compétence (ou le score de l'équipage PNJ). La fenêtre **Combat spatial** est réservée au MJ : deux vaisseaux, trois portées, ordre des postes, poussée qui consomme du delta-v. Pas de carte. Pas de dégâts (0.7.2). Un vaisseau n'entre pas dans le combat des personnages.
+Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Pas de dégâts de vaisseau (0.7.3).
 
-## 0.7.0, sur `main`
+La 0.7.1 (fenêtre Combat spatial, poussée automatique, delta-v exact à 3 décimales) a servi de premier essai. Cette version la retire.
 
-Marc a validé la 0.6.3, puis la 0.7.0.
+## 0.7.0
+
+Marc a validé la 0.6.3, puis la 0.7.0. La 0.7.1 est ensuite entrée dans `main`.
 
 Décision Marc 21/10/2026. Une seule fiche pour les vaisseaux et les objets fixes : type (liste du brouillon, groupée, plus Autre), catégorie (atmosphérique, vide, objet fixe), identité, masse, propulsion, réserves, chaleur du réacteur (0 à 10), pièces de rechange, cinq sections, modules, sept postes, notes. Pas de carte vectorielle. Le brouillon copié pour les agents est `docs/regles-vaisseaux-v0.1.md` (chiffres provisoires). Le compendium Vaisseaux contient la Petite Fortune ; le compendium Modules de vaisseau contient ses modules et trois repères d'armes.
 
@@ -62,11 +64,12 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*. Sur `main`, la version affichée est **0.7.0**. Cette branche affiche **0.7.1**.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*. Sur `main`, la version affichée est **0.7.1**. Cette branche affiche **0.7.2**.
 
 Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
+La suite des versions : [ROADMAP.md](ROADMAP.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Structure
@@ -84,7 +87,7 @@ module/sheets/character-sheet.mjs   feuille du Personnage
 module/sheets/actor-sheet.mjs       feuille des autres acteurs (pas le vaisseau)
 module/sheets/ship-sheet.mjs        feuille du Vaisseau
 module/sheets/item-sheet.mjs        feuille unique des objets
-module/ships/                       état des modules, blindage, migrations, liste des types
+module/ships/                       modules, migrations, combat dans le tracker, relais
 templates/                          gabarits Handlebars
 lang/fr.json                        tous les libellés français
 styles/sol.css                      mise en forme minimale

@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-La branche `dev/0.7.0` porte la 0.7.1 (postes et ordre du tour). Elle n'entre dans `main` qu'après la relecture : `main` reste en 0.7.0 jusque-là. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) est sur `main`, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées.
+La branche `dev/0.7.2` porte la 0.7.2 (combat spatial dans le Combat Tracker). Elle n'entre dans `main` qu'après le test de Marc : `main` reste en 0.7.1 jusque-là. La 0.7.0 (fiche Vaisseau) et la 0.7.1 (première fenêtre de combat, remplacée ici) sont derrière. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) est sur `main`, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Pas de dégâts de vaisseau, pas de chaleur ni de réparations automatisées. La suite est dans [ROADMAP.md](ROADMAP.md).
 
 ## Petites étapes jouables, validées par Marc
 
@@ -28,7 +28,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.7.1 sur cette branche, compatibilité 14,
+system.json                         Manifeste : id, version 0.7.2 sur cette branche, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -175,17 +175,23 @@ Les choix du type de vaisseau sont une carte plate dans le schéma (`SOL.shipTyp
 
 Le total au départ est dérivé (à vide + masse de réaction), pas stocké. La chaleur est un nombre 0 à 10. Un poste stocke un uuid. Vide : le score de l'équipage PNJ. Le glisser-déposer passe par `_onDrop`, pas `_onDropDocument`.
 
-## Postes et combat spatial (0.7.1)
+## Combat spatial simplifié (0.7.2)
 
-Réf. Vaisseaux v0.1 §1 et §3. `module/ships/combat.mjs` et `module/ships/post-skills.mjs` ne chargent pas Foundry. `tests/space.test.mjs` s'en sert.
+Réf. Vaisseaux v0.1 §1 et §3. `module/ships/combat.mjs` et `module/ships/post-skills.mjs` ne chargent pas Foundry. `tests/space.test.mjs` s'en sert. `module/ships/crew.mjs` résout l'acteur du poste (`fromUuid`) et prépare le score. Le jeu Foundry est dans `module/ships/actions.mjs` : boutons, drapeau du Combat, relais. `module/ships/space-ui.mjs` et `templates/combat/space-combat.hbs` n'existent plus.
 
-L'état du combat est le réglage de monde `spaceCombat` (`module/ships/space-ui.mjs`, ApplicationV2). Ce n'est pas un document Combat : le tracker des personnages reste celui de l'initiative. Décision Marc 18/10/2026 : `module/ships/guard.mjs` refuse un vaisseau ou un véhicule dans ce tracker (`preCreateCombatant`, `return false`).
+Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. `module/ships/guard.mjs` refuse encore un véhicule (`preCreateCombatant`, `return false`). Un vaisseau y entre. L'initiative est un jet d'Opérations de bord (`prepareShipInitiative`) classé par `encodeInitiative`, le même mécanisme que la Vigilance. Poste vide : score de l'équipage PNJ, Réflexes 0. « Lancer l'initiative » et « Lancer pour les PNJ » appellent `Combat.rollInitiative`.
 
-Décision Marc 21/10/2026 : ordre Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin (`SHIP_POST_IDS`, repris par `SOL.shipPostOrder`). Le +10 de Calculer reste jusqu'au jet du pilote du même tour (`nextPost` ne le vide pas). Premier vaisseau puis l'autre (`firstSide`). Un uuid vide est sauté. Un poste sans personnage est l'équipage PNJ, sans case en plus. Décision Marc 21/10/2026 : égalité à l'ouverture, le MJ choisit après le score (y compris deux échecs) ; le verrouillage dure tout le combat sauf retrait par le MJ ; esquive réussie au moins −10 (0 DR compris), puis −10 par DR, au plus −30 ; changement de portée, LdR §6 (le score ne départage que deux réussites au même DR ; deux échecs, la portée ne bouge pas) et le déclarant perd un tour de delta-v s'il en reste assez. // À confirmer par Marc : ce retrait en cas d'échec, et pour les deux vaisseaux ou un seul. Choix par défaut : le déclarant, réussite ou échec. // À confirmer par Marc : si Poussée est déjà cochée, la manœuvre compte comme cette poussée (on décoche et on paie une fois). // À confirmer par Marc : le plafond ±50 du dialogue est conservé. La poussée stocke le produit exact et l'affiche à 3 décimales (`roundDeltaV` seulement pour la fiche et le chat ; `keepExactDeltaV` ignore un renvoi de cet affichage). Simplification : coût constant par tour, la masse n'est pas recalculée. Un objet fixe ne change pas de portée et ne coche pas Poussée. Fin de tour : les autres bonus s'effacent. On n'avance pas `game.time` et on ne change pas `CONFIG.time.roundTime` (5 secondes).
+Le tour est le drapeau `sol-nouvelle-ere.spaceTurns` du document Combat, par id de combattant : verrouillage, esquive, poste du commandant, bonus du pilote. Pas de poussée. `updateCombat`, MJ actif seulement, quand `round` change : les bonus partent, le verrouillage reste. Supprimer le combat retire le document et le drapeau. On n'avance pas `game.time` et on ne change pas `CONFIG.time.roundTime` (5 secondes).
 
-Un joueur qui réussit Verrouiller, Esquiver, Calculer ou Changer de portée envoie `game.socket` (`system.sol-nouvelle-ere`) au MJ actif. `system.json` doit avoir `"socket": true`, et Foundry doit être relancé complètement après la mise à jour. Le message porte `userId`. Le MJ actif vérifie que cet utilisateur possède le vaisseau ou l'acteur du poste (`testUserPermission`, OWNER), borne le DR à 0–10 et le score à 0–200, écrit `spaceCombat`, et lance le jet adverse du changement de portée. Une arme dégradée propose −20 à l'artilleur ; hors service, elle ne tire pas. Un tir de bord ne passe pas l'arme à `performRoll` : sinon la localisation des dégâts de personnage se lancerait. La carte dit « Touché (dégâts en 0.7.2) ».
+Décision Marc 21/10/2026 : ordre Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin (`SHIP_POST_IDS`, `POST_ACTIONS` ; l'action du commandant s'appelle `command`). Le +10 de Calculer vaut pour tous les jets du Pilote de ce tour. Poste vide : équipage PNJ, sans case en plus. Esquive réussie au moins −10 (0 DR compris), puis −10 par DR, au plus −30. Changement de portée, LdR §6 (le score ne départage que deux réussites au même DR ; deux échecs, la portée ne bouge pas). Décision Marc 23/10/2026 : pas de retrait automatique de delta-v. La portée est le champ `system.range` (proche, moyenne, lointaine). Une manœuvre gagnée contre le vaisseau ciblé (`game.user.targets`) écrit la même portée sur les deux fiches. Sans cible, le jet reste dans le chat. Plusieurs vaisseaux ciblés : avertissement, rien n'est écrit. Un objet fixe refuse la manœuvre. Le delta-v est un champ manuel au dixième (`step: 0.1`). `roundPresentDeltaV` arrondit valeur et maximum seulement s'ils sont dans le diff, et retire `exact` et `exactValue` seulement s'ils sont là.
 
-Hors périmètre : dégâts localisés, dépressurisation et missiles en vol (0.7.2), chaleur, Pousser, réparations (0.7.3). Pas d'initiative de personnage pour les vaisseaux.
+Décision Marc 25/10/2026 : un jet de poste passe `shipPost: true` à `rollModifier`. Le total n'est pas ramené à ±50. `cappedModifier` reste le plafond des jets de personnage, hors postes de vaisseau.
+
+Le relais `game.socket` (`system.sol-nouvelle-ere`) reste : un joueur propriétaire du poste, pas du vaisseau, du combat ou de la cible, ne peut pas écrire l'effet tout seul. `system.json` a `"socket": true`. Foundry doit être relancé complètement après la mise à jour. Le `userId` du message est déclaratif, acceptable à une table de confiance. Le MJ actif vérifie que l'action appartient au poste (`actionBelongsToPost`), que l'utilisateur possède le vaisseau ou l'acteur du poste (`testUserPermission`, OWNER), et borne le DR à 0–10 et le score à 0–200. Une arme dégradée propose −20 à l'artilleur ; hors service, elle ne tire pas. Un tir de bord ne passe pas l'arme à `performRoll` : sinon la localisation des dégâts de personnage se lancerait. La carte dit « Touché (dégâts en 0.7.3) ».
+
+Le réglage de monde `spaceCombat` n'est plus enregistré ni lu. Une ancienne base le garde, sans effet.
+
+Hors périmètre : dégâts localisés, dépressurisation et missiles en vol (0.7.3), chaleur, Pousser, réparations (0.7.4).
 
 ## Tester sous Foundry v14
 
@@ -211,7 +217,8 @@ node --check module/ships/types.mjs
 node --check module/ships/combat.mjs
 node --check module/ships/post-skills.mjs
 node --check module/ships/guard.mjs
-node --check module/ships/space-ui.mjs
+node --check module/ships/actions.mjs
+node --check module/ships/crew.mjs
 node --check module/data/skill.mjs
 node --check module/data/weapon.mjs
 node --check module/data/armor.mjs
@@ -270,7 +277,7 @@ Puis le scénario manuel de [TESTER.md](TESTER.md). L'étape 2 reste dans [docs/
 
 Score de compétence (`skill-score.mjs`, Réf. LdR v0.2 §4) : caractéristique actuelle + formation. Si `trainingRequired` et formation 0, moitié arrondie au supérieur quand `untrainedAllowed` est vrai, sinon le jet est refusé. Décision Marc 18/10/2026 : la moitié est calculée avant la difficulté. `SkillData.migrateData` recopie `specialized` dans `trainingRequired`.
 
-Difficultés : `SOL.difficulties`, défaut `normal`. Le total difficulté + modificateur libre est borné à ±50 (`cappedModifier`). Le score visé n'est pas reborné. Décision Marc 18/10/2026.
+Difficultés : `SOL.difficulties`, défaut `normal`. Le total difficulté + modificateur libre d'un personnage est borné à ±50 (`cappedModifier`). Le score visé n'est pas reborné. Décision Marc 18/10/2026. Décision Marc 25/10/2026 : un jet de poste de vaisseau appelle `rollModifier` avec `shipPost: true` et n'est pas borné.
 
 Décision Marc 18/10/2026 : 18 % de critiques par jet (01–05, 96–00, doubles 11–88), voulu.
 

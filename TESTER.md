@@ -1,10 +1,10 @@
-# Tester le système « Sol, Nouvelle Ère » (0.7.1)
+# Tester le système « Sol, Nouvelle Ère » (0.7.2)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
-La section 11 est la **0.7.1**. On fusionne `dev/0.7.0` dans `main` avant de vous envoyer ce test : prenez le ZIP de `main`.
+La section 11 est la **0.7.2**. On fusionne `dev/0.7.2` dans `main` avant de vous envoyer ce test : prenez le ZIP de `main`.
 
-Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est nouvelle.
+Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
 L'initiative 0.5.11 est dans [docs/tests/initiative-0.5.md](docs/tests/initiative-0.5.md). Les dégâts 0.5.0 à 0.5.4 sont dans [docs/tests/etape-5.md](docs/tests/etape-5.md).
 
@@ -14,7 +14,7 @@ Gardez la console ouverte (**F12**, onglet **Console**). À la fin : aucune lign
 
 1. Fermez Foundry. Le dossier du système s'appelle exactement `sol-nouvelle-ere`, dans `Data/systems`.
 2. Mettez-le à jour (`git pull`, ou remplacez par le ZIP). `system.json` reste directement dans ce dossier.
-3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère ». Pour la section 11, la version affichée est **0.7.1** (ZIP de `main`, en section 11). Les sections 1 à 10 se faisaient en **0.7.0**.
+3. Relancez Foundry 14. Onglet **Systèmes de jeu** : « Sol, Nouvelle Ère ». Pour la section 11, la version affichée est **0.7.2** (ZIP de `main`, en section 11). Les sections 1 à 10 se faisaient en **0.7.0**.
 4. Ouvrez le monde. Dans la console : `Sol, Nouvelle Ère | Initialisation du système`.
 
 Si le monde existait déjà, ouvrez une fois le compendium **Armures et vêtements** pour voir les trois combinaisons à jour.
@@ -109,7 +109,7 @@ Les points 1 à 6 ont déjà marché. Ici, seulement ce qui a changé.
 
 https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.1** si la section 11 est déjà fusionnée, **0.7.0** sinon.
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. Au retour, la version affichée est **0.7.2** si la section 11 est déjà fusionnée, **0.7.0** sinon.
 
 1. Compendiums, dossier **Acteurs**, pack **Vaisseaux**. Glissez **Petite Fortune** dans le monde (l'onglet Acteurs). Ouvrez la fiche.
 2. Onglet **Général**. Type : **Prospecteur**. Catégorie : **Vaisseau du vide**. Faction et économie sont remplies. Masse à vide **80**, masse de réaction **150**, nature **Eau**. Le total au départ affiche **230** (vous ne le tapez pas). Accélération **21**. Delta-v **3,6 / 3,6**. Réserves : air **90**, eau **180**, vivres **150**. Chaleur **0** (la jauge va jusqu'à 10, réacteur seul). Pièces de rechange **6**. Équipage PNJ : **Entraîné (50)**.
@@ -121,22 +121,21 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 8. Onglet Général, catégorie **Objet fixe**. Propulsion et delta-v se grisent. Remettez **Vaisseau du vide** : les chiffres **21** et **3,6 / 3,6** sont encore là.
 9. Onglet Acteurs, créez un acteur **Vaisseau** vide (bouton de création, type Vaisseau). Ouvrez-le. Les quatre onglets sont là. Type **Autre**, avec une case de texte libre. Catégorie **Vaisseau du vide** (le défaut d'une fiche neuve). Les sections sont à **0**. Aucun module. Changez le type pour **Navette de ligne** (groupe Vaisseaux atmosphériques) : la liste est groupée.
 
-## 11. 0.7.1 Postes et ordre du tour
+## 11. 0.7.2 Combat spatial simplifié
 
-**Testez dans une copie du monde ou un monde neuf, et ne rouvrez pas ce monde en 0.6.3.** Les catégories `void` et `fixed` sont refusées par la 0.6.3.
+**Testez en MJ, dans une copie du monde.** Ne rouvrez pas cette copie en 0.6.3 : les catégories `void` et `fixed` y sont refusées.
 
-On fusionne cette branche dans `main` avant de vous envoyer le test. Le ZIP est celui de `main` :
+On fusionne cette branche dans `main` avant de vous envoyer le test. La version affichée au retour est **0.7.2**.
 
-https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
-
-Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere` et remplacez `Data/systems/sol-nouvelle-ere`. Fermez Foundry avant. **Après la mise à jour, relancez Foundry complètement** (quittez l'application, un rechargement du monde ne suffit pas) : sinon le relais vers le MJ ne part pas. Au retour, la version affichée est **0.7.1**. Comptez un quart d'heure.
-
-1. Reprenez la copie de monde de la section 10, ou un monde neuf. Glissez **Petite Fortune** dans les acteurs, puis dupliquez-la (ou créez un second vaisseau) pour avoir deux vaisseaux. Ouvrez les deux fiches.
-2. Sur la Petite Fortune, onglet **Postes**. L'ordre est Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin. Glissez un **personnage** du monde sur **Pilote**. Les six autres postes restent vides : la mention équipage PNJ **50** est encore là. Glissez le même personnage sur **Artilleur** : un avertissement dit qu'il tient déjà un poste, et le nom est quand même écrit. Remettez l'artilleur à vide avec **Retirer**.
-3. Bouton **Esquiver** sur le pilote. La fenêtre de jet habituelle s'ouvre, compétence de Pilotage du personnage (ou le score PNJ si le poste est vide). Vous pouvez changer le modificateur. Annulez ou lancez : la carte de chat est celle des autres jets.
-4. Bouton **Combat spatial**. Si vous n'êtes pas MJ, un message vous l'interdit. En MJ, la fenêtre s'ouvre. Choisissez les deux vaisseaux, portée de départ **moyenne**.
-5. **Test d'ouverture**. Deux jets d'Opérations de bord (équipage PNJ si le poste est vide). Le vainqueur est annoncé : il passe en premier à chaque poste. En cas d'égalité, le message vous demande de choisir vous-même dans **Agit en premier**.
-6. La liste compte quatorze lignes : Commandant des deux vaisseaux, puis Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin. La ligne en cours est en gras. **Poste suivant** avance. Un côté sans vaisseau ne s'arrête pas. Quand le navigateur a réussi **Calculer**, la case +10 du pilote reste cochée jusqu'au jet du pilote du même tour : elle ne se vide pas au poste suivant. À la fin, un message dit de prendre **Tour suivant** : le compteur de tours passe à 2, et on revient au commandant. Là, le +10 part. L'horloge du monde ne bouge pas.
-7. **Jeter le poste en cours**, ou les boutons de la fiche, dans l'ordre du tour. Commandant : choisir le poste qui reçoit +10. Opérateur : **Verrouiller** ne coche Verrouillage que sur une réussite ; la case reste pour les tours suivants, sauf si vous la décochez. Navigateur : **Calculer** ne coche le +10 du pilote que sur une réussite. Pilote, juste après : **Esquiver** propose ce +10 dans le modificateur. Une réussite donne au moins −10, puis −10 par DR, au plus −30 : une réussite à DR 0 donne −10. Un échec donne 0. **Changer de portée** se lance depuis la fiche : les deux pilotes jettent, le gagnant rapproche ou éloigne d'un cran. Deux échecs : personne ne gagne, la portée ne bouge pas. Le score ne départage que deux réussites au même DR. Le vaisseau qui a lancé la manœuvre perd le delta-v d'un tour de poussée, même s'il échoue, s'il lui en reste assez ; sinon un message refuse la manœuvre. Si **Poussée ce tour** est déjà cochée, on ne retire le delta-v qu'une fois et la case se décoche. Un objet fixe ne peut pas changer de portée. Artilleur : **passez d'abord en portée Proche**, puis **Tirer** (le laser de forage ne tire qu'en proche). Une arme dégradée propose −20. La carte dit **Touché (dégâts en 0.7.2)** en cas de réussite. Ingénieur et médecin : un jet, sans autre effet.
-8. Cochez **Poussée ce tour** sur la Petite Fortune (accélération 21). **Tour suivant**. Le delta-v stocké est le produit exact, pas un arrondi à 12 m/s. La fiche et le chat l'affichent à 3 décimales : 3,6 se lit **3,588**, et le chat indique **12,356** m/s. Dix poussées de suite se lisent **3,476**. La case de poussée, l'esquive et les +10 se vident. Le verrouillage, lui, reste coché tant que vous ne le retirez pas. Vous pouvez aussi retaper le delta-v à la main. Un objet fixe ne peut pas cocher Poussée. **Fin du combat spatial** remet la fenêtre à zéro. Les deux listes ne proposent pas deux fois le même vaisseau, et montrent son nom.
-9. Posez le pion du vaisseau sur la scène, clic droit sur le pion, icône **Combat**. Un avertissement s'affiche, et le vaisseau n'est pas ajouté. Un personnage, lui, s'ajoute comme avant.
+1. Quittez Foundry complètement.
+2. Remplacez le dossier du système par le ZIP https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip . Le dossier décompressé s'appelle `hard-sf-rpg-main` : renommez-le `sol-nouvelle-ere`.
+3. Relancez Foundry. Jouez en MJ, dans une copie du monde.
+4. Posez deux vaisseaux sur la scène et ajoutez-les au Combat Tracker (clic droit sur le pion, icône Combat).
+5. Lancez l'initiative (« Lancer l'initiative », ou « Lancer pour les PNJ »).
+6. Sur le tour d'un vaisseau, onglet Postes : un bouton par poste (Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin).
+7. Ciblez l'autre vaisseau, puis changez la portée : les deux fiches se mettent à jour.
+8. Tirez.
+9. Passez au round suivant : les bonus du tour partent, le verrouillage reste.
+10. Modifiez le delta-v à la main (au dixième de km/s).
+11. Passez un vaisseau en objet fixe : il refuse la manœuvre (changer de portée).
+12. Terminez le combat.

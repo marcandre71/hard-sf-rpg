@@ -1,5 +1,21 @@
 # Journal des versions
 
+## 0.7.2
+
+Branche `dev/0.7.2`. Elle n'entre dans `main` qu'après le test de Marc. `main` reste en 0.7.1 jusque-là. Le test (TESTER §11) prend le ZIP de `main` une fois la branche fusionnée.
+
+Décision Marc 23/10/2026 : la 0.7.1 est trop lourde. La fenêtre Combat spatial est retirée. Les vaisseaux utilisent le Combat Tracker.
+
+- Initiative : jet d'Opérations de bord du poste Opérateur, classé par le même mécanisme que la Vigilance des personnages. Poste vide : équipage PNJ (35/50/65/80 ; inconnu, 50). « Lancer l'initiative » et « Lancer pour les PNJ » lancent ce jet. Un véhicule reste refusé dans le tracker. Un vaisseau y entre.
+- Boutons des postes : Commandant (+10), Opérateur (verrouillage), Navigateur (Calculer : +10 sur tous les jets du Pilote de ce tour), Pilote (esquiver, changer de portée), Artilleur (tir), Ingénieur et Médecin (jet simple). Esquive : au moins −10, puis −10 par DR, au plus −30. Sans verrouillage, tir à −20 au-delà de la portée proche. Visée section −20, module −40. Arme dégradée −20. Arme hors service : pas de tir.
+- Au round suivant, le MJ actif retire les bonus du tour (commandant, Calculer, esquive). Le verrouillage reste jusqu'à la suppression du combat.
+- Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Commandant, Calculer, verrouillage ou son absence, tir visé, arme dégradée et le reste s'additionnent tels quels. Les jets ordinaires des personnages, hors postes de vaisseau, gardent le plafond ±50.
+- Delta-v : champ manuel en km/s, au dixième. Plus de « Poussée ce tour », plus de retrait automatique, plus de valeur exacte à 3 décimales. La migration arrondit la valeur et le maximum déjà présents, et retire `exact` et `exactValue` seulement s'ils sont là. Elle n'ajoute pas de clé absente. Petite Fortune : 3,6 / 3,6.
+- Portée : champ de chaque fiche (proche, moyenne, lointaine). Le tir le lit. Une manœuvre gagnée contre le vaisseau ciblé met les deux fiches sur la même portée. Sans cible, le jet reste dans le chat. Plusieurs vaisseaux ciblés : avertissement, la portée ne change pas. Deux échecs : personne ne gagne (LdR §6). Un objet fixe refuse la manœuvre.
+- Le relais `system.sol-nouvelle-ere` reste (`"socket": true`). Un joueur qui possède le poste mais pas le vaisseau, le combat ou la cible ne peut pas écrire l'effet tout seul. Le MJ refuse une action qui n'est pas celle du poste, vérifie le propriétaire, et borne le DR (0–10) et le score (0–200). L'identifiant `userId` du message est déclaratif.
+- Le réglage de monde `spaceCombat` n'est plus enregistré. Un monde ancien le garde en base, sans lecture.
+- Hors de cette version : dégâts localisés, critiques, dépressurisation, missiles (0.7.3) ; chaleur, Pousser, réparations (0.7.4). Les compendiums ne sont pas reconstruits : la Petite Fortune est déjà à 3,6.
+
 ## 0.7.1
 
 Branche `dev/0.7.0`. Elle n'entre dans `main` qu'après la relecture. `main` reste en 0.7.0 jusque-là. Le test pour Marc (TESTER §11) prend le ZIP de `main` une fois la branche fusionnée.
