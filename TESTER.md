@@ -145,8 +145,8 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
    **Résultat attendu :** le tir part. Une réussite dit « Touché (dégâts en 0.7.3) ».
 9. Dans le compendium **Modules de vaisseau**, glissez **Canon électromagnétique** (Proche et Moyenne) sur la fiche qui tire. Survolez le jeton adverse et appuyez sur **T** (une seule cible), puis réussissez **Verrouiller**. Ensuite **Donner +10** ou **Calculer**. Le MJ passe le round lui-même.
    **Résultat attendu :** l'onglet Postes affiche « Verrouillé : » et le nom de la cible. Le +10 n'est plus dans le modificateur du jet suivant. Repassez la fiche qui tire en **Moyenne**, gardez **T** sur la cible verrouillée : le tir ne propose pas −20. Retirez la cible (**T**) : le tir propose −20. Ce −20 se lit dans le modificateur de la fenêtre de jet. Le bouton **Retirer le verrouillage** (MJ) enlève le nom.
-10. Onglet Général, bloc Propulsion : **Delta-v (km/s)**, actuel et maximum. Tapez 3,5 dans l'actuel.
-    **Résultat attendu :** les deux saisies sont visibles. La fiche garde 3,5. Fermez et rouvrez : le nombre est encore là.
+10. Onglet Général, bloc Propulsion : **Delta-v (km/s)**, actuel et maximum. Tapez « 3,5 » dans l'actuel. Fermez la fiche et rouvrez-la. Effacez ensuite la case de l'actuel, puis cliquez ailleurs.
+    **Résultat attendu :** les deux saisies sont visibles. Après fermeture et réouverture, la valeur est encore 3,5. Effacer la case ne remet pas à 0 : l'ancien nombre reste, et un message le dit.
 11. Passez un vaisseau en **objet fixe**, puis essayez **Changer de portée**.
     **Résultat attendu :** un message refuse la manœuvre. Remettez **Vaisseau du vide** ensuite.
 12. Terminez le combat.
@@ -155,5 +155,5 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
     - Glissez un **véhicule** dans le tracker. **Résultat attendu :** il est refusé.
     - Sur un jet de poste, mettez un modificateur de −60 : le total reste −60. Faites de même pour l'initiative d'**un seul** vaisseau (pas « Lancer l'initiative » pour tout le monde) : −60 reste −60. Sur un jet de personnage, −60 devient −50. **Résultat attendu :** le vaisseau dépasse ±50, le personnage non.
     - Si vous avez encore une copie de monde en 0.7.1, ouvrez-la avec ce système. **Résultat attendu :** le monde s'ouvre, sans message d'erreur.
-    - Onglet Général : Delta-v actuel/max visible, saisie 3,5 acceptée, grisé sur objet fixe. **Résultat attendu :** les deux cases se voient, 3,5 reste, et un objet fixe a le bloc Propulsion grisé (les nombres restent).
+    - Onglet Général : Delta-v actuel/max visible, saisie 3,5 acceptée, grisé sur objet fixe. **Résultat attendu :** les deux cases se voient, 3,5 reste après fermeture et réouverture, effacer une case ne remet pas à 0, et un objet fixe a le bloc Propulsion grisé (les nombres restent).
     - Console (**F12**). **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

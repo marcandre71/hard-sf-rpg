@@ -25,7 +25,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
-import { migrateShipModuleSource, migrateShipSource, normalizeDecimalText, roundPresentDeltaV } from "../module/ships/migrate.mjs";
+import { applySheetDeltaV, migrateShipModuleSource, migrateShipSource, normalizeDecimalText, roundPresentDeltaV } from "../module/ships/migrate.mjs";
 import { markGroupDisabled, prepareFieldGroups } from "../module/sheets/prepare-fields.mjs";
 import { SHIP_TYPE_GROUPS } from "../module/ships/types.mjs";
 
@@ -269,6 +269,8 @@ check(deltaAt >= 0 && !deltaBlock.includes("integer") && deltaBlock.includes("st
 check(shipModel.includes("choices: SOL.shipRanges"), "la fiche a un champ Portée");
 check(!shipModel.includes("keepExactDeltaV"), "le stockage exact du delta-v est retiré");
 
+// Schémas factices : objets simples, pas des DataField Foundry.
+// Le vrai ShipData est vérifié dans tests/models.test.mjs, seulement si FOUNDRY_PATH est défini.
 const number = (label, step) => ({ label, number: true, options: { step } });
 const schema = (label, fields) => ({ label, fields });
 const sheetFields = {
@@ -341,6 +343,25 @@ check(commaDelta.propulsion.deltaV.value === 3.5 && !("max" in commaDelta.propul
 const commaFine = { propulsion: { deltaV: { value: "1,26", max: "3,64" } } };
 roundPresentDeltaV(commaFine);
 check(commaFine.propulsion.deltaV.value === 1.3 && commaFine.propulsion.deltaV.max === 3.6, "virgule puis arrondi au dixième");
+const nullDelta = { propulsion: { deltaV: { value: null, max: "" } } };
+roundPresentDeltaV(nullDelta);
+check(nullDelta.propulsion.deltaV.value === 0 && nullDelta.propulsion.deltaV.max === 0, "migration : null ou vide donne 0");
+const sheetOk = { system: { propulsion: { deltaV: { value: "3,5", max: "3.6" } } } };
+check(applySheetDeltaV(sheetOk).length === 0 && sheetOk.system.propulsion.deltaV.value === 3.5 && sheetOk.system.propulsion.deltaV.max === 3.6, "fiche : 3,5 donne 3.5");
+const sheetBlank = { system: { propulsion: { deltaV: { value: "", max: 3.6 } } } };
+const blankIgnored = applySheetDeltaV(sheetBlank);
+check(blankIgnored.length === 1 && blankIgnored[0].key === "value" && !("value" in sheetBlank.system.propulsion.deltaV) && sheetBlank.system.propulsion.deltaV.max === 3.6, "fiche : case vide, clé absente, le max reste");
+const sheetJunk = { system: { propulsion: { deltaV: { value: "abc" } } } };
+const junkIgnored = applySheetDeltaV(sheetJunk);
+check(junkIgnored.length === 1 && junkIgnored[0].raw === "abc" && !("value" in sheetJunk.system.propulsion.deltaV) && !("max" in sheetJunk.system.propulsion.deltaV), "fiche : abc ignoré, max non ajouté");
+const sheetTenth = { system: { propulsion: { deltaV: { value: "1,26" } } } };
+applySheetDeltaV(sheetTenth);
+check(sheetTenth.system.propulsion.deltaV.value === 1.3, "fiche : 1,26 arrondi au dixième");
+const sheetNull = { system: { propulsion: { deltaV: { value: null, max: "0" } } } };
+applySheetDeltaV(sheetNull);
+check(!("value" in sheetNull.system.propulsion.deltaV) && sheetNull.system.propulsion.deltaV.max === 0, "fiche : null retiré, 0 reste 0");
+const fieldRow = readFileSync(new URL("../templates/shared/field-row.hbs", import.meta.url), "utf8");
+check(fieldRow.includes('type="text"') && fieldRow.includes('inputmode="decimal"') && fieldRow.includes("createNumberInput"), "delta-v : input texte écrit à la main");
 
 if ( failed ) {
   console.error(`${failed} échec(s)`);

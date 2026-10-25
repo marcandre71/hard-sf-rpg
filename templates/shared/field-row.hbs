@@ -1,17 +1,25 @@
 {{!--
   Une ligne de prepareFieldGroups.
-  decimal : texte au pas 0,1. L'input number refuse souvent la virgule.
+  decimal (delta-v, pas 0,1) : input écrit ici, pas par formGroup.
+  formGroup passe par createNumberInput, qui force input.type="number"
+  (doc v14). type="text" et inputmode seraient ignorés : « 3,5 » n'arrive
+  pas, et un navigateur qui refuse la virgule vide la case.
+  @see https://foundryvtt.com/api/v14/functions/foundry.applications.fields.createNumberInput.html
   Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
 --}}
-{{#if row.disabled}}
-  {{#if row.decimal}}
-  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true type="text" inputmode="decimal" hint=row.hint}}
-  {{else}}
-  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
+{{#if row.decimal}}
+<div class="form-group">
+  <label for="{{row.rootId}}-{{row.name}}">{{localize row.label}}</label>
+  <div class="form-fields">
+    <input type="text" inputmode="decimal" id="{{row.rootId}}-{{row.name}}" name="{{row.name}}" value="{{row.value}}"{{#if row.disabled}} disabled{{/if}}>
+  </div>
+  {{#if row.hint}}
+  <p class="hint">{{localize row.hint}}</p>
   {{/if}}
+</div>
 {{else}}
-  {{#if row.decimal}}
-  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="text" inputmode="decimal"}}
+  {{#if row.disabled}}
+  {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true disabled=true hint=row.hint}}
   {{else}}
     {{#if row.number}}
     {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}

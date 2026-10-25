@@ -4,6 +4,8 @@
   (nombre, case, liste, texte enrichi) vient du schéma, pas du gabarit.
   localize=true résout les clés i18n des libellés et des choix (valeur → clé).
   Un nombre reçoit type="number" : sinon min+max (Formation) devient un curseur.
+  Exception : le pas 0,1 (delta-v) est un input texte écrit dans field-row.hbs.
+  createNumberInput force type="number" (doc v14).
   Un SchemaField imbriqué (delta-v) est un groupe dans le groupe.
   Réf. Vaisseaux v0.1 §2. Correctif 0.7.2.1.
 --}}

@@ -280,6 +280,8 @@
         "accelerationHint": "Un seul nombre : milli-g au plein. Le chiffre à vide reste dans le module moteur.",
         "deltaV": "Delta-v (km/s)",
         "deltaVHint": "km/s, au dixième. Le MJ le change à la main. Isp, poussée et accélération restent des informations.",
+        "deltaVBlank": "vide",
+        "deltaVIgnored": "Delta-v ({field}) ignoré ({value}). La valeur enregistrée reste, elle ne revient pas à 0.",
         "fixedHint": "Sans effet : objet fixe. Les valeurs restent enregistrées."
       },
       "reserves": {

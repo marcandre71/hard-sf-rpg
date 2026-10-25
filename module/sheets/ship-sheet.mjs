@@ -4,7 +4,8 @@
  * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §2.
  * Onglets : Général, Sections & modules, Postes, Notes.
  * Tout est visible et modifiable par le propriétaire (le MJ, sur ses fiches).
- * Objet fixe : propulsion et delta-v grisés, les valeurs restent stockées.
+ * Objet fixe : propulsion et delta-v grisés (visuel), les valeurs restent.
+ * La garde réelle d'une manœuvre est `refusesManeuver`.
  * Jets de poste : 0.7.2. Réf. Vaisseaux v0.1 §3.
  * Décision Marc 23/10/2026 : initiative dans le Combat Tracker.
  * Un acteur encore dans un compendium ne tient pas un poste.
@@ -27,7 +28,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
-import { normalizeDecimalText } from "../ships/migrate.mjs";
+import { applySheetDeltaV } from "../ships/migrate.mjs";
 import { POST_ACTIONS, clearShipLock, readLock, rollPostAction } from "../ships/actions.mjs";
 import { duplicateActors, refusesManeuver } from "../ships/combat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
@@ -137,8 +138,9 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.identityGroups = groupsOf(["identity"]);
     context.massGroups = groupsOf(["mass"]);
     context.propulsionGroups = groupsOf(["propulsion"]);
-    // Objet fixe : propulsion et delta-v grisés. Réf. Vaisseaux v0.1 §2.
-    // Décision Marc 21/10/2026. Même critère que le refus de manœuvre.
+    // Objet fixe : propulsion et delta-v grisés. C'est visuel.
+    // La garde réelle d'une manœuvre reste `refusesManeuver`.
+    // Réf. Vaisseaux v0.1 §2. Décision Marc 21/10/2026.
     if ( context.fixed ) markGroupDisabled(context.propulsionGroups, "SOL.Ship.propulsion.fixedHint");
     context.reserveGroups = groupsOf(["reserves"]);
     context.heatGroups = groupsOf(["heat"]);
@@ -187,8 +189,10 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   /**
-   * « 3,5 » devient 3.5 avant le nettoyage du NumberField.
-   * L'arrondi au dixième reste dans le modèle (`roundPresentDeltaV`).
+   * « 3,5 » devient 3.5, au dixième, avant le nettoyage du NumberField.
+   * Vide ou illisible : la clé est retirée. On n'envoie pas null,
+   * et on ne remplace pas par 0 : la valeur déjà enregistrée reste.
+   * Un avertissement le dit.
    * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
    *
    * @override
@@ -200,10 +204,13 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    */
   _processFormData(event, form, formData) {
     const data = super._processFormData(event, form, formData);
-    const delta = data?.system?.propulsion?.deltaV;
-    if ( delta && typeof delta === "object" ) {
-      if ( Object.hasOwn(delta, "value") ) delta.value = normalizeDecimalText(delta.value);
-      if ( Object.hasOwn(delta, "max") ) delta.max = normalizeDecimalText(delta.max);
+    for ( const entry of applySheetDeltaV(data) ) {
+      const blank = entry.raw == null || String(entry.raw).trim() === "";
+      const value = blank
+        ? game.i18n.localize("SOL.Ship.propulsion.deltaVBlank")
+        : String(entry.raw);
+      const field = game.i18n.localize(entry.key === "max" ? "SOL.Field.max" : "SOL.Field.value");
+      ui.notifications.warn(game.i18n.format("SOL.Ship.propulsion.deltaVIgnored", { field, value }));
     }
     return data;
   }

@@ -65,14 +65,15 @@ function fieldStep(field) {
  * à la fois un min et un max (Formation, 0 à 60) s'affiche en curseur
  * plus une case. Réf. revue étape 2.
  *
- * `decimal` : pas 0,1 (delta-v). Input texte, la virgule est acceptée.
+ * `decimal` : pas 0,1 (delta-v). Le gabarit écrit l'input à la main.
+ * formGroup passerait par createNumberInput, qui force type="number".
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
  *
  * @param {foundry.data.fields.DataField} field
  * @param {string} name Nom complet de l'input (`system.identity.concept`, …).
  * @param {*} value Valeur stockée.
  * @param {string} rootId
- * @returns {{ field: foundry.data.fields.DataField, name: string, label: string, value: *, rootId: string, number: boolean, decimal: boolean }}
+ * @returns {{ field: foundry.data.fields.DataField, name: string, label: string, value: *, rootId: string, number: boolean, decimal: boolean, hint: string }}
  */
 function row(field, name, value, rootId) {
   const number = isNumberField(field);
@@ -83,7 +84,8 @@ function row(field, name, value, rootId) {
     value: value === undefined || value === null ? "" : value,
     rootId,
     number,
-    decimal: number && fieldStep(field) === 0.1
+    decimal: number && fieldStep(field) === 0.1,
+    hint: typeof field?.options?.hint === "string" ? field.options.hint : ""
   };
 }
 
@@ -156,8 +158,8 @@ function liftSchema(label, inner) {
 
 /**
  * Grise un bloc et ses groupes imbriqués. Les valeurs restent.
- * Même idée que `refusesManeuver` : l'objet fixe n'utilise pas la propulsion.
- * Réf. Vaisseaux v0.1 §2. Décision Marc 21/10/2026.
+ * C'est visuel. La garde réelle d'une manœuvre reste `refusesManeuver`.
+ * Réf. Vaisseaux v0.1 §2 et §3. Décision Marc 21/10/2026.
  *
  * @param {{ inert?: boolean, hint?: string, rows?: { disabled?: boolean, hint?: string }[], groups?: object[] }[]|undefined} groups
  * @param {string} hint Clé i18n.

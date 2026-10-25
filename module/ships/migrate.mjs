@@ -88,6 +88,11 @@ export function roundPresentDeltaV(source) {
 }
 
 /**
+ * Au dixième. `null` ou une chaîne vide donne 0 :
+ * `Number(null)` et `Number("")` valent 0.
+ * Une valeur illisible (« x ») donne `undefined` : la clé n'est pas réécrite.
+ * La fiche n'envoie pas ce cas : une case vide est retirée avant.
+ *
  * @param {unknown} value
  * @returns {number|undefined}
  */
@@ -96,6 +101,43 @@ function roundTenth(value) {
   const number = typeof normalized === "number" ? normalized : Number(normalized);
   if ( !Number.isFinite(number) ) return undefined;
   return Math.round(number * 10) / 10;
+}
+
+/**
+ * Delta-v soumis par la fiche, déjà expansé.
+ * « 3,5 » devient 3.5, au dixième. Vide, null ou illisible : la clé
+ * est retirée. On n'envoie ni null ni 0, sinon le nombre revient à 0.
+ * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §2.
+ *
+ * @param {object|null|undefined} data
+ * @returns {{ key: "value"|"max", raw: unknown }[]} Clés ignorées.
+ */
+export function applySheetDeltaV(data) {
+  /** @type {{ key: "value"|"max", raw: unknown }[]} */
+  const ignored = [];
+  const delta = data?.system?.propulsion?.deltaV;
+  if ( !delta || typeof delta !== "object" ) return ignored;
+  for ( const key of /** @type {const} */ (["value", "max"]) ) {
+    if ( !Object.hasOwn(delta, key) ) continue;
+    const raw = delta[key];
+    const parsed = sheetDeltaV(raw);
+    if ( parsed === undefined ) {
+      delete delta[key];
+      ignored.push({ key, raw });
+    } else delta[key] = parsed;
+  }
+  return ignored;
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {number|undefined} `undefined` : ne pas écrire la clé.
+ */
+function sheetDeltaV(raw) {
+  if ( raw === null || raw === undefined ) return undefined;
+  if ( typeof raw === "string" && raw.trim() === "" ) return undefined;
+  const text = typeof raw === "string" ? raw.trim() : raw;
+  return roundTenth(text);
 }
 
 /**

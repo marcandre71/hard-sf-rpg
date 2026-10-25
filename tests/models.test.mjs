@@ -400,6 +400,33 @@ try {
   if ( "category" in moduleDiff || "section" in moduleDiff ) {
     throw new Error("un diff de masse de module ne doit pas recevoir de catégorie");
   }
+  // Vrai ShipData. Le test de ship.test.mjs utilise des schémas factices.
+  const { prepareFieldGroups } = await import("../module/sheets/prepare-fields.mjs");
+  const builtShip = new ShipData({});
+  const storedShip = builtShip.toObject();
+  const propulsionGroups = prepareFieldGroups(
+    { propulsion: builtShip.schema.fields.propulsion },
+    { propulsion: storedShip.propulsion },
+    { prefix: "system", rootId: "ship" }
+  );
+  /** @type {{ name?: string, decimal?: boolean }[]} */
+  const shipRows = [];
+  const walkShipRows = (groups) => {
+    for ( const group of groups ?? [] ) {
+      shipRows.push(...(group.rows ?? []));
+      walkShipRows(group.groups);
+    }
+  };
+  walkShipRows(propulsionGroups);
+  const deltaValue = shipRows.find(line => line.name === "system.propulsion.deltaV.value");
+  const deltaMax = shipRows.find(line => line.name === "system.propulsion.deltaV.max");
+  if ( !deltaValue?.decimal || !deltaMax?.decimal ) {
+    throw new Error("ShipData : les lignes delta-v actuel et max doivent être produites, au dixième");
+  }
+  const acceleration = shipRows.find(line => line.name === "system.propulsion.acceleration");
+  if ( !acceleration || acceleration.decimal ) {
+    throw new Error("ShipData : l'accélération ne doit pas être une saisie au dixième");
+  }
 } catch (error) {
   console.error(error);
   process.exit(1);
