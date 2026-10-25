@@ -136,17 +136,17 @@ On fusionne cette branche dans `main` avant de vous envoyer le test. La version 
 4. Dans le compendium **Vaisseaux**, glissez **Petite Fortune** sur la scène, deux fois : deux jetons. Clic droit sur chaque jeton, icône Combat. Ouvrez chaque fiche **depuis son jeton** (double-clic sur le jeton), pas depuis la barre latérale.
    **Résultat attendu :** les deux jetons sont dans le Combat Tracker. La fiche ouverte est celle de ce jeton.
 5. Lancez l'initiative (« Lancer l'initiative », ou « Lancer pour les PNJ »).
-   **Résultat attendu :** chaque vaisseau a une initiative. Poste Opérateur vide : l'équipage PNJ, score 50.
+   **Résultat attendu :** chaque vaisseau a une initiative. Le score se lit sur la carte du chat, pas dans le tracker. Poste Opérateur vide : l'équipage PNJ, score 50.
 6. Sur le tour d'un vaisseau, onglet Postes : un bouton par poste (Commandant, Opérateur, Navigateur, Pilote, Artilleur, Ingénieur, Médecin).
    **Résultat attendu :** chaque bouton ouvre un jet. Vous pouvez annuler.
 7. Sur les deux fiches ouvertes depuis les jetons, mettez d'abord la **même** portée (par exemple Moyenne). Survolez le jeton adverse et appuyez sur **T** : une seule cible. Puis **Changer de portée**.
    **Résultat attendu :** l'issue dépend des jets. Deux échecs : la portée ne change pas. Sinon le gagnant rapproche ou éloigne, et les deux fiches affichent la même nouvelle portée.
 8. Passez les deux fiches à **Proche**. Le laser de forage ne tire qu'en proche, et une fiche neuve est en Moyenne. Puis **Tirer**.
    **Résultat attendu :** le tir part. Une réussite dit « Touché (dégâts en 0.7.3) ».
-9. Survolez le jeton adverse et appuyez sur **T** (une seule cible), puis réussissez **Verrouiller**. Ensuite **Donner +10** ou **Calculer**. Passez au round suivant.
-   **Résultat attendu :** l'onglet Postes affiche « Verrouillé : » et le nom de la cible. Le +10 n'est plus dans le modificateur du jet suivant. Repassez la fiche qui tire en **Moyenne**, gardez **T** sur la cible verrouillée : le tir ne propose pas −20. Visez l'autre jeton : le tir propose −20. Le bouton **Retirer le verrouillage** (MJ) enlève le nom.
-10. Sur la fiche, modifiez le delta-v à la main, au dixième (par exemple 3,5).
-    **Résultat attendu :** la fiche garde 3,5. Fermez et rouvrez : le nombre est encore là.
+9. Dans le compendium **Modules de vaisseau**, glissez **Canon électromagnétique** (Proche et Moyenne) sur la fiche qui tire. Survolez le jeton adverse et appuyez sur **T** (une seule cible), puis réussissez **Verrouiller**. Ensuite **Donner +10** ou **Calculer**. Le MJ passe le round lui-même.
+   **Résultat attendu :** l'onglet Postes affiche « Verrouillé : » et le nom de la cible. Le +10 n'est plus dans le modificateur du jet suivant. Repassez la fiche qui tire en **Moyenne**, gardez **T** sur la cible verrouillée : le tir ne propose pas −20. Retirez la cible (**T**) : le tir propose −20. Ce −20 se lit dans le modificateur de la fenêtre de jet. Le bouton **Retirer le verrouillage** (MJ) enlève le nom.
+10. Sur la fiche, modifiez le delta-v à la main, au dixième (par exemple 3,5). Si la virgule est refusée, tapez 3.5.
+    **Résultat attendu :** la fiche garde 3,5, ou 3.5 si la virgule a été refusée. Fermez et rouvrez : le nombre est encore là.
 11. Passez un vaisseau en **objet fixe**, puis essayez **Changer de portée**.
     **Résultat attendu :** un message refuse la manœuvre. Remettez **Vaisseau du vide** ensuite.
 12. Terminez le combat.

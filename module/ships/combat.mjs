@@ -222,6 +222,95 @@ export function roundAdvanced(previous, next) {
 }
 
 /**
+ * Vider les bonus de ce passage de round.
+ * `previous` est posé dans `Combat#_onUpdate` sur tous les clients,
+ * y compris le MJ actif qui n'a pas cliqué.
+ * Un joueur qui passe le round est donc vu.
+ * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Combat.html#previous
+ *
+ * @param {{ previous?: { round?: unknown } }|null|undefined} combat
+ * @param {object|null|undefined} changed
+ * @returns {boolean}
+ */
+export function roundClearRequested(combat, changed) {
+  if ( !changed || !Object.hasOwn(changed, "round") ) return false;
+  return roundAdvanced(combat?.previous?.round, changed.round);
+}
+
+/**
+ * Combattant de ce vaisseau.
+ * D'abord le jeton. Sinon l'acteur, si son uuid n'a qu'un combattant
+ * (jeton non lié). `actorId` seulement sans jeton (barre latérale),
+ * et seulement s'il n'y a qu'un candidat. Deux jetons du même acteur
+ * ne se confondent pas : le tour de l'autre n'est pas un critère.
+ *
+ * @param {Array<{ tokenId?: string, actorId?: string, actor?: { uuid?: string, id?: string } }>|Iterable<{ tokenId?: string }>|null|undefined} combatants
+ * @param {{ token?: { id?: string }|null, tokenId?: string, uuid?: string, id?: string }|null|undefined} ship
+ * @returns {object|null}
+ */
+export function pickCombatant(combatants, ship) {
+  const rows = combatantList(combatants);
+  if ( !ship || !rows.length ) return null;
+  const tokenId = ship.token?.id || ship.tokenId || "";
+  if ( typeof tokenId === "string" && tokenId ) {
+    const hit = rows.find(row => row?.tokenId === tokenId);
+    if ( !hit || !combatantIsShip(hit, ship) ) return null;
+    return hit;
+  }
+  const uuid = typeof ship.uuid === "string" ? ship.uuid : "";
+  if ( uuid ) {
+    const byUuid = rows.filter(row => row?.actor?.uuid === uuid);
+    if ( byUuid.length === 1 ) return byUuid[0];
+    if ( byUuid.length > 1 ) return null;
+  }
+  const actorId = typeof ship.id === "string" ? ship.id : "";
+  if ( !actorId ) return null;
+  const byActor = rows.filter(row => row && (row.actorId === actorId || row.actor?.id === actorId));
+  if ( byActor.length === 1 ) return byActor[0];
+  return null;
+}
+
+/**
+ * @param {Iterable<object>|null|undefined} combatants
+ * @returns {object[]}
+ */
+function combatantList(combatants) {
+  if ( !combatants || typeof combatants[Symbol.iterator] !== "function" ) return [];
+  return [...combatants].filter(row => row && typeof row === "object");
+}
+
+/**
+ * Le jeton demandé est bien ce vaisseau.
+ * Même `actorId`, autre uuid : un autre jeton non lié, refusé.
+ *
+ * @param {{ actorId?: string, actor?: { uuid?: string, id?: string } }} row
+ * @param {{ uuid?: string, id?: string }} ship
+ * @returns {boolean}
+ */
+function combatantIsShip(row, ship) {
+  const uuid = typeof ship.uuid === "string" ? ship.uuid : "";
+  const actorUuid = typeof row.actor?.uuid === "string" ? row.actor.uuid : "";
+  if ( uuid && actorUuid ) return uuid === actorUuid;
+  const actorId = typeof ship.id === "string" ? ship.id : "";
+  if ( !actorId ) return false;
+  return row.actorId === actorId || row.actor?.id === actorId;
+}
+
+/**
+ * Le relais n'accepte qu'un Token de la scène du combat.
+ *
+ * @param {{ documentName?: unknown, parentId?: unknown }} doc
+ * @param {{ sceneId?: unknown }} combat
+ * @returns {boolean}
+ */
+export function acceptedTokenScene(doc, combat) {
+  if ( doc?.documentName !== "Token" ) return false;
+  const sceneId = typeof combat?.sceneId === "string" ? combat.sceneId : "";
+  const parentId = typeof doc?.parentId === "string" ? doc.parentId : "";
+  return sceneId !== "" && parentId === sceneId;
+}
+
+/**
  * @param {unknown} value
  * @returns {number} 0, −10, −20 ou −30.
  */
@@ -329,16 +418,22 @@ export function sharedRange(current, direction) {
 
 /**
  * Avertissement de chat si les deux fiches n'ont pas la même portée.
- * Chaîne vide si elles concordent. On manœuvre quand même.
+ * `null` si elles concordent. On manœuvre quand même.
+ * La phrase est `SOL.Space.rangeDiffer` (`{maneuver}`, `{other}`),
+ * en français et en anglais : les deux langues lisent `lang/fr.json`.
  * // Décision Marc 25/10/2026
  *
  * @param {string} maneuverLabel
  * @param {string} otherLabel
- * @returns {string}
+ * @returns {{ key: string, maneuver: string, other: string }|null}
  */
 export function rangeDifferWarning(maneuverLabel, otherLabel) {
-  if ( maneuverLabel === otherLabel ) return "";
-  return `les portées des deux fiches diffèrent : ${maneuverLabel} / ${otherLabel}`;
+  if ( maneuverLabel === otherLabel ) return null;
+  return {
+    key: "SOL.Space.rangeDiffer",
+    maneuver: maneuverLabel,
+    other: otherLabel
+  };
 }
 
 /**

@@ -171,7 +171,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     context.sections = presentSections(actor, stored);
     context.posts = presentPosts(actor, stored);
-    context.lock = presentLock(actor);
+    context.lock = presentLock(actor, this.token);
     context.otherSections = prepareSections(actor, OTHER_ITEMS);
 
     const labelOf = field => field.label ?? field.options?.label ?? "";
@@ -433,7 +433,7 @@ async function rollPost(event, target) {
   if ( event?.detail > 1 ) return;
   const postId = target.closest("[data-post]")?.dataset.post;
   const action = target.dataset.spaceAction;
-  await rollPostAction(this.document, postId, action);
+  await rollPostAction(this.document, postId, action, this.token);
   if ( action === "lock" ) this.render();
 }
 
@@ -441,16 +441,17 @@ async function rollPost(event, target) {
  * @returns {Promise<void>}
  */
 async function clearLock() {
-  await clearShipLock(this.document);
+  await clearShipLock(this.document, this.token);
   this.render();
 }
 
 /**
  * @param {Actor} actor
+ * @param {TokenDocument|null} token
  * @returns {{ uuid: string, name: string, gm: boolean }}
  */
-function presentLock(actor) {
-  const lock = readLock(actor);
+function presentLock(actor, token) {
+  const lock = readLock(actor, token);
   const name = lock.name || game.i18n.localize("SOL.Space.lockedUnknown");
   return { uuid: lock.uuid, name, gm: game.user?.isGM === true };
 }

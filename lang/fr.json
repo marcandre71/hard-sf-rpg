@@ -706,6 +706,7 @@
       "clearLock": "Retirer le verrouillage",
       "rangeWinner": "{name} gagne. Rapprocher ou éloigner d'une portée.",
       "rangeMoved": "{name} gagne. Portée : {range}.",
+      "rangeDiffer": "les portées des deux fiches diffèrent : {maneuver} / {other}",
       "closer": "Rapprocher",
       "farther": "Éloigner",
       "rangeSame": "La portée est déjà au bout de l'échelle.",

@@ -15,6 +15,8 @@ import {
   duplicateActors,
   emptyPostScore,
   evadeFromDr,
+  acceptedTokenScene,
+  pickCombatant,
   rangeDifferWarning,
   isOwnTarget,
   lockAfterRoll,
@@ -23,6 +25,7 @@ import {
   lockRollAllowed,
   refusesManeuver,
   roundAdvanced,
+  roundClearRequested,
   sharedRange,
   targetIdentity,
   shiftRange,
@@ -146,8 +149,10 @@ check(shiftRange("long", "farther") === "long", "déjà lointaine : on ne s'élo
 check(shiftRange("medium", "closer") === "close" && shiftRange("medium", "farther") === "long", "une portée de chaque côté");
 check(sharedRange("medium", "closer") === "close", "manœuvre gagnée : on part de la portée du vaisseau qui manœuvre");
 check(sharedRange("long", "nope") === null, "sans direction, la portée n'est pas réécrite");
-check(rangeDifferWarning("Proche", "Moyenne") === "les portées des deux fiches diffèrent : Proche / Moyenne", "fiches différentes : avertissement");
-check(rangeDifferWarning("Moyenne", "Moyenne") === "", "mêmes portées : pas d'avertissement");
+const differ = rangeDifferWarning("Proche", "Moyenne");
+check(differ?.key === "SOL.Space.rangeDiffer" && differ.maneuver === "Proche" && differ.other === "Moyenne", "fiches différentes : clé i18n");
+check(rangeDifferWarning("Moyenne", "Moyenne") === null, "mêmes portées : pas d'avertissement");
+check(fr.SOL.Space.rangeDiffer === "les portées des deux fiches diffèrent : {maneuver} / {other}", "libellé des portées, français");
 
 check(compareOpposed({ success: true, dr: 1, score: 10 }, { success: false, dr: 0, score: 90 }) === "a", "une réussite bat un échec");
 check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 4, score: 40 }) === "b", "deux réussites : le plus gros DR");
@@ -187,6 +192,26 @@ check(fresh.lock === "" && fresh.evade === 0 && fresh.pilotBonus === false, "tou
 check(roundAdvanced(1, 2) === true && roundAdvanced(0, 1) === true, "le round qui augmente vide les bonus");
 check(roundAdvanced(2, 1) === false && roundAdvanced(2, 2) === false, "reculer ou rester ne vide pas les bonus");
 check(roundAdvanced(undefined, 1) === false && roundAdvanced("x", 2) === false, "sans ancien round lisible, on ne vide pas");
+check(roundClearRequested({ previous: { round: 1 } }, { round: 2 }) === true, "un joueur passe le round : previous est là, les bonus se vident");
+check(roundClearRequested({ previous: { round: 2 } }, { round: 1 }) === false, "un joueur recule le round : les bonus restent");
+check(roundClearRequested({ previous: { round: 1 } }, { turn: 1 }) === false, "changer de tour ne vide pas les bonus");
+check(roundClearRequested({}, { round: 2 }) === false, "sans previous, on ne vide pas");
+
+const tokenA = { id: "cA", tokenId: "tokA", actorId: "petite", actor: { uuid: "Actor.petite", id: "petite" } };
+const tokenB = { id: "cB", tokenId: "tokB", actorId: "petite", actor: { uuid: "Actor.petite", id: "petite" } };
+const shipA = { id: "petite", uuid: "Actor.petite", token: { id: "tokA" } };
+check(pickCombatant([tokenA, tokenB], shipA)?.id === "cA", "deux jetons du même acteur, hors tour : A");
+check(pickCombatant([tokenB, tokenA], shipA)?.id === "cA", "deux jetons du même acteur, pendant le tour de l'autre : toujours A");
+check(pickCombatant([tokenA, tokenB], { id: "petite", uuid: "Actor.petite" }) === null, "barre latérale, deux jetons : on n'en choisit pas un");
+check(pickCombatant([tokenA], { id: "petite", uuid: "Actor.sidebar" })?.id === "cA", "barre latérale, un seul candidat : actorId");
+const freeA = { id: "cA", tokenId: "tokA", actorId: "base", actor: { uuid: "Scene.s.Token.tokA", id: "base" } };
+const freeB = { id: "cB", tokenId: "tokB", actorId: "base", actor: { uuid: "Scene.s.Token.tokB", id: "base" } };
+check(pickCombatant([freeB, freeA], { id: "base", uuid: "Scene.s.Token.tokA" })?.id === "cA", "acteur non lié : l'uuid du jeton, pas l'actorId commun");
+check(pickCombatant([tokenA, tokenB], { id: "petite", uuid: "Actor.petite", token: { id: "absent" } }) === null, "jeton inconnu : on ne prend pas l'autre");
+check(acceptedTokenScene({ documentName: "Token", parentId: "scene1" }, { sceneId: "scene1" }) === true, "jeton de la scène du combat");
+check(acceptedTokenScene({ documentName: "Token", parentId: "scene2" }, { sceneId: "scene1" }) === false, "autre scène : refusé");
+check(acceptedTokenScene({ documentName: "Actor", parentId: "scene1" }, { sceneId: "scene1" }) === false, "un acteur n'est pas un jeton");
+check(acceptedTokenScene({ documentName: "Token" }, { sceneId: "scene1" }) === false, "sans scène du jeton : refusé");
 
 check(emptyPostScore("trained") === 50 && emptyPostScore("blue") === 35 && emptyPostScore("veteran") === 65 && emptyPostScore("elite") === 80, "scores PNJ de 0.7.1");
 check(emptyPostScore("nope") === 50 && emptyPostScore(undefined) === 50, "équipage inconnu : entraîné, comme un poste vide");
@@ -223,8 +248,14 @@ check(engineer.some(skill => skill.name === "Réacteurs et propulsion" && skill.
 const medic = skillsForPost("medic", [{ name: "Médecine : trauma", system: { characteristic: "int" } }]);
 check(medic.some(skill => skill.name === "Médecine : trauma") && medic.some(skill => skill.name === "Premiers secours"), "médecin : médecine ou premiers secours");
 
-for ( const key of ["notInTracker", "hitLater", "incident", "duplicate", "noTarget", "lockNoTarget", "lockOneTarget", "clearLock", "lockedOn", "fixedNoManeuver", "relayAction"] ) {
+for ( const key of ["notInTracker", "hitLater", "incident", "duplicate", "noTarget", "lockNoTarget", "lockOneTarget", "clearLock", "lockedOn", "fixedNoManeuver", "relayAction", "rangeDiffer"] ) {
   check(typeof fr.SOL.Space[key] === "string" && fr.SOL.Space[key].length > 0, `libellé SOL.Space.${key}`);
+}
+const system = JSON.parse(readFileSync(new URL("../system.json", import.meta.url), "utf8"));
+for ( const language of system.languages ) {
+  const pack = JSON.parse(readFileSync(new URL(`../${language.path}`, import.meta.url), "utf8"));
+  const sentence = pack.SOL?.Space?.rangeDiffer ?? "";
+  check(sentence.includes("{maneuver}") && sentence.includes("{other}"), `SOL.Space.rangeDiffer en ${language.lang}`);
 }
 for ( const id of ["close", "medium", "long"] ) {
   check(typeof fr.SOL.Ship.range[id] === "string", `portée ${id}`);
@@ -235,7 +266,9 @@ const postsTemplate = readFileSync(new URL("../templates/actor/ship-tab-posts.hb
 check(postsTemplate.includes("clearLock") && postsTemplate.includes("SOL.Space.lockedOn"), "l'onglet Postes montre la cible et le bouton du MJ");
 const actions = readFileSync(new URL("../module/ships/actions.mjs", import.meta.url), "utf8");
 check(!/settings\.(get|set|register)/.test(actions), "le réglage spaceCombat n'est plus lu ni enregistré");
-check(actions.includes("updateCombat") && actions.includes("preUpdateCombat") && actions.includes("roundAdvanced"), "les bonus partent sur updateCombat, seulement si le round augmente");
+check(actions.includes("updateCombat") && actions.includes("roundClearRequested") && actions.includes("previous") && !actions.includes("preUpdateCombat"), "les bonus partent sur updateCombat, via previous, même si un joueur passe le round");
+check(actions.includes("pickCombatant"), "deux jetons du même acteur passent par pickCombatant");
+check(actions.includes("relayWarn") && actions.includes("acceptedTokenScene"), "verrouillage relayé : scène du combat, avertissement chez le joueur");
 check(actions.includes("userId est déclaratif") || actions.includes("userId` est déclaratif"), "userId déclaratif est documenté");
 const initiativeSrc = readFileSync(new URL("../module/combat/initiative.mjs", import.meta.url), "utf8");
 check(/shipPost:\s*ship/.test(initiativeSrc), "l'initiative du vaisseau est un jet de poste, sans plafond");
