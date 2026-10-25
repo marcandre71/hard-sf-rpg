@@ -5,9 +5,6 @@
 --}}
 <section class="tab sol-tab sol-ship {{tab.cssClass}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   <p class="sol-hint">{{localize "SOL.Ship.post.hint"}}</p>
-  <p>
-    <button type="button" data-action="openSpace">{{localize "SOL.Space.open"}}</button>
-  </p>
   <ul class="sol-ship-posts">
     {{#each posts as |post|}}
     <li class="sol-ship-post" data-post="{{post.id}}">

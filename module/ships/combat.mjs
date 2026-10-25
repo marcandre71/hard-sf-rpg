@@ -1,15 +1,14 @@
 /**
- * Combat spatial par postes, sans Foundry.
+ * Règles de combat spatial, sans Foundry.
  *
  * Réf. Vaisseaux v0.1 §1 et §3. Pas de carte vectorielle :
- * trois portées abstraites, sept postes, un tour d'environ une minute.
- * Les dégâts, la localisation et les missiles sont pour la 0.7.2.
- * La chaleur, Pousser et les réparations sont pour la 0.7.3.
+ * trois portées abstraites, sept postes.
+ * Décision Marc 23/10/2026 : le suivi tour par tour (fenêtre,
+ * poussée, delta-v exact) est retiré. Le Combat Tracker tient l'ordre.
+ * Les dégâts, la localisation et les missiles sont pour la 0.7.3.
+ * La chaleur, Pousser et les réparations sont pour la 0.7.4.
  */
-import { SHIP_POST_IDS } from "./hull.mjs";
-
-/** Gravité standard, m/s². Le produit accélération × 60 s en découle. */
-export const STANDARD_GRAVITY = 9.80665;
+import { NPC_CREW_SCORES, SHIP_POST_IDS } from "./hull.mjs";
 
 /** Proche, moyenne, lointaine. Réf. Vaisseaux v0.1 §3. */
 export const SPACE_RANGES = ["close", "medium", "long"];
@@ -32,28 +31,42 @@ export const DEGRADED_PENALTY = -20;
 export const POST_BONUS = 10;
 
 /**
- * État vide. Le MJ le remplit (deux vaisseaux, portée de départ).
+ * Boutons de l'onglet Postes. Réf. Vaisseaux v0.1 §3.
+ * L'ordre du tour est `SHIP_POST_IDS`. Le +10 du commandant a l'id `command`.
  *
- * @returns {object}
+ * @type {Record<string, string[]>}
  */
-export function blankCombat() {
-  return {
-    round: 1,
-    postIndex: 0,
-    side: 0,
-    ships: ["", ""],
-    firstSide: null,
-    range: "medium",
-    turns: {}
-  };
+export const POST_ACTIONS = {
+  commander: ["command"],
+  operator: ["lock"],
+  navigator: ["calculate"],
+  pilot: ["evade", "changeRange"],
+  gunner: ["fire"],
+  engineer: ["simple"],
+  medic: ["simple"]
+};
+
+/**
+ * L'action appartient-elle à ce poste.
+ * Le relais refuse le reste. `command` n'est pas un id de poste.
+ *
+ * @param {unknown} postId
+ * @param {unknown} action
+ * @returns {boolean}
+ */
+export function actionBelongsToPost(postId, action) {
+  if ( typeof postId !== "string" || typeof action !== "string" ) return false;
+  return (POST_ACTIONS[postId] ?? []).includes(action);
 }
 
 /**
- * @returns {{ thrust: boolean, lock: boolean, evade: number, commanderPost: string, pilotBonus: boolean }}
+ * Bonus du tour d'un vaisseau. Pas de poussée : le delta-v est manuel.
+ * Décision Marc 23/10/2026.
+ *
+ * @returns {{ lock: boolean, evade: number, commanderPost: string, pilotBonus: boolean }}
  */
 export function blankTurn() {
   return {
-    thrust: false,
     lock: false,
     evade: 0,
     commanderPost: "",
@@ -62,54 +75,35 @@ export function blankTurn() {
 }
 
 /**
- * Ramène un état lu (réglage, saisie) à la forme attendue.
- *
  * @param {unknown} raw
- * @returns {object}
+ * @returns {ReturnType<typeof blankTurn>}
  */
-export function normalizeCombat(raw) {
-  const blank = blankCombat();
+export function normalizeTurn(raw) {
+  const blank = blankTurn();
   if ( !raw || typeof raw !== "object" || Array.isArray(raw) ) return blank;
-  const source = /** @type {Record<string, unknown>} */ (raw);
-  const round = Number(source.round);
-  const postIndex = Number(source.postIndex);
-  const side = Number(source.side);
-  const range = SPACE_RANGES.includes(/** @type {string} */ (source.range))
-    ? source.range
-    : "medium";
-  const ships = Array.isArray(source.ships)
-    ? [String(source.ships[0] ?? ""), String(source.ships[1] ?? "")]
-    : ["", ""];
-  const firstSide = source.firstSide === 0 || source.firstSide === 1 ? source.firstSide : null;
-  /** @type {Record<string, ReturnType<typeof blankTurn>>} */
-  const turns = {};
-  if ( source.turns && typeof source.turns === "object" ) {
-    for ( const [uuid, turn] of Object.entries(source.turns) ) {
-      if ( !uuid || !turn || typeof turn !== "object" ) continue;
-      const row = /** @type {Record<string, unknown>} */ (turn);
-      const post = typeof row.commanderPost === "string" && SHIP_POST_IDS.includes(row.commanderPost)
-        ? row.commanderPost
-        : "";
-      turns[uuid] = {
-        thrust: Boolean(row.thrust),
-        lock: Boolean(row.lock),
-        evade: snappedEvade(row.evade),
-        commanderPost: post,
-        pilotBonus: Boolean(row.pilotBonus)
-      };
-    }
-  }
+  const row = /** @type {Record<string, unknown>} */ (raw);
+  const post = typeof row.commanderPost === "string" && SHIP_POST_IDS.includes(row.commanderPost)
+    ? row.commanderPost
+    : "";
   return {
-    round: Number.isFinite(round) && round >= 1 ? Math.trunc(round) : 1,
-    postIndex: Number.isFinite(postIndex) && postIndex >= 0 && postIndex < SHIP_POST_IDS.length
-      ? Math.trunc(postIndex)
-      : 0,
-    side: side === 1 ? 1 : 0,
-    ships,
-    firstSide,
-    range,
-    turns
+    lock: Boolean(row.lock),
+    evade: snappedEvade(row.evade),
+    commanderPost: post,
+    pilotBonus: Boolean(row.pilotBonus)
   };
+}
+
+/**
+ * Début de round : +10 du commandant, Calculer et esquive partent.
+ * Le verrouillage reste jusqu'à la suppression du combat.
+ * Décision Marc 23/10/2026. Décision Marc 21/10/2026 pour le verrouillage.
+ *
+ * @param {unknown} turn
+ * @returns {ReturnType<typeof blankTurn>}
+ */
+export function bonusesCleared(turn) {
+  const current = normalizeTurn(turn);
+  return { ...blankTurn(), lock: current.lock };
 }
 
 /**
@@ -124,261 +118,9 @@ function snappedEvade(value) {
 }
 
 /**
- * @param {object} state
- * @param {string} uuid
- * @returns {ReturnType<typeof blankTurn>}
- */
-export function turnOf(state, uuid) {
-  if ( !uuid ) return blankTurn();
-  return { ...blankTurn(), ...(state?.turns?.[uuid] ?? {}) };
-}
-
-/**
- * Le premier vaisseau, puis l'autre. `firstSide` null : l'ordre saisi.
- *
- * @param {object} state
- * @returns {string[]}
- */
-export function actingOrder(state) {
-  const first = String(state?.ships?.[0] ?? "");
-  const second = String(state?.ships?.[1] ?? "");
-  if ( state?.firstSide === 1 ) return [second, first];
-  return [first, second];
-}
-
-/**
- * Les quatorze créneaux : chaque poste, premier vaisseau puis l'autre.
- *
- * @param {object} state
- * @returns {{ postId: string, postIndex: number, side: number, uuid: string, current: boolean, empty: boolean }[]}
- */
-export function turnSchedule(state) {
-  const order = actingOrder(state);
-  /** @type {ReturnType<typeof turnSchedule>} */
-  const rows = [];
-  SHIP_POST_IDS.forEach((postId, postIndex) => {
-    order.forEach((uuid, side) => {
-      rows.push({
-        postId,
-        postIndex,
-        side,
-        uuid,
-        current: postIndex === state.postIndex && side === state.side,
-        empty: uuid === ""
-      });
-    });
-  });
-  return rows;
-}
-
-/**
- * @param {object} state
- * @returns {{ postId: string|null, shipUuid: string, side: number }}
- */
-export function currentStep(state) {
-  return {
-    postId: SHIP_POST_IDS[state?.postIndex] ?? null,
-    shipUuid: actingOrder(state)[state?.side] ?? "",
-    side: state?.side === 1 ? 1 : 0
-  };
-}
-
-/**
- * Passe au créneau suivant. Un côté sans vaisseau est sauté.
- * À la fin du médecin du second, on ne boucle pas : le MJ prend « Tour suivant ».
- *
- * @param {object} state
- * @returns {{ state: object, done: boolean }}
- */
-export function nextPost(state) {
-  const start = normalizeCombat(state);
-  let postIndex = start.postIndex;
-  let side = start.side;
-  for ( let step = 0; step < SHIP_POST_IDS.length * 2; step++ ) {
-    side += 1;
-    if ( side > 1 ) {
-      side = 0;
-      postIndex += 1;
-    }
-    if ( postIndex >= SHIP_POST_IDS.length ) return { state: start, done: true };
-    const order = actingOrder({ ...start, postIndex, side });
-    if ( order[side] ) return { state: { ...start, postIndex, side }, done: false };
-  }
-  return { state: start, done: true };
-}
-
-/**
- * Si le créneau courant n'a pas de vaisseau, avance jusqu'au prochain.
- *
- * @param {object} state
- * @returns {{ state: object, done: boolean }}
- */
-export function settle(state) {
-  let current = normalizeCombat(state);
-  for ( let step = 0; step < SHIP_POST_IDS.length * 2; step++ ) {
-    if ( current.postIndex >= SHIP_POST_IDS.length ) return { state: current, done: true };
-    const order = actingOrder(current);
-    if ( order[current.side] ) return { state: current, done: false };
-    const stepped = nextPost(current);
-    if ( stepped.done ) return { state: current, done: true };
-    current = stepped.state;
-  }
-  return { state: current, done: false };
-}
-
-/**
- * Fin de tour : les bonus du tour partent, le verrouillage reste.
- * La poussée cochée produit une déduction, appliquée par l'appelant.
- *
- * Décision Marc 21/10/2026 : le verrouillage dure tout le combat,
- * sauf si le MJ le retire à la main.
- *
- * @param {object} state
- * @param {Record<string, { acceleration?: unknown, deltaV?: unknown }>} statsByUuid
- * @returns {{ state: object, deductions: { uuid: string, cost: number, value: number }[] }}
- */
-export function finishRound(state, statsByUuid = {}) {
-  const current = normalizeCombat(state);
-  /** @type {{ uuid: string, cost: number, value: number }[]} */
-  const deductions = [];
-  /** @type {Record<string, ReturnType<typeof blankTurn>>} */
-  const turns = {};
-  for ( const uuid of current.ships ) {
-    if ( !uuid || turns[uuid] ) continue;
-    const turn = turnOf(current, uuid);
-    const stats = statsByUuid[uuid] ?? {};
-    if ( turn.thrust ) {
-      deductions.push({
-        uuid,
-        cost: thrustCostKmS(stats.acceleration),
-        value: deltaVAfterThrust(stats.deltaV, stats.acceleration)
-      });
-    }
-    turns[uuid] = {
-      thrust: false,
-      lock: turn.lock,
-      evade: 0,
-      commanderPost: "",
-      pilotBonus: false
-    };
-  }
-  return {
-    state: {
-      ...current,
-      round: current.round + 1,
-      postIndex: 0,
-      side: 0,
-      turns
-    },
-    deductions
-  };
-}
-
-/**
- * Coût d'un tour de poussée, en km/s.
- * Accélération en milli-g × 60 s. 21 milli-g → environ 12 m/s.
- *
- * Décision Marc 21/10/2026 : on soustrait le produit exact
- * (21 milli-g → 12,356 m/s), sans arrondir à 12 ni au supérieur.
- * Simplification : coût constant par tour, la masse n'est pas recalculée.
- * Réf. Vaisseaux v0.1 §3.
- *
- * @param {unknown} accelerationMilliG
- * @returns {number}
- */
-export function thrustCostKmS(accelerationMilliG) {
-  const acceleration = Number(accelerationMilliG);
-  if ( !Number.isFinite(acceleration) || acceleration <= 0 ) return 0;
-  return acceleration * 0.001 * STANDARD_GRAVITY * 60 / 1000;
-}
-
-/**
- * Delta-v après une poussée. Ne descend pas sous 0. Le maximum n'est pas touché.
- *
- * @param {unknown} value
- * @param {unknown} accelerationMilliG
- * @returns {number}
- */
-export function deltaVAfterThrust(value, accelerationMilliG) {
-  const current = Number(value);
-  const base = Number.isFinite(current) ? current : 0;
-  const next = base - thrustCostKmS(accelerationMilliG);
-  return next > 0 ? next : 0;
-}
-
-/**
- * Affichage à trois décimales. 3,587… km/s se lit 3,588.
- * Ce nombre n'est pas celui qu'on stocke.
- *
- * @param {unknown} value
- * @returns {number}
- */
-export function roundDeltaV(value) {
-  const number = Number(value);
-  if ( !Number.isFinite(number) ) return 0;
-  return Math.round(number * 1000) / 1000;
-}
-
-/**
- * Le delta-v restant couvre-t-il un tour de poussée ?
- * Égal au coût : oui. Strictement inférieur : non.
- *
- * @param {unknown} value
- * @param {unknown} accelerationMilliG
- * @returns {boolean}
- */
-export function canPayThrust(value, accelerationMilliG) {
-  const cost = thrustCostKmS(accelerationMilliG);
-  const current = Number(value);
-  const base = Number.isFinite(current) ? current : 0;
-  return base + 1e-9 >= cost;
-}
-
-/**
- * La fiche montre le delta-v à 3 décimales. Renvoyer ce nombre
- * au formulaire ne doit pas remplacer la valeur exacte stockée.
- * Une saisie différente est une correction : on la garde.
- *
- * @param {object|null|undefined} diff Diff `system`.
- * @param {object|null|undefined} current Source déjà stockée.
- * @returns {void}
- */
-export function keepExactDeltaV(diff, current) {
-  const pair = diff?.propulsion?.deltaV;
-  if ( !pair || typeof pair !== "object" || !Object.hasOwn(pair, "value") ) return;
-  const stored = Number(current?.propulsion?.deltaV?.value);
-  const proposed = Number(pair.value);
-  if ( !Number.isFinite(stored) || !Number.isFinite(proposed) ) return;
-  if ( Math.abs(proposed - stored) <= 1e-12 ) return;
-  if ( Math.abs(proposed - roundDeltaV(stored)) >= 5e-7 ) return;
-  delete pair.value;
-  if ( Object.keys(pair).length ) return;
-  delete diff.propulsion.deltaV;
-  if ( Object.keys(diff.propulsion).length ) return;
-  delete diff.propulsion;
-}
-
-/**
- * Delta-v après un changement de portée.
- * Même produit exact que la poussée, plancher 0. Pas d'arrondi à 0,012.
- *
- * // À confirmer par Marc : le retrait se fait-il aussi en cas d'échec,
- * et pour les deux vaisseaux ou seulement celui qui manœuvre ?
- * Choix par défaut : seulement le vaisseau qui a lancé le changement,
- * qu'il réussisse ou non.
- *
- * @param {unknown} value
- * @param {unknown} accelerationMilliG
- * @returns {number}
- */
-export function deltaVAfterRangeChange(value, accelerationMilliG) {
-  return deltaVAfterThrust(value, accelerationMilliG);
-}
-
-/**
- * Esquive réussie : au moins −10, puis −10 par DR, au plus −30.
+ * Esquive réussie : max(10, 10×DR), plafonné à 30, en malus.
  * Décision Marc 21/10/2026 : une réussite à 0 DR donne −10.
- * Un échec ne donne rien.
+ * Un échec donne 0.
  *
  * @param {unknown} dr
  * @param {boolean} success
@@ -387,14 +129,19 @@ export function deltaVAfterRangeChange(value, accelerationMilliG) {
 export function evadeFromDr(dr, success) {
   if ( !success ) return 0;
   const steps = Math.trunc(Number(dr));
-  const fromDr = Number.isFinite(steps) ? Math.max(0, steps) * EVADE_STEP : 0;
-  return Math.max(EVADE_FLOOR, Math.min(fromDr, EVADE_STEP));
+  const tens = Number.isFinite(steps) ? Math.max(0, steps) : 0;
+  const magnitude = Math.max(10, 10 * tens);
+  return -Math.min(30, magnitude);
 }
 
 /**
  * Modificateur proposé pour le dialogue (le MJ peut le changer).
- * // À confirmer par Marc : le plafond ±50 du dialogue de jet est conservé.
- * Il n'est pas réappliqué ici.
+ * Décision Marc 25/10/2026 : ce total n'est pas ramené à ±50.
+ * Le dialogue d'un poste le garde tel quel (`rollModifier`).
+ * Un jet de personnage, hors poste, reste borné (`cappedModifier`).
+ *
+ * Décision Marc 21/10/2026 : le +10 de Calculer vaut pour tous
+ * les jets du Pilote du tour (Esquiver et Changer de portée).
  *
  * @param {{ postId?: string, range?: string, ship?: { lock?: boolean, evade?: number, commanderPost?: string, pilotBonus?: boolean }, foe?: { evade?: number }, aim?: string, weaponCondition?: string }} input
  * @returns {number}
@@ -403,8 +150,6 @@ export function suggestedModifier(input) {
   const postId = input?.postId ?? "";
   let modifier = 0;
   if ( input?.ship?.commanderPost && input.ship.commanderPost === postId ) modifier += POST_BONUS;
-  // Décision Marc 21/10/2026 : le navigateur agit avant, donc ce +10
-  // est déjà posé quand le pilote jette, dans le même tour.
   if ( postId === "pilot" && input?.ship?.pilotBonus ) modifier += POST_BONUS;
   if ( postId !== "gunner" ) return modifier;
   // Réf. Vaisseaux v0.1 §4 : dégradé, −20 aux tests qui utilisent l'arme.
@@ -449,16 +194,29 @@ export function shiftRange(range, direction) {
 }
 
 /**
+ * Portée écrite sur les deux vaisseaux quand la manœuvre est gagnée.
+ * Même cran, à partir de la portée du déclarant. Direction inconnue : null.
+ * Décision Marc 23/10/2026.
+ *
+ * @param {string} current
+ * @param {unknown} direction
+ * @returns {string|null}
+ */
+export function sharedRange(current, direction) {
+  if ( direction !== "closer" && direction !== "farther" ) return null;
+  return shiftRange(current, direction);
+}
+
+/**
  * Test opposé.
  *
  * Une réussite bat un échec. Deux réussites : le plus gros DR.
  * Ensuite, si `useScore`, le meilleur score. Encore égal : `"tie"`.
  * Les DE ne départagent pas.
  *
- * Décision Marc 21/10/2026 : à l'ouverture, le score départage aussi
- * deux échecs (`scoreOnFailure`, défaut). Encore égal, le MJ choisit.
- * Au changement de portée (LdR §6), le score ne départage que deux
- * réussites au même DR. Deux échecs : personne ne gagne, `"tie"`.
+ * Au changement de portée (Réf. LdR v0.2 §6), le score ne départage
+ * que deux réussites au même DR (`scoreOnFailure` faux). Deux échecs :
+ * personne ne gagne, `"tie"`.
  *
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} a
  * @param {{ success?: boolean, dr?: unknown, score?: unknown }} b
@@ -500,12 +258,61 @@ export function duplicateActors(posts) {
 }
 
 /**
- * Vaisseau et véhicule : pas d'initiative de personnage.
- * Décision Marc 18/10/2026. Réf. Vaisseaux v0.1 §1.
+ * Le véhicule n'entre pas dans le Combat Tracker.
+ * Décision Marc 18/10/2026. Le vaisseau, lui, y entre.
+ * Décision Marc 23/10/2026.
  *
  * @param {unknown} actorType
  * @returns {boolean}
  */
 export function blocksCharacterCombat(actorType) {
-  return actorType === "ship" || actorType === "vehicle";
+  return actorType === "vehicle";
+}
+
+/**
+ * Un objet fixe ne manœuvre pas.
+ * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §3.
+ *
+ * @param {unknown} category
+ * @returns {boolean}
+ */
+export function refusesManeuver(category) {
+  return category === "fixed";
+}
+
+/**
+ * Score d'un poste vide. Même barème qu'en 0.7.1.
+ * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §3.
+ * Inconnu : entraîné (50).
+ *
+ * @param {unknown} npcCrew
+ * @returns {number}
+ */
+export function emptyPostScore(npcCrew) {
+  if ( typeof npcCrew === "string" && Number.isFinite(NPC_CREW_SCORES[npcCrew]) ) {
+    return NPC_CREW_SCORES[npcCrew];
+  }
+  return NPC_CREW_SCORES.trained;
+}
+
+/**
+ * Base du jet d'initiative d'un vaisseau, avant `encodeInitiative`.
+ *
+ * Le jet est Opérations de bord, par l'acteur du poste Opérateur.
+ * Poste vide : équipage PNJ, RÉF 0 (le vaisseau n'a pas de caractéristiques).
+ * La formule et le départage sont ceux des personnages : on passe
+ * ce score et cette RÉF à `encodeInitiative`, sans autre encodage.
+ *
+ * @param {{ npcCrew?: unknown, operatorScore?: unknown, operatorRef?: unknown }} [input]
+ * @returns {{ score: number, ref: number, npc: boolean }}
+ */
+export function shipInitiativeBasis({ npcCrew, operatorScore, operatorRef } = {}) {
+  const hasScore = typeof operatorScore === "number" && Number.isFinite(operatorScore);
+  if ( !hasScore ) return { score: emptyPostScore(npcCrew), ref: 0, npc: true };
+  const ref = Number(operatorRef);
+  return {
+    score: operatorScore,
+    ref: Number.isFinite(ref) ? ref : 0,
+    npc: false
+  };
 }

@@ -19,6 +19,7 @@
  * concerné. Ajouter un champ nouveau, avec une valeur `initial`, n'exige
  * pas de migration : Foundry complète les documents déjà créés.
  */
+import { SPACE_RANGES } from "./ships/combat.mjs";
 import { NPC_CREW_SCORES, SHIP_MODULE_CATEGORIES, SHIP_POST_IDS, SHIP_SECTION_IDS } from "./ships/hull.mjs";
 import { SHIP_TYPE_GROUPS, shipTypeChoices } from "./ships/types.mjs";
 
@@ -366,6 +367,12 @@ export const SOL = {
 
   /** @type {Record<string, string>} */
   shipPosts: choiceMap(SHIP_POST_IDS, "SOL.Ship.post."),
+
+  /**
+   * Portée du vaisseau. Réf. Vaisseaux v0.1 §3.
+   * Décision Marc 23/10/2026 : un champ sur la fiche, pas une fenêtre.
+   */
+  shipRanges: choiceMap(SPACE_RANGES, "SOL.Ship.range."),
 
   /**
    * Onze catégories de module, armes comprises.

@@ -7,7 +7,7 @@
  */
 import { SOL } from "../config.mjs";
 import { AIM_MODIFIERS, attackSituation } from "./attack.mjs";
-import { cappedModifier, formatModifier } from "./d100.mjs";
+import { cappedModifier, formatModifier, rollModifier } from "./d100.mjs";
 
 /** Ordre du tableau LdR v0.2 §5. La clé `normal` est le défaut. */
 const DIFFICULTY_ORDER = ["veryEasy", "easy", "simple", "normal", "tricky", "hard", "veryHard", "extreme"];
@@ -31,15 +31,18 @@ function readAim(form) {
 }
 
 /**
- * Lit le formulaire et calcule le total borné.
- * Tir visé et Viser entrent dans le plafond ±50. Réf. LdR v0.2 §5 et §7.
+ * Lit le formulaire et calcule le total.
+ * Tir visé et Viser d'un personnage entrent dans le plafond ±50.
+ * Réf. LdR v0.2 §5 et §7.
+ * Décision Marc 25/10/2026 : un jet de poste de vaisseau n'est pas borné.
  *
  * @param {HTMLFormElement} form
  * @param {number} score
- * @param {number} [statusModifier] Malus de statut, dans le plafond ±50.
+ * @param {number} [statusModifier] Malus de statut.
+ * @param {boolean} [shipPost]
  * @returns {object}
  */
-function readForm(form, score, statusModifier = 0) {
+function readForm(form, score, statusModifier = 0, shipPost = false) {
   const difficultyKey = form.elements.difficulty?.value || "normal";
   const cfg = SOL.difficulties[difficultyKey] ?? SOL.difficulties.normal;
   const raw = Number(form.elements.modifier?.value);
@@ -49,7 +52,10 @@ function readForm(form, score, statusModifier = 0) {
   const calledShot = form.elements.calledShot?.value || "none";
   const aimActions = readAim(form);
   const situation = attackSituation(calledShot, aimActions);
-  const modifier = cappedModifier(cfg.modifier, free, situation.situation + Number(statusModifier || 0));
+  const stacked = situation.situation + Number(statusModifier || 0);
+  const modifier = shipPost
+    ? rollModifier(cfg.modifier, free, stacked, { shipPost: true })
+    : cappedModifier(cfg.modifier, free, stacked);
   const aimPart = situation.aim.parts.find(part => part.id === "aim");
   return {
     difficultyKey,
@@ -74,13 +80,14 @@ function readForm(form, score, statusModifier = 0) {
  * @param {HTMLElement} root
  * @param {number} score
  * @param {number} [statusModifier]
+ * @param {boolean} [shipPost]
  * @returns {void}
  */
-function paintTotal(root, score, statusModifier = 0) {
+function paintTotal(root, score, statusModifier = 0, shipPost = false) {
   const form = root.querySelector("form") ?? root;
   const out = form.querySelector("[data-total]");
   if ( !out || !form.elements?.difficulty ) return;
-  out.textContent = formatModifier(readForm(form, score, statusModifier).modifier);
+  out.textContent = formatModifier(readForm(form, score, statusModifier, shipPost).modifier);
 }
 
 /**
@@ -90,13 +97,16 @@ function paintTotal(root, score, statusModifier = 0) {
  * @param {number} score
  * @param {string} [difficultyKey]
  * @param {number} [free]
+ * @param {{ shipPost?: boolean }} [options]
  * @returns {{ difficultyKey: string, difficultyLabel: string, difficultyModifier: number, free: number, modifier: number, target: number }}
  */
-export function rollChoice(score, difficultyKey = "normal", free = 0) {
+export function rollChoice(score, difficultyKey = "normal", free = 0, { shipPost = false } = {}) {
   const key = difficultyKey in SOL.difficulties ? difficultyKey : "normal";
   const cfg = SOL.difficulties[key];
   const safeFree = Number.isFinite(free) ? Math.trunc(free) : 0;
-  const modifier = cappedModifier(cfg.modifier, safeFree);
+  const modifier = shipPost
+    ? rollModifier(cfg.modifier, safeFree, 0, { shipPost: true })
+    : cappedModifier(cfg.modifier, safeFree);
   return {
     difficultyKey: key,
     difficultyLabel: game.i18n.localize(cfg.label),
@@ -148,10 +158,10 @@ function statusNote(statusModifier) {
 }
 
 /**
- * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number, free?: number }} options
+ * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number, free?: number, shipPost?: boolean }} options
  * @returns {Promise<null|object>}
  */
-export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0 }) {
+export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0, shipPost = false }) {
   const initialFree = Number.isFinite(Number(free)) ? Math.trunc(Number(free)) : 0;
   const escape = foundry.utils.escapeHTML;
   const options = DIFFICULTY_ORDER.map(key => {
@@ -186,7 +196,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         action: "roll",
         label: game.i18n.localize("SOL.Roll.confirm"),
         default: true,
-        callback: (_event, button) => readForm(button.form, score, statusModifier)
+        callback: (_event, button) => readForm(button.form, score, statusModifier, shipPost)
       },
       {
         action: "cancel",
@@ -201,7 +211,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         : (second?.element ?? first?.element ?? second);
       if ( root instanceof HTMLElement ) {
         const form = root.querySelector("form") ?? root;
-        const update = () => paintTotal(form, score, statusModifier);
+        const update = () => paintTotal(form, score, statusModifier, shipPost);
         form.querySelector("[name=difficulty]")?.addEventListener("change", update);
         form.querySelector("[name=modifier]")?.addEventListener("input", update);
         form.querySelector("[name=calledShot]")?.addEventListener("change", update);

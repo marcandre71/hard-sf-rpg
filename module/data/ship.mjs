@@ -3,10 +3,10 @@
  *
  * Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §2.
  * Pas de carte vectorielle : postes et portées abstraites.
- * Pas de caractéristiques. Décision Marc 18/10/2026 : véhicules et
- * vaisseaux n'ont pas d'initiative. La garde est dans
- * `module/ships/guard.mjs` (0.7.1). Les jets de poste sont dans
- * `module/ships/space-ui.mjs`. Pas de dégâts ici (0.7.2).
+ * Pas de caractéristiques. Décision Marc 23/10/2026 : le vaisseau
+ * entre dans le Combat Tracker. Le véhicule, non (`guard.mjs`).
+ * Les jets de poste sont dans `module/ships/actions.mjs`.
+ * Pas de dégâts ici (0.7.3).
  *
  * Décision Marc 21/10/2026 : abri anti-radiation, position, cap et
  * champs de station ne sont pas codés.
@@ -17,9 +17,8 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html
  */
 import { SOL } from "../config.mjs";
-import { keepExactDeltaV } from "../ships/combat.mjs";
 import { clampShipDiff, departureMass, effectiveClampCurrent } from "../ships/hull.mjs";
-import { migrateShipSource } from "../ships/migrate.mjs";
+import { migrateShipSource, roundPresentDeltaV } from "../ships/migrate.mjs";
 import { htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
 /**
@@ -136,8 +135,13 @@ export class ShipData extends foundry.abstract.TypeDataModel {
           step: 1,
           hint: "SOL.Ship.propulsion.accelerationHint"
         }),
-        // km/s. Décision Marc 21/10/2026. Pas `integer` : 3,6 est accepté.
-        deltaV: valueMaxField("SOL.Ship.propulsion.deltaV", { min: 0, hint: "SOL.Ship.propulsion.deltaVHint" })
+        // km/s, au dixième. Décision Marc 23/10/2026. Pas `integer` : 3,6 est accepté.
+        // Le MJ le modifie à la main. Pas de déduction automatique.
+        deltaV: valueMaxField("SOL.Ship.propulsion.deltaV", {
+          min: 0,
+          step: 0.1,
+          hint: "SOL.Ship.propulsion.deltaVHint"
+        })
       }, { label: "SOL.Ship.propulsion.label" }),
       reserves: new SchemaField({
         air: numberField("SOL.Ship.reserves.air", { initial: 0, min: 0, integer: true, step: 1 }),
@@ -157,6 +161,15 @@ export class ShipData extends foundry.abstract.TypeDataModel {
         initial: "trained",
         blank: false,
         choices: SOL.npcCrewLevels
+      }),
+      // Proche, moyenne, lointaine. Décision Marc 23/10/2026.
+      // `initial` seulement : une migration n'injecte pas la clé
+      // dans un diff qui ne l'a pas. Réf. Vaisseaux v0.1 §3.
+      range: stringField("SOL.Ship.range.label", {
+        initial: "medium",
+        blank: false,
+        choices: SOL.shipRanges,
+        hint: "SOL.Ship.range.hint"
       }),
       sections: new SchemaField(sections, { label: "SOL.Ship.sections" }),
       posts: new SchemaField(posts, { label: "SOL.Ship.posts" }),
@@ -193,7 +206,8 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       // Token non lié : `_source` est le delta. Le maximum absent s'y
       // lit sur l'acteur de base (`token.baseActor`).
       const current = effectiveClampCurrent(this._source, baseShipSource(this));
-      keepExactDeltaV(changes.system, current);
+      // Décision Marc 23/10/2026 : au dixième, seulement si la clé est dans le diff.
+      roundPresentDeltaV(changes.system);
       clampShipDiff(changes.system, current);
     }
     if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);

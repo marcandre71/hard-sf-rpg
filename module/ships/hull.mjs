@@ -3,8 +3,8 @@
  *
  * Réf. Vaisseaux v0.1 §4 (état dérivé) et §5 (plaque + module de blindage).
  * Décision Marc 21/10/2026 : l'Intégrité remplace le SA et le tableau d'avaries.
- * Pas de dégâts ici. Les jets de poste sont dans `space-ui.mjs` (0.7.1).
- * La chaleur, Pousser et les réparations restent pour la 0.7.3.
+ * Pas de dégâts ici. Les jets de poste sont dans `actions.mjs` (0.7.2).
+ * La chaleur, Pousser et les réparations restent pour la 0.7.4.
  *
  * Les clés sont en anglais. Les libellés français sont dans `lang/fr.json`.
  */

@@ -11,7 +11,7 @@
  */
 import { SOL } from "../config.mjs";
 import { struckZone } from "./attack.mjs";
-import { cappedModifier, formatModifier, resolveD100 } from "./d100.mjs";
+import { cappedModifier, formatModifier, resolveD100, rollModifier } from "./d100.mjs";
 import { askRoll } from "./roll-dialog.mjs";
 import { statusRollModifiers, statusSituation } from "./status-mods.mjs";
 
@@ -108,6 +108,7 @@ function resultKey(critical, success) {
  * @param {string} [params.note] Rappel déjà traduit, sous le résultat.
  * @param {(outcome: { success: boolean, dr: number, de: number }) => string} [params.noteFor] Rappel selon le résultat.
  * @param {number} [params.suggested] Modificateur libre proposé. Le MJ peut le changer.
+ * @param {boolean} [params.shipPost] Poste de vaisseau : pas de plafond ±50. Décision Marc 25/10/2026.
  * @param {string|null} [params.messageMode] Clé de `CONFIG.ChatMessage.modes`.
  * @param {object|null} [params.messageOptions] Champs ajoutés à la carte (`whisper`, `blind`, …).
  * @returns {Promise<null|{ success: boolean, dr: number, de: number, critical: "success"|"failure"|null, die: number, target: number }>}
@@ -122,13 +123,14 @@ export async function performRoll({
   note = "",
   noteFor = null,
   suggested = 0,
+  shipPost = false,
   messageMode = null,
   messageOptions = null
 }) {
   const statusModifier = statusSituation(actorStatusIds(actor));
   const picked = choice
-    ? stampStatus(choice, score, statusModifier)
-    : await askRoll({ title: label, score, attack: Boolean(weapon), statusModifier, free: suggested });
+    ? stampStatus(choice, score, statusModifier, shipPost)
+    : await askRoll({ title: label, score, attack: Boolean(weapon), statusModifier, free: suggested, shipPost });
   if ( !picked ) return null;
 
   // Foundry : 1d100 va de 1 à 100. Un 00 physique vaut 100.
@@ -244,16 +246,20 @@ export async function performRoll({
 
 /**
  * Ajoute le malus de statut à un choix déjà fait (test simple, jets groupés).
- * Le plafond ±50 s'applique au total. Réf. LdR v0.2 §5.
+ * Le plafond ±50 s'applique au total d'un personnage. Réf. LdR v0.2 §5.
+ * Décision Marc 25/10/2026 : un jet de poste de vaisseau n'est pas borné.
  *
  * @param {object} choice
  * @param {number} score
  * @param {number} statusModifier
+ * @param {boolean} [shipPost]
  * @returns {object}
  */
-function stampStatus(choice, score, statusModifier) {
+function stampStatus(choice, score, statusModifier, shipPost = false) {
   const situation = Number(choice.situation ?? 0) + Number(statusModifier || 0);
-  const modifier = cappedModifier(choice.difficultyModifier ?? 0, choice.free ?? 0, situation);
+  const modifier = shipPost
+    ? rollModifier(choice.difficultyModifier ?? 0, choice.free ?? 0, situation, { shipPost: true })
+    : cappedModifier(choice.difficultyModifier ?? 0, choice.free ?? 0, situation);
   return {
     ...choice,
     statusModifier,

@@ -31,7 +31,7 @@ import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
 import { ShipSheet } from "./sheets/ship-sheet.mjs";
-import { registerSpaceCombat } from "./ships/space-ui.mjs";
+import { registerShipPlay } from "./ships/actions.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 
@@ -137,7 +137,7 @@ function initializeSystem() {
   registerBreachCountdown();
   registerSealJoints();
   registerInitiative();
-  registerSpaceCombat();
+  registerShipPlay();
 }
 
 Hooks.once("init", initializeSystem);

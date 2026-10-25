@@ -1,31 +1,25 @@
 /**
- * Ordre du tour spatial, esquive, portée, delta-v. Sans Foundry.
- * Réf. Vaisseaux v0.1 §1 et §3.
+ * Combat spatial simplifié. Sans Foundry.
+ * Réf. Vaisseaux v0.1 §1 et §3. Réf. LdR v0.2 §6 et §7.
  */
 import { readFileSync } from "node:fs";
+import { encodeInitiative } from "../module/dice/initiative.mjs";
+import { cappedModifier, rollModifier } from "../module/dice/d100.mjs";
 import { SHIP_POST_IDS } from "../module/ships/hull.mjs";
 import {
-  actingOrder,
+  POST_ACTIONS,
+  actionBelongsToPost,
   blocksCharacterCombat,
-  blankCombat,
-  canPayThrust,
+  bonusesCleared,
   compareOpposed,
-  currentStep,
-  deltaVAfterRangeChange,
-  deltaVAfterThrust,
   duplicateActors,
+  emptyPostScore,
   evadeFromDr,
-  finishRound,
-  keepExactDeltaV,
-  nextPost,
-  normalizeCombat,
-  settle,
-  roundDeltaV,
+  refusesManeuver,
+  sharedRange,
   shiftRange,
+  shipInitiativeBasis,
   suggestedModifier,
-  thrustCostKmS,
-  turnOf,
-  turnSchedule,
   weaponCanFire
 } from "../module/ships/combat.mjs";
 import { matchesSkillSpec, skillsForPost } from "../module/ships/post-skills.mjs";
@@ -45,47 +39,11 @@ function check(ok, message) {
   console.error(message);
 }
 
-/**
- * @param {number} actual
- * @param {number} expected
- * @returns {boolean}
- */
-function near(actual, expected) {
-  return Math.abs(actual - expected) < 1e-9;
-}
-
-const expectedCost = 21 * 0.001 * 9.80665 * 60 / 1000;
-check(near(thrustCostKmS(21), expectedCost), `21 milli-g → ${expectedCost} km/s`);
-check(near(thrustCostKmS(21) * 1000, 12.356379), "21 milli-g → 12,356 m/s, sans arrondi à 12");
-check(thrustCostKmS(0) === 0 && thrustCostKmS(-3) === 0 && thrustCostKmS("x") === 0, "pas de poussée si l'accélération n'est pas positive");
-check(near(deltaVAfterThrust(3.6, 21), 3.6 - expectedCost), "3,6 km/s moins le produit exact");
-check(roundDeltaV(3.6 - expectedCost) === 3.588, "un tour s'affiche 3,588");
-check(roundDeltaV(thrustCostKmS(21) * 1000) === 12.356, "le coût s'affiche 12,356 m/s, pas 12");
-check(near(deltaVAfterRangeChange(3.6, 21), 3.6 - expectedCost), "changer de portée : produit exact, sans arrondi à 0,012");
-check(deltaVAfterRangeChange(0.001, 21) === 0, "la manœuvre ne passe pas sous 0");
-let tenTurns = 3.6;
-for ( let turn = 0; turn < 10; turn++ ) tenTurns = deltaVAfterThrust(tenTurns, 21);
-check(near(tenTurns, 3.6 - 10 * expectedCost), "dix tours : stocké exact");
-check(roundDeltaV(tenTurns) === 3.476, "dix tours : on lit 3,476");
-check(canPayThrust(3.6, 21) === true && canPayThrust(thrustCostKmS(21), 21) === true, "assez de delta-v : la manœuvre passe");
-check(canPayThrust(0.001, 21) === false && canPayThrust(thrustCostKmS(21) - 1e-6, 21) === false, "moins d'un tour : la manœuvre est refusée");
-const shown = { propulsion: { deltaV: { value: roundDeltaV(tenTurns) } } };
-keepExactDeltaV(shown, { propulsion: { deltaV: { value: tenTurns } } });
-check(!shown.propulsion, "l'affichage 3,476 ne réécrit pas le stock");
-const edited = { propulsion: { deltaV: { value: 3.5 } } };
-keepExactDeltaV(edited, { propulsion: { deltaV: { value: tenTurns } } });
-check(edited.propulsion.deltaV.value === 3.5, "une correction manuelle est gardée");
-const exactWrite = { propulsion: { deltaV: { value: 3.6 - expectedCost } } };
-keepExactDeltaV(exactWrite, { propulsion: { deltaV: { value: 3.6 } } });
-check(near(exactWrite.propulsion.deltaV.value, 3.6 - expectedCost), "l'écriture exacte n'est pas confondue avec l'affichage");
-check(deltaVAfterThrust(3.6, 0) === 3.6, "accélération nulle : le delta-v ne bouge pas");
-check(deltaVAfterThrust(0.001, 21) === 0, "le delta-v ne passe pas sous 0");
-
 check(evadeFromDr(1, true) === -10, "1 DR : −10");
 check(evadeFromDr(2, true) === -20, "2 DR : −20");
 check(evadeFromDr(4, true) === -30, "4 DR plafonnés à −30");
 check(evadeFromDr(2, false) === 0, "un échec n'esquive pas");
-check(evadeFromDr(0, true) === -10, "réussite à 0 DR : −10");
+check(evadeFromDr(0, true) === -10, "réussite à 0 DR : −10, max(10, 0)");
 
 const gunner = {
   postId: "gunner",
@@ -95,7 +53,13 @@ const gunner = {
   aim: "module"
 };
 check(suggestedModifier(gunner) === 10 - 20 - 30 - 40, "artilleur : +10, sans verrou −20, esquive −30, module −40");
-check(suggestedModifier({ ...gunner, weaponCondition: "degraded" }) === 10 - 20 - 30 - 40 - 20, "arme dégradée : −20 de plus pour l'artilleur");
+const stacked = suggestedModifier({ ...gunner, weaponCondition: "degraded", range: "long" });
+check(stacked === 10 - 20 - 30 - 40 - 20, "arme dégradée : −20 de plus, total au-delà de −50");
+check(rollModifier(0, stacked, 0, { shipPost: true }) === stacked, "jet de poste : le total au-delà de ±50 n'est pas borné");
+check(rollModifier(0, stacked, 0, { shipPost: false }) === -50, "jet de personnage : le même total est borné à −50");
+check(cappedModifier(0, stacked) === -50, "cappedModifier reste le plafond des personnages");
+check(rollModifier(30, 30, 0, { shipPost: true }) === 60, "jet de poste : +60 n'est pas ramené à +50");
+check(rollModifier(30, 30) === 50, "jet de personnage : +60 est ramené à +50");
 check(suggestedModifier({ postId: "pilot", ship: { pilotBonus: true }, weaponCondition: "degraded" }) === 10, "le −20 dégradé ne s'ajoute pas au pilote");
 check(suggestedModifier({
   postId: "gunner",
@@ -110,20 +74,24 @@ check(suggestedModifier({
   ship: { lock: false, commanderPost: "pilot", pilotBonus: true },
   foe: { evade: -30 },
   aim: "module"
-}) === 20, "le pilote prend le +10 du commandant et celui du navigateur, pas le malus de tir");
+}) === 20, "Calculer vaut pour le jet du pilote, avec le +10 du commandant");
+check(suggestedModifier({
+  postId: "pilot",
+  ship: { pilotBonus: true }
+}) === 10, "Changer de portée est un jet du pilote : le +10 de Calculer s'y ajoute aussi");
 check(suggestedModifier({
   postId: "gunner",
   range: "close",
   ship: {},
   foe: {},
   aim: "section"
-}) === -20, "hors combat la portée est proche : seule la visée compte");
+}) === -20, "visée d'une section : −20");
 
 const closeOnly = { category: "weapon", condition: "intact", rangeClose: true, rangeMedium: false, rangeLong: false };
 check(weaponCanFire(closeOnly, "close") === true && weaponCanFire(closeOnly, "medium") === false, "une arme de portée proche ne tire pas à moyenne");
 check(weaponCanFire({ ...closeOnly, condition: "out" }, "close") === false, "hors service : pas de tir");
 check(weaponCanFire({ ...closeOnly, condition: "unset" }, "close") === false, "non renseigné : pas de tir");
-check(weaponCanFire({ ...closeOnly, condition: "degraded" }, "close") === true, "dégradé : le tir reste possible, le −20 n'est pas dans cette fonction");
+check(weaponCanFire({ ...closeOnly, condition: "degraded" }, "close") === true, "dégradé : le tir reste possible");
 const missile = { category: "weapon", condition: "intact", rangeClose: false, rangeMedium: true, rangeLong: true };
 check(weaponCanFire(missile, "medium") === true && weaponCanFire(missile, "long") === true && weaponCanFire(missile, "close") === false, "missile : moyenne et lointaine");
 check(weaponCanFire({ category: "propulsion", condition: "intact", rangeClose: true }, "close") === false, "un moteur n'est pas une arme");
@@ -131,85 +99,60 @@ check(weaponCanFire({ category: "propulsion", condition: "intact", rangeClose: t
 check(shiftRange("close", "closer") === "close", "déjà proche : on ne se rapproche plus");
 check(shiftRange("long", "farther") === "long", "déjà lointaine : on ne s'éloigne plus");
 check(shiftRange("medium", "closer") === "close" && shiftRange("medium", "farther") === "long", "une portée de chaque côté");
+check(sharedRange("medium", "closer") === "close", "manœuvre gagnée : les deux vaisseaux prennent le même cran");
+check(sharedRange("long", "nope") === null, "sans direction, la portée n'est pas réécrite");
 
 check(compareOpposed({ success: true, dr: 1, score: 10 }, { success: false, dr: 0, score: 90 }) === "a", "une réussite bat un échec");
 check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 4, score: 40 }) === "b", "deux réussites : le plus gros DR");
-check(compareOpposed({ success: true, dr: 2, score: 40 }, { success: true, dr: 2, score: 65 }, { useScore: true }) === "b", "même DR : le score, à l'ouverture");
-check(compareOpposed({ success: true, dr: 2, score: 50 }, { success: true, dr: 2, score: 50 }, { useScore: true }) === "tie", "scores égaux : le MJ choisit");
-check(compareOpposed({ success: false, dr: 0, de: 4, score: 80 }, { success: false, dr: 0, de: 1, score: 40 }, { useScore: true }) === "a", "deux échecs : le score, pas les DE");
 check(compareOpposed({ success: true, dr: 1, score: 80 }, { success: true, dr: 1, score: 40 }, { useScore: true, scoreOnFailure: false }) === "a", "changement de portée : deux réussites au même DR, le score");
 check(compareOpposed({ success: true, dr: 1, score: 40 }, { success: true, dr: 1, score: 40 }, { useScore: true, scoreOnFailure: false }) === "tie", "scores égaux : la portée ne bouge pas");
 check(compareOpposed({ success: false, dr: 0, score: 80 }, { success: false, dr: 0, score: 40 }, { useScore: true, scoreOnFailure: false }) === "tie", "changement de portée : deux échecs, personne ne gagne");
 check(compareOpposed({ success: false, de: 5, score: 90 }, { success: false, de: 1, score: 10 }) === "tie", "les DE ne départagent pas");
 
-check(blocksCharacterCombat("ship") === true && blocksCharacterCombat("vehicle") === true, "vaisseau et véhicule : pas le tracker des personnages");
+check(blocksCharacterCombat("ship") === false, "le vaisseau entre dans le Combat Tracker");
+check(blocksCharacterCombat("vehicle") === true, "le véhicule reste dehors");
 check(blocksCharacterCombat("character") === false && blocksCharacterCombat("npc") === false, "personnage et PNJ restent dans le tracker");
+check(refusesManeuver("fixed") === true && refusesManeuver("void") === false && refusesManeuver("atmospheric") === false, "seul l'objet fixe refuse la manœuvre");
 
 check(duplicateActors([{ uuid: "A" }, { uuid: "" }, { uuid: "A" }, { uuid: "B" }]).join() === "A", "un acteur sur deux postes");
 check(duplicateActors([{ uuid: "A" }, { uuid: "B" }]).length === 0, "postes distincts");
 
-const two = normalizeCombat({ ships: ["A", "B"], range: "long", firstSide: null });
 check(SHIP_POST_IDS.join() === "commander,operator,navigator,pilot,gunner,engineer,medic", "ordre des postes");
-const schedule = turnSchedule(two);
-check(schedule.length === 14, "quatorze créneaux");
-check(schedule[0].postId === "commander" && schedule[0].uuid === "A" && schedule[0].side === 0, "commandant du premier");
-check(schedule[1].postId === "commander" && schedule[1].uuid === "B" && schedule[1].side === 1, "puis le commandant de l'autre");
-check(schedule[4].postId === "navigator" && schedule[5].postId === "navigator", "le navigateur passe avant le pilote");
-check(schedule[6].postId === "pilot" && schedule[7].postId === "pilot", "le pilote exécute après le calcul");
-check(schedule[13].postId === "medic" && schedule[13].uuid === "B", "le médecin du second ferme le tour");
-check(actingOrder({ ships: ["A", "B"], firstSide: 1 }).join() === "B,A", "le vainqueur de l'ouverture passe devant");
-const swapped = turnSchedule(normalizeCombat({ ships: ["A", "B"], firstSide: 1 }));
-check(swapped[0].uuid === "B" && swapped[1].uuid === "A", "à chaque poste, le premier désigné puis l'autre");
+check(actionBelongsToPost("commander", "command") === true, "le +10 du commandant a l'id command");
+check(actionBelongsToPost("gunner", "command") === false, "command n'appartient pas à l'artilleur");
+check(actionBelongsToPost("pilot", "changeRange") === true && actionBelongsToPost("gunner", "changeRange") === false, "changer de portée est un jet de pilote");
+check(actionBelongsToPost("gunner", "fire") === true && actionBelongsToPost("pilot", "fire") === false, "tirer appartient à l'artilleur");
+check(POST_ACTIONS.engineer.join() === "simple" && POST_ACTIONS.medic.join() === "simple", "ingénieur et médecin : un jet");
 
-let cursor = two;
-const seen = [];
-for ( let step = 0; step < 20; step++ ) {
-  const here = currentStep(cursor);
-  seen.push(`${here.postId}:${here.side}:${here.shipUuid}`);
-  const stepped = nextPost(cursor);
-  if ( stepped.done ) break;
-  cursor = stepped.state;
-}
-check(seen.length === 14 && seen[0] === "commander:0:A" && seen[1] === "commander:1:B" && seen[2] === "operator:0:A" && seen[4] === "navigator:0:A" && seen[6] === "pilot:0:A", "le poste suivant avance, sans boucler");
-
-let kept = normalizeCombat({
-  ships: ["A", "B"],
-  postIndex: SHIP_POST_IDS.indexOf("navigator"),
-  side: 0,
-  turns: { A: { lock: true, pilotBonus: true } }
+const cleared = bonusesCleared({
+  lock: true,
+  evade: -20,
+  commanderPost: "gunner",
+  pilotBonus: true,
+  thrust: true
 });
-kept = nextPost(kept).state;
-kept = nextPost(kept).state;
-check(currentStep(kept).postId === "pilot" && currentStep(kept).shipUuid === "A", "après le navigateur, on arrive au pilote");
-check(turnOf(kept, "A").pilotBonus === true && suggestedModifier({ postId: "pilot", ship: turnOf(kept, "A") }) === 10, "le +10 de Calculer tient jusqu'au jet du pilote");
-const cleared = finishRound(kept);
-check(cleared.state.turns.A.pilotBonus === false && cleared.state.turns.A.lock === true, "le +10 part à la fin du tour, le verrouillage reste");
-check(nextPost(cursor).done === true, "après le dernier médecin, le tour est fini");
+check(cleared.lock === true, "au round suivant, le verrouillage reste");
+check(cleared.evade === 0 && cleared.commanderPost === "" && cleared.pilotBonus === false, "esquive, commandant et Calculer sont vidés");
+check(!Object.hasOwn(cleared, "thrust"), "la poussée du tour n'est plus un champ");
+const fresh = bonusesCleared(null);
+check(fresh.lock === false && fresh.evade === 0 && fresh.pilotBonus === false, "tour vide : rien à garder");
 
-const skip = nextPost(normalizeCombat({ ships: ["A", ""], postIndex: 0, side: 0 }));
-check(skip.done === false && skip.state.postIndex === 1 && skip.state.side === 0 && currentStep(skip.state).shipUuid === "A", "un côté vide est sauté");
-check(nextPost(normalizeCombat({ ships: ["", ""] })).done === true, "deux côtés vides : rien à jouer");
-const settled = settle(normalizeCombat({ ships: ["", "B"], postIndex: 0, side: 0 }));
-check(settled.done === false && settled.state.side === 1 && currentStep(settled.state).shipUuid === "B", "le créneau courant vide avance");
-
-const round = finishRound(normalizeCombat({
-  round: 2,
-  ships: ["A", "B"],
-  turns: {
-    A: { thrust: true, lock: true, evade: -20, commanderPost: "gunner", pilotBonus: true },
-    B: { thrust: false, lock: false, evade: -10, commanderPost: "pilot", pilotBonus: true }
-  }
-}), {
-  A: { acceleration: 21, deltaV: 3.6 },
-  B: { acceleration: 0, deltaV: 3.6 }
+check(emptyPostScore("trained") === 50 && emptyPostScore("blue") === 35 && emptyPostScore("veteran") === 65 && emptyPostScore("elite") === 80, "scores PNJ de 0.7.1");
+check(emptyPostScore("nope") === 50 && emptyPostScore(undefined) === 50, "équipage inconnu : entraîné, comme un poste vide");
+const npc = shipInitiativeBasis({ npcCrew: "trained" });
+check(npc.npc === true && npc.score === 50 && npc.ref === 0, "poste Opérateur vide : 50, RÉF 0");
+const operator = shipInitiativeBasis({ npcCrew: "trained", operatorScore: 64, operatorRef: 57 });
+check(operator.npc === false && operator.score === 64 && operator.ref === 57, "l'acteur du poste donne son score et sa RÉF");
+const shipRank = encodeInitiative({
+  success: true, dr: 2, de: 0, ref: operator.ref, critical: "success", score: operator.score
 });
-check(round.state.round === 3 && round.state.postIndex === 0 && round.state.side === 0, "tour suivant : compteur + 1, retour au commandant");
-check(round.state.turns.A.lock === true && round.state.turns.A.thrust === false, "le verrouillage reste, la poussée s'efface");
-check(round.state.turns.A.evade === 0 && round.state.turns.A.commanderPost === "" && round.state.turns.A.pilotBonus === false, "esquive et bonus du tour s'effacent");
-check(round.state.turns.B.evade === 0 && round.state.turns.B.pilotBonus === false, "l'autre vaisseau aussi");
-check(round.deductions.length === 1 && round.deductions[0].uuid === "A" && near(round.deductions[0].value, 3.6 - expectedCost), "seule la poussée cochée enlève du delta-v");
-
-check(blankCombat().range === "medium" && blankCombat().ships.join() === ",", "combat vide : portée moyenne, deux côtés");
+const personRank = encodeInitiative({
+  success: true, dr: 2, de: 0, ref: 57, critical: "success", score: 64
+});
+check(shipRank === personRank, "même formule d'initiative qu'un personnage");
+const npcRank = encodeInitiative({ success: false, dr: 0, de: 3, ref: npc.ref, critical: null, score: npc.score });
+const personNpc = encodeInitiative({ success: false, dr: 0, de: 3, ref: 0, critical: null, score: 50 });
+check(npcRank === personNpc, "équipage PNJ : le départage est celui d'un échec à RÉF 0 et score 50");
 
 const pilot = skillsForPost("pilot", [{
   name: "Pilotage : fusion",
@@ -218,6 +161,7 @@ const pilot = skillsForPost("pilot", [{
 check(pilot.length === 1 && pilot[0].virtual === false && pilot[0].system.untrainedAllowed === false, "la fusion garde l'interdiction sans formation");
 check(matchesSkillSpec("Mécanique", { kind: "exact", name: "Mécanique" }) === true, "Mécanique exacte");
 check(matchesSkillSpec("Mécanique orbitale", { kind: "exact", name: "Mécanique" }) === false, "Mécanique orbitale n'est pas Mécanique");
+check(matchesSkillSpec("Opérations de bord", { kind: "exact", name: "Opérations de bord" }) === true, "initiative : Opérations de bord");
 const engineer = skillsForPost("engineer", [
   { name: "Mécanique orbitale", system: { characteristic: "int" } },
   { name: "Mécanique", system: { characteristic: "int", trainingRequired: false } }
@@ -228,12 +172,21 @@ check(engineer.some(skill => skill.name === "Réacteurs et propulsion" && skill.
 const medic = skillsForPost("medic", [{ name: "Médecine : trauma", system: { characteristic: "int" } }]);
 check(medic.some(skill => skill.name === "Médecine : trauma") && medic.some(skill => skill.name === "Premiers secours"), "médecin : médecine ou premiers secours");
 
-for ( const key of ["title", "notInTracker", "hitLater", "incident", "tie", "thrustLine", "duplicate"] ) {
+for ( const key of ["notInTracker", "hitLater", "incident", "duplicate", "noTarget", "fixedNoManeuver", "relayAction"] ) {
   check(typeof fr.SOL.Space[key] === "string" && fr.SOL.Space[key].length > 0, `libellé SOL.Space.${key}`);
 }
+for ( const id of ["close", "medium", "long"] ) {
+  check(typeof fr.SOL.Ship.range[id] === "string", `portée ${id}`);
+}
+check(!fr.SOL.Space.open && !fr.SOL.Space.thrust && !fr.SOL.Space.endCombat, "la fenêtre et la poussée du tour n'ont plus de libellé");
+
+const actions = readFileSync(new URL("../module/ships/actions.mjs", import.meta.url), "utf8");
+check(!/settings\.(get|set|register)/.test(actions), "le réglage spaceCombat n'est plus lu ni enregistré");
+check(actions.includes("updateCombat"), "les bonus partent sur updateCombat");
+check(actions.includes("userId est déclaratif") || actions.includes("userId` est déclaratif"), "userId déclaratif est documenté");
 
 if ( failed ) {
   console.error(`${failed} échec(s)`);
   process.exit(1);
 }
-console.log("tests/space.test.mjs : ordre, esquive, portée et delta-v ok.");
+console.log("tests/space.test.mjs : initiative, bonus de round, portée et plafond ok.");

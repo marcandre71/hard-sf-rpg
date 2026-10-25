@@ -25,7 +25,7 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
-import { migrateShipModuleSource, migrateShipSource } from "../module/ships/migrate.mjs";
+import { migrateShipModuleSource, migrateShipSource, roundPresentDeltaV } from "../module/ships/migrate.mjs";
 import { SHIP_TYPE_GROUPS } from "../module/ships/types.mjs";
 
 const fr = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));
@@ -159,6 +159,27 @@ check(!("propulsion" in descriptionWithBase) && !("sections" in descriptionWithB
 const descriptionOnly = { description: "<p>x</p>" };
 migrateShipSource(descriptionOnly);
 check(!("category" in descriptionOnly) && !("shipType" in descriptionOnly) && !("sections" in descriptionOnly), "un diff sans catégorie n'en reçoit pas");
+check(!("propulsion" in descriptionOnly) && !("range" in descriptionOnly), "un diff de description ne gagne ni delta-v ni portée");
+
+const exactDelta = { propulsion: { deltaV: { value: 3.587644, max: 3.64, exact: 3.587644 } } };
+migrateShipSource(exactDelta);
+check(exactDelta.propulsion.deltaV.value === 3.6 && exactDelta.propulsion.deltaV.max === 3.6, "le delta-v existant est arrondi au dixième");
+check(!("exact" in exactDelta.propulsion.deltaV), "la clé exacte est retirée seulement parce qu'elle était là");
+const valueOnly = { propulsion: { deltaV: { value: 3.54 } } };
+migrateShipSource(valueOnly);
+check(valueOnly.propulsion.deltaV.value === 3.5 && !("max" in valueOnly.propulsion.deltaV) && !("exact" in valueOnly.propulsion.deltaV), "sans max ni clé ancienne, on n'en ajoute pas");
+const typeOnlyDelta = { propulsion: { type: "eau" } };
+migrateShipSource(typeOnlyDelta);
+check(!("deltaV" in typeOnlyDelta.propulsion), "un type de propulsion ne gagne pas de delta-v");
+const alreadyTenth = { propulsion: { deltaV: { value: 3.6, max: 3.6 } } };
+migrateShipSource(alreadyTenth);
+check(alreadyTenth.propulsion.deltaV.value === 3.6 && alreadyTenth.propulsion.deltaV.max === 3.6, "Petite Fortune : 3,6 / 3,6 reste 3,6 / 3,6");
+const unreadable = { propulsion: { deltaV: { value: "x" } } };
+roundPresentDeltaV(unreadable);
+check(unreadable.propulsion.deltaV.value === "x", "une valeur illisible n'est pas remplacée par 0");
+const withExactValue = { propulsion: { deltaV: { value: 1.26, exactValue: 1.255 } } };
+roundPresentDeltaV(withExactValue);
+check(withExactValue.propulsion.deltaV.value === 1.3 && !("exactValue" in withExactValue.propulsion.deltaV), "exactValue part, value est arrondie");
 
 const oldRadiators = { sections: { radiators: { integrity: { value: 6, max: 6 } } } };
 migrateShipSource(oldRadiators);
@@ -242,8 +263,11 @@ for ( const file of ["ModExLaserDef001.json", "ModExCanonEM0001.json", "ModExMis
   check(weapon.system.mass === 0, `${file} : masse encore non écrite`);
 }
 const shipModel = readFileSync(new URL("../module/data/ship.mjs", import.meta.url), "utf8");
-const deltaLine = shipModel.split("\n").find(line => line.includes("deltaV:"));
-check(Boolean(deltaLine) && !deltaLine.includes("integer"), "le champ delta-v n'est pas entier : 3,6 est accepté");
+const deltaAt = shipModel.indexOf("deltaV:");
+const deltaBlock = shipModel.slice(deltaAt, deltaAt + 280);
+check(deltaAt >= 0 && !deltaBlock.includes("integer") && deltaBlock.includes("step: 0.1"), "le delta-v accepte 3,6, au pas de 0,1");
+check(shipModel.includes("choices: SOL.shipRanges"), "la fiche a un champ Portée");
+check(!shipModel.includes("keepExactDeltaV"), "le stockage exact du delta-v est retiré");
 
 if ( failed ) {
   console.error(`${failed} échec(s)`);

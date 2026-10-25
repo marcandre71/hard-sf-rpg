@@ -2,7 +2,11 @@
  * Initiative glissante dans le Combat Tracker.
  *
  * Réf. LdR v0.2 §7. Décision Marc 18/10/2026.
- * Le premier tour est un test de Vigilance. L'ordre reste ensuite,
+ * Le premier tour d'un personnage est un test de Vigilance.
+ * Décision Marc 23/10/2026 : un vaisseau jette Opérations de bord
+ * (acteur du poste Opérateur, ou équipage PNJ si le poste est vide).
+ * La formule et le départage sont les mêmes (`encodeInitiative`).
+ * L'ordre reste ensuite,
  * sauf fin d'ordre (blessure grave ou pire, ou Sonné) au round suivant,
  * recul d'une place (interruption), ou « se replacer ».
  * Aucun bonus lié à la place.
@@ -64,6 +68,7 @@ import {
   vigilanceBaseScore
 } from "../dice/initiative.mjs";
 import { rollChoice } from "../dice/roll-dialog.mjs";
+import { prepareShipInitiative } from "../ships/crew.mjs";
 
 const SYSTEM_ID = INITIATIVE_FLAG_SCOPE;
 
@@ -514,8 +519,9 @@ export class SolCombatant extends Combatant {
 
 export class SolCombat extends Combat {
   /**
-   * Test de Vigilance, pas la formule du cœur.
-   * `rollAll` et `rollNPC` appellent cette méthode (doc v14).
+   * Test de Vigilance pour un personnage, Opérations de bord pour un vaisseau.
+   * Pas la formule du cœur. `rollAll` (« Lancer l'initiative ») et
+   * `rollNPC` (« Lancer pour les PNJ ») appellent cette méthode (doc v14).
    *
    * @override
    * @param {string|string[]} ids
@@ -537,25 +543,41 @@ export class SolCombat extends Combat {
       if ( !combatant?.isOwner ) continue;
       const actor = combatant.actor;
       if ( !actor ) continue;
-      if ( !CAN_FIGHT.has(actor.type) ) {
-        // Décision Marc 18/10/2026 : véhicule et vaisseau restent hors
-        // initiative (le pilote ou l'équipage agit). À revoir avec le
-        // combat spatial.
+      // Décision Marc 18/10/2026 : le véhicule n'a pas d'initiative.
+      // Décision Marc 23/10/2026 : le vaisseau en a une, Opérations de bord.
+      if ( actor.type !== "ship" && !CAN_FIGHT.has(actor.type) ) {
         ui.notifications.warn(game.i18n.format("SOL.Initiative.notAllowed", { name: combatant.name }));
         continue;
       }
-      const rated = vigilanceBaseScore(
-        actor.system?.characteristics,
-        actor.items.filter(item => item.type === "skill"),
-        SOL.vigilanceSkill
-      );
-      if ( rated.impossible || typeof rated.score !== "number" ) {
-        ui.notifications.warn(game.i18n.format("SOL.Initiative.impossible", { name: actor.name }));
-        continue;
+      const ship = actor.type === "ship";
+      let score;
+      let ref;
+      let rollActor = actor;
+      let label = game.i18n.localize("SOL.Initiative.vigilance");
+      if ( ship ) {
+        const prepared = await prepareShipInitiative(actor);
+        if ( !prepared ) continue;
+        score = prepared.score;
+        ref = prepared.ref;
+        rollActor = prepared.actor;
+        label = prepared.label;
+      } else {
+        const rated = vigilanceBaseScore(
+          actor.system?.characteristics,
+          actor.items.filter(item => item.type === "skill"),
+          SOL.vigilanceSkill
+        );
+        if ( rated.impossible || typeof rated.score !== "number" ) {
+          ui.notifications.warn(game.i18n.format("SOL.Initiative.impossible", { name: actor.name }));
+          continue;
+        }
+        score = rated.score;
+        ref = reflexScore(actor.system?.characteristics);
       }
       // Décision Marc 18/10/2026 : un jet groupé (tout lancer, lancer les PNJ)
       // est en difficulté Normale, sans une fenêtre par combattant.
-      const choice = batch ? rollChoice(rated.score) : null;
+      // `rollAll` et `rollNPC` passent par ici (doc v14).
+      const choice = batch ? rollChoice(score, "normal", 0, { shipPost: ship }) : null;
       // Combatant caché : carte privée MJ (`gm`, doc ChatMessage.applyMode).
       // Sinon le mode du cœur, ou celui porté par messageOptions.
       const messageMode = combatant.hidden
@@ -565,24 +587,25 @@ export class SolCombat extends Combat {
           ?? options.messageOptions?.rollMode
           ?? null);
       const outcome = await performRoll({
-        actor,
-        label: game.i18n.localize("SOL.Initiative.vigilance"),
-        score: rated.score,
+        actor: rollActor,
+        label,
+        score,
         type: "initiative",
         choice,
+        shipPost: ship,
         note: options.reposition ? game.i18n.localize("SOL.Initiative.sacrificed") : "",
         messageMode,
         messageOptions: options.messageOptions ?? null
       });
       if ( !outcome ) continue;
-      const ref = reflexScore(actor.system?.characteristics);
+      // Même encodage que Vigilance : réussite, DR/DE, critique, RÉF, score.
       const initiative = encodeInitiative({
         success: outcome.success,
         dr: outcome.dr,
         de: outcome.de,
         ref,
         critical: outcome.critical,
-        score: rated.score
+        score
       });
       const rank = {
         success: outcome.success,
@@ -590,7 +613,7 @@ export class SolCombat extends Combat {
         de: outcome.de,
         ref,
         critical: outcome.critical ?? null,
-        score: rated.score
+        score
       };
       const order = turnOrder(this);
       const index = order.findIndex(entry => entry.id === id);

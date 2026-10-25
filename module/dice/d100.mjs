@@ -23,9 +23,29 @@ export function tens(value) {
 }
 
 /**
- * Difficulté + modificateur libre + situation, borné à ±50.
- * Réf. LdR v0.2 §5. Le tir visé et Viser (LdR v0.2 §7) entrent dans
- * `situation`. Le score qui en résulte n'est pas borné ici.
+ * Difficulté + modificateur libre + situation.
+ *
+ * Décision Marc 25/10/2026 : un jet de poste de vaisseau (`shipPost`)
+ * n'est pas ramené à ±50. Commandant, Calculer, verrouillage ou son
+ * absence, tir visé, arme dégradée et le reste s'additionnent tels quels.
+ * Un jet de personnage, hors poste de vaisseau, reste borné.
+ * Réf. LdR v0.2 §5. Le score qui en résulte n'est pas borné ici.
+ *
+ * @param {number} difficulty
+ * @param {number} free
+ * @param {number} [situation]
+ * @param {{ shipPost?: boolean }} [options]
+ * @returns {number}
+ */
+export function rollModifier(difficulty, free, situation = 0, { shipPost = false } = {}) {
+  const sum = Number(difficulty) + Number(free) + Number(situation);
+  if ( !Number.isFinite(sum) ) return 0;
+  if ( shipPost ) return sum; // Décision Marc 25/10/2026
+  return Math.min(MODIFIER_LIMIT, Math.max(-MODIFIER_LIMIT, sum));
+}
+
+/**
+ * Jet de personnage : total borné à ±50. Réf. LdR v0.2 §5.
  *
  * @param {number} difficulty
  * @param {number} free
@@ -33,9 +53,7 @@ export function tens(value) {
  * @returns {number}
  */
 export function cappedModifier(difficulty, free, situation = 0) {
-  const sum = Number(difficulty) + Number(free) + Number(situation);
-  if ( !Number.isFinite(sum) ) return 0;
-  return Math.min(MODIFIER_LIMIT, Math.max(-MODIFIER_LIMIT, sum));
+  return rollModifier(difficulty, free, situation, { shipPost: false });
 }
 
 /**

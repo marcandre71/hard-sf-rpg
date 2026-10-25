@@ -1,0 +1,638 @@
+/**
+ * Jets de poste depuis la fiche, dans le Combat Tracker.
+ *
+ * Décision Marc 23/10/2026 : plus de fenêtre « Combat spatial ».
+ * Le réglage de monde `spaceCombat` n'est plus enregistré.
+ * Un monde qui l'a déjà le garde en base ; rien ne le lit,
+ * donc le chargement ne plante pas.
+ * @see https://foundryvtt.com/api/v14/classes/foundry.helpers.ClientSettings.html
+ *
+ * Les bonus du tour sont un drapeau du document Combat.
+ * `updateCombat` les vide quand `round` change, chez le MJ actif.
+ * Le verrouillage reste. `deleteCombat` emporte le document,
+ * donc le verrouillage avec.
+ * @see https://foundryvtt.com/api/v14/functions/hookEvents.updateDocument.html
+ * @see https://foundryvtt.com/api/v14/functions/hookEvents.deleteDocument.html
+ *
+ * Le relais `system.sol-nouvelle-ere` sert encore : un joueur qui
+ * ne possède pas le vaisseau ne peut pas écrire le Combat ni la
+ * portée de la cible. `userId` est déclaratif (le socket ne prouve
+ * pas l'expéditeur). Acceptable à une table de confiance.
+ * Le MJ vérifie OWNER, que l'action appartient au poste, et borne
+ * le DR (0–10) et le score (0–200).
+ * @see https://foundryvtt.com/api/v14/classes/foundry.helpers.SocketInterface.html
+ * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.Document.html#testUserPermission
+ * @see https://foundryvtt.com/api/v14/classes/foundry.documents.User.html
+ */
+import { SOL } from "../config.mjs";
+import { performRoll } from "../dice/chat.mjs";
+import { skillScore } from "../dice/skill-score.mjs";
+import {
+  POST_ACTIONS,
+  SPACE_RANGES,
+  actionBelongsToPost,
+  bonusesCleared,
+  compareOpposed,
+  duplicateActors,
+  evadeFromDr,
+  normalizeTurn,
+  refusesManeuver,
+  sharedRange,
+  suggestedModifier,
+  weaponCanFire
+} from "./combat.mjs";
+import { crewOf } from "./crew.mjs";
+import { SHIP_POST_IDS } from "./hull.mjs";
+import { registerShipCombatGuard } from "./guard.mjs";
+
+const SYSTEM_ID = "sol-nouvelle-ere";
+const SOCKET = `system.${SYSTEM_ID}`;
+const TURNS = "spaceTurns";
+
+export { POST_ACTIONS };
+
+/**
+ * Garde du véhicule, relais, et vidage des bonus au changement de round.
+ * Une fois, sur `init`.
+ *
+ * @returns {void}
+ */
+export function registerShipPlay() {
+  registerShipCombatGuard();
+  game.socket?.on(SOCKET, onSpaceRelay);
+  Hooks.on("updateCombat", onCombatRound);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {string} action
+ * @returns {Promise<null|{ success: boolean, dr: number, de: number, score: number }>}
+ */
+export async function rollPostAction(ship, postId, action) {
+  if ( !ship || ship.type !== "ship" || !actionBelongsToPost(postId, action) ) return null;
+  warnIfDuplicate(ship, postId);
+  if ( action === "changeRange" ) return changeRange(ship);
+  return rollSingle(ship, postId, action);
+}
+
+/**
+ * @param {Combat} combat
+ * @param {object} changed
+ * @returns {void}
+ */
+function onCombatRound(combat, changed) {
+  if ( game.user?.isActiveGM !== true ) return;
+  if ( !changed || !Object.hasOwn(changed, "round") ) return;
+  const turns = readTurns(combat);
+  /** @type {Record<string, ReturnType<typeof bonusesCleared>>} */
+  const next = {};
+  let differ = false;
+  for ( const [id, turn] of Object.entries(turns) ) {
+    const cleared = bonusesCleared(turn);
+    next[id] = cleared;
+    const current = normalizeTurn(turn);
+    if ( cleared.lock !== current.lock || cleared.evade !== current.evade
+      || cleared.commanderPost !== current.commanderPost || cleared.pilotBonus !== current.pilotBonus ) {
+      differ = true;
+    }
+  }
+  if ( !differ ) return;
+  void combat.setFlag(SYSTEM_ID, TURNS, next);
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {Promise<null|object>}
+ */
+async function changeRange(ship) {
+  if ( !maneuverAllowed(ship) ) return null;
+  const noteFor = outcome => outcome.de >= 3 ? game.i18n.localize("SOL.Space.incident") : "";
+  const mine = await rollSingle(ship, "pilot", "changeRange", { noteFor, store: false });
+  if ( !mine ) return null;
+  const targets = targetedShips(ship);
+  if ( targets.length !== 1 ) {
+    const key = targets.length === 0 ? "SOL.Space.noTarget" : "SOL.Space.oneTarget";
+    ui.notifications.info(game.i18n.localize(key));
+    return mine;
+  }
+  const target = targets[0];
+  if ( !game.user.isGM ) {
+    await relayOwned(ship, "pilot", {
+      type: "changeRange",
+      shipUuid: ship.uuid,
+      targetUuid: target.uuid,
+      postId: "pilot",
+      action: "changeRange",
+      userId: game.user.id,
+      success: mine.success === true,
+      dr: mine.dr,
+      de: mine.de,
+      score: mine.score
+    });
+    return mine;
+  }
+  return resolveRangeChange(ship, target, mine);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {Actor} target
+ * @param {{ success: boolean, dr: number, de?: number, score: number }} mine
+ * @returns {Promise<object>}
+ */
+async function resolveRangeChange(ship, target, mine) {
+  if ( !maneuverAllowed(ship) ) return mine;
+  if ( !target || target.documentName !== "Actor" || target.type !== "ship" || target.uuid === ship.uuid ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.noTarget"));
+    return mine;
+  }
+  const noteFor = outcome => outcome.de >= 3 ? game.i18n.localize("SOL.Space.incident") : "";
+  const theirs = await rollSingle(target, "pilot", "changeRange", { noteFor, store: false });
+  if ( !theirs ) return mine;
+  const verdict = compareOpposed(mine, theirs, { useScore: true, scoreOnFailure: false });
+  if ( verdict === "tie" ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.rangeTie"));
+    return mine;
+  }
+  const winner = verdict === "a" ? ship : target;
+  const direction = await choose(game.i18n.format("SOL.Space.rangeWinner", { name: winner.name }), [
+    { id: "closer", label: game.i18n.localize("SOL.Space.closer") },
+    { id: "farther", label: game.i18n.localize("SOL.Space.farther") }
+  ]);
+  const next = sharedRange(shipRange(ship), direction);
+  if ( !next ) return mine;
+  if ( next === shipRange(ship) && next === shipRange(target) ) {
+    ui.notifications.info(game.i18n.localize("SOL.Space.rangeSame"));
+    return mine;
+  }
+  await ship.update({ "system.range": next });
+  await target.update({ "system.range": next });
+  const text = game.i18n.format("SOL.Space.rangeMoved", {
+    name: winner.name,
+    range: game.i18n.localize(SOL.shipRanges[next] ?? next)
+  });
+  await ChatMessage.create({ content: `<p>${foundry.utils.escapeHTML(text)}</p>` });
+  return mine;
+}
+
+/**
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {string} action
+ * @param {{ noteFor?: (outcome: object) => string, store?: boolean }} [options]
+ * @returns {Promise<null|{ success: boolean, dr: number, de: number, score: number }>}
+ */
+async function rollSingle(ship, postId, action, options = {}) {
+  const crew = await crewOf(ship, postId);
+  if ( !crew ) return null;
+  let aim = "";
+  let weaponCondition = "";
+  let skill = crew.skills[0];
+  if ( action === "command" ) {
+    const post = await choose(game.i18n.localize("SOL.Space.pickPost"), SHIP_POST_IDS.map(id => ({
+      id,
+      label: game.i18n.localize(SOL.shipPosts[id])
+    })));
+    if ( !post ) return null;
+    crew.chosenPost = post;
+  }
+  if ( action === "fire" ) {
+    const range = shipRange(ship);
+    const weapons = weaponsOf(ship).filter(weapon => weaponCanFire(weapon, range));
+    if ( !weapons.length ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Space.noWeapon"));
+      return null;
+    }
+    const weaponId = await choose(game.i18n.localize("SOL.Space.pickWeapon"), weapons.map(weapon => ({
+      id: weapon.id,
+      label: weapon.name
+    })));
+    if ( !weaponId ) return null;
+    weaponCondition = weapons.find(weapon => weapon.id === weaponId)?.condition ?? "";
+    aim = await choose(game.i18n.localize("SOL.Space.pickAim"), [
+      { id: "none", label: game.i18n.localize("SOL.Space.aimNone") },
+      { id: "section", label: game.i18n.localize("SOL.Space.aimSection") },
+      { id: "module", label: game.i18n.localize("SOL.Space.aimModule") }
+    ]);
+    if ( !aim ) return null;
+  }
+  if ( crew.skills.length > 1 ) {
+    const picked = await choose(game.i18n.localize("SOL.Space.pickSkill"), crew.skills.map((entry, index) => ({
+      id: String(index),
+      label: entry.name
+    })));
+    if ( picked === null ) return null;
+    skill = crew.skills[Number(picked)] ?? skill;
+  }
+  if ( !skill ) return null;
+  const score = crew.npc ? crew.score : ratedScore(crew.actor, skill);
+  if ( score === null ) return null;
+  const suggested = modifierFor(ship, postId, aim, weaponCondition);
+  const noteFor = options.noteFor ?? (action === "fire"
+    ? outcome => outcome.success ? game.i18n.localize("SOL.Space.hitLater") : ""
+    : null);
+  const outcome = await performRoll({
+    actor: crew.actor,
+    label: `${ship.name} — ${game.i18n.localize(SOL.shipPosts[postId])} — ${skill.name}`,
+    score,
+    type: "skill",
+    suggested,
+    shipPost: true,
+    noteFor: noteFor ?? undefined
+  });
+  if ( !outcome ) return null;
+  const result = { ...outcome, score };
+  if ( options.store !== false ) await storeEffect(ship, postId, action, result, crew.chosenPost);
+  return result;
+}
+
+/**
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {string} action
+ * @param {{ success: boolean, dr: number, score?: number }} result
+ * @param {string} [chosenPost]
+ * @returns {Promise<void>}
+ */
+async function storeEffect(ship, postId, action, result, chosenPost) {
+  if ( !result.success ) return;
+  if ( !actionBelongsToPost(postId, action) ) return;
+  const held = combatantFor(ship);
+  if ( !held ) {
+    if ( action === "simple" ) return;
+    ui.notifications.info(game.i18n.localize("SOL.Space.effectNotStored"));
+    return;
+  }
+  if ( !game.user.isGM ) {
+    await relayOwned(ship, postId, {
+      type: "effect",
+      shipUuid: ship.uuid,
+      postId,
+      userId: game.user.id,
+      action,
+      success: true,
+      dr: result.dr,
+      score: result.score,
+      chosenPost: chosenPost ?? ""
+    });
+    return;
+  }
+  await writeStoredEffect(held.combat, held.combatant.id, action, result, chosenPost);
+}
+
+/**
+ * @param {Combat} combat
+ * @param {string} combatantId
+ * @param {string} action
+ * @param {{ success?: boolean, dr?: number }} result
+ * @param {string} [chosenPost]
+ * @returns {Promise<void>}
+ */
+async function writeStoredEffect(combat, combatantId, action, result, chosenPost) {
+  if ( result?.success !== true || !combat || !combatantId ) return;
+  const turn = normalizeTurn(readTurns(combat)[combatantId]);
+  if ( action === "command" && chosenPost && SHIP_POST_IDS.includes(chosenPost) ) turn.commanderPost = chosenPost;
+  else if ( action === "lock" ) turn.lock = true;
+  else if ( action === "evade" ) turn.evade = evadeFromDr(result.dr, true);
+  else if ( action === "calculate" ) turn.pilotBonus = true;
+  else return;
+  const turns = readTurns(combat);
+  turns[combatantId] = turn;
+  await combat.setFlag(SYSTEM_ID, TURNS, turns);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {object} message
+ * @returns {Promise<boolean>}
+ */
+async function relayOwned(ship, postId, message) {
+  if ( !await userOwnsShipOrPost(game.user.id, ship, postId) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayRefused"));
+    return false;
+  }
+  return relayToGm(message);
+}
+
+/**
+ * @param {object} message
+ * @returns {Promise<boolean>}
+ */
+async function relayToGm(message) {
+  if ( !game.users?.activeGM || !game.socket?.emit ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.noActiveGm"));
+    return false;
+  }
+  game.socket.emit(SOCKET, message);
+  ui.notifications.info(game.i18n.localize("SOL.Space.relaySent"));
+  return true;
+}
+
+/**
+ * `userId` est déclaratif. Le MJ actif revérifie le propriétaire.
+ *
+ * @param {object} message
+ * @returns {Promise<void>}
+ */
+async function onSpaceRelay(message) {
+  if ( game.user?.isActiveGM !== true || !message || typeof message !== "object" ) return;
+  if ( message.type !== "effect" && message.type !== "changeRange" ) return;
+  const ship = message.shipUuid ? await foundry.utils.fromUuid(String(message.shipUuid)) : null;
+  if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
+  const postId = typeof message.postId === "string" ? message.postId : "";
+  const action = message.type === "changeRange" ? "changeRange" : String(message.action ?? "");
+  if ( !actionBelongsToPost(postId, action) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayAction"));
+    return;
+  }
+  if ( !await userOwnsShipOrPost(message.userId, ship, postId) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayRefused"));
+    return;
+  }
+  const roll = boundedRoll(message);
+  if ( message.type === "effect" ) {
+    const held = combatantFor(ship);
+    if ( !held ) return;
+    await writeStoredEffect(
+      held.combat,
+      held.combatant.id,
+      action,
+      roll,
+      typeof message.chosenPost === "string" ? message.chosenPost : ""
+    );
+    return;
+  }
+  const target = message.targetUuid ? await foundry.utils.fromUuid(String(message.targetUuid)) : null;
+  await resolveRangeChange(ship, target, roll);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {string} aim
+ * @param {string} [weaponCondition]
+ * @returns {number}
+ */
+function modifierFor(ship, postId, aim, weaponCondition = "") {
+  const held = combatantFor(ship);
+  const shipTurn = held ? normalizeTurn(readTurns(held.combat)[held.combatant.id]) : normalizeTurn(null);
+  const foe = foeTurn(ship, held?.combat ?? null);
+  return suggestedModifier({
+    postId,
+    range: shipRange(ship),
+    ship: shipTurn,
+    foe,
+    aim,
+    weaponCondition
+  });
+}
+
+/**
+ * Esquive du vaisseau ciblé, s'il y en a un seul.
+ * Sans cible, pas de malus d'esquive.
+ *
+ * @param {Actor} ship
+ * @param {Combat|null} combat
+ * @returns {{ evade: number }}
+ */
+function foeTurn(ship, combat) {
+  const targets = targetedShips(ship);
+  if ( targets.length !== 1 || !combat ) return { evade: 0 };
+  const foe = combatantFor(targets[0]);
+  if ( !foe || foe.combat !== combat ) return { evade: 0 };
+  return normalizeTurn(readTurns(combat)[foe.combatant.id]);
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {{ combat: Combat, combatant: Combatant }|null}
+ */
+function combatantFor(ship) {
+  /** @type {{ combat: Combat, combatant: Combatant }[]} */
+  const rows = [];
+  for ( const combat of eachCombat() ) {
+    for ( const combatant of combat.combatants ?? []) {
+      if ( !sameShip(combatant, ship) ) continue;
+      rows.push({ combat, combatant });
+    }
+  }
+  if ( !rows.length ) return null;
+  const viewed = game.combat;
+  const inView = viewed ? rows.filter(row => row.combat === viewed) : [];
+  const pool = inView.length ? inView : rows;
+  return pool.find(row => row.combat.combatant?.id === row.combatant.id) ?? pool[0];
+}
+
+/**
+ * @param {Combatant} combatant
+ * @param {Actor} ship
+ * @returns {boolean}
+ */
+function sameShip(combatant, ship) {
+  if ( !combatant || !ship ) return false;
+  if ( combatant.actor?.type !== "ship" && combatant.actor?.uuid !== ship.uuid ) {
+    if ( combatant.actorId !== ship.id ) return false;
+  }
+  if ( combatant.actor?.uuid === ship.uuid ) return true;
+  if ( ship.id && (combatant.actorId === ship.id || combatant.actor?.id === ship.id) ) return true;
+  return false;
+}
+
+/**
+ * @returns {Combat[]}
+ */
+function eachCombat() {
+  const combats = game.combats;
+  if ( !combats ) return [];
+  if ( typeof combats[Symbol.iterator] === "function" ) return [...combats];
+  return combats.contents ?? [];
+}
+
+/**
+ * @param {Combat} combat
+ * @returns {Record<string, object>}
+ */
+function readTurns(combat) {
+  const raw = combat?.getFlag?.(SYSTEM_ID, TURNS);
+  if ( !raw || typeof raw !== "object" || Array.isArray(raw) ) return {};
+  /** @type {Record<string, object>} */
+  const turns = {};
+  for ( const [id, turn] of Object.entries(raw) ) {
+    if ( !id || !turn || typeof turn !== "object" ) continue;
+    turns[id] = normalizeTurn(turn);
+  }
+  return turns;
+}
+
+/**
+ * Cibles Foundry du joueur : un Set de Token.
+ * On ne garde que les vaisseaux autres que le déclarant.
+ *
+ * @param {Actor} ship
+ * @returns {Actor[]}
+ * @see https://foundryvtt.com/api/v14/classes/foundry.documents.User.html
+ */
+function targetedShips(ship) {
+  const targets = game.user?.targets;
+  if ( !targets ) return [];
+  /** @type {Actor[]} */
+  const found = [];
+  const seen = new Set();
+  for ( const token of targets ) {
+    const actor = token?.actor;
+    if ( !actor || actor.type !== "ship" || actor.uuid === ship?.uuid ) continue;
+    if ( seen.has(actor.uuid) ) continue;
+    seen.add(actor.uuid);
+    found.push(actor);
+  }
+  return found;
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {string}
+ */
+function shipRange(ship) {
+  const value = ship?.system?._source?.range ?? ship?.system?.range;
+  return SPACE_RANGES.includes(value) ? value : "medium";
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {void}
+ */
+function warnIfDuplicate(ship, postId) {
+  const posts = SHIP_POST_IDS.map(id => ({
+    id,
+    uuid: ship.system._source?.posts?.[id]?.actorUuid ?? ship.system?.posts?.[id]?.actorUuid ?? ""
+  }));
+  const uuid = posts.find(post => post.id === postId)?.uuid ?? "";
+  if ( uuid && duplicateActors(posts).includes(uuid) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.duplicate"));
+  }
+}
+
+/**
+ * @param {Actor} actor
+ * @param {{ name: string, system: object }} skill
+ * @returns {number|null}
+ */
+function ratedScore(actor, skill) {
+  const rated = skillScore(actor.system?.characteristics, skill.system);
+  if ( rated.impossible || rated.score === null ) {
+    ui.notifications.warn(`${skill.name} — ${game.i18n.localize("SOL.Roll.impossible")}`);
+    return null;
+  }
+  return rated.score;
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {{ id: string, name: string, category: string, condition: string, rangeClose: boolean, rangeMedium: boolean, rangeLong: boolean }[]}
+ */
+function weaponsOf(ship) {
+  return ship.items.filter(item => item.type === "shipModule").map(item => ({
+    id: item.id,
+    name: item.name,
+    category: item.system.category,
+    condition: item.system.condition,
+    rangeClose: item.system.weapon?.rangeClose === true,
+    rangeMedium: item.system.weapon?.rangeMedium === true,
+    rangeLong: item.system.weapon?.rangeLong === true
+  }));
+}
+
+/**
+ * @param {string} title
+ * @param {{ id: string, label: string }[]} options
+ * @returns {Promise<string|null>}
+ */
+async function choose(title, options) {
+  if ( !options.length ) return null;
+  if ( options.length === 1 ) return options[0].id;
+  const escape = foundry.utils.escapeHTML;
+  const html = options.map(option => `<option value="${escape(option.id)}">${escape(option.label)}</option>`).join("");
+  const result = await foundry.applications.api.DialogV2.wait({
+    window: { title },
+    content: `<label><select name="choice">${html}</select></label>`,
+    buttons: [
+      {
+        action: "ok",
+        label: game.i18n.localize("SOL.Roll.confirm"),
+        default: true,
+        callback: (_event, button) => button.form.elements.choice.value
+      },
+      {
+        action: "cancel",
+        label: game.i18n.localize("SOL.Roll.cancel")
+      }
+    ],
+    rejectClose: false
+  });
+  if ( !result || result === "cancel" ) return null;
+  return String(result);
+}
+
+/**
+ * @param {Actor} ship
+ * @returns {boolean}
+ */
+function maneuverAllowed(ship) {
+  const category = ship?.system?._source?.category ?? ship?.system?.category;
+  if ( refusesManeuver(category) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.fixedNoManeuver"));
+    return false;
+  }
+  return true;
+}
+
+/**
+ * @param {unknown} value
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+function boundNumber(value, min, max) {
+  const number = Number(value);
+  if ( !Number.isFinite(number) ) return min;
+  return Math.min(max, Math.max(min, Math.trunc(number)));
+}
+
+/**
+ * @param {object} message
+ * @returns {{ success: boolean, dr: number, de: number, score: number }}
+ */
+function boundedRoll(message) {
+  return {
+    success: message.success === true,
+    dr: boundNumber(message.dr, 0, 10),
+    de: Number.isFinite(Number(message.de)) ? Number(message.de) : 0,
+    score: boundNumber(message.score, 0, 200)
+  };
+}
+
+/**
+ * Le joueur doit posséder le vaisseau, ou l'acteur qui tient le poste.
+ * `userId` vient du message : il est déclaratif.
+ *
+ * @param {unknown} userId
+ * @param {Actor} ship
+ * @param {unknown} postId
+ * @returns {Promise<boolean>}
+ */
+async function userOwnsShipOrPost(userId, ship, postId) {
+  if ( typeof userId !== "string" || !userId ) return false;
+  const user = game.users.get(userId);
+  if ( !user ) return false;
+  if ( ship.testUserPermission(user, "OWNER") ) return true;
+  if ( typeof postId !== "string" || !SHIP_POST_IDS.includes(postId) ) return false;
+  const uuid = ship.system._source?.posts?.[postId]?.actorUuid
+    || ship.system?.posts?.[postId]?.actorUuid
+    || "";
+  if ( !uuid ) return false;
+  const holder = await foundry.utils.fromUuid(uuid);
+  if ( !holder || holder.documentName !== "Actor" ) return false;
+  return holder.testUserPermission(user, "OWNER") === true;
+}

@@ -40,7 +40,53 @@ export function migrateShipSource(source) {
   // `-=integrity` est la suppression Foundry : un diff qui n'a pas la clé
   // ne la crée pas, et on n'ajoute pas `sections` s'il n'y est pas.
   dropRadiatorSectionIntegrity(source);
+  // Décision Marc 23/10/2026 : delta-v au dixième, sans suivi exact.
+  // On n'ajoute ni `propulsion`, ni `deltaV`, ni `range`.
+  roundPresentDeltaV(source);
   return source;
+}
+
+/**
+ * Anciennes clés du stockage exact, retirées seulement si elles sont là.
+ * La valeur elle-même reste dans `value` : on l'arrondit, on ne la duplique pas.
+ */
+const RETIRED_DELTA_KEYS = ["exact", "exactValue"];
+
+/**
+ * Arrondit `value` et `max` au dixième, seulement si la clé est déjà là.
+ * Une valeur illisible n'est pas remplacée par 0.
+ * Décision Marc 23/10/2026.
+ *
+ * @param {object|null|undefined} source
+ * @returns {void}
+ */
+export function roundPresentDeltaV(source) {
+  if ( !source || typeof source !== "object" || !Object.hasOwn(source, "propulsion") ) return;
+  const propulsion = source.propulsion;
+  if ( !propulsion || typeof propulsion !== "object" || !Object.hasOwn(propulsion, "deltaV") ) return;
+  const delta = propulsion.deltaV;
+  if ( !delta || typeof delta !== "object" ) return;
+  if ( Object.hasOwn(delta, "value") ) {
+    const rounded = roundTenth(delta.value);
+    if ( rounded !== undefined ) delta.value = rounded;
+  }
+  if ( Object.hasOwn(delta, "max") ) {
+    const rounded = roundTenth(delta.max);
+    if ( rounded !== undefined ) delta.max = rounded;
+  }
+  for ( const key of RETIRED_DELTA_KEYS ) {
+    if ( Object.hasOwn(delta, key) ) delete delta[key];
+  }
+}
+
+/**
+ * @param {unknown} value
+ * @returns {number|undefined}
+ */
+function roundTenth(value) {
+  const number = Number(value);
+  if ( !Number.isFinite(number) ) return undefined;
+  return Math.round(number * 10) / 10;
 }
 
 /**

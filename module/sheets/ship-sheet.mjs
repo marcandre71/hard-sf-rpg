@@ -5,8 +5,8 @@
  * Onglets : Général, Sections & modules, Postes, Notes.
  * Tout est visible et modifiable par le propriétaire (le MJ, sur ses fiches).
  * Objet fixe : propulsion et delta-v grisés, les valeurs restent stockées.
- * Jets de poste : 0.7.1. Réf. Vaisseaux v0.1 §3.
- * Décision Marc 18/10/2026 : pas d'initiative de personnage.
+ * Jets de poste : 0.7.2. Réf. Vaisseaux v0.1 §3.
+ * Décision Marc 23/10/2026 : initiative dans le Combat Tracker.
  * Un acteur encore dans un compendium ne tient pas un poste.
  *
  * Le glisser-déposer d'un personnage sur un poste écrit `actorUuid`.
@@ -27,8 +27,8 @@ import {
   parsedNumber,
   sectionHasPlate
 } from "../ships/hull.mjs";
-import { duplicateActors, roundDeltaV } from "../ships/combat.mjs";
-import { POST_ACTIONS, openSpaceCombat, rollPostAction } from "../ships/space-ui.mjs";
+import { POST_ACTIONS, rollPostAction } from "../ships/actions.mjs";
+import { duplicateActors } from "../ships/combat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
@@ -64,7 +64,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 760, height: 860 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, clearPost, rollPost, openSpace }
+    actions: { ...itemListActions, clearPost, rollPost }
   };
 
   /** @override */
@@ -131,17 +131,10 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rootId: context.rootId
     });
     context.categoryGroups = groupsOf(["category"]);
+    context.rangeGroups = groupsOf(["range"]);
     context.identityGroups = groupsOf(["identity"]);
     context.massGroups = groupsOf(["mass"]);
     context.propulsionGroups = groupsOf(["propulsion"]);
-    for ( const group of context.propulsionGroups ) {
-      for ( const line of group.rows ) {
-        if ( line.name !== "system.propulsion.deltaV" || !line.value || typeof line.value !== "object" ) continue;
-        const exact = line.value.value;
-        if ( exact === "" || exact === null || exact === undefined ) continue;
-        line.value = { ...line.value, value: roundDeltaV(exact) };
-      }
-    }
     if ( context.fixed ) {
       for ( const group of context.propulsionGroups ) {
         group.inert = true;
@@ -428,13 +421,6 @@ async function assignPost(ship, postId, uuid) {
     ui.notifications.warn(game.i18n.localize("SOL.Space.duplicate"));
   }
   await ship.update({ [`system.posts.${postId}.actorUuid`]: dropped.uuid });
-}
-
-/**
- * @returns {void}
- */
-function openSpace() {
-  openSpaceCombat();
 }
 
 /**

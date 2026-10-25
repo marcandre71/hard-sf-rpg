@@ -1,8 +1,9 @@
 /**
- * Un vaisseau ou un véhicule n'entre pas dans le combat des personnages.
+ * Un véhicule n'entre pas dans le Combat Tracker.
  *
  * Décision Marc 18/10/2026. Réf. Vaisseaux v0.1 §1.
- * C'est le pilote ou l'équipage qui agit, poste par poste.
+ * Décision Marc 23/10/2026 : le vaisseau, lui, y entre.
+ * Clic droit sur le pion, icône Combat.
  * `return false` annule la création. L'avertissement ne part que
  * chez celui qui a glissé le pion.
  *
