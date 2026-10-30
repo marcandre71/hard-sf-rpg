@@ -1,0 +1,47 @@
+{
+  "_id": "ArmTenueExercice",
+  "_key": "!items!ArmTenueExercice",
+  "name": "Tenue d'exercice à résistance élastique",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Harnais à sangles de charge simulant la pesanteur pendant les deux heures d'exercice quotidien en apesanteur. Permet l'exercice quotidien qui, selon le LdR §8, dispense du test mensuel de CON contre le déconditionnement (la v0.2 donnait +10 à ce test).</p>",
+    "protection": {
+      "head": 0,
+      "torso": 0,
+      "rightArm": 0,
+      "leftArm": 0,
+      "rightLeg": 0,
+      "leftLeg": 0
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": 0,
+      "perception": 0
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 2.2,
+    "enc": 0.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1140000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

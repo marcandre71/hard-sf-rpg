@@ -1,0 +1,38 @@
+{
+  "_id": "WpnGanteletImpul",
+  "_key": "!items!WpnGanteletImpul",
+  "name": "Gantelet d'impulsion piézoélectrique",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>5 charges. Décharge cinétique au contact qui projette la cible en apesanteur (test opposé de Manœuvre en apesanteur, ou la cible est mise En vol).</p>",
+    "skill": "Corps-à-corps",
+    "damage": 6,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 5,
+      "max": 5
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 1.2,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1220000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

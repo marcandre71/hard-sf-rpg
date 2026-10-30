@@ -504,6 +504,12 @@
       "score": "Score",
       "difficulty": "Difficulté",
       "free": "Modificateur",
+      "range": "Portée",
+      "rangeBand": {
+        "short": "Courte (0)",
+        "medium": "Moyenne (−10)",
+        "long": "Longue (−20)"
+      },
       "total": "Total",
       "target": "Score visé",
       "die": "Dé",

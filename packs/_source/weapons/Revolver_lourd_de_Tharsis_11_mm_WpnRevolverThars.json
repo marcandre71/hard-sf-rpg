@@ -1,0 +1,38 @@
+{
+  "_id": "WpnRevolverThars",
+  "_key": "!items!WpnRevolverThars",
+  "name": "Revolver lourd de Tharsis (11 mm)",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 40 / 80 m. Accepte aussi des munitions frangibles (hullSafe passe alors à true). Conçu pour la surface martienne, contre les combinaisons renforcées.</p>",
+    "skill": "Armes de poing",
+    "damage": 9,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 6,
+      "max": 6
+    },
+    "ammoType": "piercing",
+    "burst": false,
+    "hullSafe": false,
+    "mass": 1.4,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1050000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

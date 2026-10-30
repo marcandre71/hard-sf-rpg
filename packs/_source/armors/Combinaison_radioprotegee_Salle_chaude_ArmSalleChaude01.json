@@ -1,0 +1,48 @@
+{
+  "_id": "ArmSalleChaude01",
+  "_key": "!items!ArmSalleChaude01",
+  "name": "Combinaison radioprotégée « Salle chaude »",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Doublure au polyéthylène boré et au tungstène souple (Collège de Valhalla). Réduit de 50 % la dose aiguë reçue lors d'une fuite de réacteur ou en surface jovienne (pas de champ FoundryVTT, voir v0.9).</p>",
+    "protection": {
+      "head": 3,
+      "torso": 3,
+      "rightArm": 2,
+      "leftArm": 2,
+      "rightLeg": 2,
+      "leftLeg": 2
+    },
+    "pressurized": true,
+    "breachThreshold": 8,
+    "airReserve": {
+      "value": 8,
+      "max": 8
+    },
+    "penalty": {
+      "manipulation": -20,
+      "perception": -10
+    },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 24,
+    "enc": 3,
+    "sealState": "intact"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1030000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

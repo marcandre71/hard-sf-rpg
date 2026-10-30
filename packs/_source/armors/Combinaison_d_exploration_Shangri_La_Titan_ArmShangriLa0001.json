@@ -1,0 +1,47 @@
+{
+  "_id": "ArmShangriLa0001",
+  "_key": "!items!ArmShangriLa0001",
+  "name": "Combinaison d'exploration « Shangri-La » (Titan)",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Conçue pour Titan (−180 °C, atmosphère dense d'azote et de méthane, pluie de méthane). Ce n'est pas une combinaison pressurisée : masque respiratoire à réserve ou filtres, et combinaison chauffée. Pas de seuil de brèche ni de compte à rebours de décompression. Risques : le froid (panne ou déchirure du chauffage) et l'atmosphère toxique et sans oxygène (masque arraché ou filtres épuisés). Autonomie du masque et des filtres, et règle de froid : [à compléter]. Revêtement oléophobe et bottes à crampons à glace.</p>",
+    "protection": {
+      "head": 2,
+      "torso": 2,
+      "rightArm": 1,
+      "leftArm": 1,
+      "rightLeg": 2,
+      "leftLeg": 2
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": -10,
+      "perception": -10
+    },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 10.5,
+    "enc": 1.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1050000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

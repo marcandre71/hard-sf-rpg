@@ -1,0 +1,38 @@
+{
+  "_id": "WpnGyroVeilleur1",
+  "_key": "!items!WpnGyroVeilleur1",
+  "name": "Pistolet gyrojet « Veilleur »",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>20 / 50 / 100 m. Accepte aussi des micro-fusées perforantes (hullSafe passe alors à false). Micro-fusées autopropulsées, sans recul. −10 au jet et −2 aux dégâts à bout portant (moins de 3 m, fusée non accélérée).</p>",
+    "skill": "Armes de poing",
+    "damage": 8,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 8,
+      "max": 8
+    },
+    "ammoType": "frangible",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 1.1,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1040000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

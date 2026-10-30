@@ -1,0 +1,38 @@
+{
+  "_id": "WpnHarponEVA0001",
+  "_key": "!items!WpnHarponEVA0001",
+  "name": "Lance-filet et harpon magnétique d'EVA",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §3. Décision Marc 30/10/2026 -->\n<p>15 / 30 m. Immobilise un individu Flottant ou permet de s'amarrer à une paroi avec treuil (test opposé de FOR ou d'ADA).</p>",
+    "skill": "Armes d'épaule",
+    "damage": 4,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 2,
+      "max": 2
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 3,
+    "enc": 2
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1130000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

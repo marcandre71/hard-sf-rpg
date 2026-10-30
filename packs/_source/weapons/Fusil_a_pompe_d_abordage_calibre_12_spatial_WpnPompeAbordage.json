@@ -1,0 +1,38 @@
+{
+  "_id": "WpnPompeAbordage",
+  "_key": "!items!WpnPompeAbordage",
+  "name": "Fusil à pompe d'abordage (calibre 12 spatial)",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §3. Décision Marc 30/10/2026 -->\n<p>10 / 20 / 40 m. Chevrotine polymère frangible. +10 pour toucher à courte distance dans une coursive ; −2 aux dégâts à distance moyenne et −4 à longue distance.</p>",
+    "skill": "Armes d'épaule",
+    "damage": 9,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 8,
+      "max": 8
+    },
+    "ammoType": "frangible",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 3.2,
+    "enc": 2
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1080000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

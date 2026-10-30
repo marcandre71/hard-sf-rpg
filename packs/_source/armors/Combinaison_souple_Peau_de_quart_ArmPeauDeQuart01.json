@@ -1,0 +1,48 @@
+{
+  "_id": "ArmPeauDeQuart01",
+  "_key": "!items!ArmPeauDeQuart01",
+  "name": "Combinaison souple « Peau de quart »",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tissu à contre-pression mécanique (Callisto, Genève) ; gants haptiques de haute précision qui annulent la pénalité de manipulation fine.</p>",
+    "protection": {
+      "head": 1,
+      "torso": 1,
+      "rightArm": 1,
+      "leftArm": 1,
+      "rightLeg": 1,
+      "leftLeg": 1
+    },
+    "pressurized": true,
+    "breachThreshold": 5,
+    "airReserve": {
+      "value": 10,
+      "max": 10
+    },
+    "penalty": {
+      "manipulation": 0,
+      "perception": -10
+    },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 4.5,
+    "enc": 0.5,
+    "sealState": "intact"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1010000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

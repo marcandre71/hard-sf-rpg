@@ -1,0 +1,47 @@
+{
+  "_id": "ArmAntiEmeute001",
+  "_key": "!items!ArmAntiEmeute001",
+  "name": "Tenue anti-émeute portuaire",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Plastron articulé et casque à visière en polycarbonate de la sécurité des docks ; non pressurisée.</p>",
+    "protection": {
+      "head": 2,
+      "torso": 3,
+      "rightArm": 2,
+      "leftArm": 2,
+      "rightLeg": 2,
+      "leftLeg": 2
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": -10,
+      "perception": -10
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 6,
+    "enc": 2
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1080000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "_id": "ArmVesteQuart001",
+  "_key": "!items!ArmVesteQuart001",
+  "name": "Veste de quart en aramide",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Blouson de travail ignifugé qui protège des éclats métalliques, des projections de vapeur et des lames en station.</p>",
+    "protection": {
+      "head": 0,
+      "torso": 1,
+      "rightArm": 1,
+      "leftArm": 1,
+      "rightLeg": 0,
+      "leftLeg": 0
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": 0,
+      "perception": 0
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 1.5,
+    "enc": 0.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1060000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "_id": "ArmPontAssaut001",
+  "_key": "!items!ArmPontAssaut001",
+  "name": "Armure de pont (assaut et abordage)",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Carapace rigide pressurisée des fusiliers de la Veille et du Kombinat. Autonomie 30 à 60 minutes (0,5 h dans FoundryVTT). Risque de surchauffe selon le LdR §8 (tests de CON) ; cadence propre à l'armure [à compléter].</p>",
+    "protection": {
+      "head": 5,
+      "torso": 6,
+      "rightArm": 4,
+      "leftArm": 4,
+      "rightLeg": 4,
+      "leftLeg": 4
+    },
+    "pressurized": true,
+    "breachThreshold": 12,
+    "airReserve": {
+      "value": 0.5,
+      "max": 0.5
+    },
+    "penalty": {
+      "manipulation": -20,
+      "perception": -20
+    },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 28,
+    "enc": 4,
+    "sealState": "intact"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1040000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

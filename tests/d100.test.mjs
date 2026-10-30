@@ -13,7 +13,7 @@ import {
   resolveD100,
   tens
 } from "../module/dice/d100.mjs";
-import { aimModifier, attackSituation, struckZone } from "../module/dice/attack.mjs";
+import { aimModifier, attackRangePenalty, attackSituation, struckZone } from "../module/dice/attack.mjs";
 import { skillScore, weaponAttackScore, weaponCharacteristicFallback } from "../module/dice/skill-score.mjs";
 import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
@@ -213,6 +213,31 @@ check("viser et tir visé", () => {
     { id: "scope", per: 10, max: 10, maxActions: 1, label: "SOL.Roll.aim" }
   ];
   assert.equal(aimModifier({ aim: 2, scope: 1 }, aids).total, 30);
+});
+
+check("portée du jet d'attaque", () => {
+  // Décision Marc 30/10/2026. Réf. LdR v0.2 §5. Courte par défaut.
+  assert.equal(attackRangePenalty("short"), 0);
+  assert.equal(attackRangePenalty("medium"), -10);
+  assert.equal(attackRangePenalty("long"), -20);
+  assert.equal(attackRangePenalty("close"), 0);
+  assert.equal(attackRangePenalty(undefined), 0);
+  assert.equal(attackSituation("head", 2).situation, -10);
+  assert.equal(attackSituation("head", 2).range, "short");
+  assert.equal(attackSituation("head", 2).rangePenalty, 0);
+  const medium = attackSituation("none", 0, undefined, "medium");
+  assert.equal(medium.rangePenalty, -10);
+  assert.equal(medium.situation, -10);
+  assert.equal(cappedModifier(0, 0, medium.situation), -10);
+  const far = attackSituation("none", 0, undefined, "long");
+  assert.equal(far.rangePenalty, -20);
+  assert.equal(cappedModifier(0, 0, far.situation), -20);
+  const stacked = attackSituation("visor", 0, undefined, "long");
+  assert.equal(stacked.situation, -60);
+  assert.equal(cappedModifier(0, 0, stacked.situation), -50);
+  assert.equal(cappedModifier(-40, -20, attackRangePenalty("long")), -50);
+  assert.equal(attackSituation("none", 0, undefined, "proche").range, "short");
+  assert.equal(attackSituation("none", 0, undefined, "proche").rangePenalty, 0);
 });
 
 check("Base du PNJ", () => {

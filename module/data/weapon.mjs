@@ -22,6 +22,9 @@ export class WeaponData extends BaseItemData {
       // Décision Marc 17/10/2026 : les dégâts sont un entier.
       damage: numberField("SOL.Weapon.damage", { initial: 0, integer: true, step: 1 }),
       // Décision Marc 17/10/2026. Réf. LdR v0.2 §15. Défaut « short » (Courte).
+      // Décision Marc 30/10/2026. Réf. Armes v0.3 §1.
+      // Courte : jusqu'à 100 m. Moyenne : jusqu'à 200 m. Longue : au-delà.
+      // Les mètres restent dans la description. Le malus du jet est ailleurs.
       range: stringField("SOL.Weapon.range.label", {
         initial: "short",
         blank: false,

@@ -1,0 +1,38 @@
+{
+  "_id": "WpnRivetsLourd01",
+  "_key": "!items!WpnRivetsLourd01",
+  "name": "Pistolet à rivets lourd",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §4. Décision Marc 30/10/2026 -->\n<p>5 / 15 / 25 m, 20 rivets. Outil de chantier naval dont la sécurité de pression a été pontée. Recul notable ; dangereux pour les hublots et cloisons à moins de 5 m.</p>",
+    "skill": "Armes de poing",
+    "damage": 8,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 20,
+      "max": 20
+    },
+    "ammoType": "piercing",
+    "burst": false,
+    "hullSafe": false,
+    "mass": 2.5,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1140000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

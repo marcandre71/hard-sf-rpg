@@ -32,9 +32,11 @@ function readAim(form) {
 
 /**
  * Lit le formulaire et calcule le total.
- * Tir visé et Viser d'un personnage entrent dans le plafond ±50.
+ * Tir visé, Viser et la portée d'un personnage entrent dans le plafond ±50.
  * Réf. LdR v0.2 §5 et §7.
  * Décision Marc 25/10/2026 : un jet de poste de vaisseau n'est pas borné.
+ * Décision Marc 30/10/2026 : portée courte 0, moyenne −10, longue −20.
+ * Un poste de vaisseau n'a pas ce choix : sa portée est celle du combat.
  *
  * @param {HTMLFormElement} form
  * @param {number} score
@@ -51,7 +53,9 @@ function readForm(form, score, statusModifier = 0, shipPost = false) {
   const free = Number.isFinite(raw) ? Math.trunc(raw) : 0;
   const calledShot = form.elements.calledShot?.value || "none";
   const aimActions = readAim(form);
-  const situation = attackSituation(calledShot, aimActions);
+  // Décision Marc 30/10/2026. Sans la liste, le malus de portée est 0.
+  const hasRange = Boolean(form.elements.rangeBand);
+  const situation = attackSituation(calledShot, aimActions, AIM_MODIFIERS, form.elements.rangeBand?.value);
   const stacked = situation.situation + Number(statusModifier || 0);
   const modifier = shipPost
     ? rollModifier(cfg.modifier, free, stacked, { shipPost: true })
@@ -67,6 +71,8 @@ function readForm(form, score, statusModifier = 0, shipPost = false) {
     aimActions: aimPart?.actions ?? 0,
     aimBonus: aimPart?.bonus ?? 0,
     visor: situation.called.visor,
+    range: hasRange ? situation.range : null,
+    rangePenalty: hasRange ? situation.rangePenalty : 0,
     situation: situation.situation,
     statusModifier: Number(statusModifier || 0),
     modifier,
@@ -121,9 +127,10 @@ export function rollChoice(score, difficultyKey = "normal", free = 0, { shipPost
  * Cases de tir visé et de visée, seulement pour une arme.
  * Les libellés viennent de l'i18n. Les malus viennent de `attack.mjs`.
  *
+ * @param {boolean} [showRange] Choix de portée, courte par défaut. Décision Marc 30/10/2026.
  * @returns {string}
  */
-function attackFields() {
+function attackFields(showRange = false) {
   const escape = foundry.utils.escapeHTML;
   const options = [
     "none", "torso", "rightArm", "leftArm", "rightLeg", "leftLeg", "head", "visor"
@@ -136,7 +143,17 @@ function attackFields() {
       <label>${escape(game.i18n.localize(mod.label))}
         <input type="number" name="aim-${mod.id}" value="0" min="0" max="${mod.maxActions}" step="1">
       </label>`).join("");
+  const bands = ["short", "medium", "long"].map(id => {
+    const selected = id === "short" ? " selected" : "";
+    const text = game.i18n.localize(`SOL.Roll.rangeBand.${id}`);
+    return `<option value="${id}"${selected}>${escape(text)}</option>`;
+  }).join("");
+  const range = showRange ? `
+      <label>${escape(game.i18n.localize("SOL.Roll.range"))}
+        <select name="rangeBand">${bands}</select>
+      </label>` : "";
   return `
+      ${range}
       <label>${escape(game.i18n.localize("SOL.Roll.calledShot"))}
         <select name="calledShot">${options}</select>
       </label>
@@ -181,7 +198,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
       <label>${escape(game.i18n.localize("SOL.Roll.free"))}
         <input type="number" name="modifier" value="${initialFree}" step="1">
       </label>
-      ${attack ? attackFields() : ""}
+      ${attack ? attackFields(!shipPost) : ""}
       ${statusNote(statusModifier)}
       <p class="sol-roll-total">${escape(game.i18n.localize("SOL.Roll.total"))}
         <strong data-total>0</strong></p>
@@ -215,6 +232,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         form.querySelector("[name=difficulty]")?.addEventListener("change", update);
         form.querySelector("[name=modifier]")?.addEventListener("input", update);
         form.querySelector("[name=calledShot]")?.addEventListener("change", update);
+        form.querySelector("[name=rangeBand]")?.addEventListener("change", update);
         for ( const mod of AIM_MODIFIERS ) {
           form.querySelector(`[name=aim-${mod.id}]`)?.addEventListener("input", update);
         }

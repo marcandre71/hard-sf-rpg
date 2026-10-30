@@ -1,0 +1,38 @@
+{
+  "_id": "WpnDecoupePlasma",
+  "_key": "!items!WpnDecoupePlasma",
+  "name": "Découpeur plasma de main",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Contact, 10 charges. Ses dégâts bruts (9) dépassent les seuils de brèche d'une combinaison souple (4) et d'une combinaison renforcée (8).</p>",
+    "skill": "Corps-à-corps",
+    "damage": 9,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 10,
+      "max": 10
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": false,
+    "mass": 2.5,
+    "enc": 1.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1150000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

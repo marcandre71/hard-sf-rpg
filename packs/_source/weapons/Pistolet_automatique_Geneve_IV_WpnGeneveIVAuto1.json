@@ -1,0 +1,38 @@
+{
+  "_id": "WpnGeneveIVAuto1",
+  "_key": "!items!WpnGeneveIVAuto1",
+  "name": "Pistolet automatique « Genève-IV »",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 30 / 60 m. Accepte aussi des munitions perforantes (hullSafe passe alors à false). Arme de service des inspecteurs de l'Office de la Veille. Poignée codée biométrique (inutilisable par un tiers sans test d'Électronique).</p>",
+    "skill": "Armes de poing",
+    "damage": 7,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 18,
+      "max": 18
+    },
+    "ammoType": "frangible",
+    "burst": true,
+    "hullSafe": true,
+    "mass": 1.1,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1030000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "_id": "WpnScellement001",
+  "_key": "!items!WpnScellement001",
+  "name": "Pistolet de scellement thermique",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Contact à 4 m, 10 doses de résine. Projette de la mousse polymère brûlante ; un tir visé à la visière (−40) aveugle la cible jusqu'à nettoyage au couteau (1 action).</p>",
+    "skill": "Armes de poing",
+    "damage": 5,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 10,
+      "max": 10
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 1.5,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1160000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

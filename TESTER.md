@@ -1,10 +1,11 @@
-# Tester le système « Sol, Nouvelle Ère » (0.7.4)
+# Tester le système « Sol, Nouvelle Ère » (0.9.0)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
 La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible), déjà sur `main`.
 La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main`. Prenez le ZIP de `main`.
 La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
+La section 14 est la **0.9.0** (armes, armures, portée). Elle sert aussi à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -35,7 +36,7 @@ Sur Ilka, une **carabine** : dégâts **10**, compétence `Armes d'épaule`, coc
 
 1. Depuis le compendium **Armures et vêtements**, glissez **Combinaison renforcée** sur le mineur. Ouvrez-la : torse **3**, tête **3**, bras **2**, jambes **2**, **Pressurisée**, seuil de brèche **8**. **Équipé** est déjà coché (décision du 20/10/2026 : équipée par défaut au glisser-déposer). Décochez-la, puis recochez-la : décochée, elle ne compte plus. Joints : **Intacte**.
 2. Ciblez le mineur. Sur Ilka, lancez la carabine.
-3. Dans la fenêtre : difficulté **Normale**, zone visée **Torse (−10)**, actions de visée **0**. Le total affiché est **−10**. Lancez jusqu'à une **réussite** dont la carte dit **Dégâts : 12** (arme 10 + 2 DR) et **Localisation : Torse**.
+3. Dans la fenêtre : difficulté **Normale**, portée **Courte (0)**, zone visée **Torse (−10)**, actions de visée **0**. Le total affiché est **−10**. Lancez jusqu'à une **réussite** dont la carte dit **Dégâts : 12** (arme 10 + 2 DR) et **Localisation : Torse**.
 4. **Appliquer les dégâts** (MJ). La fenêtre montre : bruts **12**, armure **3**, nets **9**, Seuil **4**, gravité **Critique**, seuil de brèche **8**, brèche **Oui**.
 5. Confirmez. La blessure est **Critique**, la case **Envoie en fin d'ordre** est cochée, **Active pour le round 1** ne l'est pas. Les joints de la combinaison passent à **Percée**. La condition **Combinaison percée** est sur le jeton. Pas de **Saignement** (ce n'est pas une blessure grave).
 
@@ -52,7 +53,7 @@ Remettez ensuite la protection du torse à **3**.
 
 1. Retirez la renforcée (ou décochez **Équipé**). Glissez **Armure de pont**. Torse **6**, tête **5**, bras **4**, jambes **4**, pressurisée, seuil **12**. La description parle d'une autonomie courte (30 à 60 minutes) et d'un risque de surchauffe. Réserve d'air : **0,5 / 0,5**. Elle est déjà équipée. Joints **Intacte**.
 2. Glissez le **Pistolet frangible** du compendium **Armes** sur Ilka. Dégâts **6**, compétence `Armes de poing`. Cochez **Équipé**. La carabine part à 10 : elle ne peut pas tomber sur 6 bruts.
-3. Mettez la COO d'Ilka à **59** pour cet essai. Avec **−40**, le score est **19** : environ une chance sur dix d'un 0 DR, et presque autant d'un 1 DR. Une COO de 50 donnerait un score de 10, et un 0 DR n'y arrive presque jamais. Lancez le pistolet. Zone visée : **Visière (−40)**. Actions de visée : **0**. Le total est **−40**. Une réussite dit **Visière** et la localisation **Tête**.
+3. Mettez la COO d'Ilka à **59** pour cet essai. Avec **−40**, le score est **19** : environ une chance sur dix d'un 0 DR, et presque autant d'un 1 DR. Une COO de 50 donnerait un score de 10, et un 0 DR n'y arrive presque jamais. Lancez le pistolet. Portée **Courte (0)**. Zone visée : **Visière (−40)**. Actions de visée : **0**. Le total est **−40**. Une réussite dit **Visière** et la localisation **Tête**.
 4. **Appliquer les dégâts**. La fenêtre rappelle la visière : armure **3** (moitié de 5), seuil de brèche **6** (moitié de 12). Deux couches équipées s'additionnent d'abord (1 + 3 = 4, puis 2). Les seuils, eux, restent un par couche.
 5. Deux réussites, en annulant entre les deux si ce n'est pas le cas voulu :
    - **Dégâts : 6** (arme 6 + 0 DR). Bruts égaux au seuil : brèche **Non**. L'égalité ne perce pas.
@@ -60,7 +61,7 @@ Remettez ensuite la protection du torse à **3**.
 
 ## 4. Viser, sans zone
 
-1. Relancez le pistolet, zone visée **Aucune**, actions de visée **3**. Le total est **+30**. La localisation d'une réussite est celle du dé, pas une zone choisie.
+1. Relancez le pistolet, portée **Courte (0)**, zone visée **Aucune**, actions de visée **3**. Le total est **+30**. La localisation d'une réussite est celle du dé, pas une zone choisie.
 
 ## 5. Arme sans compétence
 
@@ -244,3 +245,22 @@ Il vous faut **une Petite Fortune**, ouverte **depuis son jeton**, dans le Comba
     **Résultat attendu :** les munitions baissent de **1**. Le laser de forage, lui, ne baisse pas. Le MJ recharge le canon à la main.
 12. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 14. 0.9.0 Armes, armures et portée
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` :
+
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
+
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+
+1. Dans la barre latérale, ouvrez les compendiums **Armes**, **Armures et vêtements** et **Équipement**.
+   **Résultat attendu :** **Armes** contient la **Carabine** et le **Pistolet frangible**, et les armes du catalogue. Il n'y a pas de **Lanceur polyvalent 40 mm**. **Armures et vêtements** contient **Combinaison souple**, **Combinaison renforcée**, **Armure de pont**, et les armures du catalogue. **Buse de compensation à gaz froid**, **Dragonne magnétique d'arme**, **Essuie-visière chauffant et revêtement oléophobe**, **Manchons à garrot pneumatique automatique** et **Phares d'épaule grand angle et balise stroboscopique** sont dans **Équipement**.
+2. Sur un personnage, glissez **3 armes** et **2 armures**. Par exemple : **Carabine tactique de la Veille**, **Pistolet de bord 9 mm basse vélocité**, **Couteau d'arrimage, lame de sas en céramique**, **Combinaison renforcée de chantier (EVA lourde)** et **Combinaison souple « Peau de quart »**. Cochez **Équipé** sur chaque arme. Les armures le sont déjà.
+   **Résultat attendu :** les cinq objets sont sur la fiche. La carabine tactique a des dégâts **10** et la portée **Moyenne**. Le pistolet de bord a des dégâts **6**. Le couteau a des dégâts **4**.
+3. Laissez une seule arme équipée. Lancez-la trois fois. Difficulté **Normale**, zone **Aucune**, actions de visée **0**. La première fois, portée **Courte**. La deuxième, **Moyenne**. La troisième, **Longue**.
+   **Résultat attendu :** **Courte** est déjà choisie à l'ouverture. Le total est **0**, puis **−10**, puis **−20**. La carte de discussion reprend la portée choisie.
+4. Ouvrez **Combinaison renforcée de chantier (EVA lourde)**.
+   **Résultat attendu :** pénalité de manipulation **−10**, pénalité de perception **−10**. La description contient encore **[à compléter]** : le champ, lui, est à **−10**.
+5. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

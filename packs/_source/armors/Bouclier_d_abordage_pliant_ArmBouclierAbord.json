@@ -1,0 +1,47 @@
+{
+  "_id": "ArmBouclierAbord",
+  "_key": "!items!ArmBouclierAbord",
+  "name": "Bouclier d'abordage pliant",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Panneau composite déployable dans une coursive. Il ne protège pas une zone : il procure un couvert mobile (−20 aux tirs adverses de face, règle du couvert du LdR). Pénalité −10 au bras qui le porte. Champ de couvert : v0.9.</p>",
+    "protection": {
+      "head": 0,
+      "torso": 0,
+      "rightArm": 0,
+      "leftArm": 0,
+      "rightLeg": 0,
+      "leftLeg": 0
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": -10,
+      "perception": 0
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 6,
+    "enc": 2
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

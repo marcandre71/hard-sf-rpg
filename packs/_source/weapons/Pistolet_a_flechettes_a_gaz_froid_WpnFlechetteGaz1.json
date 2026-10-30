@@ -1,0 +1,38 @@
+{
+  "_id": "WpnFlechetteGaz1",
+  "_key": "!items!WpnFlechetteGaz1",
+  "name": "Pistolet à fléchettes à gaz froid",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>10 / 25 / 50 m. Propulsion par gaz froid, silencieux et sans recul. Peut tirer des fléchettes sédatives (voir Liste des Substances).</p>",
+    "skill": "Armes de poing",
+    "damage": 5,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 15,
+      "max": 15
+    },
+    "ammoType": "flechette",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 0.8,
+    "enc": 0.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1010000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

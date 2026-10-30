@@ -1,0 +1,34 @@
+{
+  "_id": "GearPharesEpaule",
+  "_key": "!items!GearPharesEpaule",
+  "name": "Phares d'épaule grand angle et balise stroboscopique",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Percent le brouillard d'hydrocarbures ou l'obscurité des habitats en panne. Masse, encombrement et réserve d'énergie : [à compléter].</p>",
+    "mass": 0,
+    "enc": 0,
+    "quantity": 1,
+    "reserve": {
+      "type": "energy",
+      "value": 0,
+      "max": 0
+    },
+    "toolBonus": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 140000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

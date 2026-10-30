@@ -1,0 +1,47 @@
+{
+  "_id": "ArmCostumePlenip",
+  "_key": "!items!ArmCostumePlenip",
+  "name": "Costume de plénipotentiaire (fibre arachnide)",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Taillé sur mesure pour les négociations à Genève, Valhalla ou Shangri-La. Aucune pénalité ; protection discrète contre les lames et les fléchettes.</p>",
+    "protection": {
+      "head": 0,
+      "torso": 1,
+      "rightArm": 0,
+      "leftArm": 0,
+      "rightLeg": 0,
+      "leftLeg": 0
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": 0,
+      "perception": 0
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 1,
+    "enc": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1160000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

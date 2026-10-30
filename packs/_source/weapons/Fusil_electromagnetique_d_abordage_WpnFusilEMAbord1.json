@@ -1,0 +1,38 @@
+{
+  "_id": "WpnFusilEMAbord1",
+  "_key": "!items!WpnFusilEMAbord1",
+  "name": "Fusil électromagnétique d'abordage",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §3. Décision Marc 30/10/2026 -->\n<p>80 / 250 / 500 m. Aiguilles de tungstène et batterie. Sans détonation chimique, vitesse hypersonique. Ses dégâts bruts (11 et plus) dépassent le seuil de brèche d'une combinaison renforcée (8).</p>",
+    "skill": "Armes d'épaule",
+    "damage": 11,
+    "range": "long",
+    "recoil": true,
+    "ammo": {
+      "value": 10,
+      "max": 10
+    },
+    "ammoType": "piercing",
+    "burst": false,
+    "hullSafe": false,
+    "mass": 4.5,
+    "enc": 3
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1120000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "_id": "WpnMatraqueInert",
+  "_key": "!items!WpnMatraqueInert",
+  "name": "Matraque télescopique à inertie",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Lestée de grenaille interne amortissant le rebond en apesanteur ; arme des prévôts de station.</p>",
+    "skill": "Corps-à-corps",
+    "damage": 5,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 0,
+      "max": 0
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 0.7,
+    "enc": 0.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1190000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

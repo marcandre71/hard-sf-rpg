@@ -1,0 +1,48 @@
+{
+  "_id": "ArmRenforceChant",
+  "_key": "!items!ArmRenforceChant",
+  "name": "Combinaison renforcée de chantier (EVA lourde)",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Coque semi-rigide avec plaques thoraciques anti-micrométéorites et joints doublés ; standard des prospecteurs et des araignées de chantier. Pénalité : la v0.2 indique −10 ; si elle compte comme « combinaison lourde » au sens du LdR, ce serait −20 [à compléter].</p>",
+    "protection": {
+      "head": 3,
+      "torso": 3,
+      "rightArm": 2,
+      "leftArm": 2,
+      "rightLeg": 2,
+      "leftLeg": 2
+    },
+    "pressurized": true,
+    "breachThreshold": 8,
+    "airReserve": {
+      "value": 10,
+      "max": 10
+    },
+    "penalty": {
+      "manipulation": -10,
+      "perception": -10
+    },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 15,
+    "enc": 2,
+    "sealState": "intact"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1020000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

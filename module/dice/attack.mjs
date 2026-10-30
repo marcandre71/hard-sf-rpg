@@ -2,9 +2,10 @@
  * Tir visé et actions de visée. Sans Foundry.
  *
  * Réf. LdR v0.2 §7 « Localisation des coups » et « Actions ».
- * Le malus de zone et le bonus de visée sont des modificateurs de
- * situation : ils entrent dans le plafond ±50 avec la difficulté
- * et le modificateur libre (`cappedModifier`).
+ * Le malus de zone, le bonus de visée et le malus de portée sont des
+ * modificateurs de situation : ils entrent dans le plafond ±50 avec
+ * la difficulté et le modificateur libre (`cappedModifier`).
+ * Décision Marc 30/10/2026 : portée courte 0, moyenne −10, longue −20.
  */
 import { hitLocation } from "./d100.mjs";
 
@@ -38,6 +39,45 @@ export const CALLED_SHOTS = [
 export const AIM_MODIFIERS = [
   { id: "aim", per: 10, max: 30, maxActions: 3, label: "SOL.Roll.aim" }
 ];
+
+/**
+ * Malus de portée d'un jet d'attaque de personnage.
+ * Courte 0, moyenne −10, longue −20. Un autre palier vaut 0.
+ * Décision Marc 30/10/2026. Réf. LdR v0.2 §5 : ce malus entre dans le plafond ±50.
+ * Réf. Armes v0.3 §1 : le palier stocké sur l'arme n'est pas ce malus.
+ *
+ * @type {Record<"short"|"medium"|"long", number>}
+ */
+export const ATTACK_RANGE_PENALTIES = {
+  short: 0,
+  medium: -10,
+  long: -20
+};
+
+/**
+ * @param {string|null|undefined} band
+ * @returns {number}
+ */
+export function attackRangePenalty(band) {
+  if ( typeof band === "string" && Object.hasOwn(ATTACK_RANGE_PENALTIES, band) ) {
+    return ATTACK_RANGE_PENALTIES[band];
+  }
+  return 0;
+}
+
+/**
+ * Palier retenu pour le jet. Inconnu ou absent : courte.
+ * Décision Marc 30/10/2026 : courte par défaut.
+ *
+ * @param {string|null|undefined} band
+ * @returns {"short"|"medium"|"long"}
+ */
+export function attackRangeBand(band) {
+  if ( typeof band === "string" && Object.hasOwn(ATTACK_RANGE_PENALTIES, band) ) {
+    return /** @type {"short"|"medium"|"long"} */ (band);
+  }
+  return "short";
+}
 
 /**
  * @param {string|null|undefined} id
@@ -81,12 +121,15 @@ export function aimModifier(actions, modifiers = AIM_MODIFIERS) {
  * @param {string|null|undefined} calledId
  * @param {number|Record<string, number>|null|undefined} actions
  * @param {typeof AIM_MODIFIERS} [modifiers]
- * @returns {{ called: ReturnType<typeof calledShot>, aim: ReturnType<typeof aimModifier>, situation: number }}
+ * @param {string|null|undefined} [rangeBand] Courte si absent. Décision Marc 30/10/2026.
+ * @returns {{ called: ReturnType<typeof calledShot>, aim: ReturnType<typeof aimModifier>, range: "short"|"medium"|"long", rangePenalty: number, situation: number }}
  */
-export function attackSituation(calledId, actions, modifiers = AIM_MODIFIERS) {
+export function attackSituation(calledId, actions, modifiers = AIM_MODIFIERS, rangeBand = "short") {
   const called = calledShot(calledId);
   const aim = aimModifier(actions, modifiers);
-  return { called, aim, situation: called.penalty + aim.total };
+  const range = attackRangeBand(rangeBand);
+  const rangePenalty = attackRangePenalty(range);
+  return { called, aim, range, rangePenalty, situation: called.penalty + aim.total + rangePenalty };
 }
 
 /**

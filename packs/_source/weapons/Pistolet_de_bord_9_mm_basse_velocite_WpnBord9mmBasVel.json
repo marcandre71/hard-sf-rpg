@@ -1,0 +1,38 @@
+{
+  "_id": "WpnBord9mmBasVel",
+  "_key": "!items!WpnBord9mmBasVel",
+  "name": "Pistolet de bord 9 mm basse vélocité",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 35 / 70 m. Dotation standard des officiers de marine marchande, des rades et des syndics de la Mutuelle.</p>",
+    "skill": "Armes de poing",
+    "damage": 6,
+    "range": "short",
+    "recoil": true,
+    "ammo": {
+      "value": 15,
+      "max": 15
+    },
+    "ammoType": "frangible",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 0.9,
+    "enc": 0.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1020000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -10,6 +10,9 @@
     <li>{{localize "SOL.Roll.score"}} : {{score}}</li>
     <li>{{localize "SOL.Roll.difficulty"}} : {{difficultyLabel}} ({{difficultyModifier}})</li>
     <li>{{localize "SOL.Roll.free"}} : {{free}}</li>
+    {{#if rangeLabel}}
+    <li>{{localize "SOL.Roll.range"}} : {{rangeLabel}}</li>
+    {{/if}}
     {{#if calledLabel}}
     <li>{{calledLabel}}</li>
     {{/if}}

@@ -1,0 +1,47 @@
+{
+  "_id": "ArmCoursiveTrav1",
+  "_key": "!items!ArmCoursiveTrav1",
+  "name": "Combinaison de travail de coursive",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Bandes autoagrippantes, poches aimantées et dosimètre passif. Tenue quotidienne à bord des vaisseaux et des stations.</p>",
+    "protection": {
+      "head": 0,
+      "torso": 0,
+      "rightArm": 0,
+      "leftArm": 0,
+      "rightLeg": 0,
+      "leftLeg": 0
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": 0,
+      "perception": 0
+    },
+    "dosimeter": true,
+    "radio": false,
+    "mass": 0.8,
+    "enc": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1110000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

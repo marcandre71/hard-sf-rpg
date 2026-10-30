@@ -1,0 +1,38 @@
+{
+  "_id": "WpnBatonChoc0001",
+  "_key": "!items!WpnBatonChoc0001",
+  "name": "Matraque à impulsion (bâton-choc)",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>10 charges. Test de CON ou cible Sonnée 1 tour. Risque d'étincelle près d'une fuite d'oxygène pur.</p>",
+    "skill": "Corps-à-corps",
+    "damage": 4,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 10,
+      "max": 10
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 1,
+    "enc": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1210000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

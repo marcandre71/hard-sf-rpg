@@ -1,0 +1,38 @@
+{
+  "_id": "WpnCouteauArrim1",
+  "_key": "!items!WpnCouteauArrim1",
+  "name": "Couteau d'arrimage, lame de sas en céramique",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Conçu pour trancher sangles et filins. Sur une attaque visée aux joints d'une combinaison (−20), abaisse de 2 le seuil de brèche de la cible. Sans danger pour la coque, pas pour les joints.</p>",
+    "skill": "Corps-à-corps",
+    "damage": 4,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 0,
+      "max": 0
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 0.3,
+    "enc": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1180000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

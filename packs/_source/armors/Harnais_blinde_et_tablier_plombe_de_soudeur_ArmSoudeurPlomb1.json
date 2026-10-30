@@ -1,0 +1,47 @@
+{
+  "_id": "ArmSoudeurPlomb1",
+  "_key": "!items!ArmSoudeurPlomb1",
+  "name": "Harnais blindé et tablier plombé de soudeur",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Surcouche portée sur une combinaison souple lors des interventions dans la poupe ; réduit de 25 % la dose aiguë de radiation (pas de champ FoundryVTT, voir v0.9) et protège des arcs plasma.</p>",
+    "protection": {
+      "head": 2,
+      "torso": 2,
+      "rightArm": 1,
+      "leftArm": 1,
+      "rightLeg": 0,
+      "leftLeg": 0
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": -10,
+      "perception": -10
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 6.5,
+    "enc": 1.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1090000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

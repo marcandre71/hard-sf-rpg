@@ -168,6 +168,7 @@ export async function performRoll({
     canApplyShip: false,
     note: [note, typeof noteFor === "function" ? (noteFor(outcome) ?? "") : ""].filter(Boolean).join(" "),
     calledLabel: "",
+    rangeLabel: "",
     aimModifier: "",
     aimActions: picked.aimActions ?? 0,
     statusLabel: "",
@@ -175,6 +176,10 @@ export async function performRoll({
     visor: false
   };
 
+  if ( picked.range ) {
+    // Le libellé porte le malus (« Moyenne (−10) »). Décision Marc 30/10/2026.
+    card.rangeLabel = game.i18n.localize(`SOL.Roll.rangeBand.${picked.range}`);
+  }
   if ( picked.calledShot && picked.calledShot !== "none" ) {
     // Le libellé porte déjà le malus (« Torse (−10) »). On ne le répète pas.
     card.calledLabel = game.i18n.localize(`SOL.Roll.called.${picked.calledShot}`);

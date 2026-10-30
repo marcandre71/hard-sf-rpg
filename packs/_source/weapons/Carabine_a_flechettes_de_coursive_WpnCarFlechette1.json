@@ -1,0 +1,38 @@
+{
+  "_id": "WpnCarFlechette1",
+  "_key": "!items!WpnCarFlechette1",
+  "name": "Carabine à fléchettes de coursive",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §3. Décision Marc 30/10/2026 -->\n<p>25 / 60 / 120 m. Compensation par gaz, recul nul. Arme favorite des équipages de gardes du vide (vaisseaux de sauvetage) et des escortes de coffres d'hélium du Kombinat.</p>",
+    "skill": "Armes d'épaule",
+    "damage": 7,
+    "range": "medium",
+    "recoil": false,
+    "ammo": {
+      "value": 24,
+      "max": 24
+    },
+    "ammoType": "flechette",
+    "burst": true,
+    "hullSafe": true,
+    "mass": 2.2,
+    "enc": 1.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1060000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

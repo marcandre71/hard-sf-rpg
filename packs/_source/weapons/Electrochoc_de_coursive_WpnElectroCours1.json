@@ -1,0 +1,38 @@
+{
+  "_id": "WpnElectroCours1",
+  "_key": "!items!WpnElectroCours1",
+  "name": "Électrochoc de coursive",
+  "type": "weapon",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Portée contact à 5 m. Si au moins 1 dégât passe ou sur contact non isolé : test de CON (−10) ou cible Sonnée 1 tour. Dangereux près d'une fuite d'oxygène pur (risque d'ignition).</p>",
+    "skill": "Armes de poing",
+    "damage": 3,
+    "range": "short",
+    "recoil": false,
+    "ammo": {
+      "value": 5,
+      "max": 5
+    },
+    "ammoType": "none",
+    "burst": false,
+    "hullSafe": true,
+    "mass": 0.5,
+    "enc": 0.5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}
