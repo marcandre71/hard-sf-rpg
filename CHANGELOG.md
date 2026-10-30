@@ -2,9 +2,9 @@
 
 ## 0.9.0
 
-Branche `dev/0.9.0`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.7.4 (`34b4d60`). La section 14 de TESTER.md sert à la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.0 qu'après fusion de `dev/0.9.0` dans `main`. D'ici là, l'étape 1 donne le ZIP de la branche `dev/0.9.0`.
+Entrée dans `main` en avance rapide depuis `dev/0.9.0` (`ae781ea`), accord de Didier le 30/10/2026. La section 14 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.
 
-Décision Marc 30/10/2026. Réf. Armes v0.3 et Armures v0.3. Pas de citation d'une Bible v0.4 ni d'un Glossaire v0.2. La 0.9 se découpe en 0.9.0 (armes, armures, portée), 0.9.1 (équipement et modules), 0.9.2 (atouts, augmentations, logiciels, substances) et 0.9.3 (blessures, journaux, vaisseaux PNJ).
+Décision Marc 30/10/2026. Réf. Armes v0.3 et Armures v0.3. Pas de citation d'une Bible v0.4 ni d'un Glossaire v0.2. Décision Marc 30/10/2026 : après la 0.9.0, l'ordre est 0.9.1 (équipement et modules), 0.9.2 (atouts, augmentations, logiciels, substances), 0.9.3 (blessures, journaux, vaisseaux PNJ), 0.8.0 (machines), 0.8.1 (habillage SF, ancienne 0.10.0), puis 1.0.0.
 
 - Compendium Armes : les 24 armes du catalogue sauf le lanceur 40 mm, plus la Carabine et le Pistolet frangible déjà là (mêmes ids, mêmes noms, mêmes dégâts). Palier retenu par Marc pour la Q1 le 30/10/2026 (convention, pas une règle du LdR ; Réf. Armes v0.3 §1, qui dit encore « [à compléter : convention à valider] ») : courte jusqu'à 100 m, moyenne jusqu'à 200 m, longue au-delà. Les mètres restent dans la description. Les effets sans base au LdR restent du texte.
 - Compendium Armures : les 17 armures du catalogue, plus Combinaison souple, Combinaison renforcée et Armure de pont déjà là (mêmes ids, mêmes noms, mêmes protections). La renforcée de chantier a une pénalité de −10. Réduction de dose, couvert, autonomie du masque de Shangri-La et cadence de surchauffe restent du texte, avec « à compléter » là où la source le dit.

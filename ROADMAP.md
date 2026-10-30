@@ -14,16 +14,16 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 - [x] 0.7.2 — combat spatial simplifié, dans le Combat Tracker habituel. Testée par Marc le 25/10/2026, correctif 0.7.2.1 delta-v.
 - [x] 0.7.3 — dégâts localisés des vaisseaux, critiques, dépressurisation, missiles. Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.7.4 — chaleur du réacteur, Pousser, réparations. Règles des vaisseaux §6-7. Relue par Relecteur, test Marc reporté à la v1.
+- [x] 0.9.0 — armes, armures et portée. Relue par Relecteur, test Marc reporté à la v1.
 
 ## Ensuite
 
-- [ ] 0.7.5 — éventuelle. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.9.0 — armes, armures et portée. En relecture. Branche `dev/0.9.0`.
+- [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
 - [ ] 0.9.1 — équipement et modules.
 - [ ] 0.9.2 — atouts, augmentations, logiciels et substances.
 - [ ] 0.9.3 — blessures, journaux et vaisseaux PNJ.
-- [ ] 0.8.0 — fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines.
-- [ ] 0.10.0 — habillage SF des fiches. Mise en forme hard SF 2187, sobre et lisible : interface de bord, fond sombre, accents de couleur, typographie technique, icônes libres, aucune image sous droits. D'abord les fiches de personnage, puis les fiches Vaisseau et machines dans le même style, avec les finitions (icônes manquantes, traduction anglaise). Une proposition de style doit d'abord être validée par Didier. Décision Marc 30/10/2026.
+- [ ] 0.8.0 — machines : fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines.
+- [ ] 0.8.1 — habillage SF des fiches (ancienne 0.10.0). Avancée pour qu'une version de test « 0.8 + nouvelles fiches » arrive sur `main`. Mise en forme hard SF 2187, sobre et lisible : interface de bord, fond sombre, accents de couleur, typographie technique. Le portrait reste modifiable : un clic ouvre le FilePicker de Foundry pour l'avatar, sur toutes les fiches. Les jauges et indicateurs (chaleur, Intégrité, munitions, Endurance, états) se mettent à jour en direct sur la fiche ouverte. Icônes libres, traduction anglaise. Décision Marc 30/10/2026.
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée.
 
-Décision Marc 30/10/2026 : les catalogues commencent en 0.9.0 (armes, armures, portée), avant les machines (0.8.0). La 0.9 se découpe en 0.9.0, 0.9.1, 0.9.2 et 0.9.3.
+Décision Marc 30/10/2026 : après la 0.9.0, l'ordre est 0.9.1, 0.9.2, 0.9.3, puis 0.8.0, puis 0.8.1 (habillage, ancienne 0.10.0), puis 1.0.0.

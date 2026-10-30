@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.9.0 sur `dev/0.9.0`
+## État du système : version 0.9.0 sur `main`
 
-`main` est en 0.7.4 (chaleur, Pousser, réparations, `34b4d60`). Cette branche ajoute les armes et les armures du catalogue v0.3, et le malus de portée du jet d'attaque. C'est une PR brouillon : elle n'entre dans `main` qu'après la relecture de Relecteur Foundry puis l'accord de Didier. Ne pas la fusionner avant. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 14. Le ZIP de `main` ne contient la 0.9.0 qu'après fusion de `dev/0.9.0` dans `main`. D'ici là, l'étape 1 donne le ZIP de la branche `dev/0.9.0`. La suite des versions est dans [ROADMAP.md](ROADMAP.md). La 0.9 se découpe en 0.9.0 (armes, armures, portée), 0.9.1 (équipement et modules), 0.9.2 (atouts, augmentations, logiciels, substances) et 0.9.3 (blessures, journaux, vaisseaux PNJ).
+`main` est en 0.9.0 (armes, armures, malus de portée). Relue par Relecteur, accord de Didier le 30/10/2026. Marc n'a signalé aucun problème sur la 0.7.4. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 14, avec le ZIP de `main`. La suite est dans [ROADMAP.md](ROADMAP.md) : 0.9.1, 0.9.2, 0.9.3, puis 0.8.0, puis 0.8.1 (habillage SF, ancienne 0.10.0), puis 1.0.0.
 
 Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Décision Marc 25/10/2026 : un tir qui touche a un bouton « Appliquer les dégâts » (MJ, une fois). Les dégâts sont la valeur de l'arme plus le DR. Décision Marc 30/10/2026 : la chaleur, Pousser, les réparations et le canon sont dans la 0.7.4. Marc testera l'ensemble à la v1.0.
 
