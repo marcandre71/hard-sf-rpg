@@ -330,6 +330,7 @@
       "incidentAsk": "{name} : échec à 3 DE ou plus. Le MJ choisit (Vaisseaux v0.1 §6).",
       "incidentHeatDone": "{name} : +1 chaleur.",
       "incidentModuleDone": "{name} : {module} devient dégradé.",
+      "incidentModuleOut": "{name} : {module} a une Intégrité max de 1 : il passe hors service.",
       "incidentNoModule": "Aucun module à dégrader.",
       "repair": {
         "bricolage": "Bricolage : le meneur décide.",

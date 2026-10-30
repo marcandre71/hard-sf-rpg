@@ -18,6 +18,7 @@
  * @see https://foundryvtt.com/api/v14/functions/hookEvents.preUpdateDocument.html
  */
 import { SOL } from "../config.mjs";
+import { mayAuthorStrike } from "./combat.mjs";
 import {
   applyHullDamage,
   beginShipApply,
@@ -1030,8 +1031,8 @@ function article(text) {
  * Un drapeau modifié ensuite ne s'applique pas.
  * // Décision Marc 30/10/2026, reliquat de relecture.
  *
- * // À confirmer par Marc : l'auteur doit être MJ, ou OWNER du vaisseau
- * tireur. Un joueur qui ne possède que le personnage du poste est refusé.
+ * // Décision Marc 30/10/2026 : MJ, propriétaire du vaisseau tireur,
+ * ou propriétaire du personnage au poste Artilleur.
  *
  * @param {ChatMessage} message
  * @returns {Promise<void>}
@@ -1104,11 +1105,36 @@ function strikeMatchesRecord(message, strike) {
 function authorMayStrike(message, attackerUuid) {
   const author = message.author;
   if ( !author ) return false;
-  if ( author.isGM === true ) return true;
   const ship = shipOf(attackerUuid);
-  if ( !ship?.testUserPermission ) return false;
   const level = foundry.CONST?.DOCUMENT_OWNERSHIP_LEVELS?.OWNER ?? 3;
-  return ship.testUserPermission(author, level) === true;
+  const ownsShip = ship?.testUserPermission?.(author, level) === true;
+  return mayAuthorStrike({
+    gm: author.isGM === true,
+    ownsShip,
+    ownsPost: authorOwnsGunner(author, ship, level)
+  });
+}
+
+/**
+ * Le tir est le poste Artilleur.
+ * // Décision Marc 30/10/2026
+ *
+ * @param {User} author
+ * @param {Actor|null} ship
+ * @param {number} level
+ * @returns {boolean}
+ */
+function authorOwnsGunner(author, ship, level) {
+  const uuid = ship?.system?._source?.posts?.gunner?.actorUuid
+    ?? ship?.system?.posts?.gunner?.actorUuid
+    ?? "";
+  if ( typeof uuid !== "string" || !uuid || typeof foundry?.utils?.fromUuidSync !== "function" ) return false;
+  try {
+    const crew = foundry.utils.fromUuidSync(uuid);
+    return crew?.testUserPermission?.(author, level) === true;
+  } catch {
+    return false;
+  }
 }
 
 function isActiveGm() {

@@ -235,7 +235,7 @@ Il vous faut **une Petite Fortune**, ouverte **depuis son jeton**, dans le Comba
 7. Chaleur à **8** ou moins, réacteur allumé. **Pousser**, jusqu'à une réussite.
    **Résultat attendu :** la chaleur monte de **1**. Trois choix : **+10 par DR au Pilote** (au moins +10) jusqu'à la fin du round, en plus de Calculer ; **Poussée augmentée de moitié**, le chat dit que le MJ ajuste le delta-v ; **Un tir de laser sans chaleur**, et le prochain laser ne fait pas monter la jauge. Un échec simple monte de **2** au total, sans ces choix. Un échec à **3 DE** ou plus, ou un échec critique, monte aussi de **2** et tire le critique du réacteur.
 8. **Esquiver** ou **Changer de portée**, jusqu'à un échec à **3 DE** ou plus.
-   **Résultat attendu :** la chaleur monte de **1**, et une carte pour le MJ propose **+1 chaleur** ou **Un module dégradé**. Vous choisissez le module.
+   **Résultat attendu :** la chaleur monte de **1**, et une carte pour le MJ propose **+1 chaleur** ou **Un module dégradé**. Vous choisissez le module. S'il a une Intégrité max de **1**, il passe **hors service** et le chat le dit. Sinon il devient **dégradé**.
 9. Mettez un module à **0** (hors service). Laissez au moins **1** Pièce. **Réparation de fortune**, réussite.
    **Résultat attendu :** le jet est à **−20**. Une Pièce part seulement si le jet réussit. Le module passe à **1**. Supprimez le combat : le module revient à **0**, et le chat le dit. Un échec ne retire pas la Pièce.
 10. Hors combat, avec des Pièces, **Réparer**. Choisissez un personnage, une plaque, et **1 h en route** (ou **10 min en urgence**). Réussite.

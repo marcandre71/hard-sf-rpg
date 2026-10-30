@@ -106,6 +106,26 @@ export function applyHullDamage(input) {
 }
 
 /**
+ * Incident du Pilote : le module choisi devient dégradé.
+ * Intégrité max 1 : il passe hors service, comme l'éventration.
+ * `null` : déjà dégradé ou hors service, on ne change pas.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §5 et §6
+ *
+ * @param {unknown} value
+ * @param {unknown} max
+ * @returns {{ integrity: number, out: boolean }|null}
+ */
+export function incidentModuleValue(value, max) {
+  const lowered = degradedValue(value, max);
+  const current = Number(value);
+  if ( lowered !== null && lowered < current ) return { integrity: lowered, out: false };
+  const ceiling = Number(max);
+  if ( ceiling === 1 && Number.isFinite(current) && current > 0 ) return { integrity: 0, out: true };
+  return null;
+}
+
+/**
  * Valeur qui rend le module dégradé (moitié du maximum, vers le bas).
  * Déjà dégradé ou hors service : on ne change pas.
  * Maximum 1 : la moitié tombe à 0, cette fonction ne dégrade pas.
@@ -353,7 +373,7 @@ function sectionCrit(state, sectionId, section, logs, dice, moduleCritted) {
  * // Décision Marc 30/10/2026
  * // Réf. Vaisseaux v0.1 §6
  *
- * // À confirmer par Marc : s'il y a plusieurs modules réacteur encore
+ * // Décision Marc 30/10/2026 : s'il y a plusieurs modules réacteur encore
  * vivants, on met à 0 le premier de la fiche.
  *
  * @param {HullState} state

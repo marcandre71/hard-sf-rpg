@@ -75,7 +75,7 @@ export function heatPenalty(heat) {
  * // Décision Marc 30/10/2026
  * // Réf. Vaisseaux v0.1 §6
  *
- * // À confirmer par Marc : un module Radiateurs « non renseigné »
+ * // Décision Marc 30/10/2026 : un module Radiateurs « non renseigné »
  * (maximum 0) ne compte pas. S'il n'y a que ça, on retire 1.
  *
  * @param {Array<string|null|undefined>|null|undefined} conditions
@@ -195,7 +195,7 @@ export function shotAftermath(input) {
  * // Décision Marc 30/10/2026
  * // Réf. Vaisseaux v0.1 §6
  *
- * // À confirmer par Marc : un autre nom d'arme à énergie,
+ * // Décision Marc 30/10/2026 : un autre nom d'arme à énergie,
  * qui n'est ni un laser ni un missile, n'est pas coupé avec le réacteur.
  *
  * @param {{ name?: string }|null|undefined} weapon
@@ -210,7 +210,7 @@ export function isCannonWeapon(weapon) {
  * // Décision Marc 30/10/2026
  * // Réf. Vaisseaux v0.1 §6
  *
- * // À confirmer par Marc : s'il y a plusieurs modules réacteur,
+ * // Décision Marc 30/10/2026 : s'il y a plusieurs modules réacteur,
  * un seul hors service coupe tout le vaisseau.
  * Sans module réacteur, seule la case compte.
  *
@@ -265,7 +265,7 @@ export function repairGain(dr) {
  * // Décision Marc 30/10/2026
  * // Réf. Vaisseaux v0.1 §7
  *
- * // À confirmer par Marc : la case « Au chantier » lève seulement
+ * // Décision Marc 30/10/2026 : la case « Au chantier » lève seulement
  * le plafond de moitié. Le jet écrit quand même, jusqu'au maximum.
  * Le MJ peut ensuite corriger la fiche à la main.
  *

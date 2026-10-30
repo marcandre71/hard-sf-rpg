@@ -20,6 +20,7 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 - [ ] 0.7.5 — éventuelle. Combat personnel : effet de l'Esquive, malus de portée, malus de blessure −10/−20. Règles en attente de Didier. Peut aussi aller dans la 0.9.0.
 - [ ] 0.9.0 — catalogues (armes, armures, équipement, atouts, augmentations, logiciels, substances, autres vaisseaux) et journaux d'univers dans les compendiums.
 - [ ] 0.8.0 — fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines.
+- [ ] 0.10.0 — habillage SF des fiches. Mise en forme hard SF 2187, sobre et lisible : interface de bord, fond sombre, accents de couleur, typographie technique, icônes libres, aucune image sous droits. D'abord les fiches de personnage, puis les fiches Vaisseau et machines dans le même style, avec les finitions (icônes manquantes, traduction anglaise). Une proposition de style doit d'abord être validée par Didier. Décision Marc 30/10/2026.
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée.
 
 Décision Marc 30/10/2026 : les catalogues (0.9.0) passent avant les machines (0.8.0).

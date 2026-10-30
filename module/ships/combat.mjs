@@ -48,6 +48,20 @@ export const POST_ACTIONS = {
 };
 
 /**
+ * Qui peut poster ou faire appliquer une carte de tir.
+ * Le MJ, un propriétaire du vaisseau tireur, ou un propriétaire
+ * du personnage assis au poste. Un joueur du groupe n'a pas
+ * forcément les droits sur le vaisseau.
+ * // Décision Marc 30/10/2026
+ *
+ * @param {{ gm?: boolean, ownsShip?: boolean, ownsPost?: boolean }} input
+ * @returns {boolean}
+ */
+export function mayAuthorStrike(input = {}) {
+  return input.gm === true || input.ownsShip === true || input.ownsPost === true;
+}
+
+/**
  * L'action appartient-elle à ce poste.
  * Le relais refuse le reste. `command` n'est pas un id de poste.
  *

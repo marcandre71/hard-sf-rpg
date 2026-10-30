@@ -84,7 +84,7 @@ export async function changeHeat(ship, delta) {
 export async function spendCannonAmmo(ship, weaponId) {
   const item = ship.items?.get(weaponId);
   const ammo = item?.system?.weapon?.ammo?.value;
-  // À confirmer par Marc : munitions non saisies (null), on ne retire rien
+  // Décision Marc 30/10/2026 : munitions non saisies (null), on ne retire rien
   // et on n'écrit pas 0.
   if ( typeof ammo !== "number" ) return;
   await item.update({ "system.weapon.ammo.value": Math.max(0, Math.trunc(ammo) - 1) });
@@ -421,15 +421,16 @@ async function onHeatClick(message, button) {
     if ( !moduleId ) return;
     const item = ship.items.get(moduleId);
     if ( !item ) return;
-    const { degradedValue } = await import("./damage.mjs");
-    const next = degradedValue(item.system.integrity.value, item.system.integrity.max);
-    if ( next === null || next >= Number(item.system.integrity.value) ) {
+    const { incidentModuleValue } = await import("./damage.mjs");
+    const next = incidentModuleValue(item.system.integrity.value, item.system.integrity.max);
+    if ( !next ) {
       ui.notifications.info(game.i18n.localize("SOL.Ship.incidentNoModule"));
       return;
     }
-    await item.update({ "system.integrity.value": next });
+    await item.update({ "system.integrity.value": next.integrity });
+    const key = next.out ? "SOL.Ship.incidentModuleOut" : "SOL.Ship.incidentModuleDone";
     await ChatMessage.create({
-      content: article(game.i18n.format("SOL.Ship.incidentModuleDone", {
+      content: article(game.i18n.format(key, {
         name,
         module: foundry.utils.escapeHTML(item.name ?? "")
       }))

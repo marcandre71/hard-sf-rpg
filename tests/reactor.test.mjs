@@ -3,7 +3,7 @@
  * Sans Foundry. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6 et §7.
  */
 import { readFileSync } from "node:fs";
-import { resolveReactorCrit } from "../module/ships/damage.mjs";
+import { incidentModuleValue, resolveReactorCrit } from "../module/ships/damage.mjs";
 import {
   FIELD_REPAIR_VALUE,
   addHeat,
@@ -138,6 +138,12 @@ check(repairedValue(0, 20, 5, { plate: false }) === 5, "section : +5, plafonné 
 check(repairedValue(18, 20, 15, {}) === 20, "le gain ne dépasse pas le maximum");
 check(noSpareParts(0) === true && noSpareParts(1) === false, "sans Pièces, la réparation est refusée");
 check(FIELD_REPAIR_VALUE === 1, "réparation de fortune : Intégrité 1");
+const degraded = incidentModuleValue(8, 10);
+check(degraded?.integrity === 5 && degraded.out === false, "incident : le module devient dégradé");
+const thin = incidentModuleValue(1, 1);
+check(thin?.integrity === 0 && thin.out === true, "incident, max 1 : hors service");
+check(incidentModuleValue(5, 10) === null, "incident : déjà dégradé, on ne change pas");
+check(fr.SOL.Ship.incidentModuleOut.includes("hors service"), "incident max 1 : le texte dit hors service");
 
 check(fr.SOL.Ship.reactor.critStop.includes("coupé"), "texte d'arrêt du réacteur");
 check(fr.SOL.Ship.repair.bricolage.includes("Bricolage"), "texte sans Pièces");
