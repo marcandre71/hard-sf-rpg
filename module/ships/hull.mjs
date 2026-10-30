@@ -285,7 +285,13 @@ export function parsedNumber(raw) {
  * @returns {{ value: number|null, max: number|null }}
  */
 export function normalizeAmmoEdit(current, field, parsed) {
-  if ( parsed === null ) return { value: null, max: null };
+  // Vider une case ne vide que cette case.
+  if ( parsed === null ) {
+    const value = ammoCount(current?.value);
+    const max = ammoCount(current?.max);
+    if ( field === "max" ) return { value, max: null };
+    return { value: null, max };
+  }
   const number = Number(parsed);
   if ( !Number.isFinite(number) ) {
     return { value: ammoCount(current?.value), max: ammoCount(current?.max) };

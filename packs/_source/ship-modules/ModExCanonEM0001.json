@@ -11,7 +11,7 @@
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Le compteur ne baisse pas tout seul : le MJ le diminue à la main (automatisation en 0.7.4). Décision Marc 26/10/2026. Réf. Vaisseaux v0.1 §4.</p>",
+    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Chaque tir retire 1 munition. Le MJ recharge à la main. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §4 et §6.</p>",
     "mass": 0,
     "weapon": {
       "damage": 12,

@@ -16,7 +16,7 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 
 ## Ensuite
 
-- [ ] 0.7.4 — chaleur du réacteur, Pousser, réparations. Règles des vaisseaux §6-7.
+- [ ] 0.7.4 — chaleur du réacteur, Pousser, réparations. Règles des vaisseaux §6-7. En relecture, branche `dev/0.7.4`.
 - [ ] 0.7.5 — éventuelle. Combat personnel : effet de l'Esquive, malus de portée, malus de blessure −10/−20. Règles en attente de Didier. Peut aussi aller dans la 0.9.0.
 - [ ] 0.9.0 — catalogues (armes, armures, équipement, atouts, augmentations, logiciels, substances, autres vaisseaux) et journaux d'univers dans les compendiums.
 - [ ] 0.8.0 — fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines.

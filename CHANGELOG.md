@@ -1,5 +1,22 @@
 # Journal des versions
 
+## 0.7.4
+
+Branche `dev/0.7.4`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.7.3 (`ddbf0d7`, feuille de route `e33862b`). La section 13 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main` une fois la branche fusionnée.
+
+Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6 et §7. Pas d'autre refroidissement que celui des radiateurs, une fois par round.
+
+- Chaleur 0 à 10, réacteur seul. +1 à chaque Esquiver ou Changer de portée, réussi ou raté. +1 par tir de laser, y compris raté et y compris le laser de défense contre un missile (`heatPerShot`). À 7 : −10 à tous les jets de poste, initiative et Pousser compris, en plus du reste. La jauge ne dépasse pas 10.
+- Refroidissement au changement de round, par le MJ actif, avant le rappel des missiles : radiateurs intacts −3, dégradés −2, hors service −1. Plusieurs modules : le meilleur. Aucun module : −1. Case « Radiateurs repliés » : −1 seulement. La protection est un rappel, sans automatisme. Hors combat, le MJ change la jauge à la main.
+- À 10 : carte « Couper le réacteur » ou « Laisser tourner », pour l'ingénieur ou le MJ. Réacteur coupé : Esquiver, Changer de portée, lasers et canon électromagnétique refusés. Les missiles restent permis. « Redémarrer » : Réacteurs et propulsion, seulement à chaleur ≤ 5. Un échec laisse le réacteur coupé. Un module réacteur hors service compte comme un réacteur coupé, sans redémarrage.
+- « Laisser tourner » : au round suivant, si la chaleur est encore à 10 et que le réacteur tourne, critique réacteur 1D6 avant le refroidissement. Le dé est joint à la carte. 1-2 : réacteur coupé. 3-4 : rappel de fuite toxique. 5 : module réacteur à 0, 1D10 à la poupe sans blindage, critique de section si la poupe passe à 0, pas de critique de module en plus. 6 : rappel de dose, rien d'automatique.
+- Pousser (Ingénieur, Réacteurs et propulsion, ou score PNJ). Refusé à 9 et si le réacteur est coupé. +1 quel que soit le résultat. Réussite, au choix : +10 par DR au Pilote (au moins +10) jusqu'à la fin du round ; poussée de moitié, rappel dans le chat ; un tir de laser qui ne chauffe pas. Échec : +2 au total. Échec à 3 DE ou plus, ou échec critique : +2 et le critique réacteur.
+- Incident du Pilote (échec à 3 DE ou plus sur Esquiver ou Changer de portée) : carte pour le MJ, +1 chaleur ou un module dégradé qu'il choisit.
+- Réparation de fortune en combat : Mécanique −20 sur un module hors service. La Pièce part seulement en cas de réussite. Le module passe à 1. À la suppression du combat, il revient à 0 et le chat le dit.
+- Réparer hors combat : personnage, cible (module, plaque ou section), intervalle noté seulement (1 h ou 10 min). Réussite : −1 Pièce, +5 +5 par DR, plafonné au maximum. Échec : rien n'est perdu. Une plaque s'arrête à la moitié de son maximum, sauf si « Au chantier » est coché. Réparer une section ne remet pas ses modules, et ne décoche pas Section détruite ni Structure tordue : seul le MJ le fait. Sans Pièces : bouton refusé, « Bricolage : le meneur décide ».
+- Chaque tir de canon électromagnétique retire 1 munition. Le rechargement reste à la main. Les lasers n'ont pas de munitions.
+- Relecture 0.7.3 : si l'écriture des dégâts échoue, la coque revient en arrière et le chat le dit. Les cartes se redessinent quand le MJ actif change, et les missiles dus sont rappelés. Le réglage des tirs déjà appliqués est purgé à la suppression du message. Vider une case de munitions ne vide que cette case. La fiche lit `item._source.system`. L'infobulle du bonus de blindage dit qu'il n'est pas compté aux dégâts. Une carte de tir modifiée après coup, ou un missile hors du chemin missile, n'est pas appliquée.
+
 ## 0.7.3
 
 Branche `dev/0.7.3`, PR brouillon vers `main`. Ne pas fusionner avant la relecture. `main` est en 0.7.2.1 (`bb0aaa7`). Le test pour Marc est TESTER §12, ZIP de `dev/0.7.3`, pas de `main`.

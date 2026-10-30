@@ -64,6 +64,30 @@ import {
   missileArrivalRound,
   sensorsAreOut
 } from "./damage.mjs";
+import {
+  askRepair,
+  changeHeat,
+  commitRepair,
+  coolCombat,
+  heatOf,
+  markFieldRepair,
+  postBricolage,
+  postIncident,
+  reactorModuleDown,
+  registerHeatPlay,
+  shipReactorDown,
+  spendCannonAmmo
+} from "./heat-play.mjs";
+import {
+  isCannonWeapon,
+  noSpareParts,
+  pushHeatGain,
+  pushPilotBonus,
+  pushRefusal,
+  restartRefusal,
+  shotAftermath,
+  FIELD_REPAIR_PENALTY
+} from "./reactor.mjs";
 import { enqueueMissile, finishCounter, finishLaser, missileRecord, readHull, remindMissiles } from "./strike.mjs";
 import { crewOf } from "./crew.mjs";
 import { SHIP_POST_IDS } from "./hull.mjs";
@@ -86,6 +110,7 @@ export { POST_ACTIONS };
  */
 export function registerShipPlay() {
   registerShipCombatGuard();
+  registerHeatPlay();
   game.socket?.on(SOCKET, onSpaceRelay);
   Hooks.on("updateCombat", onCombatRound);
 }
@@ -102,6 +127,12 @@ export async function rollPostAction(ship, postId, action, token = null) {
   warnIfDuplicate(ship, postId);
   warnLinkedTwins(ship, token);
   if ( (action === "evade" || action === "changeRange") && wreckBlocks(ship) ) return null;
+  // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6.
+  if ( (action === "evade" || action === "changeRange") && moveBlocked(ship) ) return null;
+  if ( action === "push" ) return pushEngines(ship, token);
+  if ( action === "patch" ) return fieldRepair(ship, token);
+  if ( action === "repair" ) return repairOutside(ship, token);
+  if ( action === "restart" ) return restartReactor(ship, token);
   if ( action === "changeRange" ) return changeRange(ship, token);
   if ( action === "lock" ) return lockShip(ship, token);
   return rollSingle(ship, postId, action, { token });
@@ -217,12 +248,15 @@ function onCombatRound(combat, changed) {
     next[id] = cleared;
     const current = normalizeTurn(turn);
     if ( cleared.lock !== current.lock || cleared.evade !== current.evade
-      || cleared.commanderPost !== current.commanderPost || cleared.pilotBonus !== current.pilotBonus ) {
+      || cleared.commanderPost !== current.commanderPost || cleared.pilotBonus !== current.pilotBonus
+      || cleared.pushPilot !== current.pushPilot || cleared.coolLaser !== current.coolLaser ) {
       differ = true;
     }
   }
   void (async () => {
     if ( differ ) await combat.setFlag(SYSTEM_ID, TURNS, next);
+    // Critique à 10, puis refroidissement. // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6.
+    await coolCombat(combat);
     await remindMissiles(combat);
   })();
 }
@@ -362,6 +396,10 @@ async function rollSingle(ship, postId, action, options = {}) {
     if ( !weaponId ) return null;
     weapon = weapons.find(entry => entry.id === weaponId) ?? null;
     if ( !weapon ) return null;
+    if ( shipReactorDown(ship) && (isLaserWeapon(weapon) || isCannonWeapon(weapon)) ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Ship.reactorDownFire"));
+      return null;
+    }
     weaponCondition = weapon.condition ?? "";
     // Un missile ne se vise pas : l'impact lit le dé inversé.
     // Décision Marc 26/10/2026. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4 et §5.
@@ -382,7 +420,10 @@ async function rollSingle(ship, postId, action, options = {}) {
       aimed = picked;
     }
   }
-  if ( crew.skills.length > 1 ) {
+  if ( options.skillName ) {
+    const wanted = options.skillName;
+    skill = crew.skills.find(entry => entry.name === wanted || entry.name.startsWith(wanted)) ?? skill;
+  } else if ( crew.skills.length > 1 ) {
     const picked = await choose(game.i18n.localize("SOL.Space.pickSkill"), crew.skills.map((entry, index) => ({
       id: String(index),
       label: entry.name
@@ -396,7 +437,7 @@ async function rollSingle(ship, postId, action, options = {}) {
   const suggested = modifierFor(ship, postId, aim, weaponCondition, options.token ?? null, {
     range: options.rangeOverride,
     ignoreEvade: options.ignoreEvade === true
-  });
+  }) + (Number(options.extraModifier) || 0);
   const missileLaunch = action === "fire" && weapon && isMissileWeapon(weapon) && options.defense !== true;
   const single = action === "fire" ? singleTarget(ship, options.token ?? null) : null;
   const noteFor = options.noteFor ?? (action === "fire"
@@ -429,8 +470,9 @@ async function rollSingle(ship, postId, action, options = {}) {
   if ( options.store !== false && !missileLaunch ) {
     await storeEffect(ship, postId, action, result, crew.chosenPost, options.token ?? null);
   }
-  // Décision Marc 26/10/2026 : réussi ou raté, une munition. Canon et laser : non, jusqu'en 0.7.4.
+  // Décision Marc 26/10/2026 : réussi ou raté, une munition.
   if ( missileLaunch && missileAmmoSpent(result) ) await launchMissile(ship, weapon, result, options.token ?? null);
+  if ( options.settle !== false ) await settleShot(ship, postId, action, weapon, result, options.token ?? null);
   return result;
 }
 
@@ -551,6 +593,10 @@ async function onSpaceRelay(message) {
     return;
   }
   if ( game.user?.isActiveGM !== true ) return;
+  if ( message.type === "reactor" ) {
+    await onReactorRelay(message);
+    return;
+  }
   if ( message.type === "missile" ) {
     await onMissileRelay(message);
     return;
@@ -623,7 +669,8 @@ function modifierFor(ship, postId, aim, weaponCondition = "", token = null, extr
     aim,
     weaponCondition,
     twisted: ship?.system?.twisted === true,
-    sensorsOut: sensorsOutOf(ship)
+    sensorsOut: sensorsOutOf(ship),
+    heat: heatOf(ship)
   });
 }
 
@@ -894,7 +941,8 @@ function weaponsOf(ship) {
     ammo: item.system.weapon?.ammo ?? null,
     rangeClose: item.system.weapon?.rangeClose === true,
     rangeMedium: item.system.weapon?.rangeMedium === true,
-    rangeLong: item.system.weapon?.rangeLong === true
+    rangeLong: item.system.weapon?.rangeLong === true,
+    heatPerShot: Number(item.system.weapon?.heatPerShot ?? 0)
   }));
 }
 
@@ -1166,6 +1214,421 @@ async function loseMissile(ship, weaponId) {
     speaker: ChatMessage.getSpeaker({ actor: ship }),
     content: `<article class="sol-nouvelle-ere"><p>${game.i18n.format("SOL.Ship.missileLost", { name })}</p></article>`
   });
+}
+
+/**
+ * Réacteur coupé : Esquiver et Changer de portée sont refusés.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §6
+ *
+ * @param {Actor} ship
+ * @returns {boolean}
+ */
+function moveBlocked(ship) {
+  if ( !shipReactorDown(ship) ) return false;
+  ui.notifications.warn(game.i18n.localize("SOL.Ship.reactorDownMove"));
+  return true;
+}
+
+/**
+ * Chaleur du tir, munition du canon, incident du Pilote.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §6
+ *
+ * @param {Actor} ship
+ * @param {string} postId
+ * @param {string} action
+ * @param {{ id?: string, name?: string, heatPerShot?: number }|null} weapon
+ * @param {{ success?: boolean, de?: number }} result
+ * @param {TokenDocument|null} token
+ * @returns {Promise<void>}
+ */
+async function settleShot(ship, postId, action, weapon, result, token) {
+  const held = combatantFor(ship, token);
+  const coolLaser = held ? normalizeTurn(readTurns(held.combat)[held.combatant.id]).coolLaser : 0;
+  const plan = shotAftermath({
+    action,
+    laser: Boolean(weapon && isLaserWeapon(weapon)),
+    cannon: Boolean(weapon && isCannonWeapon(weapon)),
+    heatPerShot: weapon?.heatPerShot,
+    coolLaser,
+    success: result?.success,
+    de: result?.de
+  });
+  if ( !plan ) return;
+  if ( !isActiveGm() ) {
+    await relayOwned(ship, postId, {
+      type: "reactor",
+      kind: "settle",
+      shipUuid: ship.uuid,
+      tokenId: tokenIdOf(ship, token),
+      postId,
+      userId: game.user.id,
+      weaponId: weapon?.id ?? "",
+      plan
+    });
+    return;
+  }
+  await applySettle(ship, plan, weapon?.id ?? "", token);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {{ heat?: number, cannon?: boolean, incident?: boolean, coolLaser?: boolean }} plan
+ * @param {string} weaponId
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<void>}
+ */
+async function applySettle(ship, plan, weaponId, token = null) {
+  if ( plan.coolLaser ) await setCoolLaser(ship, token, 0);
+  if ( plan.cannon && weaponId ) await spendCannonAmmo(ship, weaponId);
+  if ( plan.heat ) await changeHeat(ship, plan.heat);
+  if ( plan.incident ) await postIncident(ship);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|object>}
+ */
+async function pushEngines(ship, token = null) {
+  const refusal = pushRefusal(heatOf(ship), shipReactorDown(ship));
+  if ( refusal ) {
+    ui.notifications.warn(game.i18n.localize(refusal === "heat" ? "SOL.Ship.pushRefusedHeat" : "SOL.Ship.pushRefusedDown"));
+    return null;
+  }
+  const result = await rollSingle(ship, "engineer", "push", {
+    token,
+    store: false,
+    settle: false,
+    skillName: "Réacteurs et propulsion"
+  });
+  if ( !result ) return null;
+  const gain = pushHeatGain(result);
+  /** @type {string} */
+  let choice = "";
+  if ( result.success === true ) {
+    const picked = await choose(game.i18n.localize("SOL.Ship.pushChoice"), [
+      { id: "pilot", label: game.i18n.localize("SOL.Ship.pushPilot") },
+      { id: "thrust", label: game.i18n.localize("SOL.Ship.pushThrust") },
+      { id: "laser", label: game.i18n.localize("SOL.Ship.pushLaser") }
+    ]);
+    if ( picked ) choice = picked;
+  }
+  if ( !isActiveGm() ) {
+    await relayOwned(ship, "engineer", {
+      type: "reactor",
+      kind: "push",
+      shipUuid: ship.uuid,
+      tokenId: tokenIdOf(ship, token),
+      postId: "engineer",
+      userId: game.user.id,
+      heat: gain.heat,
+      crit: gain.crit === true,
+      choice,
+      dr: result.dr
+    });
+    return result;
+  }
+  await applyPush(ship, token, gain, choice, result.dr);
+  return result;
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} token
+ * @param {{ heat: number, crit: boolean }} gain
+ * @param {string} choice
+ * @param {number} dr
+ * @returns {Promise<void>}
+ */
+async function applyPush(ship, token, gain, choice, dr) {
+  await changeHeat(ship, gain.heat);
+  if ( gain.crit ) {
+    const face = await oneReactorFace(ship);
+    if ( face?.shutdown ) await ship.update({ "system.reactorShutdown": true });
+  }
+  const name = foundry.utils.escapeHTML(ship.name ?? "");
+  if ( choice === "pilot" ) {
+    const bonus = pushPilotBonus(dr);
+    await setPushPilot(ship, token, bonus);
+    await ChatMessage.create({
+      content: articleText(game.i18n.format("SOL.Ship.pushPilotChat", { name, bonus }))
+    });
+  } else if ( choice === "thrust" ) {
+    await ChatMessage.create({
+      content: articleText(game.i18n.format("SOL.Ship.pushThrustChat", { name }))
+    });
+  } else if ( choice === "laser" ) {
+    await setCoolLaser(ship, token, 1);
+  }
+}
+
+/**
+ * Le critique de Pousser est le même tableau que celui du round.
+ * // Décision Marc 30/10/2026
+ *
+ * @param {Actor} ship
+ * @returns {Promise<{ shutdown: boolean }|null>}
+ */
+async function oneReactorFace(ship) {
+  const { resolveReactorCrit } = await import("./damage.mjs");
+  const { readHull, writeHull } = await import("./strike.mjs");
+  const faceRoll = new Roll("1d6");
+  await faceRoll.evaluate();
+  const face = Math.trunc(Number(faceRoll.total)) || 1;
+  let shock = 0;
+  /** @type {Roll[]} */
+  const rolls = [faceRoll];
+  if ( face === 5 ) {
+    const shockRoll = new Roll("1d10");
+    await shockRoll.evaluate();
+    shock = Math.trunc(Number(shockRoll.total)) || 1;
+    rolls.push(shockRoll);
+  }
+  const before = readHull(ship);
+  const stern = Number(before.sections.stern?.integrity) || 0;
+  /** @type {number[]} */
+  const sixes = [];
+  if ( face === 5 && stern > 0 && shock >= stern ) {
+    for ( let index = 0; index < 6; index += 1 ) {
+      const extra = new Roll("1d6");
+      await extra.evaluate();
+      rolls.push(extra);
+      sixes.push(Math.trunc(Number(extra.total)) || 1);
+    }
+  }
+  let sixAt = 0;
+  const resolved = resolveReactorCrit(before, face, shock, {
+    d6: () => sixes[sixAt++] ?? 1,
+    d10: () => 1,
+    pick: () => 0
+  });
+  await writeHull(ship, before, resolved.state);
+  const items = resolved.logs.map(entry => `<li>${game.i18n.format(entry.key, entry.data ?? {})}</li>`).join("");
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: ship }),
+    content: `<article class="sol-nouvelle-ere"><ul>${items}</ul></article>`,
+    rolls,
+    sound: CONFIG.sounds.dice
+  });
+  return { shutdown: resolved.shutdown };
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|object>}
+ */
+async function fieldRepair(ship, token = null) {
+  if ( !game.combat ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.repair.patchNoCombat"));
+    return null;
+  }
+  if ( noSpareParts(ship.system?.spareParts) ) {
+    await postBricolage(ship);
+    return null;
+  }
+  const rows = [];
+  for ( const item of ship.items ?? [] ) {
+    if ( item.type !== "shipModule" ) continue;
+    if ( item.system?.condition !== "out" ) continue;
+    rows.push({ id: item.id, label: item.name ?? item.id });
+  }
+  if ( !rows.length ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.incidentNoModule"));
+    return null;
+  }
+  const moduleId = rows.length === 1 ? rows[0].id : await choose(game.i18n.localize("SOL.Ship.repair.patch"), rows);
+  if ( !moduleId ) return null;
+  const result = await rollSingle(ship, "engineer", "patch", {
+    token,
+    store: false,
+    settle: false,
+    skillName: "Mécanique",
+    extraModifier: FIELD_REPAIR_PENALTY
+  });
+  if ( !result ) return null;
+  if ( result.success !== true ) {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: ship }),
+      content: articleText(game.i18n.format("SOL.Ship.repair.patchFail", {
+        name: foundry.utils.escapeHTML(ship.name ?? "")
+      }))
+    });
+    return result;
+  }
+  if ( !isActiveGm() ) {
+    await relayOwned(ship, "engineer", {
+      type: "reactor",
+      kind: "patch",
+      shipUuid: ship.uuid,
+      postId: "engineer",
+      userId: game.user.id,
+      moduleId
+    });
+    return result;
+  }
+  await markFieldRepair(ship, moduleId);
+  return result;
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|object>}
+ */
+async function repairOutside(ship, token = null) {
+  if ( noSpareParts(ship.system?.spareParts) ) {
+    await postBricolage(ship);
+    return null;
+  }
+  const picked = await askRepair(ship);
+  if ( !picked ) return null;
+  const { performRoll } = await import("../dice/chat.mjs");
+  const outcome = await performRoll({
+    actor: picked.actor,
+    label: picked.label,
+    score: picked.score,
+    type: "skill",
+    suggested: modifierFor(ship, "engineer", "", "", token),
+    shipPost: true
+  });
+  if ( !outcome ) return null;
+  if ( !isActiveGm() ) {
+    await relayOwned(ship, "engineer", {
+      type: "reactor",
+      kind: "repair",
+      shipUuid: ship.uuid,
+      postId: "engineer",
+      userId: game.user.id,
+      picked,
+      success: outcome.success === true,
+      dr: outcome.dr
+    });
+    return outcome;
+  }
+  await commitRepair(ship, picked, outcome);
+  return outcome;
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} [token]
+ * @returns {Promise<null|object>}
+ */
+async function restartReactor(ship, token = null) {
+  const refusal = restartRefusal(heatOf(ship), reactorModuleDown(ship));
+  if ( refusal ) {
+    ui.notifications.warn(game.i18n.localize(refusal === "module" ? "SOL.Ship.restartRefusedModule" : "SOL.Ship.restartRefusedHeat"));
+    return null;
+  }
+  const result = await rollSingle(ship, "engineer", "restart", {
+    token,
+    store: false,
+    settle: false,
+    skillName: "Réacteurs et propulsion"
+  });
+  if ( !result ) return null;
+  if ( !isActiveGm() ) {
+    await relayOwned(ship, "engineer", {
+      type: "reactor",
+      kind: "restart",
+      shipUuid: ship.uuid,
+      postId: "engineer",
+      userId: game.user.id,
+      success: result.success === true
+    });
+    return result;
+  }
+  await applyRestart(ship, result.success === true);
+  return result;
+}
+
+/**
+ * @param {Actor} ship
+ * @param {boolean} success
+ * @returns {Promise<void>}
+ */
+async function applyRestart(ship, success) {
+  const name = foundry.utils.escapeHTML(ship.name ?? "");
+  if ( success ) {
+    await ship.update({ "system.reactorShutdown": false });
+    await ChatMessage.create({ content: articleText(game.i18n.format("SOL.Ship.restartOk", { name })) });
+    return;
+  }
+  await ChatMessage.create({ content: articleText(game.i18n.format("SOL.Ship.restartFail", { name })) });
+}
+
+/**
+ * @param {object} message
+ * @returns {Promise<void>}
+ */
+async function onReactorRelay(message) {
+  const ship = message.shipUuid ? await foundry.utils.fromUuid(String(message.shipUuid)) : null;
+  if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
+  const postId = typeof message.postId === "string" ? message.postId : "engineer";
+  if ( !await userOwnsShipOrPost(message.userId, ship, postId) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayRefused"));
+    return;
+  }
+  if ( message.kind === "settle" && message.plan ) {
+    await applySettle(ship, message.plan, message.weaponId ?? "", null);
+    return;
+  }
+  if ( message.kind === "push" ) {
+    await applyPush(ship, null, { heat: Number(message.heat) || 0, crit: message.crit === true }, message.choice ?? "", message.dr);
+    return;
+  }
+  if ( message.kind === "patch" && message.moduleId ) {
+    await markFieldRepair(ship, message.moduleId);
+    return;
+  }
+  if ( message.kind === "repair" && message.picked ) {
+    await commitRepair(ship, message.picked, { success: message.success === true, dr: message.dr });
+    return;
+  }
+  if ( message.kind === "restart" ) await applyRestart(ship, message.success === true);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} token
+ * @param {number} bonus
+ * @returns {Promise<void>}
+ */
+async function setPushPilot(ship, token, bonus) {
+  const held = combatantFor(ship, token);
+  if ( !held ) return;
+  const turns = readTurns(held.combat);
+  const turn = normalizeTurn(turns[held.combatant.id]);
+  turn.pushPilot = bonus;
+  turns[held.combatant.id] = turn;
+  await held.combat.setFlag(SYSTEM_ID, TURNS, turns);
+}
+
+/**
+ * @param {Actor} ship
+ * @param {TokenDocument|null} token
+ * @param {number} count
+ * @returns {Promise<void>}
+ */
+async function setCoolLaser(ship, token, count) {
+  const held = combatantFor(ship, token);
+  if ( !held ) return;
+  const turns = readTurns(held.combat);
+  const turn = normalizeTurn(turns[held.combatant.id]);
+  turn.coolLaser = count;
+  turns[held.combatant.id] = turn;
+  await held.combat.setFlag(SYSTEM_ID, TURNS, turns);
+}
+
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+function articleText(text) {
+  return `<article class="sol-nouvelle-ere"><p>${text}</p></article>`;
 }
 
 /**

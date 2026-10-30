@@ -44,6 +44,20 @@
       </label>
       <p class="sol-hint">{{localize "SOL.Ship.twistedHint"}}</p>
     </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="system.radiatorsFolded" {{#if radiatorsFolded}}checked{{/if}}>
+        {{localize "SOL.Ship.radiatorsFolded"}}
+      </label>
+      <p class="sol-hint">{{localize "SOL.Ship.radiatorsFoldedHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="system.reactorShutdown" {{#if reactorShutdown}}checked{{/if}}>
+        {{localize "SOL.Ship.reactorShutdown"}}
+      </label>
+      <p class="sol-hint">{{localize "SOL.Ship.reactorShutdownHint"}}</p>
+    </div>
   </div>
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityGroups}}
 

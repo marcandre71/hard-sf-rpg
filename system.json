@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.7.3 : dégâts localisés des vaisseaux, critiques, dépressurisation, missiles.",
-  "version": "0.7.3",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.7.4 : chaleur du réacteur, Pousser, réparations, munitions du canon.",
+  "version": "0.7.4",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

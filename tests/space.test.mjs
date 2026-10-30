@@ -199,7 +199,9 @@ check(actionBelongsToPost("gunner", "command") === false, "command n'appartient 
 check(actionBelongsToPost("pilot", "changeRange") === true && actionBelongsToPost("gunner", "changeRange") === false, "changer de portée est un jet de pilote");
 check(actionBelongsToPost("toString", "valueOf") === false, "un id hors poste ne lit pas le prototype");
 check(actionBelongsToPost("gunner", "fire") === true && actionBelongsToPost("pilot", "fire") === false, "tirer appartient à l'artilleur");
-check(POST_ACTIONS.engineer.join() === "simple" && POST_ACTIONS.medic.join() === "simple", "ingénieur et médecin : un jet");
+check(POST_ACTIONS.engineer.join() === "simple,push,patch,repair,restart" && POST_ACTIONS.medic.join() === "simple", "ingénieur : Pousser et réparations ; médecin : un jet");
+check(suggestedModifier({ postId: "engineer", heat: 7, ship: {} }) === -10, "chaleur à 7 : −10, y compris Pousser");
+check(suggestedModifier({ postId: "pilot", heat: 8, ship: { pilotBonus: true, pushPilot: 20 } }) === 20, "Pousser s'ajoute à Calculer, puis la chaleur");
 
 const cleared = bonusesCleared({
   lock: "Token.A",

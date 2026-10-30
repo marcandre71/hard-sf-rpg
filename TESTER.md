@@ -1,9 +1,10 @@
-# Tester le système « Sol, Nouvelle Ère » (0.7.3)
+# Tester le système « Sol, Nouvelle Ère » (0.7.4)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
 La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible), déjà sur `main`.
 La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main`. Prenez le ZIP de `main`.
+La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -205,4 +206,41 @@ Il vous faut **deux Petite Fortune**, chacune ouverte **depuis son jeton**.
 14. Sur une fiche, mettez l'Intégrité de la **poupe** à **0**, et celle de la **proue** à **0** (les maximums restent au-dessus de 0).
     **Résultat attendu :** le badge **Épave** apparaît en haut de la fiche. Le chat le dit. **Esquiver** et **Changer de portée** sont refusés. L'avertissement dit « Piloter, Esquiver et Changer de portée » : il n'y a pas de troisième bouton, le code ne bloque que ces deux actions du poste Pilote. Remontez une des deux Intégrités au-dessus de 0 : le badge disparaît, et ces deux boutons fonctionnent de nouveau. Si une section est cochée **Section détruite**, décochez-la aussi, sinon elle compte encore comme à 0.
 15. Console (**F12**).
+    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 13. 0.7.4 Chaleur, Pousser, réparations et canon
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` :
+
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
+
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+
+Il vous faut **une Petite Fortune**, ouverte **depuis son jeton**, dans le Combat Tracker. Cliquez sur **Commencer le combat** pour passer du round 0 au round 1.
+
+**Astuce.** Vous n'êtes pas obligé d'attendre que la jauge monte. Onglet **Général**, changez **Chaleur du réacteur** à la main (6, 8, 9 ou 10). Les **Pièces de rechange** se changent aussi à la main. Pour un module, mettez son Intégrité à 0 ou à 1.
+
+1. **Tirer** avec le **Laser de forage**, réussite ou échec.
+   **Résultat attendu :** la chaleur monte de **1**. Un tir raté compte aussi.
+2. Passez au round suivant.
+   **Résultat attendu :** les radiateurs intacts retirent **3**. Cochez **Radiateurs repliés**, passez encore un round : la chaleur ne baisse que de **1**. Le texte de la case rappelle la protection, rien d'autre ne se coche. Décochez **Radiateurs repliés**.
+3. Mettez la chaleur à **7**. Lancez un jet de poste (par exemple **Calculer**), ou relancez l'initiative.
+   **Résultat attendu :** le modificateur proposé comprend **−10**, en plus des autres bonus ou malus.
+4. Mettez la chaleur à **9**. Onglet Postes, **Pousser**.
+   **Résultat attendu :** le bouton est refusé.
+5. Mettez la chaleur à **10**.
+   **Résultat attendu :** une carte propose **Couper le réacteur** et **Laisser tourner**. **Couper** coche **Réacteur coupé**. Ensuite **Esquiver**, **Changer de portée**, le laser et le canon sont refusés. Un missile reste dans la liste si la portée le permet. Remettez la chaleur à **5** à la main et cliquez **Redémarrer** : un jet de Réacteurs et propulsion. Réussite : la case se décoche. Échec : elle reste cochée, on peut réessayer au tour suivant. Au-dessus de 5, **Redémarrer** est refusé.
+6. Chaleur à **10**, case **Réacteur coupé** décochée. **Laisser tourner**, puis passez le round.
+   **Résultat attendu :** un critique de réacteur (1D6) est dans le chat, avec le dé, **avant** que la chaleur baisse. Sur **1-2**, la case se coche. Sur **5**, le module réacteur passe à **0** et la poupe perd le 1D10 sans blindage. Sur **3-4** et **6**, le chat rappelle la fuite ou la dose, et rien d'autre n'est écrit. La chaleur baisse ensuite (3, ou 1 si les radiateurs sont repliés ou hors service).
+7. Chaleur à **8** ou moins, réacteur allumé. **Pousser**, jusqu'à une réussite.
+   **Résultat attendu :** la chaleur monte de **1**. Trois choix : **+10 par DR au Pilote** (au moins +10) jusqu'à la fin du round, en plus de Calculer ; **Poussée augmentée de moitié**, le chat dit que le MJ ajuste le delta-v ; **Un tir de laser sans chaleur**, et le prochain laser ne fait pas monter la jauge. Un échec simple monte de **2** au total, sans ces choix. Un échec à **3 DE** ou plus, ou un échec critique, monte aussi de **2** et tire le critique du réacteur.
+8. **Esquiver** ou **Changer de portée**, jusqu'à un échec à **3 DE** ou plus.
+   **Résultat attendu :** la chaleur monte de **1**, et une carte pour le MJ propose **+1 chaleur** ou **Un module dégradé**. Vous choisissez le module.
+9. Mettez un module à **0** (hors service). Laissez au moins **1** Pièce. **Réparation de fortune**, réussite.
+   **Résultat attendu :** le jet est à **−20**. Une Pièce part seulement si le jet réussit. Le module passe à **1**. Supprimez le combat : le module revient à **0**, et le chat le dit. Un échec ne retire pas la Pièce.
+10. Hors combat, avec des Pièces, **Réparer**. Choisissez un personnage, une plaque, et **1 h en route** (ou **10 min en urgence**). Réussite.
+    **Résultat attendu :** une Pièce en moins, **+5** et **+5 par DR**, sans dépasser le maximum. Une plaque s'arrête à la **moitié** de son maximum. Recommencez en cochant **Au chantier** : la plaque peut aller jusqu'au maximum. L'intervalle est seulement écrit dans le chat. Mettez les Pièces à **0** : le bouton est refusé et le chat dit **Bricolage : le meneur décide**. Réparer une section ne décoche pas **Section détruite** et ne remet pas ses modules en service. Seul le MJ décoche **Section détruite** et **Structure tordue**.
+11. Glissez le **Canon électromagnétique** (compendium **Modules de vaisseau**). S'il n'affiche pas **20 / 20**, le compteur du compendium le porte déjà. **Tirer**, réussite ou échec.
+    **Résultat attendu :** les munitions baissent de **1**. Le laser de forage, lui, ne baisse pas. Le MJ recharge le canon à la main.
+12. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

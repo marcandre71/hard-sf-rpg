@@ -32,7 +32,7 @@
       </label>
       <p class="sol-ship-computed">
         {{localize "SOL.Ship.armorDisplayed"}} : <strong>{{section.displayedArmor}}</strong>
-        <span class="sol-hint">({{localize "SOL.Ship.armorBonus"}} +{{section.armorBonus}})</span>
+        <span class="sol-hint" data-tooltip="{{localize 'SOL.Ship.armorBonusHint'}}">({{localize "SOL.Ship.armorBonus"}} +{{section.armorBonus}})</span>
       </p>
       <label>
         <input type="checkbox" name="system.sections.{{section.id}}.destroyed" {{#if section.destroyed}}checked{{/if}}>

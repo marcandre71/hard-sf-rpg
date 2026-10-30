@@ -69,6 +69,7 @@ import {
 } from "../dice/initiative.mjs";
 import { rollChoice } from "../dice/roll-dialog.mjs";
 import { prepareShipInitiative } from "../ships/crew.mjs";
+import { heatPenalty } from "../ships/reactor.mjs";
 
 const SYSTEM_ID = INITIATIVE_FLAG_SCOPE;
 
@@ -579,7 +580,9 @@ export class SolCombat extends Combat {
       // `rollAll` et `rollNPC` passent par ici (doc v14).
       // Décision Marc 25/10/2026 : l'initiative du vaisseau est un jet de
       // poste, sans plafond ±50. Celle des personnages garde le plafond.
-      const choice = batch ? rollChoice(score, "normal", 0, { shipPost: ship }) : null;
+      // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6. La chaleur vaut aussi à l'initiative.
+      const strain = ship ? heatPenalty(actor.system?.heat?.value) : 0;
+      const choice = batch ? rollChoice(score, "normal", strain, { shipPost: ship }) : null;
       // Combatant caché : carte privée MJ (`gm`, doc ChatMessage.applyMode).
       // Sinon le mode du cœur, ou celui porté par messageOptions.
       const messageMode = combatant.hidden
@@ -594,6 +597,7 @@ export class SolCombat extends Combat {
         score,
         type: "initiative",
         choice,
+        suggested: ship ? strain : undefined,
         shipPost: ship,
         note: options.reposition ? game.i18n.localize("SOL.Initiative.sacrificed") : "",
         messageMode,

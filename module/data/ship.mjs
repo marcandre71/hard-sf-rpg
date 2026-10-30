@@ -151,8 +151,9 @@ export class ShipData extends foundry.abstract.TypeDataModel {
         food: numberField("SOL.Ship.reserves.food", { initial: 0, min: 0, integer: true, step: 1 })
       }, { label: "SOL.Ship.reserves.label" }),
       // Jauge du réacteur du vaisseau seul, 0 à 10. Réf. Vaisseaux v0.1 §6.
+      // Décision Marc 30/10/2026 : elle bouge toute seule en combat.
       // Décision Marc 21/10/2026 : pas de lien avec la surchauffe du
-      // blindage (tests de CON par heure, LdR §8). Pas d'automatisation.
+      // blindage (tests de CON par heure, LdR §8).
       heat: new SchemaField({
         value: numberField("SOL.Ship.heat.value", { initial: 0, min: 0, max: 10, integer: true, step: 1 })
       }, { label: "SOL.Ship.heat.label" }),
@@ -179,6 +180,10 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       // Critique de section 5. Le MJ décoche. −20 aux tests de Pilotage.
       // Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
       twisted: boolField("SOL.Ship.twisted", false),
+      // `initial` seulement : une migration n'injecte pas la clé.
+      // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6.
+      radiatorsFolded: boolField("SOL.Ship.radiatorsFolded", false),
+      reactorShutdown: boolField("SOL.Ship.reactorShutdown", false),
       sections: new SchemaField(sections, { label: "SOL.Ship.sections" }),
       posts: new SchemaField(posts, { label: "SOL.Ship.posts" }),
       // Description déjà publiée à l'étape 2 : on la garde à côté des notes.
@@ -218,8 +223,30 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       // migrateData arrondit une source déjà en base. Ici c'est le diff saisi.
       roundPresentDeltaV(changes.system);
       clampShipDiff(changes.system, current);
+      // Seul le MJ décoche. // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §7.
+      const gm = Boolean(user) && globalThis.game?.users?.get?.(user)?.isGM === true;
+      if ( user && !gm ) keepGmChecks(changes.system, this);
     }
     if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);
+  }
+}
+
+/**
+ * Un joueur ne décoche pas Section détruite ni Structure tordue.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §7
+ *
+ * @param {object} system
+ * @param {object} model
+ * @returns {void}
+ */
+function keepGmChecks(system, model) {
+  if ( system.twisted === false && model.twisted === true ) delete system.twisted;
+  const sections = system.sections;
+  if ( !sections || typeof sections !== "object" ) return;
+  for ( const id of ["bow", "port", "starboard", "stern"] ) {
+    const row = sections[id];
+    if ( row?.destroyed === false && model.sections?.[id]?.destroyed === true ) delete row.destroyed;
   }
 }
 

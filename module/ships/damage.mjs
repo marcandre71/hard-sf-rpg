@@ -347,6 +347,58 @@ function sectionCrit(state, sectionId, section, logs, dice, moduleCritted) {
 }
 
 /**
+ * Critique du réacteur. Le 5 met le module à 0 sans critique de module,
+ * et retire le 1D10 à la poupe sans blindage. Si la poupe passe à 0,
+ * le critique de section de la 0.7.3 s'applique.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §6
+ *
+ * // À confirmer par Marc : s'il y a plusieurs modules réacteur encore
+ * vivants, on met à 0 le premier de la fiche.
+ *
+ * @param {HullState} state
+ * @param {unknown} die Face 1–6.
+ * @param {unknown} shock Dégâts 1D10 déjà tirés, pour la face 5.
+ * @param {{ d6: () => number, d10: () => number, pick: (count: number) => number }} dice
+ * @returns {{ state: HullState, logs: HullLog[], shutdown: boolean }}
+ */
+export function resolveReactorCrit(state, die, shock, dice) {
+  const next = cloneHull(state);
+  const logs = [];
+  const roll = face(Number(die), 6);
+  if ( roll <= 2 ) {
+    logs.push({ key: "SOL.Ship.reactor.critStop", data: { roll } });
+    return { state: next, logs, shutdown: true };
+  }
+  if ( roll <= 4 ) {
+    logs.push({ key: "SOL.Ship.reactor.critLeak", data: { roll } });
+    return { state: next, logs, shutdown: false };
+  }
+  if ( roll === 5 ) {
+    const reactor = next.modules.find(entry => entry.category === "reactor" && Number(entry.integrity) > 0)
+      ?? next.modules.find(entry => entry.category === "reactor");
+    if ( reactor ) reactor.integrity = 0;
+    const hit = Math.max(0, Math.trunc(Number(shock)));
+    const spent = Number.isFinite(hit) ? hit : 0;
+    logs.push({
+      key: "SOL.Ship.reactor.critModule",
+      data: { roll, name: reactor?.name ?? "", shock: spent }
+    });
+    const section = next.sections.stern;
+    if ( section ) {
+      const before = pool(section.integrity) ?? 0;
+      section.integrity = Math.max(0, before - spent);
+      if ( before > 0 && section.integrity === 0 ) {
+        sectionCrit(next, "stern", section, logs, dice, new Set());
+      }
+    }
+    return { state: next, logs, shutdown: false };
+  }
+  logs.push({ key: "SOL.Ship.reactor.critRadiation", data: { roll } });
+  return { state: next, logs, shutdown: false };
+}
+
+/**
  * @param {number} value
  * @param {number} faces
  * @returns {number}

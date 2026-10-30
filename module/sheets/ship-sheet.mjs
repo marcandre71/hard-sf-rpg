@@ -177,6 +177,8 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     context.fleeing = stored.fleeing === true;
     context.twisted = stored.twisted === true;
+    context.radiatorsFolded = stored.radiatorsFolded === true;
+    context.reactorShutdown = stored.reactorShutdown === true;
     context.wreck = isWreck(hullFromDocument(stored, actor.items));
     context.sections = presentSections(actor, stored);
     context.posts = presentPosts(actor, stored);
@@ -222,6 +224,8 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     // @see https://foundryvtt.com/api/v14/classes/foundry.applications.ux.FormDataExtended.html
     writeCheckbox(data, form, "system.fleeing");
     writeCheckbox(data, form, "system.twisted");
+    writeCheckbox(data, form, "system.radiatorsFolded");
+    writeCheckbox(data, form, "system.reactorShutdown");
     for ( const id of SOL.shipSectionOrder ) {
       if ( !sectionHasPlate(id) ) continue;
       writeCheckbox(data, form, `system.sections.${id}.destroyed`);
@@ -323,7 +327,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       const parsed = parsedNumber(input.value);
       if ( field === "system.weapon.ammo.value" || field === "system.weapon.ammo.max" ) {
         const which = field.endsWith(".max") ? "max" : "value";
-        const ammo = item.system?._source?.weapon?.ammo ?? item.system?.weapon?.ammo ?? {};
+        const ammo = item._source?.system?.weapon?.ammo ?? item.system?.weapon?.ammo ?? {};
         const next = normalizeAmmoEdit(ammo, which, parsed);
         await item.update({
           "system.weapon.ammo.value": next.value,

@@ -6,9 +6,10 @@
  * Décision Marc 23/10/2026 : le suivi tour par tour (fenêtre,
  * poussée, delta-v exact) est retiré. Le Combat Tracker tient l'ordre.
  * Les dégâts, la localisation et les missiles sont dans `damage.mjs` (0.7.3).
- * La chaleur, Pousser et les réparations sont pour la 0.7.4.
+ * La chaleur, Pousser et les réparations sont dans `reactor.mjs` (0.7.4).
  */
 import { NPC_CREW_SCORES, SHIP_POST_IDS } from "./hull.mjs";
+import { heatPenalty } from "./reactor.mjs";
 
 /** Proche, moyenne, lointaine. Réf. Vaisseaux v0.1 §3. */
 export const SPACE_RANGES = ["close", "medium", "long"];
@@ -42,7 +43,7 @@ export const POST_ACTIONS = {
   navigator: ["calculate"],
   pilot: ["evade", "changeRange"],
   gunner: ["fire"],
-  engineer: ["simple"],
+  engineer: ["simple", "push", "patch", "repair", "restart"],
   medic: ["simple"]
 };
 
@@ -67,14 +68,21 @@ export function actionBelongsToPost(postId, action) {
  * `lock` est l'identité de la cible (jeton de préférence), ou "".
  * // Décision Marc 25/10/2026 : une seule cible.
  *
- * @returns {{ lock: string, evade: number, commanderPost: string, pilotBonus: boolean }}
+ * `pushPilot` : bonus de Pousser jusqu'à la fin du round.
+ * `coolLaser` : un tir de laser qui ne chauffe pas.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §6
+ *
+ * @returns {{ lock: string, evade: number, commanderPost: string, pilotBonus: boolean, pushPilot: number, coolLaser: number }}
  */
 export function blankTurn() {
   return {
     lock: "",
     evade: 0,
     commanderPost: "",
-    pilotBonus: false
+    pilotBonus: false,
+    pushPilot: 0,
+    coolLaser: 0
   };
 }
 
@@ -89,11 +97,15 @@ export function normalizeTurn(raw) {
   const post = typeof row.commanderPost === "string" && SHIP_POST_IDS.includes(row.commanderPost)
     ? row.commanderPost
     : "";
+  const pushPilot = Math.trunc(Number(row.pushPilot));
+  const coolLaser = Math.trunc(Number(row.coolLaser));
   return {
     lock: lockId(row.lock),
     evade: snappedEvade(row.evade),
     commanderPost: post,
-    pilotBonus: Boolean(row.pilotBonus)
+    pilotBonus: Boolean(row.pilotBonus),
+    pushPilot: Number.isFinite(pushPilot) && pushPilot > 0 ? pushPilot : 0,
+    coolLaser: Number.isFinite(coolLaser) && coolLaser > 0 ? coolLaser : 0
   };
 }
 
@@ -358,6 +370,9 @@ export function suggestedModifier(input) {
   let modifier = 0;
   if ( input?.ship?.commanderPost && input.ship.commanderPost === postId ) modifier += POST_BONUS;
   if ( postId === "pilot" && input?.ship?.pilotBonus ) modifier += POST_BONUS;
+  if ( postId === "pilot" ) modifier += Math.trunc(Number(input?.ship?.pushPilot) || 0);
+  // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6. S'ajoute aux autres.
+  modifier += heatPenalty(input?.heat);
   // Réf. Vaisseaux v0.1 §5. Décision Marc 25/10/2026.
   if ( postId === "pilot" && input?.twisted === true ) modifier += DEGRADED_PENALTY;
   if ( postId === "operator" && input?.sensorsOut === true ) modifier += DEGRADED_PENALTY;
@@ -396,8 +411,8 @@ export function weaponCanFire(module, range) {
 
 /**
  * Compteur à 0 : l'arme ne tire plus. Absent ou vide : non.
- * Décision Marc 26/10/2026 : canon et laser ne baissent pas tout seuls
- * (0.7.4). Seul un missile, réussi ou raté, consomme une munition.
+ * Décision Marc 30/10/2026 : un canon électromagnétique retire 1 munition.
+ * Un laser n'en a pas. Un missile, réussi ou raté, en retire une.
  * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
  *
  * @param {unknown} ammo Nombre, ou `{ value }`.

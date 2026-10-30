@@ -24,6 +24,7 @@ import {
   claimMissileReminders,
   hullFromDocument,
   invertDie,
+  isMissileWeapon,
   isWreck,
   missileDecoyed,
   pickLivingModule,
@@ -36,6 +37,7 @@ import {
 const SYSTEM_ID = "sol-nouvelle-ere";
 const MISSILES = "missiles";
 const APPLIED = "shipStrikesApplied";
+const RECORDED = "shipStrikeRecord";
 const FLIGHT = "systems/sol-nouvelle-ere/templates/chat/missile-card.hbs";
 const SECTIONS = ["bow", "port", "starboard", "stern", "radiators"];
 
@@ -67,7 +69,18 @@ export function registerShipStrike() {
     type: Object,
     default: {}
   });
+  game.settings.register(SYSTEM_ID, RECORDED, {
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {}
+  });
   Hooks.on("renderChatMessageHTML", onChatCard);
+  Hooks.on("createChatMessage", message => { void rememberStrike(message); });
+  Hooks.on("deleteChatMessage", message => { void forgetStrike(message); });
+  // Le MJ actif a changé : les boutons et les missiles en attente.
+  // https://foundryvtt.com/api/v14/functions/hookEvents.userConnected.html
+  Hooks.on("userConnected", () => { void onActiveGm(); });
   Hooks.on("preUpdateActor", onPreUpdateActor);
   Hooks.on("updateActor", onUpdateActor);
   Hooks.on("preUpdateItem", onPreUpdateItem);
@@ -104,6 +117,7 @@ export async function enqueueMissile(combat, missile) {
   const clean = cleanMissile(missile);
   if ( !combat || !clean || !isActiveGm() ) return null;
   return queueMissileWrite(async () => {
+    if ( !isActiveGm() ) return null;
     const list = readMissiles(combat);
     list.push(clean);
     await combat.setFlag(SYSTEM_ID, MISSILES, list);
@@ -122,6 +136,7 @@ export async function enqueueMissile(combat, missile) {
 export async function remindMissiles(combat) {
   if ( !isActiveGm() || !combat ) return;
   await queueMissileWrite(async () => {
+    if ( !isActiveGm() ) return;
     const claimed = claimMissileReminders(readMissiles(combat), combat.round);
     if ( !claimed.due.length ) return;
     await combat.setFlag(SYSTEM_ID, MISSILES, claimed.list);
@@ -152,6 +167,7 @@ export async function setMissileState(combatId, missileId, state) {
   const combat = game.combats?.get(combatId);
   if ( !combat || !isActiveGm() ) return null;
   return queueMissileWrite(async () => {
+    if ( !isActiveGm() ) return null;
     const list = readMissiles(combat);
     const missile = list.find(entry => entry.id === missileId);
     if ( !missile || missile.state !== "flying" ) return missile ?? null;
@@ -258,6 +274,10 @@ async function applyShipDamage(message, button) {
   }
   const strike = readStrike(message);
   if ( !strike ) return;
+  if ( !strikeMatchesRecord(message, strike) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.forgeRefused"));
+    return;
+  }
   const key = `${message.id}:apply`;
   if ( busy.has(key) ) return;
   busy.add(key);
@@ -307,7 +327,8 @@ async function applyShipDamage(message, button) {
       amount
     }, dice);
     await markStrikeApplied(message);
-    await writeHull(target, before, resolved.state);
+    const wrote = await writeHull(target, before, resolved.state);
+    if ( wrote === false ) return;
     await postResolution(target, sectionId, picked.moduleId, resolved, dice.rolls);
     gray(button, "SOL.Ship.applied");
     if ( strike.missileId ) {
@@ -669,7 +690,7 @@ function shownTotal(roll) {
  * @param {import("./damage.mjs").HullState} after
  * @returns {Promise<void>}
  */
-async function writeHull(actor, before, after) {
+export async function writeHull(actor, before, after) {
   /** @type {Record<string, unknown>} */
   const update = {};
   if ( after.twisted === true && before.twisted !== true ) update["system.twisted"] = true;
@@ -684,7 +705,6 @@ async function writeHull(actor, before, after) {
     }
     if ( next.destroyed === true && prev.destroyed !== true ) update[`system.sections.${id}.destroyed`] = true;
   }
-  if ( Object.keys(update).length ) await actor.update(update);
   /** @type {{ _id: string, [key: string]: unknown }[]} */
   const items = [];
   for ( const module of after.modules ) {
@@ -693,7 +713,38 @@ async function writeHull(actor, before, after) {
     if ( module.integrity === prev.integrity ) continue;
     items.push({ _id: module.id, "system.integrity.value": module.integrity });
   }
-  if ( items.length ) await actor.updateEmbeddedDocuments("Item", items);
+  let wroteActor = false;
+  try {
+    if ( Object.keys(update).length ) {
+      await actor.update(update);
+      wroteActor = true;
+    }
+    if ( items.length ) await actor.updateEmbeddedDocuments("Item", items);
+  } catch (error) {
+    if ( wroteActor ) {
+      /** @type {Record<string, unknown>} */
+      const back = {};
+      if ( Object.hasOwn(update, "system.twisted") ) back["system.twisted"] = before.twisted === true;
+      for ( const id of ["bow", "port", "starboard", "stern"] ) {
+        const prev = before.sections[id] ?? {};
+        if ( Object.hasOwn(update, `system.sections.${id}.armor.value`) ) back[`system.sections.${id}.armor.value`] = prev.armor;
+        if ( Object.hasOwn(update, `system.sections.${id}.integrity.value`) ) back[`system.sections.${id}.integrity.value`] = prev.integrity;
+        if ( Object.hasOwn(update, `system.sections.${id}.destroyed`) ) back[`system.sections.${id}.destroyed`] = prev.destroyed === true;
+      }
+      try {
+        await actor.update(back);
+      } catch {
+        // Le retour en arrière a aussi échoué. Le chat le dit.
+      }
+    }
+    ui.notifications.error(game.i18n.localize("SOL.Ship.writeFailed"));
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: article(game.i18n.localize("SOL.Ship.writeFailed"))
+    });
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -974,6 +1025,92 @@ function article(text) {
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.collections.Users.html#activeGM
  * @returns {boolean}
  */
+/**
+ * Photo du tir au moment où la carte est créée.
+ * Un drapeau modifié ensuite ne s'applique pas.
+ * // Décision Marc 30/10/2026, reliquat de relecture.
+ *
+ * // À confirmer par Marc : l'auteur doit être MJ, ou OWNER du vaisseau
+ * tireur. Un joueur qui ne possède que le personnage du poste est refusé.
+ *
+ * @param {ChatMessage} message
+ * @returns {Promise<void>}
+ */
+async function rememberStrike(message) {
+  if ( !isActiveGm() || !message?.id ) return;
+  const raw = message.getFlag(SYSTEM_ID, "shipStrike");
+  if ( !raw || typeof raw !== "object" ) return;
+  const stored = game.settings.get(SYSTEM_ID, RECORDED);
+  const next = stored && typeof stored === "object" ? { ...stored } : {};
+  next[message.id] = {
+    attackerUuid: typeof raw.attackerUuid === "string" ? raw.attackerUuid : "",
+    targetUuid: typeof raw.targetUuid === "string" ? raw.targetUuid : "",
+    weaponId: typeof raw.weaponId === "string" ? raw.weaponId : "",
+    missileId: typeof raw.missileId === "string" ? raw.missileId : ""
+  };
+  await game.settings.set(SYSTEM_ID, RECORDED, next);
+}
+
+/**
+ * @param {ChatMessage} message
+ * @returns {Promise<void>}
+ */
+async function forgetStrike(message) {
+  if ( !isActiveGm() || !message?.id ) return;
+  const stored = game.settings.get(SYSTEM_ID, RECORDED);
+  if ( !stored || typeof stored !== "object" || !Object.hasOwn(stored, message.id) ) return;
+  const next = { ...stored };
+  delete next[message.id];
+  await game.settings.set(SYSTEM_ID, RECORDED, next);
+  const applied = game.settings.get(SYSTEM_ID, APPLIED);
+  if ( applied && typeof applied === "object" && Object.hasOwn(applied, message.id) ) {
+    const cleared = { ...applied };
+    delete cleared[message.id];
+    await game.settings.set(SYSTEM_ID, APPLIED, cleared);
+  }
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+async function onActiveGm() {
+  if ( !isActiveGm() ) return;
+  const combat = game.combat;
+  if ( combat ) await remindMissiles(combat);
+  ui.chat?.render?.();
+}
+
+/**
+ * @param {ChatMessage} message
+ * @param {object} strike
+ * @returns {boolean}
+ */
+function strikeMatchesRecord(message, strike) {
+  const stored = game.settings.get(SYSTEM_ID, RECORDED);
+  const recorded = stored && typeof stored === "object" ? stored[message.id] : null;
+  if ( !recorded ) return false;
+  if ( recorded.targetUuid !== strike.targetUuid ) return false;
+  if ( recorded.attackerUuid !== strike.attackerUuid ) return false;
+  if ( recorded.weaponId !== strike.weaponId ) return false;
+  if ( (recorded.missileId || "") !== (strike.missileId || "") ) return false;
+  return authorMayStrike(message, strike.attackerUuid);
+}
+
+/**
+ * @param {ChatMessage} message
+ * @param {string} attackerUuid
+ * @returns {boolean}
+ */
+function authorMayStrike(message, attackerUuid) {
+  const author = message.author;
+  if ( !author ) return false;
+  if ( author.isGM === true ) return true;
+  const ship = shipOf(attackerUuid);
+  if ( !ship?.testUserPermission ) return false;
+  const level = foundry.CONST?.DOCUMENT_OWNERSHIP_LEVELS?.OWNER ?? 3;
+  return ship.testUserPermission(author, level) === true;
+}
+
 function isActiveGm() {
   const active = game.users?.activeGM;
   return Boolean(active && game.user?.id === active.id);
@@ -1048,5 +1185,7 @@ async function strikeAmount(strike, message) {
   if ( !attacker || typeof strike.weaponId !== "string" || !strike.weaponId ) return null;
   const item = attacker.items?.get(strike.weaponId);
   if ( !item || item.type !== "shipModule" ) return null;
+  // Un missile ne s'applique pas par la carte de tir. // Décision Marc 30/10/2026
+  if ( isMissileWeapon(item.system?.weapon) ) return null;
   return shipStrikeAmount(item.system?.weapon?.damage, strike.dr, { missile: false });
 }
