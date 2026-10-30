@@ -1,0 +1,34 @@
+{
+  "_id": "ModTambour035g01",
+  "_key": "!items!ModTambour035g01",
+  "name": "Tambour d'habitation centrifuge (0,35 g)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Monté sur les deux flancs (couplé avec le flanc tribord). Grands vaisseaux (paquebots, longs-courriers, navires-hôpitaux) : 0,35 g, ce qui compte comme exercice contre le déconditionnement en croisière (LdR §8) ; doit être verrouillé avant tout combat.</p>",
+    "category": "cabins",
+    "section": "port",
+    "integrity": {
+      "value": 12,
+      "max": 12
+    },
+    "effects": "<p>Monté sur les deux flancs (couplé avec le flanc tribord). Grands vaisseaux (paquebots, longs-courriers, navires-hôpitaux) : 0,35 g, ce qui compte comme exercice contre le déconditionnement en croisière (LdR §8) ; doit être verrouillé avant tout combat.</p>",
+    "mass": 28,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 590000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

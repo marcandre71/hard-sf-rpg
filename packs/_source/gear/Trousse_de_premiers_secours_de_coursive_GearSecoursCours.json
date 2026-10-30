@@ -1,0 +1,34 @@
+{
+  "_id": "GearSecoursCours",
+  "_key": "!items!GearSecoursCours",
+  "name": "Trousse de premiers secours de coursive",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Premiers secours ; indispensable pour éviter le −20 sans matériel. Pansements compressifs, colle dermique et garrots conçus pour l'apesanteur.</p>",
+    "mass": 1.5,
+    "enc": 0.5,
+    "quantity": 1,
+    "reserve": {
+      "type": "doses",
+      "value": 5,
+      "max": 5
+    },
+    "toolBonus": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 360000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

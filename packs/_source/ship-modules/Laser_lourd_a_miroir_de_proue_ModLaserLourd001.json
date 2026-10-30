@@ -1,0 +1,46 @@
+{
+  "_id": "ModLaserLourd001",
+  "_key": "!items!ModLaserLourd001",
+  "name": "Laser lourd à miroir de proue",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Arme principale des patrouilleurs de la Veille et des escorteurs du Kombinat ; +10 pour toucher sur un tir visé contre les radiateurs ou les capteurs. La v0.2 indiquait 2 de chaleur par tir ; ramené à 1, conformément à la règle « +1 par tir de laser ». Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "category": "weapon",
+    "section": "bow",
+    "integrity": {
+      "value": 8,
+      "max": 8
+    },
+    "effects": "<p>Arme principale des patrouilleurs de la Veille et des escorteurs du Kombinat ; +10 pour toucher sur un tir visé contre les radiateurs ou les capteurs. La v0.2 indiquait 2 de chaleur par tir ; ramené à 1, conformément à la règle « +1 par tir de laser ». Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "mass": 7,
+    "armorPoints": 0,
+    "weapon": {
+      "damage": 11,
+      "rangeClose": true,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "ammo": {
+        "value": null,
+        "max": null
+      },
+      "heatPerShot": 1,
+      "class": "laser"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 420000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

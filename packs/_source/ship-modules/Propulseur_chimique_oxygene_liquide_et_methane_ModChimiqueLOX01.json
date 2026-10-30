@@ -1,0 +1,34 @@
+{
+  "_id": "ModChimiqueLOX01",
+  "_key": "!items!ModChimiqueLOX01",
+  "name": "Propulseur chimique oxygène liquide et méthane",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~360 s ; 0,5 à 2 g sur de courtes durées. Forte poussée pour quitter un puits de gravité (Lune, Mars, Titan), mais delta-v total faible ; pas besoin de réacteur nucléaire.</p>",
+    "category": "propulsion",
+    "section": "stern",
+    "integrity": {
+      "value": 8,
+      "max": 8
+    },
+    "effects": "<p>Isp ~360 s ; 0,5 à 2 g sur de courtes durées. Forte poussée pour quitter un puits de gravité (Lune, Mars, Titan), mais delta-v total faible ; pas besoin de réacteur nucléaire.</p>",
+    "mass": 4,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 310000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

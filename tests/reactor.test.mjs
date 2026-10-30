@@ -18,6 +18,7 @@ import {
   repairAlreadyCapped,
   shouldCoolRound,
   uniqueShipIds,
+  shipWeaponKind,
   weaponClass,
   pilotIncident,
   pushHeatGain,
@@ -114,6 +115,12 @@ check(hardTurn?.heat === 1 && hardTurn.incident === true, "Esquiver ratée : +1,
 check(isCannonWeapon({ name: "Canon électromagnétique" }) === true && isCannonWeapon({ name: "Laser de forage" }) === false, "le canon se reconnaît au nom");
 check(weaponClass({ name: "Canon laser" }) === "laser" && isCannonWeapon({ name: "Canon laser" }) === false, "un canon laser est un laser");
 check(weaponClass({ kind: "cannon", name: "Laser de forage" }) === "cannon", "un champ explicite gagne sur le nom");
+check(shipWeaponKind({ class: "railgun", name: "Laser de forage" }) === "railgun", "railgun est prioritaire sur le nom");
+check(weaponClass({ class: "railgun", name: "Laser de forage" }) === "cannon", "un railgun compte comme un canon");
+check(weaponClass({ class: "laser", name: "Canon électromagnétique" }) === "laser", "un laser explicite gagne sur canon");
+check(weaponClass({ class: "other", name: "Canon laser" }) === "", "autre n'est ni un laser ni un canon");
+check(shipWeaponKind({ class: "missile" }) === "missile", "missile explicite");
+check(shipWeaponKind({ weapon: true }) === "" && weaponClass({ name: "Canon électromagnétique" }) === "cannon", "sans champ, le nom reste lu");
 check(shouldCoolRound(undefined, 1) === true && shouldCoolRound(3, 4) === true, "le refroidissement part quand le round avance");
 check(shouldCoolRound(3, 3) === false && shouldCoolRound(3, 2) === false, "reculer puis revenir ne refroidit pas deux fois");
 check(uniqueShipIds([{ uuid: "A" }, { uuid: "A" }, { uuid: "B" }]).join() === "A,B", "deux jetons du même vaisseau ne refroidissent qu'une fois");

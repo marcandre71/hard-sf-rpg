@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.9.1
+
+Branche `dev/0.9.1`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.9.0 (`50f0289`). La section 15 de TESTER.md sert à la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.1 qu'après fusion de `dev/0.9.1` dans `main`. D'ici là, l'étape 1 donne le ZIP de la branche.
+
+Décision Marc 30/10/2026. Réf. Équipement v0.3 et Modules v0.3.
+
+- Équipement : le catalogue, sauf les trois drones (acteurs, feuille en 0.8.0). La Rustine garde son id et son nom, quantité 3, masse 0,2 kg. Les cinq accessoires déjà là restent : le catalogue ne les reprend pas.
+- Modules : les 38 du catalogue. Trois noms exacts gardent leur id (Canon électromagnétique, Passerelle, Support vital). La plaque de proue de la Petite Fortune reste à 8. Le Whipple vaut +4, plafond +4.
+- Type d'arme de vaisseau : laser, railgun, missile, autre. Il prime sur le nom. Absent d'un diff, il n'est pas inventé : le nom décide encore.
+- Armures : les trois paires proches sont fondues dans l'id déjà là, avec les valeurs du catalogue. La phrase « −10 ou −20 ? » est retirée. Le choix de portée du jet reste libre. Il est masqué pour une arme de contact, et laissé pour le Lance-filet. Les malus des descriptions s'ajoutent à la main au malus de portée.
+
+Journal des règles, Armes v0.3 §6, à compléter (pas sur chaque arme) : réduction chiffrée des munitions frangibles ; conséquence d'un tir perforant manqué dans un compartiment pressurisé.
+
 ## 0.9.0
 
 Entrée dans `main` en avance rapide depuis `dev/0.9.0` (`ae781ea`), accord de Didier le 30/10/2026. La section 14 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.

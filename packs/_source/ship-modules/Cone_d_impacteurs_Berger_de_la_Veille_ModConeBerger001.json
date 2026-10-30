@@ -1,0 +1,46 @@
+{
+  "_id": "ModConeBerger001",
+  "_key": "!items!ModConeBerger001",
+  "name": "Cône d'impacteurs « Berger » de la Veille",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Réservé à la Veille. Conçu pour dévier les astéroïdes ou briser une station rebelle ; exige une double clé humaine (Règle Sereguine : déviation de masse). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "category": "weapon",
+    "section": "bow",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Réservé à la Veille. Conçu pour dévier les astéroïdes ou briser une station rebelle ; exige une double clé humaine (Règle Sereguine : déviation de masse). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "mass": 14,
+    "armorPoints": 0,
+    "weapon": {
+      "damage": 28,
+      "rangeClose": false,
+      "rangeMedium": true,
+      "rangeLong": true,
+      "ammo": {
+        "value": 2,
+        "max": 2
+      },
+      "heatPerShot": 0,
+      "class": "other"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 460000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

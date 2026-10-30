@@ -1,0 +1,34 @@
+{
+  "_id": "ModNucleaireLH21",
+  "_key": "!items!ModNucleaireLH21",
+  "name": "Moteur nucléaire thermique à l'hydrogène liquide",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~900 s ; 30 à 80 milli-g. Deux fois plus sobre (jusqu'à 10 km/s de delta-v pour un remorqueur rapide), mais impose de grands réservoirs cryogéniques.</p>",
+    "category": "propulsion",
+    "section": "stern",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Isp ~900 s ; 30 à 80 milli-g. Deux fois plus sobre (jusqu'à 10 km/s de delta-v pour un remorqueur rapide), mais impose de grands réservoirs cryogéniques.</p>",
+    "mass": 8,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 330000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

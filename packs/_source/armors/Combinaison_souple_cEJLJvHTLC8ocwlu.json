@@ -5,7 +5,14 @@
   "type": "armor",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Combinaison pressurisée. Protection : torse 1, tête 1, bras 1, jambes 1. Seuil de brèche 4.</p>",
+    "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
+    "airReserve": { "value": 8, "max": 8 },
+    "sealState": "intact",
+    "penalty": { "manipulation": -10, "perception": -10 },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 6.5,
+    "enc": 1,
     "protection": {
       "head": 1,
       "torso": 1,
@@ -27,7 +34,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

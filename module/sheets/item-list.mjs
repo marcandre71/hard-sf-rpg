@@ -13,6 +13,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  */
 import { SOL } from "../config.mjs";
+import { showsAttackRange } from "../dice/attack.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import { applySealAction } from "../dice/seal-apply.mjs";
 import { findSealMethod } from "../dice/seal.mjs";
@@ -356,6 +357,8 @@ async function rollItem(event, target) {
     label: skillLabel ? `${item.name} — ${skillLabel}` : item.name,
     score: rated.score,
     weapon: item,
-    type: "weapon"
+    type: "weapon",
+    // Décision Marc 30/10/2026 : pas de choix pour une arme de contact.
+    rangeChoice: showsAttackRange(item)
   });
 }

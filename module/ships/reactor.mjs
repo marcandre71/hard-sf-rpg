@@ -194,21 +194,38 @@ export function shotAftermath(input) {
 
 /**
  * Laser, canon, ou rien.
- * Un champ explicite (`kind` ou `weaponClass`) gagne.
- * Sinon le nom : « laser » est lu avant « canon », donc un canon laser
- * est un laser. Pas d'autre champ sur le module aujourd'hui.
- * // Décision Marc 30/10/2026
- * // Réf. Vaisseaux v0.1 §6
+ * Le champ `class` (laser, railgun, missile, autre) est prioritaire
+ * sur le nom. Un champ plus ancien (`kind` ou `weaponClass`) aussi.
+ * « cannon » ancien vaut railgun. Sinon le nom : « laser » avant « canon »,
+ * donc un canon laser est un laser.
+ * Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §6.
+ * Une arme à énergie qui n'est ni un laser ni un railgun ni un missile
+ * n'est pas coupée avec le réacteur.
  *
- * // Décision Marc 30/10/2026 : un autre nom d'arme à énergie,
- * qui n'est ni un laser ni un missile, n'est pas coupé avec le réacteur.
+ * @param {{ name?: string, class?: string, kind?: string, weaponClass?: string }|null|undefined} weapon
+ * @returns {"laser"|"railgun"|"missile"|"other"|""}
+ */
+export function shipWeaponKind(weapon) {
+  const raw = [weapon?.class, weapon?.kind, weapon?.weaponClass]
+    .find(value => typeof value === "string" && value !== "");
+  if ( raw === "cannon" ) return "railgun";
+  if ( raw === "laser" || raw === "railgun" || raw === "missile" || raw === "other" ) return raw;
+  return "";
+}
+
+/**
+ * Laser ou canon pour la chaleur et la coupure du réacteur.
+ * `railgun` est le canon électromagnétique. Missile et autre : ni l'un ni l'autre.
+ * Sans champ, le nom. Décision Marc 30/10/2026.
  *
- * @param {{ name?: string, kind?: string, weaponClass?: string }|null|undefined} weapon
+ * @param {{ name?: string, class?: string, kind?: string, weaponClass?: string }|null|undefined} weapon
  * @returns {"laser"|"cannon"|""}
  */
 export function weaponClass(weapon) {
-  const explicit = weapon?.kind ?? weapon?.weaponClass;
-  if ( explicit === "laser" || explicit === "cannon" ) return explicit;
+  const kind = shipWeaponKind(weapon);
+  if ( kind === "laser" ) return "laser";
+  if ( kind === "railgun" ) return "cannon";
+  if ( kind === "missile" || kind === "other" ) return "";
   const name = typeof weapon?.name === "string" ? weapon.name : "";
   if ( /laser/i.test(name) ) return "laser";
   if ( /canon/i.test(name) ) return "cannon";

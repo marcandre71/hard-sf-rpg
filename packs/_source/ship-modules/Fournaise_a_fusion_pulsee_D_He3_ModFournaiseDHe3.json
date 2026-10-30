@@ -1,0 +1,34 @@
+{
+  "_id": "ModFournaiseDHe3",
+  "_key": "!items!ModFournaiseDHe3",
+  "name": "Fournaise à fusion pulsée D-He3",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~100 000 s ; 5 milli-g (2 à 10 pour un gros vaisseau, jusqu'à 50 pendant quelques heures pour un petit vaisseau militaire). Billes de D-He3 comprimées par laser dans une tuyère magnétique (400 à 1 000 km/s de delta-v, valeur de la v0.2). Chaleur résiduelle de 1 à 3 GW ; 8 à 15 kg de D-He3 par jour (Bible §7). Allumage interdit à moins de 50 000 km d'un habitat ; panache radioactif et brûlant, visible dans tout le système intérieur.</p>",
+    "category": "propulsion",
+    "section": "stern",
+    "integrity": {
+      "value": 14,
+      "max": 14
+    },
+    "effects": "<p>Isp ~100 000 s ; 5 milli-g (2 à 10 pour un gros vaisseau, jusqu'à 50 pendant quelques heures pour un petit vaisseau militaire). Billes de D-He3 comprimées par laser dans une tuyère magnétique (400 à 1 000 km/s de delta-v, valeur de la v0.2). Chaleur résiduelle de 1 à 3 GW ; 8 à 15 kg de D-He3 par jour (Bible §7). Allumage interdit à moins de 50 000 km d'un habitat ; panache radioactif et brûlant, visible dans tout le système intérieur.</p>",
+    "mass": 20,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 350000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

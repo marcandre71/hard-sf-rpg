@@ -1,0 +1,34 @@
+{
+  "_id": "GearDecapsuleur1",
+  "_key": "!items!GearDecapsuleur1",
+  "name": "Terminal d'intrusion « Décapsuleur »",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Informatique, Électronique (intrusion matérielle). Réserve 12 h. Boîtier de maintenance modifié pour interroger un verrou de sas hors ligne ou extraire la boîte noire d'une épave.</p>",
+    "mass": 1,
+    "enc": 0.5,
+    "quantity": 1,
+    "reserve": {
+      "type": "energy",
+      "value": 12,
+      "max": 12
+    },
+    "toolBonus": 10
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 250000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

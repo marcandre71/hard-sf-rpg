@@ -831,7 +831,14 @@
         "label": "Arme",
         "damage": "Dégâts",
         "ammunition": "Munitions",
-        "heat": "Chaleur par tir"
+        "heat": "Chaleur par tir",
+        "class": {
+          "label": "Type d'arme",
+          "laser": "Laser",
+          "railgun": "Railgun",
+          "missile": "Missile",
+          "other": "Autre"
+        }
       }
     },
     "Space": {

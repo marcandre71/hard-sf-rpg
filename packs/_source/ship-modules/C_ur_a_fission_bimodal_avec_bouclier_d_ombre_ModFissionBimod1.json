@@ -1,0 +1,34 @@
+{
+  "_id": "ModFissionBimod1",
+  "_key": "!items!ModFissionBimod1",
+  "name": "Cœur à fission bimodal (avec bouclier d'ombre)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
+    "category": "reactor",
+    "section": "stern",
+    "integrity": {
+      "value": 8,
+      "max": 8
+    },
+    "effects": "<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
+    "mass": 12,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 370000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

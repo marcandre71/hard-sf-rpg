@@ -1,0 +1,46 @@
+{
+  "_id": "ModTourelleEMDbl",
+  "_key": "!items!ModTourelleEMDbl",
+  "name": "Tourelle électromagnétique double",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. Armement lourd d'escorteur. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "category": "weapon",
+    "section": "port",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Aussi sur le flanc tribord. Armement lourd d'escorteur. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "mass": 9,
+    "armorPoints": 0,
+    "weapon": {
+      "damage": 14,
+      "rangeClose": true,
+      "rangeMedium": true,
+      "rangeLong": false,
+      "ammo": {
+        "value": 30,
+        "max": 30
+      },
+      "heatPerShot": 0,
+      "class": "railgun"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 440000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

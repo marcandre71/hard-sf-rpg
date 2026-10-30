@@ -5,8 +5,12 @@
   "type": "gear",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Équipement consommable, posé en une action. Aucun test au calme. Sous le feu, un test simple (pas un test prolongé) : Survie par défaut, difficulté normale. Le meneur peut changer la compétence et la difficulté. Décision Marc 20/10/2026. D'autres objets de colmatage (mousses expansives, etc.) seront définis plus tard. Réf. LdR v0.2 §7 et §8.</p>",
-    "quantity": 1
+    "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
+    "mass": 0.2,
+    "enc": 0,
+    "quantity": 3,
+    "reserve": { "type": "", "value": 0, "max": 0 },
+    "toolBonus": 0
   },
   "effects": [],
   "folder": null,
@@ -18,7 +22,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.6.3",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

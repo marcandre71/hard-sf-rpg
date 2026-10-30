@@ -1,0 +1,34 @@
+{
+  "_id": "ModPetrelNucl001",
+  "_key": "!items!ModPetrelNucl001",
+  "name": "Turbopropulseur atmosphérique nucléaire « Pétrel »",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp : sans objet (atmosphérique) ; croisière aérienne. Chauffe l'atmosphère dense de Titan (1,45 bar) par un échangeur thermique ; autonomie de vol quasi illimitée (navette K-12 Pétrel, dirigeables).</p>",
+    "category": "propulsion",
+    "section": "stern",
+    "integrity": {
+      "value": 8,
+      "max": 8
+    },
+    "effects": "<p>Isp : sans objet (atmosphérique) ; croisière aérienne. Chauffe l'atmosphère dense de Titan (1,45 bar) par un échangeur thermique ; autonomie de vol quasi illimitée (navette K-12 Pétrel, dirigeables).</p>",
+    "mass": 3,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

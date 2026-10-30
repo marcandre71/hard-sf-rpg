@@ -178,7 +178,7 @@ function statusNote(statusModifier) {
  * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number, free?: number, shipPost?: boolean }} options
  * @returns {Promise<null|object>}
  */
-export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0, shipPost = false }) {
+export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0, shipPost = false, rangeChoice = true }) {
   const initialFree = Number.isFinite(Number(free)) ? Math.trunc(Number(free)) : 0;
   const escape = foundry.utils.escapeHTML;
   const options = DIFFICULTY_ORDER.map(key => {
@@ -198,7 +198,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
       <label>${escape(game.i18n.localize("SOL.Roll.free"))}
         <input type="number" name="modifier" value="${initialFree}" step="1">
       </label>
-      ${attack ? attackFields(!shipPost) : ""}
+      ${attack ? attackFields(!shipPost && rangeChoice !== false) : ""}
       ${statusNote(statusModifier)}
       <p class="sol-roll-total">${escape(game.i18n.localize("SOL.Roll.total"))}
         <strong data-total>0</strong></p>

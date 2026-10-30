@@ -1,0 +1,34 @@
+{
+  "_id": "GearValiseChir01",
+  "_key": "!items!GearValiseChir01",
+  "name": "Valise chirurgicale de bord (gravité zéro)",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Médecine (chirurgie), Premiers secours. Dôme opératoire transparent à aspiration laminaire qui empêche le sang de flotter en apesanteur ; requise pour opérer hors d'une infirmerie.</p>",
+    "mass": 5.5,
+    "enc": 1.5,
+    "quantity": 1,
+    "reserve": {
+      "type": "doses",
+      "value": 10,
+      "max": 10
+    },
+    "toolBonus": 10
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 370000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

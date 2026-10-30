@@ -13,7 +13,7 @@ import {
   resolveD100,
   tens
 } from "../module/dice/d100.mjs";
-import { aimModifier, attackRangePenalty, attackSituation, struckZone } from "../module/dice/attack.mjs";
+import { aimModifier, attackRangePenalty, attackSituation, showsAttackRange, struckZone } from "../module/dice/attack.mjs";
 import { skillScore, weaponAttackScore, weaponCharacteristicFallback } from "../module/dice/skill-score.mjs";
 import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
@@ -238,6 +238,11 @@ check("portée du jet d'attaque", () => {
   assert.equal(cappedModifier(-40, -20, attackRangePenalty("long")), -50);
   assert.equal(attackSituation("none", 0, undefined, "proche").range, "short");
   assert.equal(attackSituation("none", 0, undefined, "proche").rangePenalty, 0);
+  assert.equal(showsAttackRange({ name: "Couteau", system: { skill: "Corps-à-corps", description: "<p>Lame.</p>" } }), false);
+  assert.equal(showsAttackRange({ name: "Découpeur", system: { skill: "Corps-à-corps", description: "<p>Contact, 10 charges.</p>" } }), false);
+  assert.equal(showsAttackRange({ name: "Électrochoc", system: { skill: "Armes de poing", description: "<p>Portée contact à 5 m.</p>" } }), false);
+  assert.equal(showsAttackRange({ name: "Lance-filet et harpon magnétique d'EVA", system: { skill: "Armes d'épaule", description: "<p>15 / 30 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Carabine", system: { skill: "Armes d'épaule", description: "<p>40 / 100 / 200 m.</p>" } }), true);
 });
 
 check("Base du PNJ", () => {

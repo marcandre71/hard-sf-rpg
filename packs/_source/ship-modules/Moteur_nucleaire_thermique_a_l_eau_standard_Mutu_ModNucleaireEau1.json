@@ -1,0 +1,34 @@
+{
+  "_id": "ModNucleaireEau1",
+  "_key": "!items!ModNucleaireEau1",
+  "name": "Moteur nucléaire thermique à l'eau (standard Mutuelle)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé.</p>",
+    "category": "propulsion",
+    "section": "stern",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé.</p>",
+    "mass": 6,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 320000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

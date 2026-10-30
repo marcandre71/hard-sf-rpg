@@ -66,8 +66,27 @@ export function attackRangePenalty(band) {
 }
 
 /**
+ * Le choix de portée du jet est masqué pour une arme de contact.
+ * Le Lance-filet le garde. Décision Marc 30/10/2026.
+ * Corps-à-corps, ou une description qui dit « contact ».
+ *
+ * @param {{ name?: string, system?: { skill?: string, description?: string } }|null|undefined} weapon
+ * @returns {boolean}
+ */
+export function showsAttackRange(weapon) {
+  const name = typeof weapon?.name === "string" ? weapon.name : "";
+  if ( /lance-filet/i.test(name) ) return true;
+  const skill = typeof weapon?.system?.skill === "string" ? weapon.system.skill : "";
+  if ( skill === "Corps-à-corps" ) return false;
+  const html = typeof weapon?.system?.description === "string" ? weapon.system.description : "";
+  const text = html.replace(/<[^>]+>/g, " ");
+  return !/contact/i.test(text);
+}
+
+/**
  * Palier retenu pour le jet. Inconnu ou absent : courte.
  * Décision Marc 30/10/2026 : courte par défaut.
+ * Le choix reste libre, quel que soit le palier stocké sur l'arme.
  *
  * @param {string|null|undefined} band
  * @returns {"short"|"medium"|"long"}

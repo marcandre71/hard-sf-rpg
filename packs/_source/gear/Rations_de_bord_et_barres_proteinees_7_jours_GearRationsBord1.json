@@ -1,0 +1,34 @@
+{
+  "_id": "GearRationsBord1",
+  "_key": "!items!GearRationsBord1",
+  "name": "Rations de bord et barres protéinées (7 jours)",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Subsistance pour 7 jours. Barres aux algues de Cérès, pâtes thermostabilisées et boissons à pipette utilisables à travers le port de casque.</p>",
+    "mass": 3.5,
+    "enc": 1,
+    "quantity": 1,
+    "reserve": {
+      "type": "doses",
+      "value": 7,
+      "max": 7
+    },
+    "toolBonus": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 390000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "ModCoffreHelium1",
+  "_key": "!items!ModCoffreHelium1",
+  "name": "Coffre cryogénique blindé d'hélium 3",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc. Pour les courriers blindés « coffres d'hélium » du Kombinat (0,5 à 2 t d'He3) ; blindage interne propre de 6, qui ne s'ajoute pas à la plaque de la section (pas de champ dédié, v0.9).</p>",
+    "category": "cargo",
+    "section": "bow",
+    "integrity": {
+      "value": 12,
+      "max": 12
+    },
+    "effects": "<p>Aussi sur un flanc. Pour les courriers blindés « coffres d'hélium » du Kombinat (0,5 à 2 t d'He3) ; blindage interne propre de 6, qui ne s'ajoute pas à la plaque de la section (pas de champ dédié, v0.9).</p>",
+    "mass": 8,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 630000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

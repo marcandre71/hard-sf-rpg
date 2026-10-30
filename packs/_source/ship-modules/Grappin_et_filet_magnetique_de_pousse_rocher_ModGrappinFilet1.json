@@ -1,0 +1,34 @@
+{
+  "_id": "ModGrappinFilet1",
+  "_key": "!items!ModGrappinFilet1",
+  "name": "Grappin et filet magnétique de pousse-rocher",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Ancre le vaisseau sur un petit astéroïde ou un vaisseau en perdition pour le remorquer ; licence de la Veille requise pour déplacer une masse.</p>",
+    "category": "other",
+    "section": "bow",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Ancre le vaisseau sur un petit astéroïde ou un vaisseau en perdition pour le remorquer ; licence de la Veille requise pour déplacer une masse.</p>",
+    "mass": 8,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 670000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

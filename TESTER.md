@@ -1,4 +1,4 @@
-# Tester le système « Sol, Nouvelle Ère » (0.9.0)
+# Tester le système « Sol, Nouvelle Ère » (0.9.1)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
@@ -6,6 +6,7 @@ La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible),
 La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main`. Prenez le ZIP de `main`.
 La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
+La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Le ZIP de `main` ne contient la 0.9.1 qu'après fusion de `dev/0.9.1` dans `main`. D'ici là, l'étape 1 de la section 15 donne le ZIP de la branche `dev/0.9.1`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -256,11 +257,35 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 
 1. Dans la barre latérale, ouvrez les compendiums **Armes**, **Armures et vêtements** et **Équipement**.
    **Résultat attendu :** **Armes** contient la **Carabine** et le **Pistolet frangible**, et les armes du catalogue. Il n'y a pas de **Lanceur polyvalent 40 mm**. **Armures et vêtements** contient **Combinaison souple**, **Combinaison renforcée**, **Armure de pont**, et les armures du catalogue. **Buse de compensation à gaz froid**, **Dragonne magnétique d'arme**, **Essuie-visière chauffant et revêtement oléophobe**, **Manchons à garrot pneumatique automatique** et **Phares d'épaule grand angle et balise stroboscopique** sont dans **Équipement**.
-2. Sur un personnage, glissez **3 armes** et **2 armures**. Par exemple : **Carabine tactique de la Veille**, **Pistolet de bord 9 mm basse vélocité**, **Couteau d'arrimage, lame de sas en céramique**, **Combinaison renforcée de chantier (EVA lourde)** et **Combinaison souple « Peau de quart »**. Cochez **Équipé** sur chaque arme. Les armures le sont déjà.
+2. Sur un personnage, glissez **3 armes** et **2 armures**. Par exemple : **Carabine tactique de la Veille**, **Pistolet de bord 9 mm basse vélocité**, **Couteau d'arrimage, lame de sas en céramique**, **Combinaison renforcée** et **Combinaison souple « Peau de quart »**. Cochez **Équipé** sur chaque arme. Les armures le sont déjà.
    **Résultat attendu :** les cinq objets sont sur la fiche. La carabine tactique a des dégâts **10** et la portée **Moyenne**. Le pistolet de bord a des dégâts **6**. Le couteau a des dégâts **4**.
 3. Le personnage n'a aucun état actif. Laissez une seule arme équipée, et notez son nom. Lancez-la trois fois. Dans la fenêtre, mettez le champ **Modificateur** à **0** : il est prérempli avec une valeur suggérée. Difficulté **Normale**, zone **Aucune**, actions de visée **0**. La première fois, portée **Courte**. La deuxième, **Moyenne**. La troisième, **Longue**.
    **Résultat attendu :** **Courte** est déjà choisie à l'ouverture. Le total est **0**, puis **−10**, puis **−20**. La carte de discussion porte le nom de l'arme notée et la portée choisie.
-4. Ouvrez **Combinaison renforcée de chantier (EVA lourde)**.
-   **Résultat attendu :** pénalité de manipulation **−10**, pénalité de perception **−10**. La description contient encore **[à compléter]** : le champ, lui, est à **−10**.
+4. Ouvrez **Combinaison renforcée**.
+   **Résultat attendu :** pénalité de manipulation **−10**, pénalité de perception **−10**. La description ne demande plus si la pénalité est **−10** ou **−20**.
 5. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 15. 0.9.1 Équipement et modules
+
+Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.1 qu'après fusion de `dev/0.9.1` dans `main`. D'ici là, l'étape 1 donne le ZIP de la branche `dev/0.9.1`.
+
+1. Prenez le ZIP de la branche `dev/0.9.1` :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.1.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.1`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`. Après fusion de `dev/0.9.1` dans `main`, prenez à la place le ZIP de `main` (https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip) : le dossier s'appelle alors `hard-sf-rpg-main`.
+2. Ouvrez les compendiums **Équipement** et **Modules de vaisseau**.
+   **Résultat attendu :** **Équipement** contient la **Rustine** et les objets du catalogue, plus les cinq accessoires déjà là (buse, dragonne, essuie-visière, manchons, phares). **Modules de vaisseau** contient les modules déjà connus de la Petite Fortune et ceux du catalogue. Il n'y a pas de seconde **Combinaison renforcée de chantier**, ni de seconde **Combinaison souple de travail**, ni de seconde **Armure de pont (assaut et abordage)**.
+3. Ouvrez la **Rustine**.
+   **Résultat attendu :** quantité **3**, masse **0,2** kg. Le nom est exactement **Rustine**.
+4. Sur la Petite Fortune, onglet **Général** ou **Sections**, la plaque de **proue** est **8 / 8**.
+   **Résultat attendu :** elle n'a pas changé. Le **Bouclier Whipple** du compendium a **4** points de blindage, pas plus.
+5. Ouvrez le **Canon électromagnétique** du compendium **Modules de vaisseau**.
+   **Résultat attendu :** masse **5**, munitions **20 / 20**, type d'arme **Railgun**.
+6. Sur un personnage, équipez le **Couteau d'arrimage, lame de sas en céramique** et lancez-le. Puis équipez seulement le **Lance-filet et harpon magnétique d'EVA** et lancez-le.
+   **Résultat attendu :** le couteau n'a pas de choix **Portée**. Le lance-filet en a un, **Courte (0)** déjà choisie.
+7. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+Les malus écrits dans les descriptions (fusil à pompe, gyrojet à bout portant) s'ajoutent au malus de portée. Le MJ les saisit à la main dans **Modificateur**. Rien ne les ajoute tout seul.

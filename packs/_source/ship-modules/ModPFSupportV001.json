@@ -4,23 +4,15 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
     "category": "lifeSupport",
     "section": "starboard",
     "integrity": {
       "value": 6,
       "max": 6
     },
-    "effects": "<p>Recyclage de l'air et de l'eau. Abri pour 6. Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
     "mass": 6,
-    "weapon": {
-      "damage": 0,
-      "rangeClose": false,
-      "rangeMedium": false,
-      "rangeLong": false,
-      "ammunition": "",
-      "heatPerShot": 0
-    },
     "armorPoints": 0
   },
   "effects": [],
@@ -33,7 +25,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

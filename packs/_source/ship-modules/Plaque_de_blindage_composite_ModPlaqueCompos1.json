@@ -1,0 +1,34 @@
+{
+  "_id": "ModPlaqueCompos1",
+  "_key": "!items!ModPlaqueCompos1",
+  "name": "Plaque de blindage composite",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc ou la poupe ; impossible sur les radiateurs. Hors chantier, la plaque ne se répare qu'à la moitié de son maximum. Intégrité propre du module : [à compléter] (la v0.2 n'en donne pas).</p>",
+    "category": "armor",
+    "section": "bow",
+    "integrity": {
+      "value": 0,
+      "max": 0
+    },
+    "effects": "<p>Aussi sur un flanc ou la poupe ; impossible sur les radiateurs. Hors chantier, la plaque ne se répare qu'à la moitié de son maximum. Intégrité propre du module : [à compléter] (la v0.2 n'en donne pas).</p>",
+    "mass": 4,
+    "armorPoints": 4
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

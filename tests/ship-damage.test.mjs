@@ -251,6 +251,9 @@ check(missileDecoyed({ success: false, dr: 0, score: 90 }, { success: true, dr: 
 check(MISSILE_DAMAGE === 20, "impact : 20, plus le DR du lancement");
 check(isMissileWeapon({ rangeClose: false, rangeMedium: true, rangeLong: true }) === true, "missile : pas de portée proche");
 check(isMissileWeapon({ rangeClose: true, rangeMedium: true, rangeLong: false }) === false, "une arme de portée proche n'est pas un missile");
+check(isMissileWeapon({ class: "missile", rangeClose: true }) === true, "un missile explicite prime sur la portée proche");
+check(isMissileWeapon({ class: "other", rangeClose: false, rangeMedium: true, rangeLong: true }) === false, "autre n'est pas un missile");
+check(isMissileWeapon({ class: "railgun", rangeClose: false, rangeMedium: true }) === false, "un railgun n'est pas un missile");
 check(isLaserWeapon({ name: "Laser de défense" }) === true && isLaserWeapon({ name: "Canon électromagnétique" }) === false, "laser : le nom contient laser");
 check(ammoBlocksFire(0) === true && ammoBlocksFire({ value: 0 }) === true && ammoBlocksFire(null) === false && ammoBlocksFire({ value: null }) === false, "0 bloque, vide non");
 

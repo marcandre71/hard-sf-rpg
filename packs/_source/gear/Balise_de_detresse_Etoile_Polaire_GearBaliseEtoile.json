@@ -1,0 +1,34 @@
+{
+  "_id": "GearBaliseEtoile",
+  "_key": "!items!GearBaliseEtoile",
+  "name": "Balise de détresse « Étoile Polaire »",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Autonomie 30 jours (720 h). Émet sur le canal d'urgence ; oblige légalement tout sociétaire de la Mutuelle à portée à se dérouter. Boîtier étanche et résistant au vide, activable à la main ou au contact du vide.</p>",
+    "mass": 0.5,
+    "enc": 0,
+    "quantity": 1,
+    "reserve": {
+      "type": "energy",
+      "value": 720,
+      "max": 720
+    },
+    "toolBonus": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 310000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

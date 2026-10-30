@@ -1,0 +1,34 @@
+{
+  "_id": "ModAntenneRadio1",
+  "_key": "!items!ModAntenneRadio1",
+  "name": "Antenne radio et laser de communication",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
+    "category": "communications",
+    "section": "bow",
+    "integrity": {
+      "value": 4,
+      "max": 4
+    },
+    "effects": "<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
+    "mass": 1,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 550000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -199,7 +199,14 @@ export class ShipModuleData extends BaseItemData {
           initialValue: null,
           initialMax: null
         }),
-        heatPerShot: numberField("SOL.ShipModule.weapon.heat", { initial: 0, min: 0, integer: true, step: 1 })
+        heatPerShot: numberField("SOL.ShipModule.weapon.heat", { initial: 0, min: 0, integer: true, step: 1 }),
+        // Vide : le nom décide. La migration n'écrit pas ce champ dans un diff.
+        // Décision Marc 30/10/2026. laser, railgun, missile, autre.
+        class: stringField("SOL.ShipModule.weapon.class.label", {
+          initial: "",
+          blank: true,
+          choices: SOL.shipWeaponClasses
+        })
       }, { label: "SOL.ShipModule.weapon.label" }),
       armorPoints: numberField("SOL.ShipModule.armorPoints", { initial: 0, min: 0, integer: true, step: 1 })
     };

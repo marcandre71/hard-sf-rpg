@@ -125,6 +125,7 @@ export async function performRoll({
   noteFor = null,
   suggested = 0,
   shipPost = false,
+  rangeChoice = true,
   shipStrike = null,
   messageMode = null,
   messageOptions = null
@@ -132,7 +133,15 @@ export async function performRoll({
   const statusModifier = statusSituation(actorStatusIds(actor));
   const picked = choice
     ? stampStatus(choice, score, statusModifier, shipPost)
-    : await askRoll({ title: label, score, attack: Boolean(weapon), statusModifier, free: suggested, shipPost });
+    : await askRoll({
+      title: label,
+      score,
+      attack: Boolean(weapon),
+      statusModifier,
+      free: suggested,
+      shipPost,
+      rangeChoice
+    });
   if ( !picked ) return null;
 
   // Foundry : 1d100 va de 1 à 100. Un 00 physique vaut 100.

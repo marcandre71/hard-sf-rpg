@@ -19,7 +19,7 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 ## Ensuite
 
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.9.1 — équipement et modules.
+- [ ] 0.9.1 — équipement et modules. En relecture. Branche `dev/0.9.1`.
 - [ ] 0.9.2 — atouts, augmentations, logiciels et substances.
 - [ ] 0.9.3 — blessures, journaux et vaisseaux PNJ.
 - [ ] 0.8.0 — machines : fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines.

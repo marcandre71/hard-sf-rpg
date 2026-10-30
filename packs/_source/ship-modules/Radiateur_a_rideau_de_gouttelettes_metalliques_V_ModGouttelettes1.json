@@ -1,0 +1,34 @@
+{
+  "_id": "ModGouttelettes1",
+  "_key": "!items!ModGouttelettes1",
+  "name": "Radiateur à rideau de gouttelettes métalliques (Veille, militaire)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Jet d'étain liquide récupéré par champ magnétique : les projectiles cinétiques traversent le nuage sans briser de panneau (−10 aux tirs de canon électromagnétique visant les radiateurs).</p>",
+    "category": "radiators",
+    "section": "radiators",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Jet d'étain liquide récupéré par champ magnétique : les projectiles cinétiques traversent le nuage sans briser de panneau (−10 aux tirs de canon électromagnétique visant les radiateurs).</p>",
+    "mass": 6,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 420000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

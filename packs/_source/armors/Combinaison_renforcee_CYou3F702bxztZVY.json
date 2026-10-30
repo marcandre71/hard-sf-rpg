@@ -5,7 +5,7 @@
   "type": "armor",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Combinaison pressurisée. Protection : torse 3, tête 3, bras 2, jambes 2. Seuil de brèche 8.</p>",
+    "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Coque semi-rigide avec plaques thoraciques anti-micrométéorites et joints doublés ; standard des prospecteurs et des araignées de chantier.</p>",
     "protection": {
       "head": 3,
       "torso": 3,
@@ -15,7 +15,14 @@
       "leftLeg": 2
     },
     "pressurized": true,
-    "breachThreshold": 8
+    "breachThreshold": 8,
+    "airReserve": { "value": 10, "max": 10 },
+    "sealState": "intact",
+    "penalty": { "manipulation": -10, "perception": -10 },
+    "dosimeter": true,
+    "radio": true,
+    "mass": 15,
+    "enc": 2
   },
   "effects": [],
   "folder": null,
@@ -27,7 +34,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.5.1",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

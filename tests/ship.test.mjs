@@ -232,7 +232,7 @@ migrateShipModuleSource(ammoMass);
 check(!("weapon" in ammoMass), "un diff de masse ne gagne pas de munitions");
 const damageOnly = { weapon: { damage: 8 } };
 migrateShipModuleSource(damageOnly);
-check(!("ammo" in damageOnly.weapon) && !("ammunition" in damageOnly.weapon), "un diff de dégâts ne gagne pas de compteur");
+check(!("ammo" in damageOnly.weapon) && !("ammunition" in damageOnly.weapon) && !("class" in damageOnly.weapon), "un diff de dégâts ne gagne ni compteur ni type d'arme");
 const four = { weapon: { ammunition: "4", damage: 20 } };
 migrateShipModuleSource(four);
 check(four.weapon.ammo.value === 4 && four.weapon.ammo.max === 4 && four.weapon.damage === 20 && !("ammunition" in four.weapon), "« 4 » devient 4/4");
@@ -300,7 +300,7 @@ check(embeddedEngine?.system.effects.includes("350 s") && embeddedEngine.system.
 check(looseEngine.system.effects === embeddedEngine.system.effects && looseEngine._stats.systemVersion === "0.7.1" && fortune._stats.systemVersion === "0.7.1", "les deux textes moteur et la version des documents changés");
 check(embeddedEngine.system.effects === looseEngine.system.effects, "le module moteur des deux packs a le même texte");
 check(fortune.system.description.includes("21 milli-g") && fortune.system.description.includes("3,6") && !fortune.system.description.includes("380"), "texte de l'acteur aligné");
-for ( const file of ["ModExLaserDef001.json", "ModExCanonEM0001.json", "ModExMissile0001.json"] ) {
+for ( const file of ["ModExLaserDef001.json", "ModExMissile0001.json"] ) {
   const weapon = JSON.parse(readFileSync(new URL(`../packs/_source/ship-modules/${file}`, import.meta.url), "utf8"));
   check(weapon.system.integrity.value === 4 && weapon.system.integrity.max === 4, `${file} : intégrité 4/4`);
   check(weapon.system.effects.includes("Intégrité provisoire, ajustable en jeu"), `${file} : effets décidés`);
@@ -312,7 +312,8 @@ const missilePack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modul
 const laserPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModExLaserDef001.json", import.meta.url), "utf8"));
 const drillPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModPFLaserFor001.json", import.meta.url), "utf8"));
 check(cannonPack.system.weapon.ammo.value === 20 && cannonPack.system.weapon.ammo.max === 20, "canon : 20/20");
-check(cannonPack.system.effects.includes("retire 1 munition"), "canon : chaque tir retire une munition");
+check(cannonPack.system.mass === 5 && cannonPack.system.weapon.class === "railgun", "canon : masse 5 t, type railgun");
+check(cannonPack.system.integrity.value === 4 && !("ammunition" in cannonPack.system.weapon), "canon : intégrité 4, sans ancien texte de munitions");
 check(missilePack.system.weapon.ammo.value === 4 && missilePack.system.weapon.ammo.max === 4, "missile : 4/4");
 check(missilePack.system.effects.includes("est automatisé") && !missilePack.system.effects.includes("n'est pas automatisé"), "missile : le temps de vol est automatisé");
 check(laserPack.system.weapon.ammo.value === null && laserPack.system.weapon.ammo.max === null, "laser de défense : compteur vide");

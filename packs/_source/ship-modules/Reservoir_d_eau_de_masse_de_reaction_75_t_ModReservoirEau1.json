@@ -1,0 +1,34 @@
+{
+  "_id": "ModReservoirEau1",
+  "_key": "!items!ModReservoirEau1",
+  "name": "Réservoir d'eau de masse de réaction (75 t)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+    "category": "other",
+    "section": "port",
+    "integrity": {
+      "value": 8,
+      "max": 8
+    },
+    "effects": "<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+    "mass": 3,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

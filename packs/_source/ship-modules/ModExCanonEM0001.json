@@ -4,15 +4,16 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Repère d'arme du §4, pas installé sur la Petite Fortune. Section proue. Intégrité 4/4 : Décision Marc 21/10/2026. La masse n'est pas dans le tableau : 0 en attendant. À confirmer par Marc.</p>",
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc. Projectiles cinétiques inertes non guidés ; à portée moyenne contre une cible en croisière, un habitat ou des radiateurs déployés. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",
     "section": "bow",
     "integrity": {
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 12, portées proche et moyenne, 20 projectiles, chaleur 0. Chaque tir retire 1 munition. Le MJ recharge à la main. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §4 et §6.</p>",
-    "mass": 0,
+    "effects": "<p>Aussi sur un flanc. Projectiles cinétiques inertes non guidés ; à portée moyenne contre une cible en croisière, un habitat ou des radiateurs déployés. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "mass": 5,
+    "armorPoints": 0,
     "weapon": {
       "damage": 12,
       "rangeClose": true,
@@ -22,9 +23,9 @@
         "value": 20,
         "max": 20
       },
-      "heatPerShot": 0
-    },
-    "armorPoints": 0
+      "heatPerShot": 0,
+      "class": "railgun"
+    }
   },
   "effects": [],
   "folder": null,
@@ -36,7 +37,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.3",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

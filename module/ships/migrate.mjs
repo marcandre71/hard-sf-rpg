@@ -284,6 +284,8 @@ function migrateWeaponAmmo(source) {
   }
   if ( Object.hasOwn(weapon, "ammo") ) return;
   weapon.ammo = { value: parsed, max: parsed };
+  // Décision Marc 30/10/2026 : `weapon.class` n'est pas ajouté ici.
+  // Un diff sans ce champ garde la détection par le nom.
 }
 
 /**

@@ -1,0 +1,34 @@
+{
+  "_id": "ModVoilureRadia1",
+  "_key": "!items!ModVoilureRadia1",
+  "name": "Grandes voilures radiantes rigides (long-courrier, station)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Ailes incandescentes (800 à 1 200 K) évacuant 1 à 3 GW, environ 100 m de côté par gigawatt (Bible §7) ; fixes, impossibles à replier en combat. Masse : [à compléter] (dizaines à centaines de tonnes).</p>",
+    "category": "radiators",
+    "section": "radiators",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>Ailes incandescentes (800 à 1 200 K) évacuant 1 à 3 GW, environ 100 m de côté par gigawatt (Bible §7) ; fixes, impossibles à replier en combat. Masse : [à compléter] (dizaines à centaines de tonnes).</p>",
+    "mass": 0,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 410000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "ModPlasmaCargo01",
+  "_key": "!items!ModPlasmaCargo01",
+  "name": "Propulseur à plasma (cargo lent)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~3 000 à 5 000 s ; 0,01 à 0,1 milli-g. Poussée extrêmement faible : −20 au Pilote pour Changer de portée en combat. Consommation minime : fret lent, cargos qui mettent un an à rejoindre Cérès, sans équipage ou avec un équipage réduit (Bible §7).</p>",
+    "category": "propulsion",
+    "section": "stern",
+    "integrity": {
+      "value": 12,
+      "max": 12
+    },
+    "effects": "<p>Isp ~3 000 à 5 000 s ; 0,01 à 0,1 milli-g. Poussée extrêmement faible : −20 au Pilote pour Changer de portée en combat. Consommation minime : fret lent, cargos qui mettent un an à rejoindre Cérès, sans équipage ou avec un équipage réduit (Bible §7).</p>",
+    "mass": 10,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 340000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

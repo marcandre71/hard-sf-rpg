@@ -1,0 +1,34 @@
+{
+  "_id": "ModDomeVeille001",
+  "_key": "!items!ModDomeVeille001",
+  "name": "Dôme de veille longue portée (Veille, militaire)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Télescope infrarouge cryogénique : +10 en Opérations de bord pour verrouiller une cible ou repérer une coque froide à 15 millions de km.</p>",
+    "category": "sensors",
+    "section": "bow",
+    "integrity": {
+      "value": 6,
+      "max": 6
+    },
+    "effects": "<p>Télescope infrarouge cryogénique : +10 en Opérations de bord pour verrouiller une cible ou repérer une coque froide à 15 millions de km.</p>",
+    "mass": 3,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 530000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

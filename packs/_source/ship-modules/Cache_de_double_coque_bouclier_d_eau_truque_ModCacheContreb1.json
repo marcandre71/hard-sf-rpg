@@ -1,0 +1,34 @@
+{
+  "_id": "ModCacheContreb1",
+  "_key": "!items!ModCacheContreb1",
+  "name": "Cache de double coque (bouclier d'eau truqué)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. Dissimule 3 t de contrebande dans le bouclier d'eau antiradiations : −20 aux tests de Fouille des inspecteurs de la Veille.</p>",
+    "category": "cargo",
+    "section": "port",
+    "integrity": {
+      "value": 6,
+      "max": 6
+    },
+    "effects": "<p>Aussi sur le flanc tribord. Dissimule 3 t de contrebande dans le bouclier d'eau antiradiations : −20 aux tests de Fouille des inspecteurs de la Veille.</p>",
+    "mass": 5,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 620000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -380,6 +380,17 @@ export const SOL = {
    */
   shipModuleCategories: choiceMap(SHIP_MODULE_CATEGORIES, "SOL.ShipModule.category."),
 
+  /**
+   * Type d'arme de vaisseau. Vide : le nom décide.
+   * Décision Marc 30/10/2026. railgun = canon électromagnétique.
+   */
+  shipWeaponClasses: {
+    laser: "SOL.ShipModule.weapon.class.laser",
+    railgun: "SOL.ShipModule.weapon.class.railgun",
+    missile: "SOL.ShipModule.weapon.class.missile",
+    other: "SOL.ShipModule.weapon.class.other"
+  },
+
   /** État dérivé, jamais stocké. Réf. Vaisseaux v0.1 §4. */
   shipModuleConditions: {
     intact: "SOL.ShipModule.condition.intact",

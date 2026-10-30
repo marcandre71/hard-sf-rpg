@@ -1,0 +1,46 @@
+{
+  "_id": "ModCasierMissile",
+  "_key": "!items!ModCasierMissile",
+  "name": "Casier lance-missiles (4 missiles)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc. Le missile arrive au début du tour suivant (portée moyenne) ou deux tours plus tard (lointaine) ; contre-mesures de l'Opérateur ou tir de laser de défense possibles. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "category": "weapon",
+    "section": "bow",
+    "integrity": {
+      "value": 4,
+      "max": 4
+    },
+    "effects": "<p>Aussi sur un flanc. Le missile arrive au début du tour suivant (portée moyenne) ou deux tours plus tard (lointaine) ; contre-mesures de l'Opérateur ou tir de laser de défense possibles. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "mass": 4,
+    "armorPoints": 0,
+    "weapon": {
+      "damage": 20,
+      "rangeClose": false,
+      "rangeMedium": true,
+      "rangeLong": true,
+      "ammo": {
+        "value": 4,
+        "max": 4
+      },
+      "heatPerShot": 0,
+      "class": "missile"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 450000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

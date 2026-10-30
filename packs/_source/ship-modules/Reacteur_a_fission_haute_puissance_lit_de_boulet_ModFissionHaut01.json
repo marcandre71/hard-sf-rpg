@@ -1,0 +1,34 @@
+{
+  "_id": "ModFissionHaut01",
+  "_key": "!items!ModFissionHaut01",
+  "name": "Réacteur à fission haute puissance (lit de boulets)",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>5 à 20 MWe. Cargos à plasma, stations moyennes, tourelles laser de défense.</p>",
+    "category": "reactor",
+    "section": "stern",
+    "integrity": {
+      "value": 10,
+      "max": 10
+    },
+    "effects": "<p>5 à 20 MWe. Cargos à plasma, stations moyennes, tourelles laser de défense.</p>",
+    "mass": 20,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 380000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

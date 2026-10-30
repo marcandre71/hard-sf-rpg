@@ -8,7 +8,7 @@
  */
 
 import { compareOpposed } from "./combat.mjs";
-import { weaponClass } from "./reactor.mjs";
+import { shipWeaponKind, weaponClass } from "./reactor.mjs";
 
 /** Dégâts d'un missile à l'impact : 20 + DR du lancement. Réf. Vaisseaux v0.1 §4. */
 export const MISSILE_DAMAGE = 20;
@@ -490,6 +490,10 @@ export function sensorsAreOut(modules) {
  * @returns {boolean}
  */
 export function isMissileWeapon(weapon) {
+  // Décision Marc 30/10/2026 : le type d'arme prime sur les portées.
+  const kind = shipWeaponKind(weapon);
+  if ( kind === "missile" ) return true;
+  if ( kind === "laser" || kind === "railgun" || kind === "other" ) return false;
   if ( !weapon || weapon.rangeClose === true ) return false;
   return weapon.rangeMedium === true || weapon.rangeLong === true;
 }

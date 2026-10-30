@@ -1,0 +1,34 @@
+{
+  "_id": "ModInfirmerie001",
+  "_key": "!items!ModInfirmerie001",
+  "name": "Infirmerie pressurisée et 4 caissons de torpeur",
+  "type": "shipModule",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. Compte comme de bons outils médicaux : +10 en Médecine (LdR §5) ; 4 caissons de torpeur médicale intégrés.</p>",
+    "category": "lifeSupport",
+    "section": "port",
+    "integrity": {
+      "value": 6,
+      "max": 6
+    },
+    "effects": "<p>Aussi sur le flanc tribord. Compte comme de bons outils médicaux : +10 en Médecine (LdR §5) ; 4 caissons de torpeur médicale intégrés.</p>",
+    "mass": 5,
+    "armorPoints": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 570000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "GearBiberonAir01",
+  "_key": "!items!GearBiberonAir01",
+  "name": "Cartouche d'air de réserve (« Biberon » 2 h)",
+  "type": "gear",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Ajoute 2 h d'air à une combinaison pressurisée en 1 action par la valve externe. Bouteille composite haute pression avec filtre à hydroxyde de lithium contre le CO2.</p>",
+    "mass": 1.5,
+    "enc": 0.5,
+    "quantity": 1,
+    "reserve": {
+      "type": "air",
+      "value": 2,
+      "max": 2
+    },
+    "toolBonus": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 290000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.1",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}
