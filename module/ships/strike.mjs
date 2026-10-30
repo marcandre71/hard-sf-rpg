@@ -1046,6 +1046,7 @@ async function rememberStrike(message) {
   if ( !raw || typeof raw !== "object" ) return;
   await queueApplied(async () => {
     const stored = game.settings.get(SYSTEM_ID, RECORDED);
+    if ( stored && typeof stored === "object" && Object.hasOwn(stored, message.id) ) return;
     const next = stored && typeof stored === "object" ? { ...stored } : {};
     next[message.id] = {
       attackerUuid: typeof raw.attackerUuid === "string" ? raw.attackerUuid : "",

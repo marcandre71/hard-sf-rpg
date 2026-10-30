@@ -482,6 +482,17 @@ async function onHeatClick(message, button) {
     });
     return;
   }
+  const { userOwnsShipOrPost } = await import("./actions.mjs");
+  const { heatChoiceRefusal } = await import("./reactor.mjs");
+  const refusal = heatChoiceRefusal({
+    cardType: message.getFlag(SYSTEM_ID, "type"),
+    cardShipUuid: message.getFlag(SYSTEM_ID, "shipUuid"),
+    shipUuid: ship.uuid,
+    ownsEngineer: await userOwnsShipOrPost(game.user.id, ship, "engineer"),
+    senderIsGm: game.user?.isGM === true,
+    action: button.dataset.action
+  });
+  if ( refusal ) return;
   await message.setFlag(SYSTEM_ID, "choiceResolved", true);
   const action = button.dataset.action;
   const name = foundry.utils.escapeHTML(ship.name ?? "");

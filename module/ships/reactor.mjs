@@ -223,6 +223,53 @@ export function isCannonWeapon(weapon) {
   return weaponClass(weapon) === "cannon";
 }
 
+/** Boutons acceptés sur une carte de chaleur ou d'incident. */
+export const HEAT_CHOICE_ACTIONS = [
+  "sol-heat-cut",
+  "sol-heat-run",
+  "sol-incident-heat",
+  "sol-incident-module"
+];
+
+/**
+ * Relais d'une carte chaleur ou incident, avant tout drapeau « résolu ».
+ * La carte doit être du bon type, le vaisseau celui annoncé, l'auteur
+ * propriétaire du vaisseau ou de l'ingénieur. L'incident est réservé au MJ.
+ * Seules les quatre actions de la carte sont admises, chacune sur son type.
+ *
+ * @param {{ cardType?: unknown, cardShipUuid?: unknown, shipUuid?: unknown, ownsEngineer?: boolean, senderIsGm?: boolean, action?: unknown }} input
+ * @returns {""|"type"|"ship"|"post"|"gm"|"action"}
+ */
+export function heatChoiceRefusal(input = {}) {
+  const cardType = input.cardType;
+  if ( cardType !== "heatChoice" && cardType !== "pilotIncident" ) return "type";
+  const shipUuid = typeof input.shipUuid === "string" ? input.shipUuid : "";
+  const cardShip = typeof input.cardShipUuid === "string" ? input.cardShipUuid : "";
+  if ( !shipUuid || shipUuid !== cardShip ) return "ship";
+  if ( input.ownsEngineer !== true ) return "post";
+  if ( cardType === "pilotIncident" && input.senderIsGm !== true ) return "gm";
+  const heatActions = ["sol-heat-cut", "sol-heat-run"];
+  const incidentActions = ["sol-incident-heat", "sol-incident-module"];
+  const allowed = cardType === "heatChoice" ? heatActions : incidentActions;
+  if ( !allowed.includes(input.action) ) return "action";
+  return "";
+}
+
+/**
+ * Une connexion ne réécrit pas un tir déjà enregistré.
+ *
+ * @param {object|null|undefined} stored
+ * @param {string} id
+ * @param {object} entry
+ * @returns {object|null} `null` si l'entrée existe déjà.
+ */
+export function rememberStrikeEntry(stored, id, entry) {
+  const next = stored && typeof stored === "object" ? { ...stored } : {};
+  if ( Object.hasOwn(next, id) ) return null;
+  next[id] = entry;
+  return next;
+}
+
 /**
  * Refroidir seulement si le round avance au-delà du dernier déjà traité.
  * Reculer puis revenir sur ce round ne refait pas le refroidissement.

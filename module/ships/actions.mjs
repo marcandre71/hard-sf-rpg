@@ -577,6 +577,30 @@ async function relayOwned(ship, postId, message) {
  * @param {object} message
  * @returns {Promise<boolean>}
  */
+async function acceptHeatChoice(message) {
+  const card = game.messages?.get?.(message.messageId);
+  if ( !card ) return;
+  const shipUuid = typeof message.shipUuid === "string" ? message.shipUuid : "";
+  const ship = shipUuid ? await foundry.utils.fromUuid(shipUuid) : null;
+  if ( !ship || ship.documentName !== "Actor" || ship.type !== "ship" ) return;
+  const { heatChoiceRefusal } = await import("./reactor.mjs");
+  const sender = game.users?.get?.(message.userId);
+  const refusal = heatChoiceRefusal({
+    cardType: card.getFlag(SYSTEM_ID, "type"),
+    cardShipUuid: card.getFlag(SYSTEM_ID, "shipUuid"),
+    shipUuid,
+    ownsEngineer: await userOwnsShipOrPost(message.userId, ship, "engineer"),
+    senderIsGm: sender?.isGM === true,
+    action: message.action
+  });
+  if ( refusal ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Space.relayRefused"));
+    return;
+  }
+  const { finishHeatChoice } = await import("./heat-play.mjs");
+  await finishHeatChoice(card, message.action);
+}
+
 async function relayToGm(message) {
   if ( !game.users?.activeGM || !game.socket?.emit ) {
     ui.notifications.warn(game.i18n.localize("SOL.Space.noActiveGm"));
@@ -603,11 +627,7 @@ async function onSpaceRelay(message) {
   }
   if ( game.user?.isActiveGM !== true ) return;
   if ( message.type === "heatChoice" ) {
-    const card = game.messages?.get?.(message.messageId);
-    if ( card ) {
-      const { finishHeatChoice } = await import("./heat-play.mjs");
-      await finishHeatChoice(card, message.action);
-    }
+    await acceptHeatChoice(message);
     return;
   }
   if ( message.type === "reactor" ) {
@@ -1574,7 +1594,12 @@ async function onReactorRelay(message) {
   }
   if ( message.kind === "settle" && message.plan ) {
     const heat = clampHeat(message.plan.heat);
-    await applySettle(ship, { ...message.plan, heat }, message.weaponId ?? "", null);
+    await applySettle(ship, {
+      heat,
+      incident: message.plan.incident === true,
+      coolLaser: message.plan.coolLaser === true,
+      cannon: message.plan.cannon === true
+    }, message.weaponId ?? "", null);
     return;
   }
   if ( message.kind === "push" ) {
@@ -1584,14 +1609,14 @@ async function onReactorRelay(message) {
     }
     const dr = boundDr(message.dr);
     const de = boundDr(message.de);
+    const success = message.success === true;
     const gain = pushHeatGain({
-      success: message.success === true,
+      success,
       de,
       critical: message.critical === "failure" ? "failure" : null
     });
-    const choice = message.choice === "pilot" || message.choice === "thrust" || message.choice === "laser"
-      ? message.choice
-      : "";
+    const known = message.choice === "pilot" || message.choice === "thrust" || message.choice === "laser";
+    const choice = success && known ? message.choice : "";
     await applyPush(ship, null, gain, choice, dr);
     return;
   }
@@ -1601,10 +1626,23 @@ async function onReactorRelay(message) {
       ui.notifications.warn(game.i18n.localize("SOL.Ship.incidentNoModule"));
       return;
     }
+    if ( noSpareParts(ship.system?.spareParts) ) {
+      await postBricolage(ship);
+      return;
+    }
     await markFieldRepair(ship, message.moduleId);
     return;
   }
   if ( message.kind === "repair" && message.picked ) {
+    const numbers = repairNumbers(ship, message.picked);
+    const capped = repairAlreadyCapped(numbers.current, numbers.max, {
+      plate: message.picked.kind === "plate",
+      yard: message.picked.yard === true
+    });
+    if ( capped ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Ship.repair.capped"));
+      return;
+    }
     await commitRepair(ship, message.picked, { success: message.success === true, dr: boundDr(message.dr) });
     return;
   }
@@ -1837,7 +1875,7 @@ function boundedRoll(message) {
  * @param {unknown} postId
  * @returns {Promise<boolean>}
  */
-async function userOwnsShipOrPost(userId, ship, postId) {
+export async function userOwnsShipOrPost(userId, ship, postId) {
   if ( typeof userId !== "string" || !userId ) return false;
   const user = game.users.get(userId);
   if ( !user ) return false;

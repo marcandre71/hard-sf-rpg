@@ -264,10 +264,9 @@ const playerSheet = { twisted: false, sections: { stern: { destroyed: false } } 
 keepGmChecks(playerSheet, { twisted: true, sections: { stern: { destroyed: true } } });
 check(!("twisted" in playerSheet) && !("destroyed" in playerSheet.sections.stern), "un joueur ne décoche pas Structure tordue ni Section détruite");
 const gmSheet = { twisted: false, sections: { bow: { destroyed: false } } };
-check(requesterIsGm({ isGM: true }) === true, "le MJ est reconnu");
-if ( requesterIsGm({ isGM: true }) ) {
-  check(gmSheet.twisted === false && gmSheet.sections.bow.destroyed === false, "le MJ peut décocher");
-}
+const gmUser = { isGM: true };
+if ( !requesterIsGm(gmUser) ) keepGmChecks(gmSheet, { twisted: true, sections: { bow: { destroyed: true } } });
+check(gmSheet.twisted === false && gmSheet.sections.bow.destroyed === false, "le MJ peut décocher");
 
 const typeIds = SHIP_TYPE_GROUPS.flatMap(group => group.types.map(type => type.id));
 check(new Set(typeIds).size === typeIds.length, "types de vaisseau uniques");

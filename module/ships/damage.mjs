@@ -362,11 +362,16 @@ function sectionCrit(state, sectionId, section, logs, dice, moduleCritted, optio
   section.integrity = 0;
   logs.push({ key: "SOL.Ship.crit.sectionRupture", data: { roll } });
   // Décision Marc 26/10/2026 : tous les modules encore vivants passent hors service.
+  // Décision Marc 30/10/2026 : sans jet de module, la ligne « hors service » reste.
   for ( const entry of state.modules ) {
     if ( entry.section !== sectionId ) continue;
     if ( !(Number(entry.integrity) > 0) ) continue;
     entry.integrity = 0;
-    if ( !bare ) moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
+    if ( bare ) {
+      logs.push({ key: "SOL.Ship.crit.moduleOut", data: { name: entry.name ?? "" } });
+      continue;
+    }
+    moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
   }
 }
 

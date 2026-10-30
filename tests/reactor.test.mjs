@@ -11,7 +11,9 @@ import {
   coolingDrop,
   heatPenalty,
   combatIdForShip,
+  heatChoiceRefusal,
   isCannonWeapon,
+  rememberStrikeEntry,
   noSpareParts,
   repairAlreadyCapped,
   shouldCoolRound,
@@ -123,6 +125,17 @@ check(repairAlreadyCapped(6, 10, { plate: true }) === true, "plaque déjà à la
 check(repairAlreadyCapped(4, 10, { plate: true }) === false, "plaque sous la moitié : le jet part");
 check(repairAlreadyCapped(5, 10, { plate: true, yard: true }) === false, "au chantier, la moitié n'est pas le plafond");
 check(repairAlreadyCapped(10, 10, {}) === true, "déjà au maximum : pas de jet");
+const heatOk = { cardType: "heatChoice", cardShipUuid: "ship", shipUuid: "ship", ownsEngineer: true, senderIsGm: false, action: "sol-heat-cut" };
+check(heatChoiceRefusal(heatOk) === "", "l'ingénieur peut couper le réacteur");
+check(heatChoiceRefusal({ ...heatOk, action: "sol-incident-heat" }) === "action", "une action d'incident n'est pas acceptée sur la carte chaleur");
+check(heatChoiceRefusal({ ...heatOk, cardType: "pilotIncident", action: "sol-incident-heat", senderIsGm: false }) === "gm", "l'incident est refusé à un non-MJ");
+check(heatChoiceRefusal({ ...heatOk, cardType: "pilotIncident", action: "sol-incident-heat", senderIsGm: true }) === "", "le MJ peut choisir l'incident");
+check(heatChoiceRefusal({ ...heatOk, shipUuid: "autre" }) === "ship", "le vaisseau du relais doit être celui de la carte");
+check(heatChoiceRefusal({ ...heatOk, ownsEngineer: false }) === "post", "un autre joueur ne résout pas la carte");
+check(heatChoiceRefusal({ ...heatOk, cardType: "autre" }) === "type", "un autre type de carte est refusé");
+const kept = { msg: { targetUuid: "a" } };
+check(rememberStrikeEntry(kept, "msg", { targetUuid: "b" }) === null, "une connexion ne réécrit pas un tir déjà enregistré");
+check(rememberStrikeEntry({}, "msg", { targetUuid: "a" })?.msg?.targetUuid === "a", "un tir nouveau est enregistré");
 check(restartRefusal(5, false) === "" && restartRefusal(6, false) === "heat", "redémarrer à 5 ou moins");
 check(restartRefusal(1, true) === "module", "module réacteur hors service : pas de redémarrage");
 
@@ -159,7 +172,7 @@ const down = resolveReactorCrit(hull({
 });
 check(down.state.sections.stern.integrity === 0 && down.state.sections.stern.destroyed === true, "poupe à 0 : critique de section");
 check(down.state.modules.find(entry => entry.id === "m").integrity === 0, "rupture : le module passe hors service");
-check(!down.logs.some(entry => entry.key === "SOL.Ship.crit.moduleOut") && critDice === 1, "rupture du réacteur : pas de jet de critique de module");
+check(down.logs.some(entry => entry.key === "SOL.Ship.crit.moduleOut") && critDice === 1, "rupture du réacteur : hors service, sans jet de module");
 const dose = resolveReactorCrit(hull(), 6, 0, scripted([]));
 check(dose.logs.some(entry => entry.key === "SOL.Ship.reactor.critRadiation") && dose.state.sections.stern.integrity === 20, "6 : rappel de dose, rien d'écrit");
 
