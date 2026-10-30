@@ -252,17 +252,16 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 
 1. Prenez le ZIP de la branche `dev/0.9.0` :
 
-https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.0.zip
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.0.zip
 
-Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.0`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`. Après fusion de `dev/0.9.0` dans `main`, prenez à la place le ZIP de `main` (https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip) : le dossier s'appelle alors `hard-sf-rpg-main`.
-
-Dans la barre latérale, ouvrez les compendiums **Armes**, **Armures et vêtements** et **Équipement**.
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.0`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`. Après fusion de `dev/0.9.0` dans `main`, prenez à la place le ZIP de `main` (https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip) : le dossier s'appelle alors `hard-sf-rpg-main`.
+2. Dans la barre latérale, ouvrez les compendiums **Armes**, **Armures et vêtements** et **Équipement**.
    **Résultat attendu :** **Armes** contient la **Carabine** et le **Pistolet frangible**, et les armes du catalogue. Il n'y a pas de **Lanceur polyvalent 40 mm**. **Armures et vêtements** contient **Combinaison souple**, **Combinaison renforcée**, **Armure de pont**, et les armures du catalogue. **Buse de compensation à gaz froid**, **Dragonne magnétique d'arme**, **Essuie-visière chauffant et revêtement oléophobe**, **Manchons à garrot pneumatique automatique** et **Phares d'épaule grand angle et balise stroboscopique** sont dans **Équipement**.
-2. Sur un personnage, glissez **3 armes** et **2 armures**. Par exemple : **Carabine tactique de la Veille**, **Pistolet de bord 9 mm basse vélocité**, **Couteau d'arrimage, lame de sas en céramique**, **Combinaison renforcée de chantier (EVA lourde)** et **Combinaison souple « Peau de quart »**. Cochez **Équipé** sur chaque arme. Les armures le sont déjà.
+3. Sur un personnage, glissez **3 armes** et **2 armures**. Par exemple : **Carabine tactique de la Veille**, **Pistolet de bord 9 mm basse vélocité**, **Couteau d'arrimage, lame de sas en céramique**, **Combinaison renforcée de chantier (EVA lourde)** et **Combinaison souple « Peau de quart »**. Cochez **Équipé** sur chaque arme. Les armures le sont déjà.
    **Résultat attendu :** les cinq objets sont sur la fiche. La carabine tactique a des dégâts **10** et la portée **Moyenne**. Le pistolet de bord a des dégâts **6**. Le couteau a des dégâts **4**.
-3. Le personnage n'a aucun état actif. Laissez une seule arme équipée, et notez son nom. Lancez-la trois fois. Dans la fenêtre, mettez le champ **Modificateur** à **0** : il est prérempli avec une valeur suggérée. Difficulté **Normale**, zone **Aucune**, actions de visée **0**. La première fois, portée **Courte**. La deuxième, **Moyenne**. La troisième, **Longue**.
+4. Le personnage n'a aucun état actif. Laissez une seule arme équipée, et notez son nom. Lancez-la trois fois. Dans la fenêtre, mettez le champ **Modificateur** à **0** : il est prérempli avec une valeur suggérée. Difficulté **Normale**, zone **Aucune**, actions de visée **0**. La première fois, portée **Courte**. La deuxième, **Moyenne**. La troisième, **Longue**.
    **Résultat attendu :** **Courte** est déjà choisie à l'ouverture. Le total est **0**, puis **−10**, puis **−20**. La carte de discussion porte le nom de l'arme notée et la portée choisie.
-4. Ouvrez **Combinaison renforcée de chantier (EVA lourde)**.
+5. Ouvrez **Combinaison renforcée de chantier (EVA lourde)**.
    **Résultat attendu :** pénalité de manipulation **−10**, pénalité de perception **−10**. La description contient encore **[à compléter]** : le champ, lui, est à **−10**.
-5. Console (**F12**).
+6. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
