@@ -303,6 +303,7 @@
       "writeFailed": "L'écriture des dégâts a échoué. Rien n'est laissé à moitié : la coque est revenue en arrière si c'était possible.",
       "forgeRefused": "Cette carte de tir ne correspond pas au tir enregistré. Rien n'est appliqué.",
       "cannonSpent": "Le canon électromagnétique retire 1 munition.",
+      "skillMissing": "Compétence introuvable : {name}.",
       "cannonEmpty": "Plus de munitions de canon : le tir ne part pas.",
       "reactorDownFire": "Réacteur coupé : ce tir est refusé. Un missile reste permis.",
       "reactorDownMove": "Réacteur coupé : Esquiver et Changer de portée sont refusés.",
@@ -334,6 +335,7 @@
       "incidentNoModule": "Aucun module à dégrader.",
       "repair": {
         "bricolage": "Bricolage : le meneur décide.",
+        "capped": "Déjà au plafond : rien à réparer, aucune Pièce n'est dépensée.",
         "patch": "Réparation de fortune",
         "patchNoCombat": "Réparation de fortune : il faut un combat en cours.",
         "fix": "Réparer",

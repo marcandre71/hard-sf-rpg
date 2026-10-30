@@ -16,12 +16,16 @@ import {
   FIELD_REPAIR_VALUE,
   addHeat,
   clampHeat,
+  combatIdForShip,
   coolingDrop,
   noSpareParts,
   reactorIsDown,
   repairGain,
-  repairedValue
+  repairedValue,
+  shouldCoolRound,
+  uniqueShipIds
 } from "./reactor.mjs";
+import { SHIP_POST_IDS, keepGmChecks, requesterIsGm } from "./hull.mjs";
 import { readHull, writeHull } from "./strike.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
@@ -35,6 +39,25 @@ const SYSTEM_ID = "sol-nouvelle-ere";
 export function registerHeatPlay() {
   Hooks.on("renderChatMessageHTML", onHeatCard);
   Hooks.on("deleteCombat", combat => { void restoreFieldRepairs(combat); });
+  // Le hook reçoit un id. On le relit. Le modèle, lui, reçoit l'objet User.
+  // Les deux refusent à un joueur de décocher. Le MJ actif voit le même diff.
+  // https://foundryvtt.com/api/v14/functions/hookEvents.preUpdateDocument.html
+  Hooks.on("preUpdateActor", (actor, changes, _options, userId) => {
+    if ( actor?.type !== "ship" || !changes?.system ) return;
+    const user = typeof userId === "object" && userId ? userId : game.users?.get?.(userId);
+    if ( requesterIsGm(user) ) return;
+    keepGmChecks(changes.system, actor.system);
+  });
+  // Saisie manuelle à 10 : la carte part. changeHeat pose solHeatFromCode
+  // pour ne pas la poster deux fois.
+  // https://foundryvtt.com/api/v14/functions/hookEvents.updateDocument.html
+  Hooks.on("updateActor", (actor, changes, options) => {
+    if ( game.user?.id !== game.users?.activeGM?.id ) return;
+    if ( actor?.type !== "ship" || options?.solHeatFromCode === true ) return;
+    const value = changes?.system?.heat?.value;
+    if ( value !== 10 ) return;
+    void postHeatCard(actor);
+  });
 }
 
 /**
@@ -71,7 +94,7 @@ export function reactorModuleDown(ship) {
 export async function changeHeat(ship, delta) {
   const before = heatOf(ship);
   const after = addHeat(before, delta);
-  if ( after !== before ) await ship.update({ "system.heat.value": after });
+  if ( after !== before ) await ship.update({ "system.heat.value": after }, { solHeatFromCode: true });
   if ( before < 10 && after === 10 ) await postHeatCard(ship);
   return after;
 }
@@ -130,10 +153,17 @@ export async function postIncident(ship) {
  * @returns {Promise<void>}
  */
 export async function coolCombat(combat) {
-  const rows = combat?.combatants ?? [];
-  for ( const combatant of rows ) {
+  if ( !combat || !shouldCoolRound(combat.getFlag?.(SYSTEM_ID, "heatRound"), combat.round) ) return;
+  const round = Math.trunc(Number(combat.round));
+  await combat.setFlag(SYSTEM_ID, "heatRound", round);
+  const wanted = new Set(uniqueShipIds([...(combat.combatants ?? [])].map(row => ({
+    uuid: row.actor?.uuid
+  }))));
+  const seen = new Set();
+  for ( const combatant of combat.combatants ?? [] ) {
     const ship = combatant.actor;
-    if ( !ship || ship.type !== "ship" ) continue;
+    if ( !ship || ship.type !== "ship" || !wanted.has(ship.uuid) || seen.has(ship.uuid) ) continue;
+    seen.add(ship.uuid);
     await coolOne(ship);
   }
 }
@@ -148,7 +178,7 @@ export async function markFieldRepair(ship, moduleId) {
   if ( !item ) return;
   const parts = Number(ship.system?.spareParts);
   await item.update({ "system.integrity.value": FIELD_REPAIR_VALUE });
-  const combatId = game.combat?.id;
+  const combatId = combatIdForShip(listedCombats(), ship.uuid);
   if ( !combatId ) return;
   await item.setFlag(SYSTEM_ID, "fieldRepair", combatId);
   if ( Number.isFinite(parts) ) await ship.update({ "system.spareParts": Math.max(0, Math.trunc(parts) - 1) });
@@ -167,11 +197,7 @@ export async function markFieldRepair(ship, moduleId) {
  */
 export async function askRepair(ship) {
   const escape = foundry.utils.escapeHTML;
-  const people = [{ id: "npc", label: game.i18n.localize("SOL.Ship.npcCrew.label") }];
-  for ( const actor of game.actors ?? [] ) {
-    if ( actor.type !== "character" && actor.type !== "npc" ) continue;
-    people.push({ id: actor.uuid, label: actor.name ?? actor.id });
-  }
+  const people = repairPeople(ship);
   const targets = repairTargets(ship);
   if ( !targets.length ) return null;
   const personOptions = people.map(entry => `<option value="${escape(entry.id)}">${escape(entry.label)}</option>`).join("");
@@ -250,6 +276,7 @@ export async function commitRepair(ship, picked, outcome) {
     if ( !item ) return;
     value = repairedValue(item.system.integrity.value, item.system.integrity.max, gain, {});
     await item.update({ "system.integrity.value": value });
+    if ( value > FIELD_REPAIR_VALUE ) await item.unsetFlag(SYSTEM_ID, "fieldRepair");
     targetLabel = item.name ?? targetLabel;
   } else if ( picked.kind === "plate" ) {
     const section = ship.system.sections?.[picked.id];
@@ -276,6 +303,72 @@ export async function commitRepair(ship, picked, outcome) {
  * @param {Actor} ship
  * @returns {Promise<void>}
  */
+/**
+ * Critique réacteur, avec de vrais dés.
+ * L'écriture ratée ne poste pas le critique comme s'il avait pris.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §6
+ *
+ * @param {Actor} ship
+ * @returns {Promise<{ shutdown: boolean, wrote: boolean }>}
+ */
+export async function rollReactorCrit(ship) {
+  const faceRoll = await oneDie("1d6");
+  const face = shown(faceRoll);
+  /** @type {Roll[]} */
+  const rolls = [faceRoll];
+  let shock = 0;
+  if ( face === 5 ) {
+    const shockRoll = await oneDie("1d10");
+    rolls.push(shockRoll);
+    shock = shown(shockRoll);
+  }
+  /** @type {Roll[]} */
+  const pool6 = [];
+  /** @type {Roll[]} */
+  const pool10 = [];
+  if ( face === 5 ) {
+    for ( let index = 0; index < 8; index += 1 ) pool6.push(await oneDie("1d6"));
+    for ( let index = 0; index < 4; index += 1 ) pool10.push(await oneDie("1d10"));
+  }
+  let sixAt = 0;
+  let tenAt = 0;
+  const before = readHull(ship);
+  const resolved = resolveReactorCrit(before, face, shock, {
+    d6() {
+      const roll = pool6[sixAt++];
+      if ( roll ) rolls.push(roll);
+      return roll ? shown(roll) : 1;
+    },
+    d10() {
+      const roll = pool10[tenAt++];
+      if ( roll ) rolls.push(roll);
+      return roll ? shown(roll) : 1;
+    },
+    pick(count) {
+      const size = Math.trunc(Number(count));
+      if ( !Number.isFinite(size) || size <= 1 ) return 0;
+      return Math.floor(Math.random() * size);
+    }
+  });
+  const wrote = await writeHull(ship, before, resolved.state);
+  if ( wrote === false ) return { shutdown: false, wrote: false };
+  if ( resolved.shutdown ) await ship.update({ "system.reactorShutdown": true });
+  await postCrit(ship, resolved.logs, rolls);
+  return { shutdown: resolved.shutdown === true, wrote: true };
+}
+
+/**
+ * « Laisser tourner » ne programme rien de plus.
+ * Au changement de round, si la chaleur est à 10 et le réacteur allumé,
+ * le critique tombe quand même. Ne pas répondre à la carte a le même effet.
+ * Le bouton ne fait que résoudre la carte et l'annoncer.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §6
+ *
+ * @param {Actor} ship
+ * @returns {Promise<void>}
+ */
 async function postHeatCard(ship) {
   const name = foundry.utils.escapeHTML(ship.name ?? "");
   await ChatMessage.create({
@@ -292,46 +385,10 @@ async function postHeatCard(ship) {
  * @returns {Promise<void>}
  */
 async function coolOne(ship) {
-  let heat = heatOf(ship);
   const folded = ship.system?.radiatorsFolded === true;
   const down = shipReactorDown(ship);
   const running = ship.system?.reactorShutdown !== true && !reactorModuleDown(ship);
-  if ( heat === 10 && running ) {
-    const faceRoll = await oneDie("1d6");
-    const face = shown(faceRoll);
-    /** @type {Roll[]} */
-    const rolls = [faceRoll];
-    let shock = 0;
-    if ( face === 5 ) {
-      const shockRoll = await oneDie("1d10");
-      rolls.push(shockRoll);
-      shock = shown(shockRoll);
-    }
-    const before = readHull(ship);
-    const stern = Number(before.sections.stern?.integrity) || 0;
-    /** @type {Roll[]} */
-    const extra = [];
-    if ( face === 5 && stern > 0 && shock >= stern ) {
-      for ( let index = 0; index < 6; index += 1 ) extra.push(await oneDie("1d6"));
-    }
-    let extraAt = 0;
-    const resolved = resolveReactorCrit(before, face, shock, {
-      d6() {
-        const roll = extra[extraAt++];
-        if ( roll ) rolls.push(roll);
-        return roll ? shown(roll) : 1;
-      },
-      d10() {
-        return 1;
-      },
-      pick() {
-        return 0;
-      }
-    });
-    await writeHull(ship, before, resolved.state);
-    if ( resolved.shutdown ) await ship.update({ "system.reactorShutdown": true });
-    await postCrit(ship, resolved.logs, rolls);
-  }
+  if ( heatOf(ship) === 10 && running ) await rollReactorCrit(ship);
   const conditions = moduleRows(ship)
     .filter(entry => entry.category === "radiators")
     .map(entry => entry.condition);
@@ -373,6 +430,12 @@ async function restoreFieldRepairs(combat) {
 function onHeatCard(message, html) {
   const type = message.getFlag(SYSTEM_ID, "type");
   if ( type !== "heatChoice" && type !== "pilotIncident" ) return;
+  if ( message.getFlag(SYSTEM_ID, "choiceResolved") === true ) {
+    for ( const button of html.querySelectorAll("[data-action^=sol-heat], [data-action^=sol-incident]") ) {
+      button.disabled = true;
+    }
+    return;
+  }
   const ship = shipFromFlag(message);
   const allowed = viewerEngineer(ship, type === "pilotIncident");
   for ( const button of html.querySelectorAll("[data-action^=sol-heat], [data-action^=sol-incident]") ) {
@@ -394,9 +457,32 @@ function onHeatCard(message, html) {
  * @param {HTMLButtonElement} button
  * @returns {Promise<void>}
  */
+/**
+ * @param {ChatMessage} message
+ * @param {string} action
+ * @returns {Promise<void>}
+ */
+export async function finishHeatChoice(message, action) {
+  return onHeatClick(message, { dataset: { action } });
+}
+
 async function onHeatClick(message, button) {
+  if ( message.getFlag(SYSTEM_ID, "choiceResolved") === true ) return;
   const ship = shipFromFlag(message);
   if ( !ship ) return;
+  const active = game.user?.id === game.users?.activeGM?.id;
+  if ( !active ) {
+    const { relayToGm } = await import("./actions.mjs");
+    await relayToGm({
+      type: "heatChoice",
+      shipUuid: ship.uuid,
+      messageId: message.id,
+      action: button.dataset.action,
+      userId: game.user.id
+    });
+    return;
+  }
+  await message.setFlag(SYSTEM_ID, "choiceResolved", true);
   const action = button.dataset.action;
   const name = foundry.utils.escapeHTML(ship.name ?? "");
   if ( action === "sol-heat-cut" ) {
@@ -418,12 +504,16 @@ async function onHeatClick(message, button) {
   }
   if ( action === "sol-incident-module" ) {
     const moduleId = await pickModule(ship);
-    if ( !moduleId ) return;
+    if ( !moduleId ) {
+      await message.unsetFlag(SYSTEM_ID, "choiceResolved");
+      return;
+    }
     const item = ship.items.get(moduleId);
     if ( !item ) return;
     const { incidentModuleValue } = await import("./damage.mjs");
     const next = incidentModuleValue(item.system.integrity.value, item.system.integrity.max);
     if ( !next ) {
+      await message.unsetFlag(SYSTEM_ID, "choiceResolved");
       ui.notifications.info(game.i18n.localize("SOL.Ship.incidentNoModule"));
       return;
     }
@@ -587,6 +677,63 @@ function moduleRows(ship) {
     });
   }
   return rows;
+}
+
+/**
+ * @returns {Array<{ id: string, combatants: Array<{ actorUuid: string }> }>}
+ */
+function listedCombats() {
+  /** @type {Array<{ id: string, combatants: Array<{ actorUuid: string }> }>} */
+  const list = [];
+  for ( const combat of game.combats ?? [] ) {
+    /** @type {Array<{ actorUuid: string }>} */
+    const combatants = [];
+    for ( const row of combat.combatants ?? [] ) {
+      combatants.push({ actorUuid: row.actor?.uuid ?? "" });
+    }
+    list.push({ id: combat.id, combatants });
+  }
+  return list;
+}
+
+/**
+ * Équipage du vaisseau, acteurs possédés, et tous les personnages si MJ.
+ *
+ * @param {Actor} ship
+ * @returns {{ id: string, label: string }[]}
+ */
+function repairPeople(ship) {
+  /** @type {{ id: string, label: string }[]} */
+  const people = [{ id: "npc", label: game.i18n.localize("SOL.Ship.npcCrew.label") }];
+  const seen = new Set(["npc"]);
+  const add = (id, label) => {
+    if ( !id || seen.has(id) ) return;
+    seen.add(id);
+    people.push({ id, label: label || id });
+  };
+  for ( const postId of SHIP_POST_IDS ) {
+    const uuid = ship.system?._source?.posts?.[postId]?.actorUuid
+      ?? ship.system?.posts?.[postId]?.actorUuid
+      ?? "";
+    if ( typeof uuid === "string" && uuid ) add(uuid, uuid);
+  }
+  const gm = game.user?.isGM === true;
+  for ( const actor of game.actors ?? [] ) {
+    if ( actor.type !== "character" && actor.type !== "npc" ) continue;
+    if ( gm && actor.type === "character" ) add(actor.uuid, actor.name ?? actor.id);
+    else if ( actor.isOwner === true ) add(actor.uuid, actor.name ?? actor.id);
+  }
+  for ( const person of people ) {
+    if ( person.id === "npc" ) continue;
+    if ( person.label && person.label !== person.id ) continue;
+    try {
+      const doc = foundry.utils.fromUuidSync(person.id);
+      if ( doc?.name ) person.label = doc.name;
+    } catch {
+      // L'uuid reste le libellé.
+    }
+  }
+  return people;
 }
 
 /**

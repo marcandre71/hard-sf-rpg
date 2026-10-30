@@ -178,6 +178,8 @@ export function shotAftermath(input) {
     if ( input.success !== true && pilotIncident(input.de) ) plan.incident = true;
   }
   if ( input?.laser === true ) {
+    // Décision Marc 30/10/2026 : un tir supplémentaire ce tour.
+    // Ce tir-là ne chauffe pas. Les autres lasers du tour chauffent.
     const free = Math.trunc(Number(input.coolLaser));
     if ( Number.isFinite(free) && free > 0 ) plan.coolLaser = true;
     else {
@@ -191,18 +193,107 @@ export function shotAftermath(input) {
 }
 
 /**
- * Canon électromagnétique : le nom contient « canon ».
+ * Laser, canon, ou rien.
+ * Un champ explicite (`kind` ou `weaponClass`) gagne.
+ * Sinon le nom : « laser » est lu avant « canon », donc un canon laser
+ * est un laser. Pas d'autre champ sur le module aujourd'hui.
  * // Décision Marc 30/10/2026
  * // Réf. Vaisseaux v0.1 §6
  *
  * // Décision Marc 30/10/2026 : un autre nom d'arme à énergie,
  * qui n'est ni un laser ni un missile, n'est pas coupé avec le réacteur.
  *
- * @param {{ name?: string }|null|undefined} weapon
+ * @param {{ name?: string, kind?: string, weaponClass?: string }|null|undefined} weapon
+ * @returns {"laser"|"cannon"|""}
+ */
+export function weaponClass(weapon) {
+  const explicit = weapon?.kind ?? weapon?.weaponClass;
+  if ( explicit === "laser" || explicit === "cannon" ) return explicit;
+  const name = typeof weapon?.name === "string" ? weapon.name : "";
+  if ( /laser/i.test(name) ) return "laser";
+  if ( /canon/i.test(name) ) return "cannon";
+  return "";
+}
+
+/**
+ * @param {{ name?: string, kind?: string, weaponClass?: string }|null|undefined} weapon
  * @returns {boolean}
  */
 export function isCannonWeapon(weapon) {
-  return typeof weapon?.name === "string" && /canon/i.test(weapon.name);
+  return weaponClass(weapon) === "cannon";
+}
+
+/**
+ * Refroidir seulement si le round avance au-delà du dernier déjà traité.
+ * Reculer puis revenir sur ce round ne refait pas le refroidissement.
+ * // Décision Marc 30/10/2026
+ *
+ * @param {unknown} lastRound
+ * @param {unknown} round
+ * @returns {boolean}
+ */
+export function shouldCoolRound(lastRound, round) {
+  const current = Math.trunc(Number(round));
+  if ( !Number.isFinite(current) ) return false;
+  const previous = Number(lastRound);
+  if ( !Number.isFinite(previous) ) return true;
+  return current > previous;
+}
+
+/**
+ * Un acteur lié à deux jetons ne refroidit qu'une fois.
+ *
+ * @param {Array<{ uuid?: string, actorUuid?: string, actor?: { uuid?: string } }>|null|undefined} rows
+ * @returns {string[]}
+ */
+export function uniqueShipIds(rows) {
+  /** @type {string[]} */
+  const ids = [];
+  const seen = new Set();
+  for ( const row of rows ?? [] ) {
+    const uuid = row?.actor?.uuid || row?.uuid || row?.actorUuid || "";
+    if ( !uuid || seen.has(uuid) ) continue;
+    seen.add(uuid);
+    ids.push(uuid);
+  }
+  return ids;
+}
+
+/**
+ * Combat qui contient ce vaisseau. Pas le combat seulement affiché.
+ *
+ * @param {Array<{ id?: string, combatants?: Array<{ actor?: { uuid?: string }, actorUuid?: string }> }>|null|undefined} combats
+ * @param {unknown} shipUuid
+ * @returns {string}
+ */
+export function combatIdForShip(combats, shipUuid) {
+  if ( typeof shipUuid !== "string" || !shipUuid ) return "";
+  for ( const combat of combats ?? [] ) {
+    const rows = combat?.combatants ?? [];
+    const hit = rows.some(row => (row?.actor?.uuid || row?.actorUuid || "") === shipUuid);
+    if ( hit && typeof combat?.id === "string" ) return combat.id;
+  }
+  return "";
+}
+
+/**
+ * Déjà au plafond : maximum, ou moitié d'une plaque hors chantier.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §7
+ *
+ * @param {unknown} current
+ * @param {unknown} max
+ * @param {{ plate?: boolean, yard?: boolean }} [options]
+ * @returns {boolean}
+ */
+export function repairAlreadyCapped(current, max, options = {}) {
+  const ceiling = Math.trunc(Number(max));
+  const cap = Number.isFinite(ceiling) && ceiling > 0 ? ceiling : 0;
+  let limit = cap;
+  if ( options.plate === true && options.yard !== true ) limit = Math.floor(cap / 2);
+  const present = Math.trunc(Number(current));
+  const base = Number.isFinite(present) && present > 0 ? present : 0;
+  return base >= limit;
 }
 
 /**

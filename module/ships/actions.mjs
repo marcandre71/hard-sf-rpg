@@ -60,6 +60,7 @@ import {
   isLaserWeapon,
   isMissileWeapon,
   isWreck,
+  boundDr,
   missileAmmoSpent,
   missileArrivalRound,
   sensorsAreOut
@@ -69,6 +70,7 @@ import {
   changeHeat,
   commitRepair,
   coolCombat,
+  rollReactorCrit,
   heatOf,
   markFieldRepair,
   postBricolage,
@@ -79,8 +81,10 @@ import {
   spendCannonAmmo
 } from "./heat-play.mjs";
 import {
+  clampHeat,
   isCannonWeapon,
   noSpareParts,
+  repairAlreadyCapped,
   pushHeatGain,
   pushPilotBonus,
   pushRefusal,
@@ -422,7 +426,12 @@ async function rollSingle(ship, postId, action, options = {}) {
   }
   if ( options.skillName ) {
     const wanted = options.skillName;
-    skill = crew.skills.find(entry => entry.name === wanted || entry.name.startsWith(wanted)) ?? skill;
+    const found = crew.skills.find(entry => entry.name === wanted || entry.name.startsWith(wanted));
+    if ( !found ) {
+      ui.notifications.warn(game.i18n.format("SOL.Ship.skillMissing", { name: wanted }));
+      return null;
+    }
+    skill = found;
   } else if ( crew.skills.length > 1 ) {
     const picked = await choose(game.i18n.localize("SOL.Space.pickSkill"), crew.skills.map((entry, index) => ({
       id: String(index),
@@ -593,6 +602,14 @@ async function onSpaceRelay(message) {
     return;
   }
   if ( game.user?.isActiveGM !== true ) return;
+  if ( message.type === "heatChoice" ) {
+    const card = game.messages?.get?.(message.messageId);
+    if ( card ) {
+      const { finishHeatChoice } = await import("./heat-play.mjs");
+      await finishHeatChoice(card, message.action);
+    }
+    return;
+  }
   if ( message.type === "reactor" ) {
     await onReactorRelay(message);
     return;
@@ -670,7 +687,9 @@ function modifierFor(ship, postId, aim, weaponCondition = "", token = null, extr
     weaponCondition,
     twisted: ship?.system?.twisted === true,
     sensorsOut: sensorsOutOf(ship),
-    heat: heatOf(ship)
+    // Réparer hors combat ne prend pas le −10 de chaleur.
+    // // À confirmer par Marc
+    heat: extra.ignoreHeat === true ? 0 : heatOf(ship)
   });
 }
 
@@ -1323,8 +1342,9 @@ async function pushEngines(ship, token = null) {
       tokenId: tokenIdOf(ship, token),
       postId: "engineer",
       userId: game.user.id,
-      heat: gain.heat,
-      crit: gain.crit === true,
+      success: result.success === true,
+      de: result.de,
+      critical: result.critical,
       choice,
       dr: result.dr
     });
@@ -1344,10 +1364,7 @@ async function pushEngines(ship, token = null) {
  */
 async function applyPush(ship, token, gain, choice, dr) {
   await changeHeat(ship, gain.heat);
-  if ( gain.crit ) {
-    const face = await oneReactorFace(ship);
-    if ( face?.shutdown ) await ship.update({ "system.reactorShutdown": true });
-  }
+  if ( gain.crit ) await rollReactorCrit(ship);
   const name = foundry.utils.escapeHTML(ship.name ?? "");
   if ( choice === "pilot" ) {
     const bonus = pushPilotBonus(dr);
@@ -1365,54 +1382,29 @@ async function applyPush(ship, token, gain, choice, dr) {
 }
 
 /**
- * Le critique de Pousser est le même tableau que celui du round.
- * // Décision Marc 30/10/2026
- *
  * @param {Actor} ship
- * @returns {Promise<{ shutdown: boolean }|null>}
+ * @param {{ kind?: string, id?: string }} picked
+ * @returns {{ current: unknown, max: unknown }}
  */
-async function oneReactorFace(ship) {
-  const { resolveReactorCrit } = await import("./damage.mjs");
-  const { readHull, writeHull } = await import("./strike.mjs");
-  const faceRoll = new Roll("1d6");
-  await faceRoll.evaluate();
-  const face = Math.trunc(Number(faceRoll.total)) || 1;
-  let shock = 0;
-  /** @type {Roll[]} */
-  const rolls = [faceRoll];
-  if ( face === 5 ) {
-    const shockRoll = new Roll("1d10");
-    await shockRoll.evaluate();
-    shock = Math.trunc(Number(shockRoll.total)) || 1;
-    rolls.push(shockRoll);
-  }
-  const before = readHull(ship);
-  const stern = Number(before.sections.stern?.integrity) || 0;
-  /** @type {number[]} */
-  const sixes = [];
-  if ( face === 5 && stern > 0 && shock >= stern ) {
-    for ( let index = 0; index < 6; index += 1 ) {
-      const extra = new Roll("1d6");
-      await extra.evaluate();
-      rolls.push(extra);
-      sixes.push(Math.trunc(Number(extra.total)) || 1);
+function shipHasCombat(ship) {
+  const uuid = ship?.uuid;
+  if ( !uuid ) return false;
+  for ( const combat of game.combats ?? [] ) {
+    for ( const row of combat.combatants ?? [] ) {
+      if ( row.actor?.uuid === uuid ) return true;
     }
   }
-  let sixAt = 0;
-  const resolved = resolveReactorCrit(before, face, shock, {
-    d6: () => sixes[sixAt++] ?? 1,
-    d10: () => 1,
-    pick: () => 0
-  });
-  await writeHull(ship, before, resolved.state);
-  const items = resolved.logs.map(entry => `<li>${game.i18n.format(entry.key, entry.data ?? {})}</li>`).join("");
-  await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor: ship }),
-    content: `<article class="sol-nouvelle-ere"><ul>${items}</ul></article>`,
-    rolls,
-    sound: CONFIG.sounds.dice
-  });
-  return { shutdown: resolved.shutdown };
+  return false;
+}
+
+function repairNumbers(ship, picked) {
+  if ( picked?.kind === "module" ) {
+    const item = ship.items?.get(picked.id);
+    return { current: item?.system?.integrity?.value, max: item?.system?.integrity?.max };
+  }
+  const section = ship.system?.sections?.[picked?.id];
+  if ( picked?.kind === "plate" ) return { current: section?.armor?.value, max: section?.armor?.max };
+  return { current: section?.integrity?.value, max: section?.integrity?.max };
 }
 
 /**
@@ -1421,7 +1413,7 @@ async function oneReactorFace(ship) {
  * @returns {Promise<null|object>}
  */
 async function fieldRepair(ship, token = null) {
-  if ( !game.combat ) {
+  if ( !shipHasCombat(ship) ) {
     ui.notifications.warn(game.i18n.localize("SOL.Ship.repair.patchNoCombat"));
     return null;
   }
@@ -1446,6 +1438,8 @@ async function fieldRepair(ship, token = null) {
     store: false,
     settle: false,
     skillName: "Mécanique",
+    // Jet de poste : le −10 de chaleur à 7 s'ajoute au −20.
+    // // À confirmer par Marc
     extraModifier: FIELD_REPAIR_PENALTY
   });
   if ( !result ) return null;
@@ -1485,13 +1479,19 @@ async function repairOutside(ship, token = null) {
   }
   const picked = await askRepair(ship);
   if ( !picked ) return null;
+  const numbers = repairNumbers(ship, picked);
+  if ( repairAlreadyCapped(numbers.current, numbers.max, { plate: picked.kind === "plate", yard: picked.yard === true }) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.repair.capped"));
+    return null;
+  }
   const { performRoll } = await import("../dice/chat.mjs");
   const outcome = await performRoll({
     actor: picked.actor,
     label: picked.label,
     score: picked.score,
     type: "skill",
-    suggested: modifierFor(ship, "engineer", "", "", token),
+    // // À confirmer par Marc : hors combat, pas le malus de chaleur.
+    suggested: modifierFor(ship, "engineer", "", "", token, { ignoreHeat: true }),
     shipPost: true
   });
   if ( !outcome ) return null;
@@ -1573,19 +1573,39 @@ async function onReactorRelay(message) {
     return;
   }
   if ( message.kind === "settle" && message.plan ) {
-    await applySettle(ship, message.plan, message.weaponId ?? "", null);
+    const heat = clampHeat(message.plan.heat);
+    await applySettle(ship, { ...message.plan, heat }, message.weaponId ?? "", null);
     return;
   }
   if ( message.kind === "push" ) {
-    await applyPush(ship, null, { heat: Number(message.heat) || 0, crit: message.crit === true }, message.choice ?? "", message.dr);
+    if ( pushRefusal(heatOf(ship), shipReactorDown(ship)) ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Ship.pushRefusedHeat"));
+      return;
+    }
+    const dr = boundDr(message.dr);
+    const de = boundDr(message.de);
+    const gain = pushHeatGain({
+      success: message.success === true,
+      de,
+      critical: message.critical === "failure" ? "failure" : null
+    });
+    const choice = message.choice === "pilot" || message.choice === "thrust" || message.choice === "laser"
+      ? message.choice
+      : "";
+    await applyPush(ship, null, gain, choice, dr);
     return;
   }
   if ( message.kind === "patch" && message.moduleId ) {
+    const item = ship.items?.get(message.moduleId);
+    if ( !item || item.system?.condition !== "out" ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Ship.incidentNoModule"));
+      return;
+    }
     await markFieldRepair(ship, message.moduleId);
     return;
   }
   if ( message.kind === "repair" && message.picked ) {
-    await commitRepair(ship, message.picked, { success: message.success === true, dr: message.dr });
+    await commitRepair(ship, message.picked, { success: message.success === true, dr: boundDr(message.dr) });
     return;
   }
   if ( message.kind === "restart" ) await applyRestart(ship, message.success === true);

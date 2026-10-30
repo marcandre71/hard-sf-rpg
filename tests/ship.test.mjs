@@ -21,8 +21,10 @@ import {
   displayedArmor,
   effectiveClampCurrent,
   followedRadiatorIntegrity,
+  keepGmChecks,
   moduleCondition,
   normalizeAmmoEdit,
+  requesterIsGm,
   parsedNumber,
   sectionHasPlate
 } from "../module/ships/hull.mjs";
@@ -257,6 +259,15 @@ const clampedAmmo = normalizeAmmoEdit({ value: 2, max: 4 }, "value", 10);
 check(clampedAmmo.value === 4 && clampedAmmo.max === 4, "une valeur au-dessus du maximum est ramenée");
 const loweredMax = normalizeAmmoEdit({ value: 4, max: 4 }, "max", 2);
 check(loweredMax.value === 2 && loweredMax.max === 2, "baisser le maximum ramène la valeur");
+check(requesterIsGm({ isGM: true }) === true && requesterIsGm({ isGM: false }) === false && requesterIsGm("UserId") === false, "le garde-fou lit l'objet User, pas un id");
+const playerSheet = { twisted: false, sections: { stern: { destroyed: false } } };
+keepGmChecks(playerSheet, { twisted: true, sections: { stern: { destroyed: true } } });
+check(!("twisted" in playerSheet) && !("destroyed" in playerSheet.sections.stern), "un joueur ne décoche pas Structure tordue ni Section détruite");
+const gmSheet = { twisted: false, sections: { bow: { destroyed: false } } };
+check(requesterIsGm({ isGM: true }) === true, "le MJ est reconnu");
+if ( requesterIsGm({ isGM: true }) ) {
+  check(gmSheet.twisted === false && gmSheet.sections.bow.destroyed === false, "le MJ peut décocher");
+}
 
 const typeIds = SHIP_TYPE_GROUPS.flatMap(group => group.types.map(type => type.id));
 check(new Set(typeIds).size === typeIds.length, "types de vaisseau uniques");

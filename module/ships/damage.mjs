@@ -8,6 +8,7 @@
  */
 
 import { compareOpposed } from "./combat.mjs";
+import { weaponClass } from "./reactor.mjs";
 
 /** Dégâts d'un missile à l'impact : 20 + DR du lancement. Réf. Vaisseaux v0.1 §4. */
 export const MISSILE_DAMAGE = 20;
@@ -331,8 +332,11 @@ function moduleCrit(state, section, module, logs, dice, moduleCritted, hasPlate)
  * @param {Set<string>} moduleCritted
  * @returns {void}
  */
-function sectionCrit(state, sectionId, section, logs, dice, moduleCritted) {
+function sectionCrit(state, sectionId, section, logs, dice, moduleCritted, options = {}) {
   if ( section._critted ) return;
+  // Décision Marc 30/10/2026 : le critique réacteur 5 ne relance pas
+  // la table de module. Les modules passent quand même hors service.
+  const bare = options.noModuleCrit === true;
   section._critted = true;
   const roll = face(dice.d6(), 6);
   if ( roll <= 2 ) {
@@ -345,7 +349,7 @@ function sectionCrit(state, sectionId, section, logs, dice, moduleCritted) {
       if ( entry.section !== sectionId ) continue;
       if ( !(Number(entry.integrity) > 0) ) continue;
       entry.integrity = 0;
-      moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
+      if ( !bare ) moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
     }
     return;
   }
@@ -362,7 +366,7 @@ function sectionCrit(state, sectionId, section, logs, dice, moduleCritted) {
     if ( entry.section !== sectionId ) continue;
     if ( !(Number(entry.integrity) > 0) ) continue;
     entry.integrity = 0;
-    moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
+    if ( !bare ) moduleCrit(state, section, entry, logs, dice, moduleCritted, sectionId !== "radiators");
   }
 }
 
@@ -409,7 +413,7 @@ export function resolveReactorCrit(state, die, shock, dice) {
       const before = pool(section.integrity) ?? 0;
       section.integrity = Math.max(0, before - spent);
       if ( before > 0 && section.integrity === 0 ) {
-        sectionCrit(next, "stern", section, logs, dice, new Set());
+        sectionCrit(next, "stern", section, logs, dice, new Set(), { noModuleCrit: true });
       }
     }
     return { state: next, logs, shutdown: false };
@@ -493,7 +497,7 @@ export function isMissileWeapon(weapon) {
  * @returns {boolean}
  */
 export function isLaserWeapon(weapon) {
-  return typeof weapon?.name === "string" && /laser/i.test(weapon.name);
+  return weaponClass(weapon) === "laser";
 }
 
 /**

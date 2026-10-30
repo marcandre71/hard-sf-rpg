@@ -17,7 +17,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.TypeDataModel.html
  */
 import { SOL } from "../config.mjs";
-import { clampShipDiff, departureMass, effectiveClampCurrent } from "../ships/hull.mjs";
+import { clampShipDiff, departureMass, effectiveClampCurrent, keepGmChecks, requesterIsGm } from "../ships/hull.mjs";
 import { migrateShipSource, roundPresentDeltaV } from "../ships/migrate.mjs";
 import { boolField, htmlField, numberField, SchemaField, stringField, valueMaxField } from "./fields.mjs";
 
@@ -223,30 +223,12 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       // migrateData arrondit une source déjà en base. Ici c'est le diff saisi.
       roundPresentDeltaV(changes.system);
       clampShipDiff(changes.system, current);
-      // Seul le MJ décoche. // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §7.
-      const gm = Boolean(user) && globalThis.game?.users?.get?.(user)?.isGM === true;
-      if ( user && !gm ) keepGmChecks(changes.system, this);
+      // Seul le MJ décoche. `user` est l'objet User (doc v14), pas un id.
+      // Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §7.
+      // @see https://foundryvtt.com/api/v14/classes/foundry.abstract.DataModel.html#_preUpdate
+      if ( user && !requesterIsGm(user) ) keepGmChecks(changes.system, this);
     }
     if ( typeof super._preUpdate === "function" ) return super._preUpdate(changes, options, user);
-  }
-}
-
-/**
- * Un joueur ne décoche pas Section détruite ni Structure tordue.
- * // Décision Marc 30/10/2026
- * // Réf. Vaisseaux v0.1 §7
- *
- * @param {object} system
- * @param {object} model
- * @returns {void}
- */
-function keepGmChecks(system, model) {
-  if ( system.twisted === false && model.twisted === true ) delete system.twisted;
-  const sections = system.sections;
-  if ( !sections || typeof sections !== "object" ) return;
-  for ( const id of ["bow", "port", "starboard", "stern"] ) {
-    const row = sections[id];
-    if ( row?.destroyed === false && model.sections?.[id]?.destroyed === true ) delete row.destroyed;
   }
 }
 

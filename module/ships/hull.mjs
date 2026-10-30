@@ -103,6 +103,41 @@ export function sectionHasPlate(sectionId) {
 }
 
 /**
+ * L'argument de `_preUpdate` est l'utilisateur, pas son identifiant.
+ * `game.users.get(user)` sur un objet User ne le retrouve pas.
+ * // Décision Marc 30/10/2026
+ * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.DataModel.html#_preUpdate
+ *
+ * @param {unknown} user
+ * @returns {boolean}
+ */
+export function requesterIsGm(user) {
+  return Boolean(user) && typeof user === "object" && /** @type {{ isGM?: boolean }} */ (user).isGM === true;
+}
+
+/**
+ * Seul le MJ décoche Section détruite et Structure tordue.
+ * Le diff est modifié. Cocher reste permis.
+ * // Décision Marc 30/10/2026
+ * // Réf. Vaisseaux v0.1 §7
+ *
+ * @param {object|null|undefined} system
+ * @param {{ twisted?: boolean, sections?: Record<string, { destroyed?: boolean }> }|null|undefined} current
+ * @returns {object|null|undefined}
+ */
+export function keepGmChecks(system, current) {
+  if ( !system || typeof system !== "object" ) return system;
+  if ( system.twisted === false && current?.twisted === true ) delete system.twisted;
+  const sections = system.sections;
+  if ( !sections || typeof sections !== "object" ) return system;
+  for ( const id of ["bow", "port", "starboard", "stern"] ) {
+    const row = sections[id];
+    if ( row?.destroyed === false && current?.sections?.[id]?.destroyed === true ) delete row.destroyed;
+  }
+  return system;
+}
+
+/**
  * Points ajoutés par les modules « blindage » de la section.
  *
  * Un module hors service n'ajoute rien : à 0, il ne fonctionne plus

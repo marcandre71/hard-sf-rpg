@@ -329,7 +329,10 @@ async function applyShipDamage(message, button) {
     }, dice);
     await markStrikeApplied(message);
     const wrote = await writeHull(target, before, resolved.state);
-    if ( wrote === false ) return;
+    if ( wrote === false ) {
+      await unmarkStrikeApplied(message);
+      return;
+    }
     await postResolution(target, sectionId, picked.moduleId, resolved, dice.rolls);
     gray(button, "SOL.Ship.applied");
     if ( strike.missileId ) {
@@ -1041,15 +1044,17 @@ async function rememberStrike(message) {
   if ( !isActiveGm() || !message?.id ) return;
   const raw = message.getFlag(SYSTEM_ID, "shipStrike");
   if ( !raw || typeof raw !== "object" ) return;
-  const stored = game.settings.get(SYSTEM_ID, RECORDED);
-  const next = stored && typeof stored === "object" ? { ...stored } : {};
-  next[message.id] = {
-    attackerUuid: typeof raw.attackerUuid === "string" ? raw.attackerUuid : "",
-    targetUuid: typeof raw.targetUuid === "string" ? raw.targetUuid : "",
-    weaponId: typeof raw.weaponId === "string" ? raw.weaponId : "",
-    missileId: typeof raw.missileId === "string" ? raw.missileId : ""
-  };
-  await game.settings.set(SYSTEM_ID, RECORDED, next);
+  await queueApplied(async () => {
+    const stored = game.settings.get(SYSTEM_ID, RECORDED);
+    const next = stored && typeof stored === "object" ? { ...stored } : {};
+    next[message.id] = {
+      attackerUuid: typeof raw.attackerUuid === "string" ? raw.attackerUuid : "",
+      targetUuid: typeof raw.targetUuid === "string" ? raw.targetUuid : "",
+      weaponId: typeof raw.weaponId === "string" ? raw.weaponId : "",
+      missileId: typeof raw.missileId === "string" ? raw.missileId : ""
+    };
+    await game.settings.set(SYSTEM_ID, RECORDED, next);
+  });
 }
 
 /**
@@ -1078,7 +1083,17 @@ async function onActiveGm() {
   if ( !isActiveGm() ) return;
   const combat = game.combat;
   if ( combat ) await remindMissiles(combat);
-  ui.chat?.render?.();
+  const messages = game.messages?.contents ?? (game.messages ? [...game.messages] : []);
+  for ( const message of messages ) {
+    if ( message.getFlag?.(SYSTEM_ID, "shipStrike") ) await rememberStrike(message);
+    const type = message.getFlag?.(SYSTEM_ID, "type");
+    const touched = message.getFlag?.(SYSTEM_ID, "shipStrike")
+      || type === "heatChoice"
+      || type === "pilotIncident"
+      || type === "missileImpact"
+      || type === "missileFlight";
+    if ( touched ) ui.chat?.updateMessage?.(message);
+  }
 }
 
 /**
@@ -1180,6 +1195,17 @@ function strikeWasApplied(message) {
  * @param {ChatMessage} message
  * @returns {Promise<void>}
  */
+async function unmarkStrikeApplied(message) {
+  await queueApplied(async () => {
+    const stored = game.settings.get(SYSTEM_ID, APPLIED);
+    if ( !stored || typeof stored !== "object" || !Object.hasOwn(stored, message.id) ) return;
+    const next = { ...stored };
+    delete next[message.id];
+    await game.settings.set(SYSTEM_ID, APPLIED, next);
+  });
+  if ( message.getFlag(SYSTEM_ID, "shipApplied") === true ) await message.unsetFlag(SYSTEM_ID, "shipApplied");
+}
+
 async function markStrikeApplied(message) {
   await queueApplied(async () => {
     const stored = game.settings.get(SYSTEM_ID, APPLIED);

@@ -10,8 +10,13 @@ import {
   clampHeat,
   coolingDrop,
   heatPenalty,
+  combatIdForShip,
   isCannonWeapon,
   noSpareParts,
+  repairAlreadyCapped,
+  shouldCoolRound,
+  uniqueShipIds,
+  weaponClass,
   pilotIncident,
   pushHeatGain,
   pushPilotBonus,
@@ -105,6 +110,19 @@ check(cannonShot?.cannon === true && cannonShot.heat === 0, "un canon retire une
 const hardTurn = shotAftermath({ action: "evade", success: false, de: 3 });
 check(hardTurn?.heat === 1 && hardTurn.incident === true, "Esquiver ratée : +1, et l'incident à 3 DE");
 check(isCannonWeapon({ name: "Canon électromagnétique" }) === true && isCannonWeapon({ name: "Laser de forage" }) === false, "le canon se reconnaît au nom");
+check(weaponClass({ name: "Canon laser" }) === "laser" && isCannonWeapon({ name: "Canon laser" }) === false, "un canon laser est un laser");
+check(weaponClass({ kind: "cannon", name: "Laser de forage" }) === "cannon", "un champ explicite gagne sur le nom");
+check(shouldCoolRound(undefined, 1) === true && shouldCoolRound(3, 4) === true, "le refroidissement part quand le round avance");
+check(shouldCoolRound(3, 3) === false && shouldCoolRound(3, 2) === false, "reculer puis revenir ne refroidit pas deux fois");
+check(uniqueShipIds([{ uuid: "A" }, { uuid: "A" }, { uuid: "B" }]).join() === "A,B", "deux jetons du même vaisseau ne refroidissent qu'une fois");
+check(combatIdForShip([
+  { id: "shown", combatants: [{ actorUuid: "other" }] },
+  { id: "ship", combatants: [{ actorUuid: "vessel" }] }
+], "vessel") === "ship", "le drapeau vise le combat du vaisseau");
+check(repairAlreadyCapped(6, 10, { plate: true }) === true, "plaque déjà à la moitié : pas de jet");
+check(repairAlreadyCapped(4, 10, { plate: true }) === false, "plaque sous la moitié : le jet part");
+check(repairAlreadyCapped(5, 10, { plate: true, yard: true }) === false, "au chantier, la moitié n'est pas le plafond");
+check(repairAlreadyCapped(10, 10, {}) === true, "déjà au maximum : pas de jet");
 check(restartRefusal(5, false) === "" && restartRefusal(6, false) === "heat", "redémarrer à 5 ou moins");
 check(restartRefusal(1, true) === "module", "module réacteur hors service : pas de redémarrage");
 
@@ -118,15 +136,30 @@ const boom = resolveReactorCrit(hull({
 }), 5, 4, scripted([]));
 check(boom.state.modules[0].integrity === 0 && boom.state.sections.stern.integrity === 8, "5 : module à 0, 1D10 sans blindage");
 check(!boom.logs.some(entry => entry.key === "SOL.Ship.crit.moduleOut"), "5 : pas de critique de module en plus");
+let critDice = 0;
 const down = resolveReactorCrit(hull({
   stern: { integrity: 3 },
   modules: [
     { id: "r", name: "Cœur", category: "reactor", section: "stern", integrity: 4, integrityMax: 4 },
     { id: "m", name: "Moteur", category: "propulsion", section: "stern", integrity: 2, integrityMax: 4 }
   ]
-}), 5, 9, scripted([6, 1]));
+}), 5, 9, {
+  d6() {
+    critDice += 1;
+    return 6;
+  },
+  d10() {
+    critDice += 1;
+    return 4;
+  },
+  pick() {
+    critDice += 1;
+    return 0;
+  }
+});
 check(down.state.sections.stern.integrity === 0 && down.state.sections.stern.destroyed === true, "poupe à 0 : critique de section");
-check(down.state.modules.find(entry => entry.id === "m").integrity === 0, "rupture : le module de la poupe passe hors service");
+check(down.state.modules.find(entry => entry.id === "m").integrity === 0, "rupture : le module passe hors service");
+check(!down.logs.some(entry => entry.key === "SOL.Ship.crit.moduleOut") && critDice === 1, "rupture du réacteur : pas de jet de critique de module");
 const dose = resolveReactorCrit(hull(), 6, 0, scripted([]));
 check(dose.logs.some(entry => entry.key === "SOL.Ship.reactor.critRadiation") && dose.state.sections.stern.integrity === 20, "6 : rappel de dose, rien d'écrit");
 
