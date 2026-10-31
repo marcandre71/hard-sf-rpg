@@ -1,7 +1,7 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.3 : habillage SF des fiches. Polices dans fonts/, feuille dans styles/sol.css.",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.3 : blessures, journaux et vaisseaux PNJ.",
   "version": "0.9.3",
   "compatibility": {
     "minimum": "14",

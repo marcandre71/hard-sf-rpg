@@ -1,0 +1,660 @@
+{
+  "_id": "NpcCargoProvis01",
+  "_key": "!actors!NpcCargoProvis01",
+  "name": "Cargo",
+  "type": "ship",
+  "img": "icons/svg/ship.svg",
+  "system": {
+    "shipType": "slowPlasmaFreighter",
+    "shipTypeOther": "",
+    "category": "void",
+    "identity": {
+      "classBuilder": "",
+      "faction": "",
+      "economy": "",
+      "transponderReal": "",
+      "transponderDisplayed": ""
+    },
+    "mass": {
+      "dry": 80,
+      "reaction": 150,
+      "reactionNature": "water"
+    },
+    "propulsion": {
+      "type": "nucléaire thermique à l'eau",
+      "acceleration": 21,
+      "deltaV": {
+        "value": 3.6,
+        "max": 3.6
+      }
+    },
+    "reserves": {
+      "air": 90,
+      "water": 180,
+      "food": 150
+    },
+    "heat": {
+      "value": 0
+    },
+    "spareParts": 6,
+    "npcCrew": "trained",
+    "sections": {
+      "bow": {
+        "integrity": {
+          "value": 20,
+          "max": 20
+        },
+        "armor": {
+          "value": 8,
+          "max": 8
+        }
+      },
+      "port": {
+        "integrity": {
+          "value": 15,
+          "max": 15
+        },
+        "armor": {
+          "value": 4,
+          "max": 4
+        }
+      },
+      "starboard": {
+        "integrity": {
+          "value": 15,
+          "max": 15
+        },
+        "armor": {
+          "value": 4,
+          "max": 4
+        }
+      },
+      "stern": {
+        "integrity": {
+          "value": 20,
+          "max": 20
+        },
+        "armor": {
+          "value": 4,
+          "max": 4
+        }
+      },
+      "radiators": {}
+    },
+    "posts": {
+      "commander": {
+        "actorUuid": ""
+      },
+      "operator": {
+        "actorUuid": ""
+      },
+      "pilot": {
+        "actorUuid": ""
+      },
+      "navigator": {
+        "actorUuid": ""
+      },
+      "gunner": {
+        "actorUuid": ""
+      },
+      "engineer": {
+        "actorUuid": ""
+      },
+      "medic": {
+        "actorUuid": ""
+      }
+    },
+    "description": "<p>Provisoire. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §2 et §8.</p>",
+    "notes": "<p>Provisoire. Décision Marc 30/10/2026 : tiré de la Petite Fortune, ajusté simplement.</p><p>À confirmer par Marc : masse à vide 80 t, masse de réaction 150 t, delta-v 3,6 / 3,6 km/s, accélération 21 milli-g, intégrités et plaques, réserves, pièces et équipage PNJ. Ce sont les chiffres de la Petite Fortune, pas une fiche de cargo.</p><p>Le moteur est le Propulseur à plasma (cargo lent) du pack (Réf. Modules v0.3 §2). Son texte donne 0,01 à 0,1 milli-g. L'accélération 21 milli-g de la fiche n'est pas celle de ce module.</p>"
+  },
+  "items": [
+    {
+      "_id": "NpcCar0000000000",
+      "name": "Propulseur à plasma (cargo lent)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~3 000 à 5 000 s ; 0,01 à 0,1 milli-g. Poussée extrêmement faible : −20 au Pilote pour Changer de portée en combat. Consommation minime : fret lent, cargos qui mettent un an à rejoindre Cérès, sans équipage ou avec un équipage réduit (Bible §7).</p>",
+        "category": "propulsion",
+        "section": "stern",
+        "integrity": {
+          "value": 12,
+          "max": 12
+        },
+        "effects": "<p>Isp ~3 000 à 5 000 s ; 0,01 à 0,1 milli-g. Poussée extrêmement faible : −20 au Pilote pour Changer de portée en combat. Consommation minime : fret lent, cargos qui mettent un an à rejoindre Cérès, sans équipage ou avec un équipage réduit (Bible §7).</p>",
+        "mass": 10,
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.9.1",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0000000000"
+    },
+    {
+      "_id": "NpcCar0100000000",
+      "name": "Cœur à fission bimodal (avec bouclier d'ombre)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
+        "category": "reactor",
+        "section": "stern",
+        "integrity": {
+          "value": 8,
+          "max": 8
+        },
+        "effects": "<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
+        "mass": 12,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0100000000"
+    },
+    {
+      "_id": "NpcCar0200000000",
+      "name": "Panneaux radiateurs repliables (~50 m², prospecteur)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
+        "category": "radiators",
+        "section": "radiators",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
+        "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0200000000"
+    },
+    {
+      "_id": "NpcCar0300000000",
+      "name": "Réservoir d'eau de masse de réaction (75 t)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+        "category": "other",
+        "section": "port",
+        "integrity": {
+          "value": 8,
+          "max": 8
+        },
+        "effects": "<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+        "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0300000000"
+    },
+    {
+      "_id": "NpcCar0400000000",
+      "name": "Réservoir d'eau de masse de réaction (75 t)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+        "category": "other",
+        "section": "starboard",
+        "integrity": {
+          "value": 8,
+          "max": 8
+        },
+        "effects": "<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+        "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0400000000"
+    },
+    {
+      "_id": "NpcCar0500000000",
+      "name": "Capteurs civils (radar, lidar, infrarouge)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
+        "category": "sensors",
+        "section": "bow",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
+        "mass": 1,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0500000000"
+    },
+    {
+      "_id": "NpcCar0600000000",
+      "name": "Antenne radio et laser de communication",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
+        "category": "communications",
+        "section": "bow",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
+        "mass": 1,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0600000000"
+    },
+    {
+      "_id": "NpcCar0700000000",
+      "name": "Passerelle, cabines et carré (4 couchettes de 2 m³)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Logement de 4 à 6 personnes (Petite Fortune).</p>",
+        "category": "cabins",
+        "section": "bow",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Logement de 4 à 6 personnes (Petite Fortune).</p>",
+        "mass": 6,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0700000000"
+    },
+    {
+      "_id": "NpcCar0800000000",
+      "name": "Support vital et abri anti-éruption entouré d'eau",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
+        "category": "lifeSupport",
+        "section": "starboard",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
+        "mass": 6,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammunition": "",
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0800000000"
+    },
+    {
+      "_id": "NpcCar0900000000",
+      "name": "Soute à minerai ou conteneurs (20 t)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
+        "category": "cargo",
+        "section": "port",
+        "integrity": {
+          "value": 6,
+          "max": 6
+        },
+        "effects": "<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
+        "mass": 5,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar0900000000"
+    },
+    {
+      "_id": "NpcCar1000000000",
+      "name": "Sondes et foreuses d'astéroïdes (6)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
+        "category": "other",
+        "section": "port",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
+        "mass": 2,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar1000000000"
+    },
+    {
+      "_id": "NpcCar1100000000",
+      "name": "Sas d'EVA, treuil et baie de drones",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
+        "category": "other",
+        "section": "starboard",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
+        "mass": 2,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar1100000000"
+    },
+    {
+      "_id": "NpcCar1200000000",
+      "name": "Laser de forage (outil civil)",
+      "type": "shipModule",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+        "category": "weapon",
+        "section": "bow",
+        "integrity": {
+          "value": 4,
+          "max": 4
+        },
+        "effects": "<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+        "mass": 2,
+        "weapon": {
+          "damage": 6,
+          "rangeClose": true,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "ammo": {
+            "value": null,
+            "max": null
+          },
+          "heatPerShot": 1,
+          "class": "laser"
+        },
+        "armorPoints": 0
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.7.0",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      },
+      "_key": "!actors.items!NpcCargoProvis01.NpcCar1200000000"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.3",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}
