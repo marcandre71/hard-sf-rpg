@@ -4,7 +4,7 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
+    "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
     "category": "reactor",
     "section": "stern",
     "integrity": {
@@ -13,6 +13,13 @@
     },
     "effects": "<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
     "mass": 12,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "heatPerShot": 0
+    },
     "armorPoints": 0
   },
   "effects": [],

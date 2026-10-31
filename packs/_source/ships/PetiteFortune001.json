@@ -114,15 +114,22 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total.</p>",
+        "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Les effets gardent les chiffres de la Petite Fortune utilisés par les tests. -->\n<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé.</p>",
         "category": "propulsion",
         "section": "stern",
         "integrity": {
           "value": 10,
           "max": 10
         },
-        "effects": "<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total.</p>",
+        "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
         "mass": 6,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -148,7 +155,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
+        "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
         "category": "reactor",
         "section": "stern",
         "integrity": {
@@ -157,6 +164,13 @@
         },
         "effects": "<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
         "mass": 12,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -182,7 +196,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
+        "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
         "category": "radiators",
         "section": "radiators",
         "integrity": {
@@ -191,6 +205,13 @@
         },
         "effects": "<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
         "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -216,7 +237,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
         "category": "other",
         "section": "port",
         "integrity": {
@@ -225,6 +246,13 @@
         },
         "effects": "<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
         "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -250,7 +278,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
         "category": "other",
         "section": "starboard",
         "integrity": {
@@ -259,6 +287,13 @@
         },
         "effects": "<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
         "mass": 3,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -284,7 +319,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
+        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
         "category": "sensors",
         "section": "bow",
         "integrity": {
@@ -293,6 +328,13 @@
         },
         "effects": "<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
         "mass": 1,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -318,7 +360,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
+        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
         "category": "communications",
         "section": "bow",
         "integrity": {
@@ -327,6 +369,13 @@
         },
         "effects": "<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
         "mass": 1,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -352,14 +401,14 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Logement de 4 à 6 personnes (Petite Fortune).</p>",
         "category": "cabins",
         "section": "bow",
         "integrity": {
           "value": 6,
           "max": 6
         },
-        "effects": "<p>Jusqu'à 6 personnes en se serrant. Réf. Vaisseaux v0.1 §8.</p>",
+        "effects": "<p>Logement de 4 à 6 personnes (Petite Fortune).</p>",
         "mass": 6,
         "weapon": {
           "damage": 0,
@@ -394,14 +443,14 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+        "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
         "category": "lifeSupport",
         "section": "starboard",
         "integrity": {
           "value": 6,
           "max": 6
         },
-        "effects": "<p>Recyclage de l'air et de l'eau. Abri pour 6. Réf. Vaisseaux v0.1 §8.</p>",
+        "effects": "<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
         "mass": 6,
         "weapon": {
           "damage": 0,
@@ -436,7 +485,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
         "category": "cargo",
         "section": "port",
         "integrity": {
@@ -445,6 +494,13 @@
         },
         "effects": "<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
         "mass": 5,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -470,7 +526,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
         "category": "other",
         "section": "port",
         "integrity": {
@@ -479,6 +535,13 @@
         },
         "effects": "<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
         "mass": 2,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -504,7 +567,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
+        "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
         "category": "other",
         "section": "starboard",
         "integrity": {
@@ -513,6 +576,13 @@
         },
         "effects": "<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
         "mass": 2,
+        "weapon": {
+          "damage": 0,
+          "rangeClose": false,
+          "rangeMedium": false,
+          "rangeLong": false,
+          "heatPerShot": 0
+        },
         "armorPoints": 0
       },
       "effects": [],
@@ -538,7 +608,7 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+        "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
         "category": "weapon",
         "section": "bow",
         "integrity": {
@@ -547,7 +617,6 @@
         },
         "effects": "<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
         "mass": 2,
-        "armorPoints": 0,
         "weapon": {
           "damage": 6,
           "rangeClose": true,
@@ -559,7 +628,8 @@
           },
           "heatPerShot": 1,
           "class": "laser"
-        }
+        },
+        "armorPoints": 0
       },
       "effects": [],
       "folder": null,

@@ -4,7 +4,7 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
+    "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
     "category": "radiators",
     "section": "radiators",
     "integrity": {
@@ -13,6 +13,13 @@
     },
     "effects": "<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
     "mass": 3,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "heatPerShot": 0
+    },
     "armorPoints": 0
   },
   "effects": [],

@@ -4,7 +4,7 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
     "category": "other",
     "section": "port",
     "integrity": {
@@ -13,6 +13,13 @@
     },
     "effects": "<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
     "mass": 2,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "heatPerShot": 0
+    },
     "armorPoints": 0
   },
   "effects": [],

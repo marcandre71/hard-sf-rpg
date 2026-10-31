@@ -4,15 +4,22 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total.</p>",
+    "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Les effets gardent les chiffres de la Petite Fortune utilisés par les tests. -->\n<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé.</p>",
     "category": "propulsion",
     "section": "stern",
     "integrity": {
       "value": 10,
       "max": 10
     },
-    "effects": "<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total.</p>",
+    "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
     "mass": 6,
+    "weapon": {
+      "damage": 0,
+      "rangeClose": false,
+      "rangeMedium": false,
+      "rangeLong": false,
+      "heatPerShot": 0
+    },
     "armorPoints": 0
   },
   "effects": [],

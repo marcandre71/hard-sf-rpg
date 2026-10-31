@@ -5,7 +5,7 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Réservé à la Veille. Conçu pour dévier les astéroïdes ou briser une station rebelle ; exige une double clé humaine (Règle Sereguine : déviation de masse). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : type d'arme « autre ». -->\n<p>Réservé à la Veille. Conçu pour dévier les astéroïdes ou briser une station rebelle ; exige une double clé humaine (Règle Sereguine : déviation de masse). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",
     "section": "bow",
     "integrity": {

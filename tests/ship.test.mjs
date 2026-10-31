@@ -2,7 +2,7 @@
  * État des modules et blindage de section, sans Foundry.
  * Réf. Vaisseaux v0.1 §4 et §5. Décision Marc 21/10/2026.
  */
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import {
   MODULE_DEGRADED,
   MODULE_INTACT,
@@ -289,9 +289,17 @@ check(fortune.system.heat.value === 0 && fortune.system.spareParts === 6 && fort
 check(fortune.system.sections.bow.integrity.value === 20 && fortune.system.sections.bow.armor.value === 8, "proue 20 / 8");
 check(!fortune.system.sections.radiators.integrity && fortune.system.sections.radiators.armor === undefined, "radiateurs : pas d'intégrité de section stockée, pas de plaque");
 check(fortune.items.length === 13, "13 modules embarqués");
-check(!fortune.items.some(item => item.name === "Laser de défense"), "les repères d'armes ne sont pas sur le vaisseau");
+check(!fortune.items.some(item => item.name === "Laser de défense" || item.name === "Laser de défense (tourelle)"), "les repères d'armes ne sont pas sur le vaisseau");
 const drill = fortune.items.find(item => item._id === "ModPFLaserFor001");
-check(drill?.system.category === "weapon" && drill.system.weapon.damage === 6 && drill.system.weapon.rangeClose === true && drill.system.weapon.rangeMedium === false && drill.system.weapon.heatPerShot === 1, "laser de forage");
+check(drill?.name === "Laser de forage (outil civil)", "laser de forage : nom du catalogue, id déjà là");
+check(drill?.system.category === "weapon" && drill.system.weapon.class === "laser" && drill.system.weapon.damage === 6 && drill.system.weapon.rangeClose === true && drill.system.weapon.rangeMedium === false && drill.system.weapon.heatPerShot === 1, "laser de forage");
+const tanks = fortune.items.filter(item => item.name === "Réservoir d'eau de masse de réaction (75 t)");
+check(tanks.length === 2 && tanks.some(item => item.system.section === "port") && tanks.some(item => item.system.section === "starboard"), "deux réservoirs, nom du catalogue, sections gardées");
+const moduleFiles = readdirSync(new URL("../packs/_source/ship-modules/", import.meta.url)).filter(name => name.endsWith(".json"));
+check(moduleFiles.length === 39, `39 modules dans le pack, reçu ${moduleFiles.length}`);
+for (const gone of ["ModLaserForageC1", "ModLaserDefense1", "ModCasierMissile", "ModAntenneRadio1", "ModCapteursCivil", "ModNucleaireEau1", "ModRadiatPanneau", "ModFissionBimod1", "ModReservoirEau1", "ModSasEvaDrones1", "ModSondesForeuse", "ModSouteMinerai1"]) {
+  check(!moduleFiles.some(name => name.includes(gone)), `${gone} : doublon retiré`);
+}
 const massSum = fortune.items.reduce((sum, item) => sum + item.system.mass, 0);
 check(massSum === 52, `masse des modules 52 t, reçu ${massSum}`);
 const embeddedEngine = fortune.items.find(item => item._id === "ModPFMoteur00001");
@@ -303,6 +311,8 @@ check(fortune.system.description.includes("21 milli-g") && fortune.system.descri
 for ( const file of ["ModExLaserDef001.json", "ModExMissile0001.json"] ) {
   const weapon = JSON.parse(readFileSync(new URL(`../packs/_source/ship-modules/${file}`, import.meta.url), "utf8"));
   check(weapon.system.integrity.value === 4 && weapon.system.integrity.max === 4, `${file} : intégrité 4/4`);
+  check(weapon.system.effects.includes("Intégrité provisoire, ajustable en jeu"), `${file} : effets décidés`);
+  check(weapon.system.mass === 0, `${file} : masse de la Petite Fortune conservée`);
   check(!("ammunition" in weapon.system.weapon), `${file} : plus d'ancien texte de munitions`);
 }
 const cannonPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModExCanonEM0001.json", import.meta.url), "utf8"));
@@ -313,9 +323,10 @@ check(cannonPack.system.weapon.ammo.value === 20 && cannonPack.system.weapon.amm
 check(cannonPack.system.mass === 5 && cannonPack.system.weapon.class === "railgun", "canon : masse 5 t, type railgun");
 check(cannonPack.system.integrity.value === 4 && !("ammunition" in cannonPack.system.weapon), "canon : intégrité 4, sans ancien texte de munitions");
 check(missilePack.system.weapon.ammo.value === 4 && missilePack.system.weapon.ammo.max === 4, "missile : 4/4");
-check(missilePack.system.mass === 4 && missilePack.system.weapon.class === "missile", "missile : masse 4 t, type missile");
+check(missilePack.system.effects.includes("est automatisé") && !missilePack.system.effects.includes("n'est pas automatisé"), "missile : le temps de vol est automatisé");
+check(missilePack.system.mass === 0 && missilePack.system.weapon.class === "missile", "missile : masse 0 conservée, type missile");
 check(missilePack.name === "Casier lance-missiles (4 missiles)", "missile : nom du catalogue, id conservé");
-check(laserPack.system.mass === 3 && laserPack.system.weapon.class === "laser", "laser de défense : masse 3 t, type laser");
+check(laserPack.system.mass === 0 && laserPack.system.weapon.class === "laser", "laser de défense : masse 0 conservée, type laser");
 check(laserPack.system.weapon.ammo.value === null && laserPack.system.weapon.ammo.max === null, "laser de défense : compteur vide");
 check(drillPack.system.weapon.ammo.value === null && drillPack.system.weapon.ammo.max === null, "laser de forage : compteur vide");
 const shipModel = readFileSync(new URL("../module/data/ship.mjs", import.meta.url), "utf8");
