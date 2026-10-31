@@ -17,7 +17,13 @@ import { showsAttackRange } from "../dice/attack.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import { applySealAction } from "../dice/seal-apply.mjs";
 import { findSealMethod } from "../dice/seal.mjs";
-import { personalAmmoSpend } from "../dice/personal-ammo.mjs";
+import {
+  beginPersonalShot,
+  endPersonalShot,
+  personalAmmoAfterRoll,
+  personalAmmoSpend,
+  personalShotRefusedToNonOwner
+} from "../dice/personal-ammo.mjs";
 import { skillScore, weaponAttackScore } from "../dice/skill-score.mjs";
 
 /**
@@ -378,32 +384,52 @@ async function rollItem(event, target) {
   // Décision Didier/Marc 31/10/2026 (champ vide = rien retiré) ; max 0 = sans chargeur
   // Un 0 avec un maximum supérieur à 0 refuse le tir, comme le canon.
   // Réf. Vaisseaux v0.1 §4. Le rechargement reste manuel.
-  const ammoPlan = personalAmmoSpend(item.system._source?.ammo ?? item.system.ammo);
-  if ( !ammoPlan.fire ) {
-    ui.notifications.warn(game.i18n.localize("SOL.Ship.ammoEmpty"));
+  // Le refus pour un joueur non propriétaire est confirmé. Pas de relais au MJ.
+  const ammoSeen = item.system._source?.ammo ?? item.system.ammo;
+  if ( personalShotRefusedToNonOwner(ammoSeen, item.isOwner === true) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Item.notOwner"));
     return;
   }
-  // Réf. LdR v0.2 §15 : sans compétence, ou nom inconnu, on lance
-  // quand même, sur la caractéristique. Le jet n'est refusé que si
-  // la compétence est sur la fiche et que la formation l'interdit.
-  const skills = actor.items.filter(entry => entry.type === "skill");
-  const rated = weaponAttackScore(actor.system.characteristics, item.system.skill, skills);
-  if ( rated.impossible ) {
-    ui.notifications.warn(game.i18n.localize("SOL.Roll.impossible"));
-    return;
+  // Un seul tir ouvert par arme. Le second clic ne lit pas un compteur périmé.
+  if ( !beginPersonalShot(item.uuid) ) return;
+  try {
+    const ammoPlan = personalAmmoSpend(item.system._source?.ammo ?? item.system.ammo);
+    if ( !ammoPlan.fire ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Item.ammoEmpty"));
+      return;
+    }
+    // Réf. LdR v0.2 §15 : sans compétence, ou nom inconnu, on lance
+    // quand même, sur la caractéristique. Le jet n'est refusé que si
+    // la compétence est sur la fiche et que la formation l'interdit.
+    const skills = actor.items.filter(entry => entry.type === "skill");
+    const rated = weaponAttackScore(actor.system.characteristics, item.system.skill, skills);
+    if ( rated.impossible ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Roll.impossible"));
+      return;
+    }
+    const skillLabel = String(rated.label ?? "").trim();
+    const outcome = await performRoll({
+      actor,
+      label: skillLabel ? `${item.name} — ${skillLabel}` : item.name,
+      score: rated.score,
+      weapon: item,
+      type: "weapon",
+      // Décision Marc 30/10/2026 : pas de choix pour une arme de contact.
+      // Décision Marc 31/10/2026 : l'électrochoc et le pistolet de scellement l'ont.
+      rangeChoice: showsAttackRange(item)
+    });
+    // Annulation de la fenêtre : on ne retire pas.
+    if ( !outcome ) return;
+    // On relit après le jet. Une saisie pendant la fenêtre n'est pas écrasée.
+    const fresh = item.system._source?.ammo ?? item.system.ammo;
+    const spent = personalAmmoAfterRoll(fresh);
+    if ( spent.notify ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Item.ammoEmpty"));
+      return;
+    }
+    if ( !spent.write || spent.next === null ) return;
+    await item.update({ "system.ammo.value": spent.next });
+  } finally {
+    endPersonalShot(item.uuid);
   }
-  const skillLabel = String(rated.label ?? "").trim();
-  const outcome = await performRoll({
-    actor,
-    label: skillLabel ? `${item.name} — ${skillLabel}` : item.name,
-    score: rated.score,
-    weapon: item,
-    type: "weapon",
-    // Décision Marc 30/10/2026 : pas de choix pour une arme de contact.
-    // Décision Marc 31/10/2026 : l'électrochoc et le pistolet de scellement l'ont.
-    rangeChoice: showsAttackRange(item)
-  });
-  // Annulation de la fenêtre : on ne retire pas. Réussi ou raté : on retire.
-  if ( !outcome || ammoPlan.next === null ) return;
-  await item.update({ "system.ammo.value": ammoPlan.next });
 }

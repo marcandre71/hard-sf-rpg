@@ -486,7 +486,9 @@
     },
     "Item": {
       "description": "Description",
-      "effect": "Effet"
+      "effect": "Effet",
+      "ammoEmpty": "Plus de munitions : cette arme portative ne tire plus.",
+      "notOwner": "Vous n'êtes pas propriétaire de cette arme : le tir est refusé."
     },
     "Difficulty": {
       "veryEasy": "Très facile",

@@ -105,7 +105,7 @@
       }
     },
     "description": "<p>Provisoire. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §2 et §8.</p>",
-    "notes": "<p>Provisoire. Décision Marc 30/10/2026 : tiré de la Petite Fortune, ajusté simplement.</p><p>Décision Didier/Marc 31/10/2026 : accélération 50 milli-g. Réf. Vaisseaux v0.1 §8.</p><p>Le delta-v reste 3,6 / 3,6 km/s. La poussée écrite sur le moteur n'est pas recalculée.</p><p>À confirmer par Marc : masse à vide 80 t, masse de réaction 150 t, delta-v 3,6 / 3,6 km/s, intégrités et plaques (proue 20/8, flancs 15/4, poupe 20/4), réserves, pièces et équipage PNJ. Ce sont les chiffres de la Petite Fortune, pas une fiche de patrouilleur.</p><p>Le laser de proue est le Laser lourd à miroir de proue du pack (Réf. Modules v0.3 §5), type laser. Les autres modules restent ceux de la Petite Fortune.</p>"
+    "notes": "<p>Provisoire. Décision Marc 30/10/2026 : tiré de la Petite Fortune, ajusté simplement.</p><p>Décision Didier/Marc 31/10/2026 : accélération 50 milli-g. Réf. Vaisseaux v0.1 §8. Poussée du moteur : 113 kN, ce qui correspond à 50 milli-g pour 230 t.</p><p>Durée de poussée, accélération à vide, masse et delta-v : provisoire jusqu'à la 1.0. Le delta-v affiché reste 3,6 / 3,6 km/s.</p><p>À confirmer par Marc : masse à vide 80 t, masse de réaction 150 t, intégrités et plaques (proue 20/8, flancs 15/4, poupe 20/4), réserves, pièces et équipage PNJ. Ce sont les chiffres de la Petite Fortune, pas une fiche de patrouilleur.</p><p>Le laser de proue est le Laser lourd à miroir de proue du pack (Réf. Modules v0.3 §5), type laser. Les autres modules restent ceux de la Petite Fortune.</p>"
   },
   "items": [
     {
@@ -114,14 +114,14 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Les effets gardent les chiffres de la Petite Fortune utilisés par les tests. -->\n<p>Isp ~350 à 380 s ; 20 à 60 milli-g. Cheval de trait de la Ceinture (Petite Fortune : 350 s, 21 milli-g au plein, 3,6 km/s de delta-v ; Dette de Pallas). L'eau se refait sur tout rocher glacé.</p>",
+        "description": "<!-- Réf. Modules v0.3 §2. Décision Didier/Marc 31/10/2026 : poussée 113 kN, soit 50 milli-g pour 230 t. Durée de poussée, accélération à vide, masse et delta-v : provisoire jusqu'à la 1.0. -->\n<p>Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
         "category": "propulsion",
         "section": "stern",
         "integrity": {
           "value": 10,
           "max": 10
         },
-        "effects": "<p>21 milli-g au plein, eau, 350 s. Environ 60 milli-g presque à vide, environ 47 kN, durée indicative environ 2,9 h de poussée au total. Décision Marc 21/10/2026 (avis Expert Science). Réf. Vaisseaux v0.1 §8.</p>",
+        "effects": "<p>Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
         "mass": 6,
         "weapon": {
           "damage": 0,

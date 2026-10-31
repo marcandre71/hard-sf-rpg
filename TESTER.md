@@ -345,19 +345,23 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 2. Ouvrez le compendium **Blessures**.
    **Résultat attendu :** les quatre **Blessure légère**, **grave**, **critique** et **mortelle** sont encore là, ainsi que les quatre **Blessure de machine**. Il y a en plus les blessures nommées, par exemple **Contusion faciale, arcade ouverte** (tête, légère, −10) et **Cœur ou aorte déchirés** (torse, mortelle). Il n'y a pas de **Lentille étoilée**.
 3. Ouvrez **Cataracte radique précoce** dans **Séquelles**. Puis **Cancer radio-induit**, **Troubles cognitifs radio-induits** et **Fragilité cellulaire acquise**.
-   **Résultat attendu :** catégorie **Radiation**, permanente. Aucune ne dit **[à compléter]** pour le dé. Le texte dit que c'est une liste et que le MJ choisit. Le cancer dit qu'il se déclare plus tard, sans effet immédiat. Les troubles cognitifs disent **−10** aux tests d'INT, en rappel. La fragilité dit que le seuil de radiation est divisé par deux, arrondi au supérieur.
+   **Résultat attendu :** catégorie **Radiation**, permanente. Aucune ne dit **[à compléter]** pour le dé. Le texte dit que c'est une liste et que le MJ choisit. Le cancer dit qu'il se déclare plus tard, sans effet immédiat. Les troubles cognitifs disent **−10** aux tests d'INT, en rappel. La fragilité dit que le seuil de radiation est **150 mSv**.
 4. Ouvrez **Habitat tournant (station)** dans **Origines**.
    **Résultat attendu :** la description est **0,3 à 0,7 g**. Les modificateurs sont **ADA +10, PER +5, FOR −5, CON −5**. Le nom n'a pas changé.
 5. Ouvrez le compendium **Univers et factions**, journal **Factions**.
-   **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Mutuelle, Kombinat Hélion, Collège de Valhalla, Partants de la Longue Patience. Le texte de la Veille parle du Traité de Genève de 1981. Le journal **Glossaire** a une page.
+   **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Mutuelle, Kombinat Hélion, Collège de Valhalla, Partants de la Longue Patience. Le texte de la Veille parle du Traité de Genève de 1981. Le journal **Glossaire** a une page. Son titre dit **Glossaire (v0.2)**. Le texte de la page n'a pas été réécrit.
 6. Dans **Vaisseaux**, ouvrez **Patrouilleur de la Veille** et **Cargo**. N'ouvrez pas la Petite Fortune pour la modifier.
-   **Résultat attendu :** les notes disent **provisoire** et **À confirmer par Marc** pour le reste des chiffres de coque. L'accélération du patrouilleur est **50**. Celle du cargo est **0,05**. Le delta-v affiché reste **3,6**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**.
+   **Résultat attendu :** les notes disent **provisoire** et **À confirmer par Marc** pour le reste des chiffres de coque. L'accélération du patrouilleur est **50**. Celle du cargo est **0,05**. Le type de propulsion du cargo est **Propulseur à plasma (cargo lent)**. Le delta-v affiché reste **3,6**. Les notes du cargo disent que le delta-v et la masse de réaction sont **provisoire, copie de la Petite Fortune**. Le moteur du patrouilleur dit **113 kN** et **50 milli-g pour 230 t**. Il ne dit pas **21 milli-g** ni **2,9 h**. Durée, accélération à vide, masse et delta-v y sont marqués **provisoire**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**. Son moteur dit encore **47 kN**.
 7. Sur un personnage, glissez le **Pistolet de bord 9 mm basse vélocité**. Cochez **Équipé**. La fiche du personnage reste ouverte. Les munitions sont **15 / 15**. Lancez-le une fois, réussite ou échec.
    **Résultat attendu :** la jauge et le nombre passent à **14 / 15**.
+   Lancez encore, puis **Annuler** dans la fenêtre.
+   **Résultat attendu :** les munitions restent **14 / 15**.
    Mettez les munitions actuelles à **0**, puis lancez encore.
    **Résultat attendu :** le tir est refusé. Le message dit qu'il n'y a plus de munitions. Le nombre reste **0**. Remettez **15** avant de continuer.
    Décochez le pistolet. Glissez le **Couteau d'arrimage, lame de sas en céramique**, cochez **Équipé**, et lancez-le.
    **Résultat attendu :** un couteau attaque normalement. Les munitions restent **0 / 0**.
+   Revenez au pistolet équipé, munitions au-dessus de 0. Connectez-vous avec un joueur qui n'est pas propriétaire de ce personnage, et lancez le pistolet.
+   **Résultat attendu :** le tir est refusé. Le message dit que vous n'êtes pas propriétaire. Les munitions ne bougent pas.
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 

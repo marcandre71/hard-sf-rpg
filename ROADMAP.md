@@ -28,4 +28,4 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 
 Décision Marc 31/10/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4 blessures, journaux et vaisseaux PNJ, 0.8.0 machines, 1.0.0.
 
-Décision Didier/Marc 31/10/2026 : un maximum de munitions à 0 veut dire sans chargeur. Le tir passe et rien n'est retiré. Un 0 avec un maximum supérieur à 0 refuse le tir. Le patrouilleur accélère à 50 milli-g. Le cargo accélère à 0,05 milli-g. Le delta-v n'est pas recalculé. Les séquelles de radiation sont une liste, en texte seulement.
+Décision Didier/Marc 31/10/2026 : un maximum de munitions à 0 veut dire sans chargeur. Le tir passe et rien n'est retiré. Un 0 avec un maximum supérieur à 0 refuse le tir. Un non-propriétaire ne tire pas une arme à chargeur, sans relais au MJ. Le patrouilleur accélère à 50 milli-g, poussée 113 kN pour 230 t. Le cargo accélère à 0,05 milli-g, type plasma. Delta-v, masse de réaction, durée et accélération à vide restent provisoires. La fragilité cellulaire est à 150 mSv. Les séquelles de radiation sont une liste, en texte seulement.

@@ -4,16 +4,21 @@
 
 Branche `dev/0.9.4`, anciennement `dev/0.9.3`. PR brouillon vers `main`. La 0.9.2 (`a194c10`) et l'habillage 0.9.3 (`20be91c`) sont dans `main`. Ne pas fusionner. La section 17 de TESTER.md sert à la séance de test de la v1.
 
-Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Glossaire v0.1, Vaisseaux v0.1 §2 et §8.
+Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Glossaire v0.2, Vaisseaux v0.1 §2 et §8. Séquelles v0.3.
 
 - Blessures : les 8 entrées déjà là gardent leur id. Les 24 blessures humaines nommées du catalogue sont ajoutées. Les 4 repères de machine restent tels quels : la table des machines attend la 0.8.0.
 - Séquelles : les 8 séquelles de radiation du catalogue. Le dé, le cancer, les troubles cognitifs et la fragilité sont tranchés plus bas.
 - Origines : les 6 concordent, sauf l'habitat tournant, dont la gravité perd « selon l'habitat ».
-- Journaux : une page par faction, recopiée de la Bible v0.1 §6, et le glossaire en une page.
+- Journaux : une page par faction, recopiée de la Bible v0.1 §6, et le Glossaire v0.2 en une page. Le texte recopié n'est pas modifié. La mention de version suit le titre du document.
 - Vaisseaux : Patrouilleur de la Veille et Cargo, provisoires, chiffres de coque repris de la Petite Fortune et marqués à confirmer. Le patrouilleur porte le laser lourd du pack. Le cargo porte le propulseur à plasma du pack. La Petite Fortune n'est pas modifiée.
 - Munitions : chaque tir d'une arme de personnage ou de PNJ retire 1 à `system.ammo.value`. Décision Didier/Marc 31/10/2026. Réf. Vaisseaux v0.1 §4. Un 0 avec un maximum supérieur à 0 refuse le tir, comme le canon. Valeur null, maximum null, ou maximum 0 : le tir part, rien n'est écrit. Un maximum 0 veut dire sans chargeur (couteau, mains nues). Le rechargement reste manuel.
-- Vaisseaux PNJ : le patrouilleur a une accélération de 50 milli-g (Réf. Vaisseaux v0.1 §8). Le cargo a 0,05 milli-g, le milieu de la fourchette du plasma. Décision Didier/Marc 31/10/2026. Le delta-v et le texte de poussée des moteurs ne sont pas recalculés. Le reste des chiffres de coque reste celui de la Petite Fortune, provisoire.
-- Séquelles : pas de dé. C'est une liste, le MJ choisit. Le cancer se déclare plus tard, sans effet immédiat. Les troubles cognitifs rappellent −10 aux tests d'INT, sans malus automatique. La fragilité divise le seuil de radiation par deux, arrondi au supérieur, en texte seulement. Décision Didier/Marc 31/10/2026.
+- Vaisseaux PNJ : le patrouilleur a une accélération de 50 milli-g (Réf. Vaisseaux v0.1 §8). Le cargo a 0,05 milli-g, le milieu de la fourchette du plasma. Décision Didier/Marc 31/10/2026.
+- Décision Didier/Marc 31/10/2026 : la poussée du moteur du patrouilleur est 113 kN, ce qui correspond à 50 milli-g pour 230 t. Durée de poussée, accélération à vide, masse et delta-v restent provisoires jusqu'à la 1.0. Les masses stockées restent 80 t et 150 t. Le delta-v reste 3,6 / 3,6.
+- Décision Didier/Marc 31/10/2026 : le type de propulsion du cargo est le Propulseur à plasma (cargo lent), le même libellé que le module. Delta-v et masse de réaction : provisoire, copie de la Petite Fortune.
+- Séquelles : pas de dé. C'est une liste, le MJ choisit. Le cancer se déclare plus tard, sans effet immédiat. Les troubles cognitifs rappellent −10 aux tests d'INT, sans malus automatique.
+- Décision Didier/Marc 31/10/2026 : la fragilité cellulaire a un seuil de 150 mSv, comme dans Séquelles v0.3. Texte seulement, sans nouveau champ.
+- Munitions, relecture : après la fenêtre, on relit `system.ammo.value` et on écrit cette valeur moins 1. Une saisie pendant la fenêtre n'est pas écrasée. Si la valeur relue est 0 et que le maximum est supérieur à 0, on n'écrit rien et on notifie `SOL.Item.ammoEmpty`. Un verrou par `item.uuid` est libéré dans un `finally`.
+- Décision Didier/Marc 31/10/2026 : un joueur qui n'est pas propriétaire d'une arme à chargeur ne peut pas tirer. Notification `SOL.Item.notOwner`. Pas de relais au MJ. Une arme sans chargeur n'est pas concernée.
 
 Réserves mineures de Relecteur sur la 0.9.2, traitées :
 
