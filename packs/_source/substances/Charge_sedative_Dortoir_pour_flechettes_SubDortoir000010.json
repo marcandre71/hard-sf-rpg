@@ -10,7 +10,7 @@
     "administration": "projectile ou injection",
     "duration": "1D10 × 5 min",
     "doses": {
-      "value": null,
+      "value": 5,
       "max": 5
     },
     "effect": "<p>Si au moins 1 dégât traverse l'armure, la cible doit réussir un test de CON (−10) ou tomber Inconsciente pour 1D10 × 5 minutes. Délai d'action avant l'inconscience (la v0.2 indiquait Sonnée au 1er tour, Inconsciente au 2e, ce qui est trop rapide pour un sédatif réaliste) : [à compléter].</p>",

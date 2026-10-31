@@ -1,11 +1,12 @@
 /**
  * Catalogues 0.9.2. Sans Foundry.
  * Réf. Atouts v0.3, Augmentations v0.3, Logiciels v0.3, Substances v0.3.
- * Décision Marc 30/10/2026.
+ * Décision Marc 30/10/2026. Doses pleines : Décision Marc 31/10/2026.
  */
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { SOL } from "../module/config.mjs";
+import { applyFullDoses, fullDosesValue } from "../module/data/substance-doses.mjs";
 
 const root = new URL("../packs/_source/", import.meta.url);
 
@@ -73,8 +74,8 @@ const substanceCategories = new Set(Object.keys(SOL.substanceCategories));
 let legalityBlank = 0;
 for (const entry of substances) {
   assert.equal(substanceCategories.has(entry.system.category), true, entry.name);
-  assert.equal(entry.system.doses.value, null, `${entry.name} : doses actuelles non inventées`);
   assert.equal(Number.isInteger(entry.system.doses.max), true, entry.name);
+  assert.equal(entry.system.doses.value, entry.system.doses.max, `${entry.name} : doses actuelles pleines`);
   if (entry.system.legality === "") {
     legalityBlank += 1;
     assert.equal(entry.system.description.includes("[à compléter]"), true, entry.name);
@@ -89,6 +90,43 @@ for (const name of ["Chélateur d'actinides (Bleu de Prusse, DTPA)", "Oxygénate
 
 const iron = substances.find(entry => entry.name.includes("Jus de Fer"));
 assert.equal(iron.system.doses.max, 1);
+assert.equal(iron.system.doses.value, 1);
 assert.equal(iron.system.administration, "autoInjector");
+
+// Décision Marc 31/10/2026. Création seulement : un 0 reste 0, une fiche sans maximum reste vide.
+assert.equal(fullDosesValue({ value: null, max: 1 }), 1);
+assert.equal(fullDosesValue({ max: 30 }), 30);
+assert.equal(fullDosesValue({ value: 0, max: 5 }), undefined);
+assert.equal(fullDosesValue({ value: 2, max: 5 }), undefined);
+assert.equal(fullDosesValue({ value: null, max: null }), undefined);
+assert.equal(fullDosesValue(null), undefined);
+
+const created = [];
+applyFullDoses({
+  doses: { value: null, max: 4 },
+  updateSource(changes) { created.push(changes); }
+});
+assert.deepEqual(created, [{ "doses.value": 4 }]);
+
+const kept = [];
+applyFullDoses({
+  doses: { value: 0, max: 4 },
+  updateSource(changes) { kept.push(changes); }
+});
+assert.deepEqual(kept, []);
+applyFullDoses({
+  doses: { value: null, max: null },
+  updateSource(changes) { kept.push(changes); }
+});
+assert.deepEqual(kept, []);
+
+const substanceSource = readFileSync(new URL("../module/data/base-item.mjs", import.meta.url), "utf8");
+const substanceBlock = substanceSource.slice(
+  substanceSource.indexOf("export class SubstanceData"),
+  substanceSource.indexOf("export class SoftwareData")
+);
+assert.equal(substanceBlock.includes("// Décision Marc 31/10/2026"), true);
+assert.equal(substanceBlock.includes("_preCreate"), true);
+assert.equal(substanceBlock.includes("static migrateData"), false);
 
 console.log("catalog-092.test.mjs : ok");

@@ -318,7 +318,9 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 6. Ouvrez **Dérivation Sereguine « Sans-Témoin »**.
    **Résultat attendu :** **Verrou Sereguine** est décoché. Score autonome **50**. La description dit que c'est un crime grave.
 7. Sur un personnage, glissez **Cocktail de poussée « Jus de Fer »**.
-   **Résultat attendu :** catégorie **Gravité**, administration **autoInjector**, durée **1 h**, doses **vide / 1**. La légalité dit **[à compléter]**. Rouvrez la fiche : les champs sont encore là.
+   **Résultat attendu :** catégorie **Gravité**, administration **autoInjector**, durée **1 h**, doses **1 / 1**. La légalité dit **[à compléter]**. Rouvrez la fiche : les champs sont encore là.
+   Créez une substance à la main sur le même personnage, sans rien saisir.
+   **Résultat attendu :** les doses restent **vide / vide**. La catégorie peut rester vide.
 8. Ouvrez **Oxygénateur sanguin perfluoré « Souffle Noir »**, **Chélateur d'actinides (Bleu de Prusse, DTPA)** et **Charge sédative « Dortoir » (pour fléchettes)**.
    **Résultat attendu :** chacun dit **[à compléter]** dans l'effet. Rien ne change le compte à rebours d'une combinaison percée, ni un test de Médecine, ni un délai d'inconscience.
 9. Créez un atout à la main sur le personnage. Laissez le domaine vide. Cochez rien d'autre.

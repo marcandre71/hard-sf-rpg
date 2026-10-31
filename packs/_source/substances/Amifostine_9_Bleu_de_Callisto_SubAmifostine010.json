@@ -10,7 +10,7 @@
     "administration": "autoInjector",
     "duration": "1 exposition",
     "doses": {
-      "value": null,
+      "value": 1,
       "max": 1
     },
     "effect": "<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>",

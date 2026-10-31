@@ -10,7 +10,7 @@
     "administration": "oral et injection",
     "duration": "cure de 3 jours",
     "doses": {
-      "value": null,
+      "value": 3,
       "max": 3
     },
     "effect": "<p>Traite seulement la contamination interne (poussières radioactives inhalées ou ingérées après une brèche). Il accélère l'élimination des particules et arrête donc la dose qu'elles continueraient à délivrer ; il ne retire pas la dose déjà reçue. Valeurs chiffrées et test de Médecine : [à compléter].</p>",

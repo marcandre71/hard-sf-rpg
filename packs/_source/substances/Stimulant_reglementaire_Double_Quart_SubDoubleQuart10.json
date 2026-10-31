@@ -10,7 +10,7 @@
     "administration": "oral",
     "duration": "8 h",
     "doses": {
-      "value": null,
+      "value": 5,
       "max": 5
     },
     "effect": "<p>Repousse l'état Épuisé pendant un quart entier (8 h) et rend temporairement 2 points d'Endurance.</p>",

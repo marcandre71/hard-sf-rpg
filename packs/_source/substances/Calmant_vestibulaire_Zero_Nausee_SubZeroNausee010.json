@@ -10,7 +10,7 @@
     "administration": "timbre",
     "duration": "24 h",
     "doses": {
-      "value": null,
+      "value": 5,
       "max": 5
     },
     "effect": "<p>Supprime le mal de l'espace des premiers jours et réduit de moitié la pénalité de gravité inhabituelle pour les tâches physiques (−10 devient 0 ; −20 devient −10).</p>",

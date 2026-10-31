@@ -10,7 +10,7 @@
     "administration": "autoInjector",
     "duration": "1 h",
     "doses": {
-      "value": null,
+      "value": 1,
       "max": 1
     },
     "effect": "<p>+1 en Tolérance aux g pendant 1 heure (manœuvres de combat à forte poussée, décollages planétaires).</p>",

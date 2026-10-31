@@ -10,7 +10,7 @@
     "administration": "oral",
     "duration": "quotidien, cure d'1 mois",
     "doses": {
-      "value": null,
+      "value": 30,
       "max": 30
     },
     "effect": "<p>Avec ce traitement, le personnage n'a pas de test mensuel de CON contre le déconditionnement (LdR §8). Ralentit la fonte osseuse et musculaire.</p>",

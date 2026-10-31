@@ -10,7 +10,7 @@
     "administration": "perfusion",
     "duration": "1 semaine",
     "doses": {
-      "value": null,
+      "value": 1,
       "max": 1
     },
     "effect": "<p>Traitement hospitalier d'un patient Exposé ou Irradié ; permet de redescendre d'un palier de radiation en une semaine de soins intensifs.</p>",

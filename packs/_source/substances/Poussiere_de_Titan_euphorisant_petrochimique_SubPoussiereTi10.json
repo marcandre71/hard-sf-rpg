@@ -10,7 +10,7 @@
     "administration": "inhalation",
     "duration": "3 h",
     "doses": {
-      "value": null,
+      "value": 1,
       "max": 1
     },
     "effect": "<p>Rend temporairement 3 points de Sang-froid, ignore l'état Choqué et donne +10 aux tests de VOL contre la peur.</p>",

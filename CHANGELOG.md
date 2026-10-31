@@ -9,9 +9,9 @@ Décision Marc 30/10/2026. Réf. Atouts v0.3, Augmentations v0.3, Logiciels v0.3
 - Atouts : les 25 du catalogue, coût 15. Champ `domain` (espace, technique, endurance, combat, social), vide par défaut. Un diff partiel ne le reçoit pas.
 - Augmentations : les 14 du catalogue. Le coût reste 0. Là où le catalogue dit [à compléter], la description le dit.
 - Logiciels : les 15 du catalogue. Catégorie fermée de 5, utilitaire par défaut. Support pad, tablette ou vaisseau, un seul, vide par défaut. Compétences assistées en texte. Score autonome affiché, sans bouton. Verrou Sereguine coché par défaut ; « Sans-Témoin » est décoché.
-- Substances : les 15 du catalogue. Administration et durée en texte. Doses : le maximum vient du catalogue, la valeur actuelle reste vide. Légalité vide quand le catalogue dit [à compléter]. Chélateur, Souffle Noir et Dortoir gardent [à compléter] dans l'effet.
+- Substances : les 15 du catalogue. Administration et durée en texte. Doses : le maximum vient du catalogue, la valeur actuelle est pleine (`doses.value` égale `doses.max`). Décision Marc 31/10/2026. Une substance créée sans valeur copie ce maximum dans `_preCreate`, seulement si c'est un entier. Un 0 stocké reste 0. Une création sans maximum reste vide. Un diff partiel ne reçoit pas cette valeur. Légalité vide quand le catalogue dit [à compléter]. Chélateur, Souffle Noir et Dortoir gardent [à compléter] dans l'effet.
 
-À confirmer par Marc : la valeur actuelle des doses (le catalogue ne donne que le maximum ; proposition : la laisser vide). Le coût 0 des augmentations, en attendant une monnaie. Le verrou Sereguine coché par défaut (le catalogue le dit ; « Sans-Témoin » est l'exception).
+Décision Marc 31/10/2026, tranchée par Didier : le coût des augmentations reste affiché, à 0. Le verrou Sereguine reste coché par défaut ; « Sans-Témoin » reste décoché. Un objet créé à la main garde ses champs vides, sauf la catégorie de logiciel, qui part sur Utilitaire. Les doses actuelles d'une substance sont pleines.
 
 ## 0.9.1
 

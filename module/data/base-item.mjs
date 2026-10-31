@@ -7,6 +7,7 @@
  * catalogue v0.3, effets en texte seulement.
  */
 import { SOL } from "../config.mjs";
+import { applyFullDoses } from "./substance-doses.mjs";
 import { boolField, htmlField, numberField, stringField, valueMaxField } from "./fields.mjs";
 
 /**
@@ -29,6 +30,7 @@ export class BaseItemData extends foundry.abstract.TypeDataModel {
  * Réf. LdR v0.2 §15, Fiche v0.2 §4. Réf. Substances v0.3 §1.
  * Décision Marc 30/10/2026 : effets en texte. Pas de migrateData :
  * un diff partiel ne reçoit pas les champs nouveaux.
+ * Décision Marc 31/10/2026 : doses actuelles pleines à la création.
  *
  * @extends BaseItemData
  */
@@ -47,8 +49,8 @@ export class SubstanceData extends BaseItemData {
       administration: stringField("SOL.Substance.administration"),
       // Décision Marc 30/10/2026 : chaîne libre (« 1 h », « 1D10 × 5 min »).
       duration: stringField("SOL.Substance.duration"),
-      // Le catalogue donne le maximum. La valeur actuelle n'y est pas :
-      // elle reste vide (null), le MJ la saisit.
+      // Le catalogue donne le maximum. Décision Marc 31/10/2026 :
+      // la valeur actuelle le copie à la création (_preCreate), pas dans un diff.
       doses: valueMaxField("SOL.Substance.doses", {
         integer: true,
         min: 0,
@@ -61,6 +63,24 @@ export class SubstanceData extends BaseItemData {
       // Décision Marc 30/10/2026 : chaîne libre, vide quand elle n'est pas connue.
       legality: stringField("SOL.Substance.legality")
     };
+  }
+
+  /**
+   * Valeur actuelle = maximum, si elle n'est pas déjà posée.
+   * Une fiche faite à la main, sans maximum, reste vide.
+   * Un diff partiel ne passe pas ici.
+   *
+   * @override
+   * @param {object} data
+   * @param {object} options
+   * @param {foundry.documents.BaseUser} user
+   * @returns {Promise<boolean|void>|boolean|void}
+   * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.DataModel.html#_preCreate
+   */
+  _preCreate(data, options, user) {
+    // Décision Marc 31/10/2026
+    applyFullDoses(this);
+    if ( typeof super._preCreate === "function" ) return super._preCreate(data, options, user);
   }
 }
 

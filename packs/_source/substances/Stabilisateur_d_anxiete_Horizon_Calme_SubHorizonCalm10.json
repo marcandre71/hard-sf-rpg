@@ -10,7 +10,7 @@
     "administration": "oral ou timbre",
     "duration": "8 h",
     "doses": {
-      "value": null,
+      "value": 5,
       "max": 5
     },
     "effect": "<p>Rend 2 points de Sang-froid, une fois par scénario.</p>",
