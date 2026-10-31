@@ -12,7 +12,7 @@ const actorSheet = readFileSync(new URL("../templates/actor/actor-sheet.hbs", im
 const portrait = readFileSync(new URL("../module/sheets/portrait.mjs", import.meta.url), "utf8");
 const principal = readFileSync(new URL("../templates/actor/tab-principal.hbs", import.meta.url), "utf8");
 
-assert.equal(system.version, "0.9.3");
+assert.equal(system.version, "0.9.4");
 assert.equal(system.styles.includes("styles/sol.css"), true);
 assert.equal("fonts" in system, false, "le manifeste v14 n'a pas de clé fonts");
 
@@ -60,7 +60,9 @@ const ship = readFileSync(new URL("../module/sheets/ship-sheet.mjs", import.meta
 assert.equal(ship.includes("// Réf. 0.7.4-decisions : malus à partir de 7"), true);
 assert.equal(ship.includes("step >= 6"), false);
 const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
-assert.equal(tester.includes("La section 17 est réservée à la **0.9.4**"), true);
+const section17 = tester.indexOf("## 17. 0.9.4 Blessures");
+const section18 = tester.indexOf("## 18. 0.9.3 Habillage");
+assert.equal(section17 > 0 && section18 > section17, true);
 assert.equal(tester.includes("Ouvrez l'arme, changez Munitions actuelles"), true);
 assert.equal(tester.includes("Cliquez le portrait. Dans le sélecteur, double-cliquez une image, ou cliquez-la puis **Choisir**"), true);
 assert.equal(tester.includes("le 7ᵉ segment passe en ambre"), true);
