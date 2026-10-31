@@ -7,8 +7,10 @@
 --}}
 <section class="sol-sheet">
   <header class="sol-header">
-    <img class="sol-portrait" src="{{actor.img}}" alt="{{docSource.name}}"
-         data-action="editImage" data-edit="img" data-tooltip="{{localize 'SOL.Sheet.EditImage'}}">
+    <button type="button" class="sol-portrait-button" data-action="editImage" data-edit="img"
+            data-tooltip="{{localize 'SOL.Sheet.EditImage'}}">
+      <img class="sol-portrait" src="{{actor.img}}" alt="{{docSource.name}}">
+    </button>
     <div class="sol-identity">
       <p class="sol-type">{{localize typeLabel}}</p>
       <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
@@ -21,7 +23,14 @@
   {{> "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs"}}
   <p class="sol-seuil">{{localize "SOL.Damage.sb"}} : <strong>{{seuil}}</strong></p>
   {{#if showEndurance}}
-  <p class="sol-seuil">{{localize "SOL.Actor.endurance"}} : <strong>{{enduranceCurrent}} / {{enduranceMax}}</strong></p>
+  <div class="sol-endurance-line">
+    <span class="sol-lbl">{{localize "SOL.Actor.endurance"}}</span>
+    <span class="sol-num">{{enduranceCurrent}} / {{enduranceMax}}</span>
+  </div>
+  <div class="sol-gauge" role="meter" aria-valuemin="0" aria-valuemax="{{enduranceMax}}"
+       aria-valuenow="{{enduranceCurrent}}" aria-label="{{localize 'SOL.Actor.endurance'}}">
+    <span class="sol-gauge-fill" style="width: {{endurancePct}}%"></span>
+  </div>
   {{/if}}
   {{#if breachText}}
   <p class="sol-seuil">{{breachText}}</p>

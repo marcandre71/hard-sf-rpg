@@ -21,6 +21,7 @@ import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { applyDroppedState, dragData, presentStatuses, removeStatus } from "./states.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
+import { editImage } from "./portrait.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -34,7 +35,7 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, rollCharacteristic, stopBreachClock, removeStatus }
+    actions: { ...itemListActions, rollCharacteristic, stopBreachClock, removeStatus, editImage }
   };
 
   /** @override */
@@ -90,6 +91,9 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       context.showEndurance = endurance.max != null;
       context.enduranceCurrent = endurance.current;
       context.enduranceMax = endurance.max;
+      context.endurancePct = endurance.max > 0
+        ? Math.max(0, Math.min(100, Math.round((100 * endurance.current) / endurance.max)))
+        : 0;
     }
     const breach = breachContext(actor);
     context.breachText = breach.text;

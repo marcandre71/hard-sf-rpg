@@ -1,4 +1,4 @@
-# Tester le système « Sol, Nouvelle Ère » (0.9.2)
+# Tester le système « Sol, Nouvelle Ère » (0.9.3)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
@@ -8,6 +8,7 @@ La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle ser
 La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
 La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 La section 16 est la **0.9.2** (atouts, augmentations, logiciels, substances). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
+La section 18 est la **0.9.3** (habillage des fiches). C'est une PR brouillon vers `main`. Le ZIP de `main` ne la contient pas. L'étape 1 donne le ZIP de `dev/0.9.3-style`. Ne pas la fusionner.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -327,3 +328,28 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
    **Résultat attendu :** le domaine peut rester vide. Le coût en XP part à **0**, pas à 15.
 10. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 18. 0.9.3 Habillage des fiches
+
+Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.3 qu'après fusion de la 0.9.2, puis de cette branche. D'ici là, prenez le ZIP de `dev/0.9.3-style`.
+
+1. Prenez le ZIP de `dev/0.9.3-style` :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.3-style.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.3-style`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.3**. La barre latérale de Foundry n'a pas changé de couleurs.
+2. Ouvrez la fiche d'un personnage.
+   **Résultat attendu :** fond sombre, titres cyan, caractéristiques en cartes, Endurance avec une jauge. Le texte se lit. Un champ pris au clavier a un contour visible.
+3. Cliquez le portrait. Choisissez une image, puis fermez le sélecteur.
+   **Résultat attendu :** le portrait de la fiche change, sans recharger la page. Refaites-le sur un PNJ ou un vaisseau : le clic ouvre aussi le sélecteur.
+4. Fiche du personnage encore ouverte. Changez l'Endurance actuelle.
+   **Résultat attendu :** la jauge et le nombre bougent tout de suite.
+5. Équipez une arme qui a des munitions. Lancez-la une fois (réussite ou échec).
+   **Résultat attendu :** la jauge de munitions sur la fiche baisse d'un cran, fiche encore ouverte.
+6. Ouvrez la Petite Fortune, onglet Général, puis Sections & modules. Montez la chaleur d'un cran. Mettez une section à 0.
+   **Résultat attendu :** les segments de chaleur changent. La section à 0 a un filet rouge, et le mot ou le chiffre le dit aussi.
+7. Regardez la barre latérale, la barre des scènes, et une carte de jet dans le chat.
+   **Résultat attendu :** l'interface Foundry hors fiche n'a pas pris le fond de la feuille. La carte de jet garde ses couleurs d'avant.
+8. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

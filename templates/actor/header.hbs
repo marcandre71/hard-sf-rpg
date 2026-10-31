@@ -1,16 +1,39 @@
 {{!--
-  En-tête commun aux trois onglets (portrait, nom, type).
-  Le nom est lu dans document._source. Réf. consigne étape 3.
+  En-tête commun (portrait, nom, Endurance s'il y en a une).
+  Le portrait ouvre le FilePicker v14 (action editImage).
+  Décision Marc 31/10/2026. Le nom est lu dans document._source.
 --}}
 <header class="sol-header">
-  <img class="sol-portrait" src="{{actor.img}}" alt="{{docSource.name}}"
-       data-action="editImage" data-edit="img" data-tooltip="{{localize 'SOL.Sheet.EditImage'}}">
+  <button type="button" class="sol-portrait-button" data-action="editImage" data-edit="img"
+          data-tooltip="{{localize 'SOL.Sheet.EditImage'}}">
+    <img class="sol-portrait" src="{{actor.img}}" alt="{{docSource.name}}">
+  </button>
   <div class="sol-identity">
-    <p class="sol-type">{{localize typeLabel}}</p>
+    <p class="sol-lbl">{{localize typeLabel}}</p>
     {{#if wreck}}
     <p class="sol-wreck">{{localize "SOL.Ship.wreckBadge"}}</p>
     {{/if}}
-    <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
-    <input id="{{rootId}}-name" type="text" name="name" value="{{docSource.name}}">
+    <label class="sol-name-label" for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
+    <input id="{{rootId}}-name" class="sol-name" type="text" name="name" value="{{docSource.name}}">
+    {{#if headerSlots.length}}
+    <div class="sol-tags">
+      {{#each headerSlots}}
+      <span class="sol-tag">{{localize label}} <b>{{name}}</b></span>
+      {{/each}}
+    </div>
+    {{/if}}
   </div>
+  {{#if showEndurance}}
+  <section class="sol-panel sol-endurance-panel">
+    <h2><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i> {{localize "SOL.Section.physical"}}</h2>
+    <div class="sol-endurance-line">
+      <span class="sol-lbl">{{localize "SOL.Actor.endurance"}}</span>
+      <span class="sol-num">{{enduranceCurrent}} / {{enduranceMax}}</span>
+    </div>
+    <div class="sol-gauge" role="meter" aria-valuemin="0" aria-valuemax="{{enduranceMax}}"
+         aria-valuenow="{{enduranceCurrent}}" aria-label="{{localize 'SOL.Actor.endurance'}}">
+      <span class="sol-gauge-fill" style="width: {{endurancePct}}%"></span>
+    </div>
+  </section>
+  {{/if}}
 </header>

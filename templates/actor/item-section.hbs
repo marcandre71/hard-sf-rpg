@@ -6,7 +6,9 @@
   reste le hook preCreateItem.
 --}}
 <section class="sol-item-section">
+  {{#unless hideTitle}}
   <h3 class="sol-section-title">{{localize section.title}}</h3>
+  {{/unless}}
   {{#if section.items.length}}
   <ul class="sol-items">
     {{#each section.items as |item|}}
@@ -39,8 +41,16 @@
       {{#if item.fields.length}}
       <span class="sol-item-fields">
         {{#each item.fields as |field|}}
-        <span class="sol-item-field"><span class="sol-item-field-label">{{localize field.label}}</span> {{field.value}}</span>
+        <span class="sol-item-field{{#if field.tone}} sol-pill sol-pill-{{field.tone}}{{/if}}"><span class="sol-item-field-label">{{localize field.label}}</span> {{field.value}}</span>
         {{/each}}
+      </span>
+      {{/if}}
+      {{#if item.ammoMax}}
+      <span class="sol-ammo">
+        <span class="sol-num">{{item.ammoValue}} / {{item.ammoMax}}</span>
+        <span class="sol-gauge" role="meter" aria-valuemin="0" aria-valuemax="{{item.ammoMax}}" aria-valuenow="{{item.ammoValue}}">
+          <span class="sol-gauge-fill" style="width: {{item.ammoPct}}%"></span>
+        </span>
       </span>
       {{/if}}
       <button type="button" class="sol-item-edit" data-action="openItem" data-tooltip="{{localize 'SOL.Sheet.EditItem'}}">

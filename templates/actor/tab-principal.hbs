@@ -4,38 +4,63 @@
   Compétence : nom, abréviation, formation, score. Le libellé de
   caractéristique lance le jet. Réf. LdR v0.2 §4.
   Réf. consigne étape 3, Fiche v0.2 §4. Pas de Vice ni de Lueur (Fiche v0.2 §5).
+  Habillage : panneaux. Les zones d'armure relisent sumZoneArmour. Décision Marc 31/10/2026.
 --}}
 <section class="tab sol-tab {{tab.cssClass}}" data-group="main" data-tab="principal">
-  <h2 class="sol-section-title">{{localize "SOL.Character.identity"}}</h2>
-  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityMain}}
+  <section class="sol-panel">
+    <h2><i class="fa-solid fa-id-card" aria-hidden="true"></i> {{localize "SOL.Character.identity"}}</h2>
+    {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=identityMain}}
+    <div class="sol-slots">
+      {{#each slotSections as |section|}}
+        {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=section}}
+      {{/each}}
+    </div>
+  </section>
 
-  <div class="sol-slots">
-    {{#each slotSections as |section|}}
-      {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=section}}
-    {{/each}}
+  <section class="sol-panel">
+    <h2><i class="fa-solid fa-table-cells" aria-hidden="true"></i> {{localize "SOL.Sheet.Characteristics"}}</h2>
+    {{> "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs"}}
+  </section>
+
+  <div class="sol-split">
+    <div class="sol-split-col">
+      <section class="sol-panel">
+        <h2><i class="fa-solid fa-chart-line" aria-hidden="true"></i> {{localize skillSection.title}}</h2>
+        {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=skillSection hideTitle=true}}
+      </section>
+      <section class="sol-panel">
+        <h2><i class="fa-solid fa-star" aria-hidden="true"></i> {{localize talentSection.title}}</h2>
+        {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=talentSection hideTitle=true}}
+      </section>
+    </div>
+    <div class="sol-split-col">
+      <section class="sol-panel">
+        <h2><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> {{localize "SOL.Armor.protection"}}</h2>
+        <div class="sol-zones">
+          {{#each armorZones}}
+          <div class="sol-zone{{#if hurt}} sol-tone-warn{{/if}}">
+            <span class="sol-lbl">{{localize label}}</span>
+            <span class="sol-num">{{value}}{{#if hurt}} <span title="{{localize 'SOL.Sheet.zoneHurt'}}">▲</span>{{/if}}</span>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+      <section class="sol-panel">
+        <h2><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{localize "SOL.Section.states"}}</h2>
+        {{> "systems/sol-nouvelle-ere/templates/actor/status-section.hbs" hideTitle=true}}
+        {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=injurySection hideTitle=true}}
+        {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=sequelSection hideTitle=true}}
+        {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=enduranceGroups}}
+        {{#if breachText}}
+        <p class="sol-seuil">{{breachText}}</p>
+        {{#each breachAir as |line|}}
+        <p class="sol-seuil">{{line}}</p>
+        {{/each}}
+        {{#if breachStop}}
+        <button type="button" data-action="stopBreachClock">{{localize "SOL.Breach.stop"}}</button>
+        {{/if}}
+        {{/if}}
+      </section>
+    </div>
   </div>
-
-  <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
-  {{> "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs"}}
-
-  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=skillSection}}
-  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=talentSection}}
-
-  <h2 class="sol-section-title">{{localize "SOL.Section.physical"}}</h2>
-  {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=enduranceGroups}}
-  {{#if showEndurance}}
-  <p class="sol-seuil">{{localize "SOL.Actor.endurance"}} : <strong>{{enduranceCurrent}} / {{enduranceMax}}</strong></p>
-  {{/if}}
-  {{#if breachText}}
-  <p class="sol-seuil">{{breachText}}</p>
-  {{#each breachAir as |line|}}
-  <p class="sol-seuil">{{line}}</p>
-  {{/each}}
-  {{#if breachStop}}
-  <button type="button" data-action="stopBreachClock">{{localize "SOL.Breach.stop"}}</button>
-  {{/if}}
-  {{/if}}
-  {{> "systems/sol-nouvelle-ere/templates/actor/status-section.hbs"}}
-  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=injurySection}}
-  {{> "systems/sol-nouvelle-ere/templates/actor/item-section.hbs" section=sequelSection}}
 </section>

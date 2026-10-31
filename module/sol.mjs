@@ -65,6 +65,41 @@ function initializeSystem() {
 
   CONFIG.SOL = SOL;
 
+  // Polices embarquées. Le manifeste v14 n'a pas de clé fonts :
+  // @font-face est dans styles/sol.css, et Foundry les connaît ici.
+  // Décision Marc 31/10/2026. SIL OFL, fichiers dans fonts/.
+  if ( CONFIG.fontDefinitions ) {
+    const face = (file, weight) => ({
+      urls: [`systems/sol-nouvelle-ere/fonts/${file}`],
+      weight,
+      style: "normal"
+    });
+    Object.assign(CONFIG.fontDefinitions, {
+      "IBM Plex Sans Condensed": {
+        editor: false,
+        fonts: [
+          face("IBMPlexSansCondensed-Regular.woff2", 400),
+          face("IBMPlexSansCondensed-Medium.woff2", 500),
+          face("IBMPlexSansCondensed-SemiBold.woff2", 600)
+        ]
+      },
+      "IBM Plex Mono": {
+        editor: false,
+        fonts: [
+          face("IBMPlexMono-Regular.woff2", 400),
+          face("IBMPlexMono-Medium.woff2", 500)
+        ]
+      },
+      "Atkinson Hyperlegible Next": {
+        editor: true,
+        fonts: [
+          face("AtkinsonHyperlegibleNext-Regular.woff2", 400),
+          face("AtkinsonHyperlegibleNext-Bold.woff2", 700)
+        ]
+      }
+    });
+  }
+
   // Réf. LdR v0.2 : un tour dure environ 5 secondes. `0` ne fait pas
   // avancer le temps du monde au changement de round, et l'horloge de
   // brèche resterait figée en combat.

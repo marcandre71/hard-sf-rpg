@@ -36,6 +36,8 @@ import { duplicateActors, refusesManeuver } from "../ships/combat.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
 import { markGroupDisabled, prepareFieldGroups } from "./prepare-fields.mjs";
+import { editImage } from "./portrait.mjs";
+import { clampHeat } from "../ships/reactor.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -76,7 +78,7 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 760, height: 860 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, clearPost, rollPost, clearLock }
+    actions: { ...itemListActions, clearPost, rollPost, clearLock, editImage }
   };
 
   /** @override */
@@ -136,6 +138,17 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.typeLabel = `TYPES.Actor.${actor.type}`;
     context.fixed = refusesManeuver(stored.category);
     context.heatMax = REACTOR_HEAT_MAX;
+    // Segments d'affichage. Le malus de poste reste dans reactor.mjs (à partir de 7).
+    // La maquette colore à partir de 6, et le maximum en alerte. Décision Marc 31/10/2026.
+    const heatNow = clampHeat(stored.heat?.value ?? 0);
+    context.heatValue = heatNow;
+    context.heatSegments = Array.from({ length: REACTOR_HEAT_MAX }, (_unused, index) => {
+      const step = index + 1;
+      if ( step > heatNow ) return "empty";
+      if ( step >= REACTOR_HEAT_MAX ) return "alert";
+      if ( step >= 6 ) return "warn";
+      return "accent";
+    });
     context.departureMass = actor.system.departureMass;
 
     const groupsOf = (keys) => prepareFieldGroups(pickFields(fields, keys), stored, {
@@ -350,6 +363,30 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
  * @param {object} stored
  * @returns {object[]}
  */
+/**
+ * Couleur de tuile. Affichage seulement : alerte à 0 ou détruite,
+ * ambre si la section est entamée ou si la structure est tordue.
+ *
+ * @param {string} id
+ * @param {object} source
+ * @param {object} stored
+ * @param {Array<{ value?: number, max?: number }>} followed
+ * @returns {""|"warn"|"alert"}
+ */
+function sectionTone(id, source, stored, followed) {
+  if ( id === "radiators" ) {
+    if ( followed.some(row => Number(row.value) <= 0) && followed.length ) return "alert";
+    if ( followed.some(row => Number(row.max) > 0 && Number(row.value) < Number(row.max)) ) return "warn";
+    if ( stored.twisted === true ) return "warn";
+    return "";
+  }
+  const value = source.integrity?.value ?? 0;
+  const max = source.integrity?.max ?? 0;
+  if ( source.destroyed === true || (max > 0 && value <= 0) ) return "alert";
+  if ( stored.twisted === true || (max > 0 && value < max) ) return "warn";
+  return "";
+}
+
 function presentSections(actor, stored) {
   const items = actor.items.filter(item => item.type === "shipModule");
   const raw = items.map(item => ({
@@ -374,6 +411,7 @@ function presentSections(actor, stored) {
       armorValue: source.armor?.value ?? 0,
       armorMax: source.armor?.max ?? 0,
       destroyed: source.destroyed === true,
+      tone: sectionTone(id, source, stored, id === "radiators" ? followed : []),
       armorBonus: hasPlate ? armorBonus(raw, id) : 0,
       displayedArmor: displayedArmor(id, plate, raw),
       followed: id === "radiators"

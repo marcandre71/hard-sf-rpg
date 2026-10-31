@@ -1,35 +1,33 @@
 {{!--
-  Tableau des caractéristiques. Le contexte parent fournit `characteristics`
-  et `bounds`. Le bouton lance `rollCharacteristic`. Saisies dans `_source`,
-  Actuelle dérivée. temp n'a pas de borne (Fiche v0.2 §4).
+  Caractéristiques en cartes : abréviation, actuelle, nom, puis les saisies.
+  L'actuelle est dérivée (pas un input). Les autres cases restent éditables.
+  Le bouton lance rollCharacteristic. Réf. Fiche v0.2 §4.
 --}}
-<table class="sol-characteristics">
-  <thead>
-    <tr>
-      <th class="sol-col-name">{{localize "SOL.Sheet.Characteristic"}}</th>
-      <th>{{localize bounds.base.label}}</th>
-      <th>{{localize bounds.origin.label}}</th>
-      <th>{{localize bounds.advance.label}}</th>
-      <th>{{localize bounds.temp.label}}</th>
-      <th>{{localize "SOL.Field.value"}}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each characteristics as |c|}}
-    <tr data-characteristic="{{c.key}}">
-      <td class="sol-col-name">
-        <button type="button" class="sol-roll-characteristic" data-action="rollCharacteristic" data-characteristic="{{c.key}}">
-          <i class="fa-solid fa-dice-d20"></i>
-          <span class="sol-abbr">{{localize c.abbr}}</span>
-          <span class="sol-label">{{localize c.label}}</span>
-        </button>
-      </td>
-      <td><input type="number" name="{{c.path}}.base" value="{{c.base}}" min="{{../bounds.base.min}}" max="{{../bounds.base.max}}" step="1"></td>
-      <td><input type="number" name="{{c.path}}.origin" value="{{c.origin}}" min="{{../bounds.origin.min}}" max="{{../bounds.origin.max}}" step="1"></td>
-      <td><input type="number" name="{{c.path}}.advance" value="{{c.advance}}" min="{{../bounds.advance.min}}" max="{{../bounds.advance.max}}" step="1"></td>
-      <td><input type="number" name="{{c.path}}.temp" value="{{c.temp}}" step="1"></td>
-      <td class="sol-value"><output>{{c.value}}</output></td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+<div class="sol-chars">
+  {{#each characteristics as |c|}}
+  <div class="sol-ch" data-characteristic="{{c.key}}">
+    <button type="button" class="sol-ch-roll" data-action="rollCharacteristic" data-characteristic="{{c.key}}">
+      <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
+      <span class="sol-abbr">{{localize c.abbr}}</span>
+    </button>
+    <output class="sol-ch-value">{{c.value}}</output>
+    <span class="sol-lbl">{{localize c.label}}</span>
+    <label class="sol-ch-field">
+      <span class="sol-lbl">{{localize ../bounds.base.label}}</span>
+      <input type="number" name="{{c.path}}.base" value="{{c.base}}" min="{{../bounds.base.min}}" max="{{../bounds.base.max}}" step="1">
+    </label>
+    <label class="sol-ch-field">
+      <span class="sol-lbl">{{localize ../bounds.origin.label}}</span>
+      <input type="number" name="{{c.path}}.origin" value="{{c.origin}}" min="{{../bounds.origin.min}}" max="{{../bounds.origin.max}}" step="1">
+    </label>
+    <label class="sol-ch-field">
+      <span class="sol-lbl">{{localize ../bounds.advance.label}}</span>
+      <input type="number" name="{{c.path}}.advance" value="{{c.advance}}" min="{{../bounds.advance.min}}" max="{{../bounds.advance.max}}" step="1">
+    </label>
+    <label class="sol-ch-field">
+      <span class="sol-lbl">{{localize ../bounds.temp.label}}</span>
+      <input type="number" name="{{c.path}}.temp" value="{{c.temp}}" step="1">
+    </label>
+  </div>
+  {{/each}}
+</div>

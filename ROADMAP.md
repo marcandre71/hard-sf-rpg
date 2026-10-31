@@ -21,9 +21,9 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 ## Ensuite
 
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.9.3 — blessures, journaux et vaisseaux PNJ.
+- [ ] 0.9.3 — habillage SF des fiches (ancienne 0.8.1 / 0.10.0). En relecture. Branche `dev/0.9.3-style`, rebasée sur `main`.
+- [ ] 0.9.4 — blessures, journaux et vaisseaux PNJ. Passe après l'habillage. Branche `dev/0.9.4`.
 - [ ] 0.8.0 — machines : fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines. Luciole, Crabe et TATI arrivent ici, pas de coquille en 0.9.1. Masse du TATI : à compléter (Équipement v0.3 §5). Décision Marc 31/10/2026.
-- [ ] 0.8.1 — habillage SF des fiches (ancienne 0.10.0). Avancée pour qu'une version de test « 0.8 + nouvelles fiches » arrive sur `main`. Mise en forme hard SF 2187, sobre et lisible : interface de bord, fond sombre, accents de couleur, typographie technique. Le portrait reste modifiable : un clic ouvre le FilePicker de Foundry pour l'avatar, sur toutes les fiches. Les jauges et indicateurs (chaleur, Intégrité, munitions, Endurance, états) se mettent à jour en direct sur la fiche ouverte. Icônes libres, traduction anglaise. Décision Marc 30/10/2026.
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée.
 
-Décision Marc 30/10/2026 : après la 0.9.0, l'ordre est 0.9.1, 0.9.2, 0.9.3, puis 0.8.0, puis 0.8.1 (habillage, ancienne 0.10.0), puis 1.0.0.
+Décision Marc 31/10/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4 blessures, journaux et vaisseaux PNJ, 0.8.0 machines, 1.0.0.

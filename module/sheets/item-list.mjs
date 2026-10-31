@@ -105,7 +105,12 @@ function itemFields(item) {
     case "injury":
       return [
         { label: "SOL.Injury.location", value: choiceLabel(SOL.bodyLocations, source.location) },
-        { label: "SOL.Injury.severity.label", value: choiceLabel(SOL.injurySeverities, source.severity) }
+        {
+          label: "SOL.Injury.severity.label",
+          value: choiceLabel(SOL.injurySeverities, source.severity),
+          // Affichage : légère en ambre, le reste en alerte. Le mot reste.
+          tone: source.severity === "light" ? "warn" : (source.severity ? "alert" : "")
+        }
       ];
     case "sequel":
       return [{ label: "SOL.Sequel.category.label", value: choiceLabel(SOL.sequelCategories, source.category) }];
@@ -154,8 +159,24 @@ function presentItem(item, actor) {
     showEndOfOrder: item.type === "injury",
     endOfOrder: item.type === "injury" && item.system?.endOfOrder === true,
     showSeal: Boolean(seal) && Number(item.system.quantity) >= 1,
-    canRoll: rollable && (item.type === "skill" || (isWeapon && equipped))
+    canRoll: rollable && (item.type === "skill" || (isWeapon && equipped)),
+    // Jauge d'affichage. Le tir écrit déjà ammo. Le rendu de la fiche la relit.
+    ...ammoGauge(item.type === "weapon" ? item.system._source?.ammo : null)
   };
+}
+
+/**
+ * Pourcentage de la jauge de munitions. Pas une règle.
+ *
+ * @param {{ value?: number, max?: number }|null|undefined} ammo
+ * @returns {{ ammoValue?: number, ammoMax?: number, ammoPct?: number }}
+ */
+function ammoGauge(ammo) {
+  const max = ammo?.max;
+  const value = ammo?.value;
+  if ( !Number.isInteger(max) || max <= 0 || !Number.isInteger(value) ) return {};
+  const pct = Math.max(0, Math.min(100, Math.round((100 * value) / max)));
+  return { ammoValue: value, ammoMax: max, ammoPct: pct };
 }
 
 /**

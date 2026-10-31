@@ -45,7 +45,8 @@
       "EditItem": "Modifier l'objet",
       "DeleteItem": "Retirer l'objet",
       "ConfirmDelete": "Retirer « {name} » de cette fiche ?",
-      "Ship": "Feuille de vaisseau (Sol, Nouvelle Ère)"
+      "Ship": "Feuille de vaisseau (Sol, Nouvelle Ère)",
+      "zoneHurt": "Une blessure est sur cette zone"
     },
     "Tab": {
       "principal": "Principal",

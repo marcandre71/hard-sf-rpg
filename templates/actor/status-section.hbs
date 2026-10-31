@@ -4,7 +4,9 @@
   pose le statut lié par flags.sol-nouvelle-ere.statusId.
 --}}
 <section class="sol-item-section">
+  {{#unless hideTitle}}
   <h3 class="sol-section-title">{{localize "SOL.Section.states"}}</h3>
+  {{/unless}}
   {{#if statuses.length}}
   <ul class="sol-items">
     {{#each statuses as |status|}}

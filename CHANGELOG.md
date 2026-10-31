@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.9.3
+
+Branche `dev/0.9.3-style`, créée depuis `dev/0.9.2`. PR brouillon vers `main`. Elle sera rebasée sur `main` après la fusion de la 0.9.2. Ne pas fusionner. La section 18 de TESTER.md sert à la séance de test de la v1.
+
+Décision Marc 31/10/2026. Ancienne 0.8.1 / 0.10.0. Habillage seulement : aucune règle, aucun modèle, aucune migration. Réf. proposition de style et maquette validées (« très joli et dans le thème »).
+
+- Palette en variables CSS, sous `.sol-nouvelle-ere.actor` et `.sol-nouvelle-ere.item`. Pas sur `:root`. Les cartes de chat gardent leurs teintes.
+- Polices SIL OFL dans `fonts/` (woff2 et OFL). IBM Plex Sans Condensed, IBM Plex Mono, Atkinson Hyperlegible Next. Pas de CDN. Le manifeste v14 n'a pas de clé `fonts` : `@font-face` dans `styles/sol.css` (clé `styles`), et `CONFIG.fontDefinitions` au démarrage.
+- Fiche de personnage : en-tête, caractéristiques, compétences, armures par zone, équipement, états, Endurance, notes. Le portrait ouvre `foundry.applications.apps.FilePicker` (action `editImage`) sur toutes les fiches d'acteur.
+- Jauges : Endurance, munitions, chaleur (segments), Intégrité des sections. Elles suivent le rendu de `updateActor` ou `updateItem`. Un objet incorporé rafraîchit déjà la fiche parente.
+- Fiche vaisseau : même palette, tuiles de section, jauge de chaleur. Les règles de chaleur ne changent pas (malus à partir de 7).
+- Texte au moins 12 px. Focus visible. L'état ne passe pas que par la couleur (mot ou ▲).
+
 ## 0.9.2
 
 Entrée dans `main` en avance rapide depuis `dev/0.9.2` (`8db71c4`). Relue par Relecteur, test Marc reporté à la v1. La section 16 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.

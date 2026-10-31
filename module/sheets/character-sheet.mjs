@@ -25,8 +25,10 @@
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { breachContext, stopBreachClock } from "../dice/breach-countdown.mjs";
 import { performRoll } from "../dice/chat.mjs";
+import { sumZoneArmour } from "../dice/damage.mjs";
 import { resolveEndurance } from "../dice/derived.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
+import { editImage } from "./portrait.mjs";
 import { applyDroppedState, dragData, presentStatuses, removeStatus } from "./states.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
@@ -74,10 +76,10 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["sol", "sol-nouvelle-ere", "actor", "character"],
-    position: { width: 720, height: 800 },
+    position: { width: 1120, height: 900 },
     window: { resizable: true },
     form: { submitOnChange: true },
-    actions: { ...itemListActions, rollCharacteristic, stopBreachClock, removeStatus }
+    actions: { ...itemListActions, rollCharacteristic, stopBreachClock, removeStatus, editImage }
   };
 
   /**
@@ -187,6 +189,23 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       prepareSections(actor, [...SLOT_TYPES, ...PRINCIPAL_LISTS, ...INVENTORY_TYPES]).map(section => [section.type, section])
     );
     context.slotSections = SLOT_TYPES.map(type => byType[type]).filter(Boolean);
+    context.headerSlots = context.slotSections.map(section => ({
+      label: section.title,
+      name: section.items[0]?.name ?? ""
+    }));
+    const armors = actor.items
+      .filter(item => item.type === "armor")
+      .map(item => ({ equipped: item.system.equipped === true, protection: item.system.protection }));
+    const hurt = new Set(
+      actor.items.filter(item => item.type === "injury" && item.system.location).map(item => item.system.location)
+    );
+    // Même somme que les dégâts (armures équipées). Affichage seulement.
+    context.armorZones = Object.keys(SOL.bodyLocations).map(id => ({
+      id,
+      label: SOL.bodyLocations[id],
+      value: sumZoneArmour(armors, id),
+      hurt: hurt.has(id)
+    }));
     context.skillSection = byType.skill;
     context.talentSection = byType.talent;
     context.injurySection = byType.injury;
@@ -201,6 +220,9 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.showEndurance = endurance.max != null;
     context.enduranceCurrent = endurance.current;
     context.enduranceMax = endurance.max;
+    context.endurancePct = endurance.max > 0
+      ? Math.max(0, Math.min(100, Math.round((100 * endurance.current) / endurance.max)))
+      : 0;
     const breach = breachContext(actor);
     context.breachText = breach.text;
     context.breachAir = breach.air;

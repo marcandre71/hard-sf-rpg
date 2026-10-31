@@ -13,7 +13,7 @@
   </p>
 
   {{#each sections as |section|}}
-  <fieldset class="sol-fieldset">
+  <fieldset class="sol-fieldset sol-section-tile{{#if section.tone}} sol-tone-{{section.tone}}{{/if}}">
     <legend>{{localize section.label}}</legend>
 
     <div class="sol-ship-pair">
