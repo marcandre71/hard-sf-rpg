@@ -359,6 +359,7 @@ async function rollItem(event, target) {
     weapon: item,
     type: "weapon",
     // Décision Marc 30/10/2026 : pas de choix pour une arme de contact.
+    // Décision Marc 31/10/2026 : l'électrochoc et le pistolet de scellement l'ont.
     rangeChoice: showsAttackRange(item)
   });
 }

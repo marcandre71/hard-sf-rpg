@@ -6,7 +6,8 @@
   "img": "icons/svg/item-bag.svg",
   "system": {
     "skill": "Armes d'épaule",
-    "damage": 10
+    "damage": 10,
+    "melee": false
   },
   "effects": [],
   "folder": null,

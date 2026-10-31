@@ -18,7 +18,8 @@
     "burst": true,
     "hullSafe": true,
     "mass": 2.5,
-    "enc": 1.5
+    "enc": 1.5,
+    "melee": false
   },
   "effects": [],
   "folder": null,

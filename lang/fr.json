@@ -649,6 +649,7 @@
         "medium": "Moyenne",
         "long": "Longue"
       },
+      "melee": "Arme de contact",
       "recoil": "Recul",
       "ammo": "Munitions",
       "ammoType": {

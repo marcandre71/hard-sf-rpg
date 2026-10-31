@@ -7,6 +7,7 @@
  * La distance réelle, indicative, se note dans la description.
  */
 import { SOL } from "../config.mjs";
+import { migrateWeaponContact } from "../dice/attack.mjs";
 import { BaseItemData } from "./base-item.mjs";
 import { boolField, numberField, stringField, valueMaxField } from "./fields.mjs";
 
@@ -31,6 +32,11 @@ export class WeaponData extends BaseItemData {
         blank: false,
         choices: SOL.weaponRanges
       }),
+      // Décision Marc 31/10/2026. Vrai : pas de choix de portée au jet.
+      // L'électrochoc et le pistolet de scellement sont faux.
+      // La migration ne pose ce champ que sur une fiche complète.
+      // @see https://foundryvtt.com/api/v14/classes/foundry.data.fields.BooleanField.html
+      melee: boolField("SOL.Weapon.melee", false),
       recoil: boolField("SOL.Weapon.recoil", false),
       ammo: valueMaxField("SOL.Weapon.ammo"),
       ammoType: stringField("SOL.Weapon.ammoType.label", {
@@ -59,6 +65,8 @@ export class WeaponData extends BaseItemData {
   static migrateData(source) {
     // Seulement l'ancienne forme objet. Un diff sans `range`, ou déjà un palier, n'est pas modifié.
     if ( source?.range && typeof source.range === "object" ) source.range = "short";
+    // Décision Marc 31/10/2026. Un diff partiel ne reçoit pas `melee`.
+    migrateWeaponContact(source);
     return super.migrateData(source);
   }
 }

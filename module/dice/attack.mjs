@@ -66,18 +66,82 @@ export function attackRangePenalty(band) {
 }
 
 /**
+ * Clés d'une fiche d'arme complète. Un diff qui n'en a qu'une partie
+ * n'est pas une fiche : on n'y ajoute pas `melee`.
+ * Décision Marc 31/10/2026.
+ *
+ * @type {string[]}
+ */
+const FULL_WEAPON_KEYS = [
+  "skill", "description", "damage", "range", "recoil",
+  "ammo", "ammoType", "burst", "hullSafe", "mass", "enc"
+];
+
+/**
+ * Pose `melee` sur une fiche d'arme complète qui n'a pas le champ.
+ * Corps-à-corps : arme de contact. Les autres, y compris l'électrochoc
+ * et le pistolet de scellement (Armes de poing), ne le sont pas.
+ * Un diff partiel n'est pas complété.
+ * Décision Marc 31/10/2026.
+ *
+ * @param {object} source
+ * @returns {object}
+ */
+export function migrateWeaponContact(source) {
+  if ( !source || typeof source !== "object" ) return source;
+  if ( Object.hasOwn(source, "melee") ) return source;
+  if ( !FULL_WEAPON_KEYS.every(key => Object.hasOwn(source, key)) ) return source;
+  if ( source.range && typeof source.range === "object" ) return source;
+  source.melee = source.skill === "Corps-à-corps";
+  return source;
+}
+
+/**
+ * Valeur stockée de `melee`, ou `undefined` si le champ n'est pas écrit.
+ * Sur un document Foundry, le défaut du schéma remplit `system.melee`
+ * sans l'écrire dans `_source` : on lit la source.
+ * Décision Marc 31/10/2026.
+ *
+ * @param {{ system?: { melee?: boolean, _source?: { melee?: boolean } } }|null|undefined} weapon
+ * @returns {boolean|undefined}
+ */
+function storedMelee(weapon) {
+  const system = weapon?.system;
+  if ( !system || typeof system !== "object" ) return undefined;
+  const source = system._source && typeof system._source === "object" ? system._source : system;
+  if ( !Object.hasOwn(source, "melee") ) return undefined;
+  return source.melee === true;
+}
+
+/**
  * Le choix de portée du jet est masqué pour une arme de contact.
- * Décision Marc 30/10/2026 : le Lance-filet le garde.
- * Décision Marc 31/10/2026 : l'électrochoc (5 m) et le pistolet de
- * scellement (4 m) le gardent aussi. Corps-à-corps, ou une description
- * qui dit « contact », sans ces trois armes.
+ * `system.melee` stocké décide. Absent : détection provisoire
+ * (Corps-à-corps, ou le mot « contact » dans la description).
+ * Le Lance-filet, l'électrochoc (5 m) et le pistolet de scellement (4 m)
+ * gardent le choix. Décision Marc 30/10/2026. Décision Marc 31/10/2026.
+ *
+ * @param {{ name?: string, system?: { skill?: string, description?: string, melee?: boolean, _source?: object } }|null|undefined} weapon
+ * @returns {boolean}
+ */
+export function showsAttackRange(weapon) {
+  const melee = storedMelee(weapon);
+  if ( melee === true ) return false;
+  if ( melee === false ) return true;
+  return provisionalAttackRange(weapon);
+}
+
+/**
+ * Repli tant que `melee` n'est pas stocké. Provisoire.
+ * Décision Marc 31/10/2026.
  *
  * @param {{ name?: string, system?: { skill?: string, description?: string } }|null|undefined} weapon
  * @returns {boolean}
  */
-export function showsAttackRange(weapon) {
+function provisionalAttackRange(weapon) {
   const name = typeof weapon?.name === "string" ? weapon.name : "";
-  if ( /lance-filet|électrochoc|electrochoc|scellement thermique/i.test(name) ) return true;
+  // Décision Marc 31/10/2026 : ces armes disent « contact » dans
+  // la description, mais la portée se choisit, comme le Lance-filet.
+  if ( /lance-filet|électrochoc|electrochoc|pistolet de scellement|scellement thermique/i.test(name) ) return true;
   const skill = typeof weapon?.system?.skill === "string" ? weapon.system.skill : "";
   if ( skill === "Corps-à-corps" ) return false;
   const html = typeof weapon?.system?.description === "string" ? weapon.system.description : "";

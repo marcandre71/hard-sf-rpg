@@ -13,7 +13,7 @@ import {
   resolveD100,
   tens
 } from "../module/dice/d100.mjs";
-import { aimModifier, attackRangePenalty, attackSituation, showsAttackRange, struckZone } from "../module/dice/attack.mjs";
+import { aimModifier, attackRangePenalty, attackSituation, migrateWeaponContact, showsAttackRange, struckZone } from "../module/dice/attack.mjs";
 import { skillScore, weaponAttackScore, weaponCharacteristicFallback } from "../module/dice/skill-score.mjs";
 import { EXHAUSTED_STATUS, statusSituation } from "../module/dice/status-mods.mjs";
 
@@ -30,6 +30,28 @@ function check(label, fn) {
     console.error(error);
     process.exit(1);
   }
+}
+
+/**
+ * Fiche d'arme complète, pour la migration de `melee`.
+ * @param {object} extra
+ * @returns {object}
+ */
+function fullWeapon(extra) {
+  return {
+    skill: "Armes de poing",
+    description: "<p></p>",
+    damage: 1,
+    range: "short",
+    recoil: false,
+    ammo: { value: 0, max: 0 },
+    ammoType: "none",
+    burst: false,
+    hullSafe: true,
+    mass: 1,
+    enc: 1,
+    ...extra
+  };
 }
 
 check("dizaines", () => {
@@ -241,10 +263,35 @@ check("portée du jet d'attaque", () => {
   assert.equal(showsAttackRange({ name: "Couteau", system: { skill: "Corps-à-corps", description: "<p>Lame.</p>" } }), false);
   assert.equal(showsAttackRange({ name: "Découpeur", system: { skill: "Corps-à-corps", description: "<p>Contact, 10 charges.</p>" } }), false);
   assert.equal(showsAttackRange({ name: "Électrochoc de coursive", system: { skill: "Armes de poing", description: "<p>Portée contact à 5 m.</p>" } }), true);
-  assert.equal(showsAttackRange({ name: "Pistolet de scellement thermique", system: { skill: "Armes de poing", description: "<p>Contact à 4 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Pistolet de scellement thermique", system: { skill: "Armes de poing", description: "<p>Contact à 4 m, 10 doses de résine.</p>" } }), true);
   assert.equal(showsAttackRange({ name: "Découpeur plasma de main", system: { skill: "Corps-à-corps", description: "<p>Contact, 10 charges.</p>" } }), false);
   assert.equal(showsAttackRange({ name: "Lance-filet et harpon magnétique d'EVA", system: { skill: "Armes d'épaule", description: "<p>15 / 30 m.</p>" } }), true);
   assert.equal(showsAttackRange({ name: "Carabine", system: { skill: "Armes d'épaule", description: "<p>40 / 100 / 200 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Électrochoc de coursive", system: { melee: false, skill: "Armes de poing", description: "<p>Portée contact à 5 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Pistolet de scellement thermique", system: { melee: false, skill: "Armes de poing", description: "<p>Contact à 4 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Couteau", system: { melee: true, skill: "Corps-à-corps", description: "<p>Lame.</p>" } }), false);
+  assert.equal(showsAttackRange({ name: "Carabine", system: { melee: true, skill: "Armes d'épaule", description: "<p>40 m.</p>" } }), false);
+  // Le défaut du schéma n'est pas une valeur stockée.
+  assert.equal(showsAttackRange({
+    name: "Couteau",
+    system: { _source: { skill: "Corps-à-corps", description: "<p>Lame.</p>" }, melee: false, skill: "Corps-à-corps", description: "<p>Lame.</p>" }
+  }), false);
+  assert.equal(showsAttackRange({
+    name: "Couteau",
+    system: { _source: { melee: false, skill: "Corps-à-corps" }, melee: false, skill: "Corps-à-corps" }
+  }), true);
+  const partial = { damage: 4 };
+  migrateWeaponContact(partial);
+  assert.equal("melee" in partial, false);
+  const knife = fullWeapon({ skill: "Corps-à-corps", description: "<p>Contact.</p>" });
+  migrateWeaponContact(knife);
+  assert.equal(knife.melee, true);
+  const shock = fullWeapon({ skill: "Armes de poing", description: "<p>Portée contact à 5 m.</p>" });
+  migrateWeaponContact(shock);
+  assert.equal(shock.melee, false);
+  const kept = fullWeapon({ skill: "Corps-à-corps", melee: false });
+  migrateWeaponContact(kept);
+  assert.equal(kept.melee, false);
 });
 
 check("Base du PNJ", () => {
