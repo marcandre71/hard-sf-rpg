@@ -25,6 +25,8 @@ export class AugmentationData extends BaseItemData {
       }),
       effect: htmlField("SOL.Item.effect"),
       // Décision Marc 17/10/2026 : le coût est un entier.
+      // Décision Marc 30/10/2026 : il reste à 0. Réf. Augmentations v0.3 §1.
+      // Pas de monnaie. « [à compléter] » si une monnaie est retenue plus tard.
       cost: numberField("SOL.Augmentation.cost", { initial: 0, integer: true, step: 1 }),
       legality: new SchemaField({
         earth: stringField("SOL.Augmentation.legality.earth"),

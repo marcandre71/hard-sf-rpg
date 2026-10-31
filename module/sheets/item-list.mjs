@@ -77,7 +77,10 @@ function itemFields(item) {
       ];
     }
     case "talent":
-      return [{ label: "SOL.Talent.xpCost", value: source.xpCost ?? 0 }];
+      return [
+        { label: "SOL.Talent.domain.label", value: choiceLabel(SOL.talentDomains, source.domain) },
+        { label: "SOL.Talent.xpCost", value: source.xpCost ?? 0 }
+      ];
     case "weapon":
       return [
         { label: "SOL.Weapon.damage", value: source.damage ?? 0 },
@@ -113,8 +116,15 @@ function itemFields(item) {
         { label: "SOL.ShipModule.section", value: choiceLabel(SOL.shipSections, source.section) },
         { label: "SOL.ShipModule.condition.label", value: choiceLabel(SOL.shipModuleConditions, item.system.condition) }
       ];
+    case "software":
+      // Score autonome affiché, sans bouton de jet. Décision Marc 30/10/2026.
+      return [
+        { label: "SOL.Software.category.label", value: choiceLabel(SOL.softwareCategories, source.category) },
+        { label: "SOL.Software.autonomousScore", value: source.autonomousScore ?? 0 }
+      ];
+    case "substance":
+      return [{ label: "SOL.Substance.category.label", value: choiceLabel(SOL.substanceCategories, source.category) }];
     default:
-      // Substance et logiciel : description seulement, rien à résumer sur la ligne.
       return [];
   }
 }

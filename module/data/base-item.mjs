@@ -2,10 +2,12 @@
  * Base commune de tous les objets : un champ `description` (HTML).
  *
  * Réf. Fiche v0.2 §4 (gear a une description HTML ; la consigne de l'étape 2
- * l'étend à chaque type d'objet). Substance et Logiciel n'ont aucun autre
- * champ : « champs à définir » (LdR v0.2 §15, Fiche v0.2 §4).
+ * l'étend à chaque type d'objet). Le LdR v0.2 §15 disait « champs à définir »
+ * pour Substance et Logiciel. Décision Marc 30/10/2026 : les champs du
+ * catalogue v0.3, effets en texte seulement.
  */
-import { htmlField } from "./fields.mjs";
+import { SOL } from "../config.mjs";
+import { boolField, htmlField, numberField, stringField, valueMaxField } from "./fields.mjs";
 
 /**
  * Données `system` partagées. Les sous-classes étendent le schéma
@@ -24,15 +26,85 @@ export class BaseItemData extends foundry.abstract.TypeDataModel {
 
 /**
  * Substance : médicaments et drogues. Pas une augmentation.
- * Réf. LdR v0.2 §15, Fiche v0.2 §4. Aucun champ propre dans les docs.
+ * Réf. LdR v0.2 §15, Fiche v0.2 §4. Réf. Substances v0.3 §1.
+ * Décision Marc 30/10/2026 : effets en texte. Pas de migrateData :
+ * un diff partiel ne reçoit pas les champs nouveaux.
  *
  * @extends BaseItemData
  */
-export class SubstanceData extends BaseItemData {}
+export class SubstanceData extends BaseItemData {
+  /** @override */
+  static defineSchema() {
+    return {
+      ...super.defineSchema(),
+      // Vide par défaut. Réf. Substances v0.3 §2 à §5.
+      category: stringField("SOL.Substance.category.label", {
+        initial: "",
+        blank: true,
+        choices: SOL.substanceCategories
+      }),
+      // Décision Marc 30/10/2026 : chaîne libre, pas de liste fermée.
+      administration: stringField("SOL.Substance.administration"),
+      // Décision Marc 30/10/2026 : chaîne libre (« 1 h », « 1D10 × 5 min »).
+      duration: stringField("SOL.Substance.duration"),
+      // Le catalogue donne le maximum. La valeur actuelle n'y est pas :
+      // elle reste vide (null), le MJ la saisit.
+      doses: valueMaxField("SOL.Substance.doses", {
+        integer: true,
+        min: 0,
+        nullable: true,
+        initialValue: null,
+        initialMax: null
+      }),
+      effect: htmlField("SOL.Item.effect"),
+      sideEffects: htmlField("SOL.Substance.sideEffects"),
+      // Décision Marc 30/10/2026 : chaîne libre, vide quand elle n'est pas connue.
+      legality: stringField("SOL.Substance.legality")
+    };
+  }
+}
 
 /**
  * Logiciel. Réf. LdR v0.2 §15 « champs à définir », Fiche v0.2 §4.
+ * Réf. Logiciels v0.3 §1. Décision Marc 30/10/2026.
+ * Pas de migrateData : un diff partiel ne reçoit pas les champs nouveaux.
+ * Le score autonome est affiché, sans bouton de jet.
  *
  * @extends BaseItemData
  */
-export class SoftwareData extends BaseItemData {}
+export class SoftwareData extends BaseItemData {
+  /** @override */
+  static defineSchema() {
+    return {
+      ...super.defineSchema(),
+      // Liste fermée de 5. Défaut utilitaire. Décision Marc 30/10/2026.
+      category: stringField("SOL.Software.category.label", {
+        initial: "utility",
+        blank: false,
+        choices: SOL.softwareCategories
+      }),
+      // Un seul support. Vide par défaut. Décision Marc 30/10/2026.
+      host: stringField("SOL.Software.host.label", {
+        initial: "",
+        blank: true,
+        choices: SOL.softwareHosts
+      }),
+      // Plusieurs compétences : une chaîne, pas une liste d'objets.
+      assistedSkill: stringField("SOL.Software.assistedSkill"),
+      // Aide du LdR §5 : 0 ou 10 dans le catalogue. Entier.
+      skillBonus: numberField("SOL.Software.skillBonus", { initial: 0, integer: true, min: 0, step: 1 }),
+      // Affiché seulement. Décision Marc 30/10/2026. Pas de jet.
+      autonomousScore: numberField("SOL.Software.autonomousScore", {
+        initial: 0,
+        integer: true,
+        min: 0,
+        max: 100,
+        step: 1,
+        hint: "SOL.Software.autonomousScoreHint"
+      }),
+      // Réf. Logiciels v0.3 §1 : true par défaut (Règle Sereguine).
+      sereguineLock: boolField("SOL.Software.sereguineLock", true),
+      legality: stringField("SOL.Software.legality")
+    };
+  }
+}

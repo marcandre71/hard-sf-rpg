@@ -286,6 +286,54 @@ export const SOL = {
   },
 
   /**
+   * Domaine d'un atout. Vide par défaut.
+   * Décision Marc 30/10/2026. Réf. Atouts v0.3 §2 à §6.
+   */
+  talentDomains: {
+    space: "SOL.Talent.domain.space",
+    technical: "SOL.Talent.domain.technical",
+    endurance: "SOL.Talent.domain.endurance",
+    combat: "SOL.Talent.domain.combat",
+    social: "SOL.Talent.domain.social"
+  },
+
+  /**
+   * Catégorie de logiciel. Liste fermée de 5. Défaut : utilitaire.
+   * Décision Marc 30/10/2026. Réf. Logiciels v0.3 §2 à §4.
+   */
+  softwareCategories: {
+    greffier: "SOL.Software.category.greffier",
+    utility: "SOL.Software.category.utility",
+    defense: "SOL.Software.category.defense",
+    intrusion: "SOL.Software.category.intrusion",
+    falsification: "SOL.Software.category.falsification"
+  },
+
+  /**
+   * Support d'un logiciel. Un seul. Les autres supports restent en description.
+   * Décision Marc 30/10/2026. Réf. Logiciels v0.3 §1.
+   * Vide par défaut : le catalogue remplit pad, tablet ou ship.
+   */
+  softwareHosts: {
+    pad: "SOL.Software.host.pad",
+    tablet: "SOL.Software.host.tablet",
+    ship: "SOL.Software.host.ship"
+  },
+
+  /**
+   * Catégorie de substance. Réf. Substances v0.3 §2 à §5.
+   * Pas de défaut inventé : vide tant que le catalogue ne la donne pas.
+   */
+  substanceCategories: {
+    gravity: "SOL.Substance.category.gravity",
+    radiation: "SOL.Substance.category.radiation",
+    medical: "SOL.Substance.category.medical",
+    torpor: "SOL.Substance.category.torpor",
+    stimulant: "SOL.Substance.category.stimulant",
+    toxin: "SOL.Substance.category.toxin"
+  },
+
+  /**
    * Zones du corps, partagées par l'armure et les blessures.
    * Clés : Fiche v0.2 §4. Libellés : LdR v0.2 §7 (localisation).
    */

@@ -30,7 +30,16 @@ export class TalentData extends BaseItemData {
       ...super.defineSchema(),
       // À préciser : types non définis dans LdR v0.2.
       // Décision Marc 17/10/2026 : le coût en XP est un entier.
+      // Le catalogue met 15 (LdR v0.2 §10). Le défaut du champ reste 0.
       xpCost: numberField("SOL.Talent.xpCost", { initial: 0, integer: true, step: 1 }),
+      // Décision Marc 30/10/2026. Réf. Atouts v0.3 §2 à §6.
+      // Vide par défaut : un défaut « space » classerait mal un atout déjà saisi.
+      // Pas de migrateData : un diff partiel ne reçoit pas ce champ.
+      domain: stringField("SOL.Talent.domain.label", {
+        initial: "",
+        blank: true,
+        choices: SOL.talentDomains
+      }),
       // À préciser : types non définis dans LdR v0.2.
       prerequisites: stringField("SOL.Talent.prerequisites"),
       // À préciser : types non définis dans LdR v0.2. Texte seulement (pas d'ActiveEffect).

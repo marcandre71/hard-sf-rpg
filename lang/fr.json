@@ -740,7 +740,53 @@
     },
     "Talent": {
       "xpCost": "Coût en XP",
-      "prerequisites": "Prérequis"
+      "prerequisites": "Prérequis",
+      "domain": {
+        "label": "Domaine",
+        "space": "Espace",
+        "technical": "Technique",
+        "endurance": "Endurance",
+        "combat": "Combat",
+        "social": "Social"
+      }
+    },
+    "Software": {
+      "category": {
+        "label": "Catégorie",
+        "greffier": "Greffier",
+        "utility": "Utilitaire",
+        "defense": "Défense",
+        "intrusion": "Intrusion",
+        "falsification": "Falsification"
+      },
+      "host": {
+        "label": "Support",
+        "pad": "PAD",
+        "tablet": "Tablette",
+        "ship": "Vaisseau"
+      },
+      "assistedSkill": "Compétence assistée",
+      "skillBonus": "Bonus d'aide",
+      "autonomousScore": "Score autonome",
+      "autonomousScoreHint": "Affiché seulement. Pas de jet.",
+      "sereguineLock": "Verrou Sereguine",
+      "legality": "Légalité"
+    },
+    "Substance": {
+      "category": {
+        "label": "Catégorie",
+        "gravity": "Gravité",
+        "radiation": "Radiation",
+        "medical": "Soins",
+        "torpor": "Torpeur",
+        "stimulant": "Stimulant",
+        "toxin": "Toxine"
+      },
+      "administration": "Administration",
+      "duration": "Durée",
+      "doses": "Doses",
+      "sideEffects": "Effets secondaires",
+      "legality": "Légalité"
     },
     "Origin": {
       "characteristicModifiers": "Modificateurs de caractéristiques",
