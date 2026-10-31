@@ -348,7 +348,7 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** la jauge et le nombre bougent tout de suite.
 5. Ouvrez l'arme, changez Munitions actuelles, fiche du personnage ouverte.
    **Résultat attendu :** la jauge et le nombre changent tout de suite.
-6. Petite Fortune importée du compendium **Vaisseaux**. Ouvrez-la, onglet Général, puis Sections & modules. Montez la chaleur d'un cran. Mettez une section à 0.
+6. Petite Fortune importée du compendium **Vaisseaux**. Ouvrez-la, onglet Général, puis Sections & modules. Montez la chaleur jusqu'à 7, puis jusqu'à 10. Mettez une section à 0.
    **Résultat attendu :** les segments de chaleur changent. À 7, le 7ᵉ segment passe en ambre ; à 10, le dernier est rouge. La section à 0 a un filet rouge, et le mot ou le chiffre le dit aussi.
 7. Regardez la barre latérale, la barre des scènes, et une carte de jet dans le chat.
    **Résultat attendu :** l'interface Foundry hors fiche n'a pas pris le fond de la feuille. La carte de jet garde ses couleurs d'avant.
