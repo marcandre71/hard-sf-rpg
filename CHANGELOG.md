@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.9.2
+
+Branche `dev/0.9.2`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.9.1 (`eabc8a4`, notes de fusion `9877ce2`). La section 16 de TESTER.md sert à la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.2 qu'après fusion.
+
+Décision Marc 30/10/2026. Réf. Atouts v0.3, Augmentations v0.3, Logiciels v0.3, Substances v0.3. Effets en texte seulement. Pas d'ActiveEffect, pas de jet autonome, pas de champ `geneTherapy` sur le personnage.
+
+- Atouts : les 25 du catalogue, coût 15. Champ `domain` (espace, technique, endurance, combat, social), vide par défaut. Un diff partiel ne le reçoit pas.
+- Augmentations : les 14 du catalogue. Le coût reste 0. Là où le catalogue dit [à compléter], la description le dit.
+- Logiciels : les 15 du catalogue. Catégorie fermée de 5, utilitaire par défaut. Support pad, tablette ou vaisseau, un seul, vide par défaut. Compétences assistées en texte. Score autonome affiché, sans bouton. Verrou Sereguine coché par défaut ; « Sans-Témoin » est décoché.
+- Substances : les 15 du catalogue. Administration et durée en texte. Doses : le maximum vient du catalogue, la valeur actuelle reste vide. Légalité vide quand le catalogue dit [à compléter]. Chélateur, Souffle Noir et Dortoir gardent [à compléter] dans l'effet.
+
+À confirmer par Marc : la valeur actuelle des doses (le catalogue ne donne que le maximum ; proposition : la laisser vide). Le coût 0 des augmentations, en attendant une monnaie. Le verrou Sereguine coché par défaut (le catalogue le dit ; « Sans-Témoin » est l'exception).
+
 ## 0.9.1
 
 Entrée dans `main` en avance rapide depuis `dev/0.9.1` (`eabc8a4`), accord de Didier le 31/10/2026. Relue par Relecteur. La section 15 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.

@@ -1,4 +1,4 @@
-# Tester le système « Sol, Nouvelle Ère » (0.9.1)
+# Tester le système « Sol, Nouvelle Ère » (0.9.2)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
@@ -7,6 +7,7 @@ La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main
 La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
 La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
+La section 16 est la **0.9.2** (atouts, augmentations, logiciels, substances). C'est une PR brouillon : le ZIP de `main` ne la contient pas. L'étape 1 donne le ZIP de `dev/0.9.2`. Ne pas la fusionner.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -295,3 +296,32 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 
 Les malus écrits dans les descriptions (fusil à pompe, gyrojet à bout portant) s'ajoutent au malus de portée. Le MJ les saisit à la main dans **Modificateur**. Rien ne les ajoute tout seul.
+
+## 16. 0.9.2 Atouts, augmentations, logiciels et substances
+
+Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.2 qu'après fusion. D'ici là, prenez le ZIP de la branche.
+
+1. Prenez le ZIP de `dev/0.9.2` :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.2.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.2`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.2**.
+2. Ouvrez les compendiums **Atouts**, **Augmentations**, **Logiciels** et **Substances**.
+   **Résultat attendu :** **25** atouts, **14** augmentations, **15** logiciels, **15** substances. Il n'y a pas de seconde entrée pour **Pied marin du vide**.
+3. Ouvrez **Pied marin du vide**.
+   **Résultat attendu :** coût en XP **15**, domaine **Espace**, prérequis **ADA 45+ ou Manœuvre en apesanteur +20**. L'effet est du texte. Rien ne change tout seul un jet de recul.
+4. Ouvrez **Thérapie de réparation de l'ADN « Protocole Valhalla »**.
+   **Résultat attendu :** genre **Thérapie**, coût **0**. Légalité : Terre **Réglementée**, Mars **Légale**, Ailleurs **Légale (rare et chère dans la Ceinture)**. La description dit que le coût est **[à compléter]**.
+5. Ouvrez **Greffier d'éphémérides « Kepler-V »**.
+   **Résultat attendu :** catégorie **Greffier**, support **Vaisseau**, bonus d'aide **10**, score autonome **50**. Le score est une case, pas un bouton de jet. **Verrou Sereguine** est coché.
+6. Ouvrez **Dérivation Sereguine « Sans-Témoin »**.
+   **Résultat attendu :** **Verrou Sereguine** est décoché. Score autonome **50**. La description dit que c'est un crime grave.
+7. Sur un personnage, glissez **Cocktail de poussée « Jus de Fer »**.
+   **Résultat attendu :** catégorie **Gravité**, administration **autoInjector**, durée **1 h**, doses **vide / 1**. La légalité dit **[à compléter]**. Rouvrez la fiche : les champs sont encore là.
+8. Ouvrez **Oxygénateur sanguin perfluoré « Souffle Noir »**, **Chélateur d'actinides (Bleu de Prusse, DTPA)** et **Charge sédative « Dortoir » (pour fléchettes)**.
+   **Résultat attendu :** chacun dit **[à compléter]** dans l'effet. Rien ne change le compte à rebours d'une combinaison percée, ni un test de Médecine, ni un délai d'inconscience.
+9. Créez un atout à la main sur le personnage. Laissez le domaine vide. Cochez rien d'autre.
+   **Résultat attendu :** le domaine peut rester vide. Le coût en XP part à **0**, pas à 15.
+10. Console (**F12**).
+    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
