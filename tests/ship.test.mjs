@@ -312,7 +312,6 @@ for ( const file of ["ModExLaserDef001.json", "ModExMissile0001.json"] ) {
   const weapon = JSON.parse(readFileSync(new URL(`../packs/_source/ship-modules/${file}`, import.meta.url), "utf8"));
   check(weapon.system.integrity.value === 4 && weapon.system.integrity.max === 4, `${file} : intégrité 4/4`);
   check(weapon.system.effects.includes("Intégrité provisoire, ajustable en jeu"), `${file} : effets décidés`);
-  check(weapon.system.mass === 0, `${file} : masse de la Petite Fortune conservée`);
   check(!("ammunition" in weapon.system.weapon), `${file} : plus d'ancien texte de munitions`);
 }
 const cannonPack = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/ModExCanonEM0001.json", import.meta.url), "utf8"));
@@ -324,9 +323,11 @@ check(cannonPack.system.mass === 5 && cannonPack.system.weapon.class === "railgu
 check(cannonPack.system.integrity.value === 4 && !("ammunition" in cannonPack.system.weapon), "canon : intégrité 4, sans ancien texte de munitions");
 check(missilePack.system.weapon.ammo.value === 4 && missilePack.system.weapon.ammo.max === 4, "missile : 4/4");
 check(missilePack.system.effects.includes("est automatisé") && !missilePack.system.effects.includes("n'est pas automatisé"), "missile : le temps de vol est automatisé");
-check(missilePack.system.mass === 0 && missilePack.system.weapon.class === "missile", "missile : masse 0 conservée, type missile");
+// Réf. Modules v0.3
+check(missilePack.system.mass === 4 && missilePack.system.weapon.class === "missile", "missile : masse 4 t, type missile");
 check(missilePack.name === "Casier lance-missiles (4 missiles)", "missile : nom du catalogue, id conservé");
-check(laserPack.system.mass === 0 && laserPack.system.weapon.class === "laser", "laser de défense : masse 0 conservée, type laser");
+// Réf. Modules v0.3
+check(laserPack.system.mass === 3 && laserPack.system.weapon.class === "laser", "laser de défense : masse 3 t, type laser");
 check(laserPack.system.weapon.ammo.value === null && laserPack.system.weapon.ammo.max === null, "laser de défense : compteur vide");
 check(drillPack.system.weapon.ammo.value === null && drillPack.system.weapon.ammo.max === null, "laser de forage : compteur vide");
 const shipModel = readFileSync(new URL("../module/data/ship.mjs", import.meta.url), "utf8");

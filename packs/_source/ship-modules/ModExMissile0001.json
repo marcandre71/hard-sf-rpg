@@ -4,7 +4,7 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Masse 0 conservée (les tests s'en servent). Catalogue : 4 t. -->\n<p>Aussi sur un flanc. Le missile arrive au début du tour suivant (portée moyenne) ou deux tours plus tard (lointaine) ; contre-mesures de l'Opérateur ou tir de laser de défense possibles. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Masse du catalogue : 4 t. -->\n<p>Aussi sur un flanc. Le missile arrive au début du tour suivant (portée moyenne) ou deux tours plus tard (lointaine) ; contre-mesures de l'Opérateur ou tir de laser de défense possibles. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",
     "section": "bow",
     "integrity": {
@@ -12,7 +12,7 @@
       "max": 4
     },
     "effects": "<p>Intégrité provisoire, ajustable en jeu. Le temps de vol est automatisé. Aussi sur un flanc. Le missile arrive au début du tour suivant (portée moyenne) ou deux tours plus tard (lointaine) ; contre-mesures de l'Opérateur ou tir de laser de défense possibles. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
-    "mass": 0,
+    "mass": 4,
     "weapon": {
       "damage": 20,
       "rangeClose": false,
