@@ -240,7 +240,9 @@ check("portée du jet d'attaque", () => {
   assert.equal(attackSituation("none", 0, undefined, "proche").rangePenalty, 0);
   assert.equal(showsAttackRange({ name: "Couteau", system: { skill: "Corps-à-corps", description: "<p>Lame.</p>" } }), false);
   assert.equal(showsAttackRange({ name: "Découpeur", system: { skill: "Corps-à-corps", description: "<p>Contact, 10 charges.</p>" } }), false);
-  assert.equal(showsAttackRange({ name: "Électrochoc", system: { skill: "Armes de poing", description: "<p>Portée contact à 5 m.</p>" } }), false);
+  assert.equal(showsAttackRange({ name: "Électrochoc de coursive", system: { skill: "Armes de poing", description: "<p>Portée contact à 5 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Pistolet de scellement thermique", system: { skill: "Armes de poing", description: "<p>Contact à 4 m.</p>" } }), true);
+  assert.equal(showsAttackRange({ name: "Découpeur plasma de main", system: { skill: "Corps-à-corps", description: "<p>Contact, 10 charges.</p>" } }), false);
   assert.equal(showsAttackRange({ name: "Lance-filet et harpon magnétique d'EVA", system: { skill: "Armes d'épaule", description: "<p>15 / 30 m.</p>" } }), true);
   assert.equal(showsAttackRange({ name: "Carabine", system: { skill: "Armes d'épaule", description: "<p>40 / 100 / 200 m.</p>" } }), true);
 });

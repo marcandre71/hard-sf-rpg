@@ -67,15 +67,17 @@ export function attackRangePenalty(band) {
 
 /**
  * Le choix de portée du jet est masqué pour une arme de contact.
- * Le Lance-filet le garde. Décision Marc 30/10/2026.
- * Corps-à-corps, ou une description qui dit « contact ».
+ * Décision Marc 30/10/2026 : le Lance-filet le garde.
+ * Décision Marc 31/10/2026 : l'électrochoc (5 m) et le pistolet de
+ * scellement (4 m) le gardent aussi. Corps-à-corps, ou une description
+ * qui dit « contact », sans ces trois armes.
  *
  * @param {{ name?: string, system?: { skill?: string, description?: string } }|null|undefined} weapon
  * @returns {boolean}
  */
 export function showsAttackRange(weapon) {
   const name = typeof weapon?.name === "string" ? weapon.name : "";
-  if ( /lance-filet/i.test(name) ) return true;
+  if ( /lance-filet|électrochoc|electrochoc|scellement thermique/i.test(name) ) return true;
   const skill = typeof weapon?.system?.skill === "string" ? weapon.system.skill : "";
   if ( skill === "Corps-à-corps" ) return false;
   const html = typeof weapon?.system?.description === "string" ? weapon.system.description : "";

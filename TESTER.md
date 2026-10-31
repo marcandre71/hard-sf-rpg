@@ -195,7 +195,7 @@ Il vous faut **deux Petite Fortune**, chacune ouverte **depuis son jeton**.
    **Résultat attendu :** la section proposée est l'autre bout. Sans la case, 16 à 35 c'est la poupe. Avec **En fuite**, c'est la proue. Décochez ensuite **En fuite**. Annulez la fenêtre si vous ne voulez pas appliquer.
 > **Munitions :** chaque lancement, réussi ou raté, retire 1 missile. Si elles tombent à 0, retapez **4 / 4** sur la fiche.
 
-9. Glissez le module **Missile** (compendium **Modules de vaisseau**) sur le vaisseau qui tire. Les munitions doivent montrer **4 / 4** sans que vous les tapiez. Mettez les deux fiches en portée **Moyenne**. **T** sur l'autre jeton. **Tirer**, choisissez le missile. Il n'y a pas de choix de visée. Réussite.
+9. Glissez le module **Casier lance-missiles (4 missiles)** (compendium **Modules de vaisseau**) sur le vaisseau qui tire. Les munitions doivent montrer **4 / 4** sans que vous les tapiez. Mettez les deux fiches en portée **Moyenne**. **T** sur l'autre jeton. **Tirer**, choisissez le missile. Il n'y a pas de choix de visée. Réussite.
    **Résultat attendu :** les munitions baissent de 1 (**3 / 4** si c'était le premier lancement). Une carte **Missile en vol** donne la cible et le round d'arrivée (le round actuel + 1). Il n'y a pas de bouton **Appliquer les dégâts** sur le jet de lancement. À portée **Proche**, le missile n'est pas dans la liste des armes.
 10. Toujours en **Moyenne**, une seule cible, **Tirer** le missile et ratez le jet (échec).
     **Résultat attendu :** les munitions baissent de 1. Le chat dit **missile perdu**. Il n'y a pas de carte **Missile en vol**, et pas d'impact.
@@ -276,15 +276,15 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 
    Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.1`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`. Après fusion de `dev/0.9.1` dans `main`, prenez à la place le ZIP de `main` (https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip) : le dossier s'appelle alors `hard-sf-rpg-main`.
 2. Ouvrez les compendiums **Équipement** et **Modules de vaisseau**.
-   **Résultat attendu :** **Équipement** contient la **Rustine** et les objets du catalogue, plus les cinq accessoires déjà là (buse, dragonne, essuie-visière, manchons, phares). **Modules de vaisseau** contient les modules déjà connus de la Petite Fortune et ceux du catalogue. Il n'y a pas de seconde **Combinaison renforcée de chantier**, ni de seconde **Combinaison souple de travail**, ni de seconde **Armure de pont (assaut et abordage)**.
+   **Résultat attendu :** **Équipement** contient la **Rustine** et les objets du catalogue, plus les cinq accessoires déjà là (buse, dragonne, essuie-visière, manchons, phares). Il n'y a pas de drone. **Modules de vaisseau** n'a qu'une entrée par module de la Petite Fortune, sous le nom du catalogue (par exemple **Laser de forage (outil civil)**, **Casier lance-missiles (4 missiles)**). Le **Cône d'impacteurs « Berger » de la Veille** a le type **Autre**.
 3. Ouvrez la **Rustine**.
    **Résultat attendu :** quantité **3**, masse **0,2** kg. Le nom est exactement **Rustine**.
 4. Sur la Petite Fortune, onglet **Général** ou **Sections**, la plaque de **proue** est **8 / 8**.
    **Résultat attendu :** elle n'a pas changé. Le **Bouclier Whipple** du compendium a **4** points de blindage, pas plus.
 5. Ouvrez le **Canon électromagnétique** du compendium **Modules de vaisseau**.
    **Résultat attendu :** masse **5**, munitions **20 / 20**, type d'arme **Railgun**.
-6. Sur un personnage, équipez le **Couteau d'arrimage, lame de sas en céramique** et lancez-le. Puis équipez seulement le **Lance-filet et harpon magnétique d'EVA** et lancez-le.
-   **Résultat attendu :** le couteau n'a pas de choix **Portée**. Le lance-filet en a un, **Courte (0)** déjà choisie.
+6. Sur un personnage, équipez le **Couteau d'arrimage, lame de sas en céramique** et lancez-le. Puis, une arme à la fois : l'**Électrochoc de coursive**, le **Pistolet de scellement thermique**, et le **Lance-filet et harpon magnétique d'EVA**.
+   **Résultat attendu :** le couteau n'a pas de choix **Portée**. L'électrochoc, le pistolet de scellement et le lance-filet en ont un, **Courte (0)** déjà choisie.
 7. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 
