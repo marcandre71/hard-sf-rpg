@@ -2,6 +2,7 @@
  * Catalogues 0.9.4. Sans Foundry.
  * Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Vaisseaux v0.1 §8.
  * Décision Marc 30/10/2026.
+ * Décision Didier/Marc 31/10/2026.
  */
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
@@ -46,10 +47,20 @@ assert.equal(sequels.length, 8);
 for (const sequel of sequels) {
   assert.equal(sequel.system.category, "radiation", sequel.name);
   assert.equal(sequel.system.permanent, true, sequel.name);
-  assert.equal(sequel.system.description.includes("[à compléter]"), true, sequel.name);
+  assert.equal(sequel.system.description.includes("[à compléter]"), false, sequel.name);
+  assert.equal(sequel.system.description.includes("Pas de dé"), true, sequel.name);
+  assert.equal(sequel.system.effect.includes("[à compléter]"), false, sequel.name);
 }
-assert.equal(sequels.find(entry => entry.name === "Cancer radio-induit").system.effect.includes("[à compléter]"), true);
-assert.equal(sequels.find(entry => entry.name === "Troubles cognitifs radio-induits").system.effect.includes("[à compléter]"), true);
+const cancer = sequels.find(entry => entry.name === "Cancer radio-induit");
+assert.equal(cancer.system.effect.includes("se déclare plus tard"), true);
+assert.equal(cancer.system.effect.includes("Pas d'effet immédiat"), true);
+const cognitive = sequels.find(entry => entry.name === "Troubles cognitifs radio-induits");
+assert.equal(cognitive.system.effect.includes("−10"), true);
+assert.equal(cognitive.system.effect.includes("INT"), true);
+assert.equal(cognitive.system.effect.includes("pas de malus automatique"), true);
+const fragility = sequels.find(entry => entry.name === "Fragilité cellulaire acquise");
+assert.equal(fragility.system.effect.includes("divisé par deux"), true);
+assert.equal(fragility.system.effect.includes("arrondi au supérieur"), true);
 
 const habitat = origins.find(entry => entry._id === "shzqbEn7U7HEOdXY");
 assert.equal(habitat.name, "Habitat tournant (station)");
@@ -74,13 +85,20 @@ const fortune = ships.find(entry => entry.name === "Petite Fortune");
 assert.equal(patrol.system.shipType, "watchPatrol");
 assert.equal(patrol.system.notes.includes("À confirmer par Marc"), true);
 assert.equal(patrol.system.mass.dry, 80);
-assert.equal(patrol.system.propulsion.acceleration, 21);
+assert.equal(patrol.system.propulsion.acceleration, 50);
+assert.equal(patrol.system.propulsion.deltaV.value, 3.6);
+assert.equal(patrol.system.propulsion.deltaV.max, 3.6);
 const heavy = patrol.items.find(entry => entry.name.startsWith("Laser lourd"));
 assert.equal(heavy.system.weapon.class, "laser");
 assert.equal(heavy.system.weapon.damage, 11);
 assert.equal(cargo.system.shipType, "slowPlasmaFreighter");
 assert.equal(cargo.system.notes.includes("À confirmer par Marc"), true);
+assert.equal(cargo.system.propulsion.acceleration, 0.05);
+assert.equal(cargo.system.propulsion.deltaV.value, 3.6);
+assert.equal(cargo.system.propulsion.deltaV.max, 3.6);
 assert.equal(cargo.items.find(entry => entry.system.category === "propulsion").name, "Propulseur à plasma (cargo lent)");
+assert.equal(fortune.system.propulsion.acceleration, 21);
+assert.equal(fortune.system.propulsion.deltaV.value, 3.6);
 assert.equal(fortune.items.length, 13);
 assert.equal(fortune.system.sections.bow.armor.value, 8);
 assert.equal(fortune.items.some(entry => entry.name.startsWith("Laser de forage")), true);

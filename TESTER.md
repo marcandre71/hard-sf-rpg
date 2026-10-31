@@ -344,18 +344,20 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.4**.
 2. Ouvrez le compendium **Blessures**.
    **Résultat attendu :** les quatre **Blessure légère**, **grave**, **critique** et **mortelle** sont encore là, ainsi que les quatre **Blessure de machine**. Il y a en plus les blessures nommées, par exemple **Contusion faciale, arcade ouverte** (tête, légère, −10) et **Cœur ou aorte déchirés** (torse, mortelle). Il n'y a pas de **Lentille étoilée**.
-3. Ouvrez **Cataracte radique précoce** dans **Séquelles**. Puis **Cancer radio-induit**.
-   **Résultat attendu :** catégorie **Radiation**, permanente. Le cancer dit **[à compléter]**. La description dit que le tirage au dé est **[à compléter]**.
+3. Ouvrez **Cataracte radique précoce** dans **Séquelles**. Puis **Cancer radio-induit**, **Troubles cognitifs radio-induits** et **Fragilité cellulaire acquise**.
+   **Résultat attendu :** catégorie **Radiation**, permanente. Aucune ne dit **[à compléter]** pour le dé. Le texte dit que c'est une liste et que le MJ choisit. Le cancer dit qu'il se déclare plus tard, sans effet immédiat. Les troubles cognitifs disent **−10** aux tests d'INT, en rappel. La fragilité dit que le seuil de radiation est divisé par deux, arrondi au supérieur.
 4. Ouvrez **Habitat tournant (station)** dans **Origines**.
    **Résultat attendu :** la description est **0,3 à 0,7 g**. Les modificateurs sont **ADA +10, PER +5, FOR −5, CON −5**. Le nom n'a pas changé.
 5. Ouvrez le compendium **Univers et factions**, journal **Factions**.
    **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Mutuelle, Kombinat Hélion, Collège de Valhalla, Partants de la Longue Patience. Le texte de la Veille parle du Traité de Genève de 1981. Le journal **Glossaire** a une page.
 6. Dans **Vaisseaux**, ouvrez **Patrouilleur de la Veille** et **Cargo**. N'ouvrez pas la Petite Fortune pour la modifier.
-   **Résultat attendu :** les notes disent **À confirmer par Marc** et **provisoire**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**.
+   **Résultat attendu :** les notes disent **provisoire** et **À confirmer par Marc** pour le reste des chiffres de coque. L'accélération du patrouilleur est **50**. Celle du cargo est **0,05**. Le delta-v affiché reste **3,6**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**.
 7. Sur un personnage, glissez le **Pistolet de bord 9 mm basse vélocité**. Cochez **Équipé**. La fiche du personnage reste ouverte. Les munitions sont **15 / 15**. Lancez-le une fois, réussite ou échec.
    **Résultat attendu :** la jauge et le nombre passent à **14 / 15**.
    Mettez les munitions actuelles à **0**, puis lancez encore.
    **Résultat attendu :** le tir est refusé. Le message dit qu'il n'y a plus de munitions. Le nombre reste **0**. Remettez **15** avant de continuer.
+   Décochez le pistolet. Glissez le **Couteau d'arrimage, lame de sas en céramique**, cochez **Équipé**, et lancez-le.
+   **Résultat attendu :** un couteau attaque normalement. Les munitions restent **0 / 0**.
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 

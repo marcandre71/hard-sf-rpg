@@ -22,7 +22,7 @@
     },
     "propulsion": {
       "type": "nucléaire thermique à l'eau",
-      "acceleration": 21,
+      "acceleration": 0.05,
       "deltaV": {
         "value": 3.6,
         "max": 3.6
@@ -105,7 +105,7 @@
       }
     },
     "description": "<p>Provisoire. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §2 et §8.</p>",
-    "notes": "<p>Provisoire. Décision Marc 30/10/2026 : tiré de la Petite Fortune, ajusté simplement.</p><p>À confirmer par Marc : masse à vide 80 t, masse de réaction 150 t, delta-v 3,6 / 3,6 km/s, accélération 21 milli-g, intégrités et plaques, réserves, pièces et équipage PNJ. Ce sont les chiffres de la Petite Fortune, pas une fiche de cargo.</p><p>Le moteur est le Propulseur à plasma (cargo lent) du pack (Réf. Modules v0.3 §2). Son texte donne 0,01 à 0,1 milli-g. L'accélération 21 milli-g de la fiche n'est pas celle de ce module.</p>"
+    "notes": "<p>Provisoire. Décision Marc 30/10/2026 : tiré de la Petite Fortune, ajusté simplement.</p><p>Décision Didier/Marc 31/10/2026 : accélération 0,05 milli-g, le milieu de la fourchette 0,01 à 0,1 du propulseur à plasma (Réf. Modules v0.3 §2).</p><p>Le delta-v reste 3,6 / 3,6 km/s. Il n'est pas recalculé.</p><p>À confirmer par Marc : masse à vide 80 t, masse de réaction 150 t, delta-v 3,6 / 3,6 km/s, intégrités et plaques, réserves, pièces et équipage PNJ. Ce sont les chiffres de la Petite Fortune, pas une fiche de cargo.</p><p>Le moteur est le Propulseur à plasma (cargo lent) du pack (Réf. Modules v0.3 §2).</p>"
   },
   "items": [
     {

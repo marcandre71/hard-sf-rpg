@@ -375,7 +375,8 @@ async function rollItem(event, target) {
   }
 
   if ( item.type !== "weapon" || !item.system.equipped ) return;
-  // Décision Marc 31/10/2026. 0 : refus, comme le canon. Vide : le tir part.
+  // Décision Didier/Marc 31/10/2026 (champ vide = rien retiré) ; max 0 = sans chargeur
+  // Un 0 avec un maximum supérieur à 0 refuse le tir, comme le canon.
   // Réf. Vaisseaux v0.1 §4. Le rechargement reste manuel.
   const ammoPlan = personalAmmoSpend(item.system._source?.ammo ?? item.system.ammo);
   if ( !ammoPlan.fire ) {

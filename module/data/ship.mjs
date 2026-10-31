@@ -129,12 +129,12 @@ export class ShipData extends foundry.abstract.TypeDataModel {
       propulsion: new SchemaField({
         type: stringField("SOL.Ship.propulsion.type"),
         // Un seul nombre, milli-g au plein. Décision Marc 21/10/2026.
-        // Le chiffre presque à vide reste dans le texte du module moteur.
+        // Décision Didier/Marc 31/10/2026 : le cargo lent est à 0,05.
+        // Le delta-v et la poussée ne sont pas recalculés à partir de ce chiffre.
         acceleration: numberField("SOL.Ship.propulsion.acceleration", {
           initial: 0,
           min: 0,
-          integer: true,
-          step: 1,
+          step: 0.01,
           hint: "SOL.Ship.propulsion.accelerationHint"
         }),
         // km/s, au dixième. Décision Marc 23/10/2026. Pas `integer` : 3,6 est accepté.

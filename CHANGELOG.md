@@ -7,11 +7,13 @@ Branche `dev/0.9.4`, anciennement `dev/0.9.3`. PR brouillon vers `main`. La 0.9.
 Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Glossaire v0.1, Vaisseaux v0.1 §2 et §8.
 
 - Blessures : les 8 entrées déjà là gardent leur id. Les 24 blessures humaines nommées du catalogue sont ajoutées. Les 4 repères de machine restent tels quels : la table des machines attend la 0.8.0.
-- Séquelles : les 8 séquelles de radiation du catalogue. Le tirage au dé est [à compléter]. Cancer radio-induit et troubles cognitifs aussi.
+- Séquelles : les 8 séquelles de radiation du catalogue. Le dé, le cancer, les troubles cognitifs et la fragilité sont tranchés plus bas.
 - Origines : les 6 concordent, sauf l'habitat tournant, dont la gravité perd « selon l'habitat ».
 - Journaux : une page par faction, recopiée de la Bible v0.1 §6, et le glossaire en une page.
 - Vaisseaux : Patrouilleur de la Veille et Cargo, provisoires, chiffres de coque repris de la Petite Fortune et marqués à confirmer. Le patrouilleur porte le laser lourd du pack. Le cargo porte le propulseur à plasma du pack. La Petite Fortune n'est pas modifiée.
-- Munitions : chaque tir d'une arme de personnage ou de PNJ retire 1 à `system.ammo.value`. Décision Marc 31/10/2026. Réf. Vaisseaux v0.1 §4. À 0, le tir est refusé, comme le canon. Valeur null ou maximum null : le tir part, rien n'est écrit. Le rechargement reste manuel.
+- Munitions : chaque tir d'une arme de personnage ou de PNJ retire 1 à `system.ammo.value`. Décision Didier/Marc 31/10/2026. Réf. Vaisseaux v0.1 §4. Un 0 avec un maximum supérieur à 0 refuse le tir, comme le canon. Valeur null, maximum null, ou maximum 0 : le tir part, rien n'est écrit. Un maximum 0 veut dire sans chargeur (couteau, mains nues). Le rechargement reste manuel.
+- Vaisseaux PNJ : le patrouilleur a une accélération de 50 milli-g (Réf. Vaisseaux v0.1 §8). Le cargo a 0,05 milli-g, le milieu de la fourchette du plasma. Décision Didier/Marc 31/10/2026. Le delta-v et le texte de poussée des moteurs ne sont pas recalculés. Le reste des chiffres de coque reste celui de la Petite Fortune, provisoire.
+- Séquelles : pas de dé. C'est une liste, le MJ choisit. Le cancer se déclare plus tard, sans effet immédiat. Les troubles cognitifs rappellent −10 aux tests d'INT, sans malus automatique. La fragilité divise le seuil de radiation par deux, arrondi au supérieur, en texte seulement. Décision Didier/Marc 31/10/2026.
 
 Réserves mineures de Relecteur sur la 0.9.2, traitées :
 

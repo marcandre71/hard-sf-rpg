@@ -3,8 +3,8 @@
  *
  * Décision Marc 31/10/2026. Chaque tir retire 1 à `system.ammo.value`,
  * comme le canon. Réf. Vaisseaux v0.1 §4. Le rechargement reste manuel.
- * 0 : le tir est refusé, rien n'est écrit.
- * Valeur null, ou maximum null : le tir part, rien n'est écrit.
+ * Valeur 0 et maximum supérieur à 0 : le tir est refusé, rien n'est écrit.
+ * Valeur null, maximum null, ou maximum 0 : le tir part, rien n'est écrit.
  */
 
 /**
@@ -17,8 +17,8 @@ export function personalAmmoSpend(ammo) {
   const row = /** @type {{ value?: unknown, max?: unknown }} */ (ammo);
   const valueEmpty = row.value === null || row.value === undefined || row.value === "";
   const maxEmpty = row.max === null || row.max === undefined || row.max === "";
-  // Décision Marc 31/10/2026 : champ vide, on ne retire rien.
-  if ( valueEmpty || maxEmpty ) return { fire: true, next: null };
+  // Décision Didier/Marc 31/10/2026 (champ vide = rien retiré) ; max 0 = sans chargeur
+  if ( valueEmpty || maxEmpty || row.max === 0 ) return { fire: true, next: null };
   const value = Number(row.value);
   if ( !Number.isFinite(value) ) return { fire: true, next: null };
   // 0 : comme le canon. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.

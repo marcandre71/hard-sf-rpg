@@ -5,7 +5,7 @@
   "type": "sequel",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Blessures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Le LdR prévoit un tirage à chaque tranche de 1 000 mSv de dose cumulée, sur une table comprenant cataracte, risque de cancer, stérilité et troubles cognitifs. Dé et ordre de la table : [à compléter].</p>\n<p>−5 en CON ; temps de guérison naturel de toutes les blessures doublé. Traitement : greffe de moelle autologue.</p>",
+    "description": "<!-- Réf. Blessures v0.3 §4. Décision Marc 30/10/2026. Décision Didier/Marc 31/10/2026 -->\n<p>Pas de dé. C'est une liste : le MJ choisit la séquelle selon la dose et la situation.</p>\n<p>−5 en CON ; temps de guérison naturel de toutes les blessures doublé. Traitement : greffe de moelle autologue.</p>",
     "category": "radiation",
     "effect": "<p>−5 en CON ; temps de guérison naturel de toutes les blessures doublé. Traitement : greffe de moelle autologue.</p>",
     "permanent": true

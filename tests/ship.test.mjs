@@ -334,6 +334,9 @@ const shipModel = readFileSync(new URL("../module/data/ship.mjs", import.meta.ur
 const deltaAt = shipModel.indexOf("deltaV:");
 const deltaBlock = shipModel.slice(deltaAt, deltaAt + 280);
 check(deltaAt >= 0 && !deltaBlock.includes("integer") && deltaBlock.includes("step: 0.1"), "le delta-v accepte 3,6, au pas de 0,1");
+const accelAt = shipModel.indexOf("acceleration: numberField");
+const accelBlock = shipModel.slice(accelAt, accelAt + 220);
+check(accelAt >= 0 && accelBlock.includes("step: 0.01") && !accelBlock.includes("integer"), "l'accélération accepte 0,05, au pas de 0,01");
 check(shipModel.includes("choices: SOL.shipRanges"), "la fiche a un champ Portée");
 check(!shipModel.includes("keepExactDeltaV"), "le stockage exact du delta-v est retiré");
 

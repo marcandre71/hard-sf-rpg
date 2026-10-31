@@ -14,12 +14,13 @@ const one = personalAmmoSpend({ value: 1, max: 6 });
 assert.equal(one.fire, true);
 assert.equal(one.next, 0);
 
-const empty = personalAmmoSpend({ value: 0, max: 15 });
-assert.equal(empty.fire, false);
-assert.equal(empty.next, null);
+const pistolEmpty = personalAmmoSpend({ value: 0, max: 15 });
+assert.equal(pistolEmpty.fire, false, "pistolet 0/15 : tir refusé");
+assert.equal(pistolEmpty.next, null);
 
-const zeroMax = personalAmmoSpend({ value: 0, max: 0 });
-assert.equal(zeroMax.fire, false, "0/0 : comme un canon à 0");
+const knife = personalAmmoSpend({ value: 0, max: 0 });
+assert.equal(knife.fire, true, "couteau 0/0 : le tir passe");
+assert.equal(knife.next, null, "couteau 0/0 : rien n'est retiré");
 
 const nullValue = personalAmmoSpend({ value: null, max: 15 });
 assert.equal(nullValue.fire, true);
