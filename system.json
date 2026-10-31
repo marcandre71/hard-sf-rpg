@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.4 : blessures, journaux et vaisseaux PNJ. Passe après l'habillage.",
-  "version": "0.9.4",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.8.0 : machines. Passe après la 0.9.4.",
+  "version": "0.8.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -227,6 +227,13 @@
       "path": "packs/ships",
       "type": "Actor",
       "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "machines",
+      "label": "Machines",
+      "path": "packs/machines",
+      "type": "Actor",
+      "system": "sol-nouvelle-ere"
     }
   ],
   "packFolders": [
@@ -270,7 +277,7 @@
       "name": "Acteurs",
       "sorting": "m",
       "color": "#4a5a6b",
-      "packs": ["ships"],
+      "packs": ["ships", "machines"],
       "folders": []
     }
   ],

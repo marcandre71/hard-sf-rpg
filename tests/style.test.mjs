@@ -12,7 +12,7 @@ const actorSheet = readFileSync(new URL("../templates/actor/actor-sheet.hbs", im
 const portrait = readFileSync(new URL("../module/sheets/portrait.mjs", import.meta.url), "utf8");
 const principal = readFileSync(new URL("../templates/actor/tab-principal.hbs", import.meta.url), "utf8");
 
-assert.equal(system.version, "0.9.4");
+assert.equal(system.version, "0.8.0");
 assert.equal(system.styles.includes("styles/sol.css"), true);
 assert.equal("fonts" in system, false, "le manifeste v14 n'a pas de clé fonts");
 
@@ -48,6 +48,7 @@ assert.equal(header.includes('data-action="editImage"'), true);
 assert.equal(header.includes("sol-gauge"), true);
 assert.equal(actorSheet.includes('data-action="editImage"'), true);
 assert.equal(actorSheet.includes("sol-gauge"), true);
+assert.equal(actorSheet.includes("sol-name"), true);
 assert.equal(portrait.includes("foundry.applications.apps.FilePicker"), true);
 assert.equal(principal.includes("armorZones"), true);
 assert.equal(css.includes(".sol-roll-card .sol-result.success"), true);

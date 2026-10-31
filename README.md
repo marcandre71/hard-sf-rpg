@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.9.4 sur `dev/0.9.4`
+## État du système : version 0.8.0 sur `dev/0.8.0`
 
-`main` contient la 0.9.2 (`a194c10`) et l'habillage 0.9.3 (`20be91c`). Cette branche ajoute les blessures nommées, les séquelles de radiation, les journaux et deux vaisseaux PNJ provisoires. Elle passe après l'habillage. C'est une PR brouillon vers `main`. Ne pas la fusionner. Ne pas la finir maintenant. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 17. D'ici là, l'étape 1 donne le ZIP de `dev/0.9.4`. La suite est dans [ROADMAP.md](ROADMAP.md).
+`main` contient la 0.9.4 (`6f19056`). Cette branche ajoute Luciole, Crabe et TATI comme acteurs Drone, et laisse visible la liste nommée des blessures de machine. C'est une PR brouillon vers `main`. Ne pas la fusionner. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 19. D'ici là, l'étape 1 donne le ZIP de `dev/0.8.0`. La suite est dans [ROADMAP.md](ROADMAP.md).
 
 Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Décision Marc 25/10/2026 : un tir qui touche a un bouton « Appliquer les dégâts » (MJ, une fois). Les dégâts sont la valeur de l'arme plus le DR. Décision Marc 30/10/2026 : la chaleur, Pousser, les réparations et le canon sont dans la 0.7.4. Marc testera l'ensemble à la v1.0.
 

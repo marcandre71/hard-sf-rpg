@@ -5,7 +5,7 @@
   "type": "injury",
   "img": "icons/svg/blood.svg",
   "system": {
-    "description": "<p>À confirmer par Marc : blessures propres aux machines (synthétique, drone). Le LdR v0.2 §7 dit que la liste viendra ; en attendant, on utilise la blessure standard. Cette entrée est un repère du compendium, sans effet inventé.</p>",
+    "description": "<p>À confirmer par Marc : blessures propres aux machines (synthétique, drone). Le LdR v0.2 §7 dit que la liste viendra ; en attendant, on utilise la blessure standard. Cette entrée est un repère du compendium, sans effet inventé.</p>\n<p>Liste nommée : [à compléter]. Réf. LdR v0.2 §7.</p>",
     "severity": "critical",
     "penalty": 0,
     "bleeding": false,
