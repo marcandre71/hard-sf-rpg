@@ -1,5 +1,17 @@
 # Journal des versions
 
+## 0.9.3
+
+Branche `dev/0.9.3`, créée depuis `dev/0.9.2`. PR brouillon vers `main`. Elle dépend de la 0.9.2 : on la rebasera sur `main` après la fusion de cette branche. Ne pas fusionner. La section 17 de TESTER.md sert à la séance de test de la v1.
+
+Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Glossaire v0.1, Vaisseaux v0.1 §2 et §8.
+
+- Blessures : les 8 entrées déjà là gardent leur id. Les 24 blessures humaines nommées du catalogue sont ajoutées. Les 4 repères de machine restent tels quels : la table des machines attend la 0.8.0.
+- Séquelles : les 8 séquelles de radiation du catalogue. Le tirage au dé est [à compléter]. Cancer radio-induit et troubles cognitifs aussi.
+- Origines : les 6 concordent, sauf l'habitat tournant, dont la gravité perd « selon l'habitat ».
+- Journaux : une page par faction, recopiée de la Bible v0.1 §6, et le glossaire en une page.
+- Vaisseaux : Patrouilleur de la Veille et Cargo, provisoires, chiffres de coque repris de la Petite Fortune et marqués à confirmer. Le patrouilleur porte le laser lourd du pack. Le cargo porte le propulseur à plasma du pack. La Petite Fortune n'est pas modifiée.
+
 ## 0.9.2
 
 Branche `dev/0.9.2`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.9.1 (`eabc8a4`, notes de fusion `9877ce2`). La section 16 de TESTER.md sert à la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.2 qu'après fusion.
