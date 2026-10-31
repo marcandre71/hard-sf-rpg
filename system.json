@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.3 : blessures, journaux et vaisseaux PNJ.",
-  "version": "0.9.3",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.4 : blessures, journaux et vaisseaux PNJ. Passe après l'habillage.",
+  "version": "0.9.4",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

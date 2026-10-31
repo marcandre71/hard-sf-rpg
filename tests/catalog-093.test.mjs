@@ -1,5 +1,5 @@
 /**
- * Catalogues 0.9.3. Sans Foundry.
+ * Catalogues 0.9.4. Sans Foundry.
  * Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Vaisseaux v0.1 §8.
  * Décision Marc 30/10/2026.
  */
