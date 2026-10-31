@@ -1,0 +1,29 @@
+{
+  "_id": "TlnVerrFant00100",
+  "_key": "!items!TlnVerrFant00100",
+  "name": "Verrouillage fantôme",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Au poste d'Opérateur : +10 pour Verrouiller une cible dès le premier tour et +10 aux tests opposés de contre-mesures contre les missiles.</p>",
+    "xpCost": 15,
+    "domain": "space",
+    "prerequisites": "Opérations de bord +20, PER 45+",
+    "effect": "<p>Au poste d'Opérateur : +10 pour Verrouiller une cible dès le premier tour et +10 aux tests opposés de contre-mesures contre les missiles.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

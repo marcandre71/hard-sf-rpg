@@ -1,0 +1,34 @@
+{
+  "_id": "AugMoelleOsse010",
+  "_key": "!items!AugMoelleOsse010",
+  "name": "Réserve de moelle osseuse autologue",
+  "type": "augmentation",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Augmentations v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Prélèvement conservé par cryogénie ; après une irradiation grave, une greffe ramène le palier Irradié à Exposé en 48 h et annule un tirage de séquelle de radiation.</p>\n<p>Effets secondaires : Il faut rejoindre la clinique dépositaire (Valhalla ou Genève) ou faire convoyer le greffon par courrier rapide.</p>\n<p>Coût : [à compléter].</p>",
+    "kind": "culturedOrgan",
+    "effect": "<p>Prélèvement conservé par cryogénie ; après une irradiation grave, une greffe ramène le palier Irradié à Exposé en 48 h et annule un tirage de séquelle de radiation.</p>",
+    "cost": 0,
+    "legality": {
+      "earth": "Légale",
+      "mars": "Légale",
+      "elsewhere": "Légale"
+    },
+    "sideEffects": "<p>Il faut rejoindre la clinique dépositaire (Valhalla ou Genève) ou faire convoyer le greffon par courrier rapide.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "TlnPrerogGene010",
+  "_key": "!items!TlnPrerogGene010",
+  "name": "Prérogative de Genève",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Maîtrise des protocoles de l'Office de la Veille : +10 en Intimidation ou Persuasion face aux officiers de port, douaniers et équipages réguliers, en invoquant la Règle Sereguine ou le Traité de Genève de 1981.</p>",
+    "xpCost": 15,
+    "domain": "social",
+    "prerequisites": "Bureaucratie et droit +20",
+    "effect": "<p>Maîtrise des protocoles de l'Office de la Veille : +10 en Intimidation ou Persuasion face aux officiers de port, douaniers et équipages réguliers, en invoquant la Règle Sereguine ou le Traité de Genève de 1981.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

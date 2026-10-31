@@ -1,0 +1,29 @@
+{
+  "_id": "TlnPiloteInst010",
+  "_key": "!items!TlnPiloteInst010",
+  "name": "Pilote aux instruments (« Purée de pois »)",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Ignore jusqu'à −20 de pénalités dues au manque de visibilité : brume d'hydrocarbures de Titan, tempêtes de poussière martiennes.</p>",
+    "xpCost": 15,
+    "domain": "space",
+    "prerequisites": "Pilotage +20",
+    "effect": "<p>Ignore jusqu'à −20 de pénalités dues au manque de visibilité : brume d'hydrocarbures de Titan, tempêtes de poussière martiennes.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "TlnPiedMarin0010",
+  "_key": "!items!TlnPiedMarin0010",
+  "name": "Pied marin du vide",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Ignore la première pénalité de recul en apesanteur (LdR §10, Glossaire).</p>",
+    "xpCost": 15,
+    "domain": "space",
+    "prerequisites": "ADA 45+ ou Manœuvre en apesanteur +20",
+    "effect": "<p>Ignore la première pénalité de recul en apesanteur (LdR §10, Glossaire).</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

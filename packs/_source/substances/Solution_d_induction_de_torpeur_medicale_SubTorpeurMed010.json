@@ -1,0 +1,35 @@
+{
+  "_id": "SubTorpeurMed010",
+  "_key": "!items!SubTorpeurMed010",
+  "name": "Solution d'induction de torpeur médicale",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Hypothermie contrôlée pour plusieurs semaines de transit ; consommation d'air et de vivres divisée par 5. Requiert un test de Médecine ou un greffier médical.</p>\n<p>Effets secondaires : Réveil d'urgence sans procédure, état Choqué pendant 24 h.</p>",
+    "category": "torpor",
+    "administration": "perfusion en caisson",
+    "duration": "plusieurs semaines",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>Hypothermie contrôlée pour plusieurs semaines de transit ; consommation d'air et de vivres divisée par 5. Requiert un test de Médecine ou un greffier médical.</p>",
+    "sideEffects": "<p>Réveil d'urgence sans procédure, état Choqué pendant 24 h.</p>",
+    "legality": "légale"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

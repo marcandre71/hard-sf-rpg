@@ -1,0 +1,35 @@
+{
+  "_id": "SubRelance000010",
+  "_key": "!items!SubRelance000010",
+  "name": "Facteur de croissance médullaire « Relance »",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Traitement hospitalier d'un patient Exposé ou Irradié ; permet de redescendre d'un palier de radiation en une semaine de soins intensifs.</p>\n<p>Effets secondaires : Fièvre osseuse intense, −10 aux actions pendant toute la semaine.</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "radiation",
+    "administration": "perfusion",
+    "duration": "1 semaine",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>Traitement hospitalier d'un patient Exposé ou Irradié ; permet de redescendre d'un palier de radiation en une semaine de soins intensifs.</p>",
+    "sideEffects": "<p>Fièvre osseuse intense, −10 aux actions pendant toute la semaine.</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "SofFantomeTher10",
+  "_key": "!items!SofFantomeTher10",
+  "name": "Suite de leurrage « Fantôme thermique »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+10 au test opposé de contre-mesures de l'Opérateur contre un missile en approche. Fonctionne seulement si le vaisseau porte le module « Suite de guerre électronique et lance-leurres » (il pilote ses leurres : paillettes radar et fusées thermiques). Son bonus se cumule avec celui du module, dans la limite générale de ±50.</p>",
+    "category": "defense",
+    "host": "ship",
+    "assistedSkill": "Opérations de bord",
+    "skillBonus": 10,
+    "autonomousScore": 0,
+    "sereguineLock": true,
+    "legality": "restreint (militaire, escorte)"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

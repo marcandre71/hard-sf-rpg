@@ -1,0 +1,29 @@
+{
+  "_id": "TlnVoixDuQuart10",
+  "_key": "!items!TlnVoixDuQuart10",
+  "name": "Voix du quart",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Au poste de Commandant en combat spatial, le +10 d'une réussite de Commandement peut profiter à deux postes différents pendant le même tour.</p>",
+    "xpCost": 15,
+    "domain": "social",
+    "prerequisites": "Commandement +20",
+    "effect": "<p>Au poste de Commandant en combat spatial, le +10 d'une réussite de Commandement peut profiter à deux postes différents pendant le même tour.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "SofBergerDron010",
+  "_key": "!items!SofBergerDron010",
+  "name": "Greffier de télépilotage « Berger de drones »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. Permet à un opérateur de coordonner jusqu'à 3 drones à la fois sur des routines simples (patrouille, soudure, suivi de navette) sans malus. Standard chez les ingénieurs du Kombinat Hélion et sur les araignées de chantier. Ne pas confondre avec le module « Berger » de la Veille.</p>",
+    "category": "greffier",
+    "host": "tablet",
+    "assistedSkill": "Robotique et télépilotage",
+    "skillBonus": 0,
+    "autonomousScore": 45,
+    "sereguineLock": true,
+    "legality": "légal"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

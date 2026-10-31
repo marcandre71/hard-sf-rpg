@@ -1,0 +1,35 @@
+{
+  "_id": "SubSouffleNoir10",
+  "_key": "!items!SubSouffleNoir10",
+  "name": "Oxygénateur sanguin perfluoré « Souffle Noir »",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Fait reculer l'Hypoxie de 2 stades. Effet éventuel sur le compte à rebours de « Combinaison percée » : [à compléter].</p>\n<p>Effets secondaires : Frissons et maux de tête violents au retour à la pression normale (−10 en PER pendant 1 heure).</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "medical",
+    "administration": "autoInjector",
+    "duration": "15 min",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>Fait reculer l'Hypoxie de 2 stades. Effet éventuel sur le compte à rebours de « Combinaison percée » : [à compléter].</p>",
+    "sideEffects": "<p>Frissons et maux de tête violents au retour à la pression normale (−10 en PER pendant 1 heure).</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

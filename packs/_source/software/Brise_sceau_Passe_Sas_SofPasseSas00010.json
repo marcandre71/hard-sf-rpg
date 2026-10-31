@@ -1,0 +1,32 @@
+{
+  "_id": "SofPasseSas00010",
+  "_key": "!items!SofPasseSas00010",
+  "name": "Brise-sceau « Passe-Sas »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Aussi sur le terminal « Décapsuleur ». +10 aux tests d'intrusion pour déverrouiller un sas, geler une alarme locale ou modifier un journal d'accès (connexion filaire requise). Laisse une signature dans le registre matériel si le test réussit avec 0 DR.</p>",
+    "category": "intrusion",
+    "host": "tablet",
+    "assistedSkill": "Informatique, Électronique",
+    "skillBonus": 10,
+    "autonomousScore": 0,
+    "sereguineLock": true,
+    "legality": "illégal (sauf licence d'épaviste)"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

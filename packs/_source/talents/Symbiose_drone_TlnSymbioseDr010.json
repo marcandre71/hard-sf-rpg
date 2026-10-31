@@ -1,0 +1,29 @@
+{
+  "_id": "TlnSymbioseDr010",
+  "_key": "!items!TlnSymbioseDr010",
+  "name": "Symbiose drone",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Avec un drone familier (TATI, Crabe, Luciole), peut lui ordonner une action simple en dépensant sa réaction plutôt que son action du tour.</p>",
+    "xpCost": 15,
+    "domain": "technical",
+    "prerequisites": "Robotique et télépilotage +20",
+    "effect": "<p>Avec un drone familier (TATI, Crabe, Luciole), peut lui ordonner une action simple en dépensant sa réaction plutôt que son action du tour.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 900000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

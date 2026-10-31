@@ -1,0 +1,32 @@
+{
+  "_id": "SofAccosteur0010",
+  "_key": "!items!SofAccosteur0010",
+  "name": "Pilote-greffier d'amarrage « Accosteur »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur navette. Exécute les rendez-vous orbitaux de routine et l'approche aux instruments dans la brume (Titan, Vénus) ; +10 à l'amarrage. Inutilisable pour les actions Esquiver ou Changer de portée en combat spatial.</p>",
+    "category": "greffier",
+    "host": "ship",
+    "assistedSkill": "Pilotage",
+    "skillBonus": 10,
+    "autonomousScore": 45,
+    "sereguineLock": true,
+    "legality": "légal"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

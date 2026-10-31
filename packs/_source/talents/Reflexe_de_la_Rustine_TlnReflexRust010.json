@@ -1,0 +1,29 @@
+{
+  "_id": "TlnReflexRust010",
+  "_key": "!items!TlnReflexRust010",
+  "name": "Réflexe de la Rustine",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Peut poser une rustine sur sa propre combinaison percée ou sur celle d'un allié au contact en réaction, au lieu d'une action. Sous le feu, le test simple de Survie (difficulté Normale) reste exigé ; un échec ne consomme pas la rustine.</p>",
+    "xpCost": 15,
+    "domain": "endurance",
+    "prerequisites": "Sortie extravéhiculaire +10 ou Survie +10",
+    "effect": "<p>Peut poser une rustine sur sa propre combinaison percée ou sur celle d'un allié au contact en réaction, au lieu d'une action. Sous le feu, le test simple de Survie (difficulté Normale) reste exigé ; un échec ne consomme pas la rustine.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

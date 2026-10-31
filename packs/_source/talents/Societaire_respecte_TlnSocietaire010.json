@@ -1,0 +1,29 @@
+{
+  "_id": "TlnSocietaire010",
+  "_key": "!items!TlnSocietaire010",
+  "name": "Sociétaire respecté",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Dans tout habitat ou rade de la Mutuelle : +10 en Négociation et en Persuasion pour obtenir à crédit des pièces de rechange, de l'eau de réaction ou une assistance technique.</p>",
+    "xpCost": 15,
+    "domain": "social",
+    "prerequisites": "Réputation auprès de la Mutuelle +1 au moins",
+    "effect": "<p>Dans tout habitat ou rade de la Mutuelle : +10 en Négociation et en Persuasion pour obtenir à crédit des pièces de rechange, de l'eau de réaction ou une assistance technique.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

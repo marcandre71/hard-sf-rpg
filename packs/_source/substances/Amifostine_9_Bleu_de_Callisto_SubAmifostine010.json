@@ -1,0 +1,35 @@
+{
+  "_id": "SubAmifostine010",
+  "_key": "!items!SubAmifostine010",
+  "name": "Amifostine-9 (« Bleu de Callisto »)",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>\n<p>Effets secondaires : Nausées violentes immédiates, −10 aux actions pendant 4 heures et perte d'1 point d'Endurance.</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "radiation",
+    "administration": "autoInjector",
+    "duration": "1 exposition",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>",
+    "sideEffects": "<p>Nausées violentes immédiates, −10 aux actions pendant 4 heures et perte d'1 point d'Endurance.</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

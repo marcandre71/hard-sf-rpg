@@ -1,0 +1,35 @@
+{
+  "_id": "SubJusDeFer00010",
+  "_key": "!items!SubJusDeFer00010",
+  "name": "Cocktail de poussée « Jus de Fer »",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §2. Décision Marc 30/10/2026 -->\n<p>+1 en Tolérance aux g pendant 1 heure (manœuvres de combat à forte poussée, décollages planétaires).</p>\n<p>Effets secondaires : À la fin de l'effet, perte d'1 point d'Endurance et migraines (−10 en PER pendant 1 h) ; une 2e dose en 24 h impose un test de CON (−20) sous peine de malaise cardiaque (critique chez les natifs de basse gravité).</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "gravity",
+    "administration": "autoInjector",
+    "duration": "1 h",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>+1 en Tolérance aux g pendant 1 heure (manœuvres de combat à forte poussée, décollages planétaires).</p>",
+    "sideEffects": "<p>À la fin de l'effet, perte d'1 point d'Endurance et migraines (−10 en PER pendant 1 h) ; une 2e dose en 24 h impose un test de CON (−20) sous peine de malaise cardiaque (critique chez les natifs de basse gravité).</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

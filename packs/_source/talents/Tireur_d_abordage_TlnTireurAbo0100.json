@@ -1,0 +1,29 @@
+{
+  "_id": "TlnTireurAbo0100",
+  "_key": "!items!TlnTireurAbo0100",
+  "name": "Tireur d'abordage",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En apesanteur, +10 au test de Manœuvre en apesanteur contre le recul (le test en rafale passe de −20 à −10).</p>",
+    "xpCost": 15,
+    "domain": "combat",
+    "prerequisites": "Armes de poing +20 ou Armes d'épaule +20",
+    "effect": "<p>En apesanteur, +10 au test de Manœuvre en apesanteur contre le recul (le test en rafale passe de −20 à −10).</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

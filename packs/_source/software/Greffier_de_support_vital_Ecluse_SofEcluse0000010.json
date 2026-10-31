@@ -1,0 +1,32 @@
+{
+  "_id": "SofEcluse0000010",
+  "_key": "!items!SofEcluse0000010",
+  "name": "Greffier de support vital « Écluse »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur station. Surveille air, eau et CO2 en permanence ; +10 d'Aide pour gérer une fuite ou une contamination. Règle Sereguine (abandon d'équipage) : il ne peut pas, seul, condamner une cloison qui isole un compartiment où un signe de vie humain est détecté ; un humain doit valider.</p>",
+    "category": "greffier",
+    "host": "ship",
+    "assistedSkill": "Systèmes de survie",
+    "skillBonus": 10,
+    "autonomousScore": 50,
+    "sereguineLock": true,
+    "legality": "légal"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

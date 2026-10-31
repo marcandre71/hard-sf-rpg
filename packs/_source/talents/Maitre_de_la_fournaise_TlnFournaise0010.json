@@ -1,0 +1,29 @@
+{
+  "_id": "TlnFournaise0010",
+  "_key": "!items!TlnFournaise0010",
+  "name": "Maître de la fournaise",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Au poste d'Ingénieur, l'action Pousser les moteurs ou le réacteur ne génère pas le point de chaleur supplémentaire en cas d'échec simple (moins de 3 DE).</p>",
+    "xpCost": 15,
+    "domain": "technical",
+    "prerequisites": "Réacteurs et propulsion +20",
+    "effect": "<p>Au poste d'Ingénieur, l'action Pousser les moteurs ou le réacteur ne génère pas le point de chaleur supplémentaire en cas d'échec simple (moins de 3 DE).</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "SofRegistreNav10",
+  "_key": "!items!SofRegistreNav10",
+  "name": "Registre naval et catalogue des débris de la Veille",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 pour identifier la classe et l'historique officiel d'un vaisseau d'après sa signature infrarouge, ou repérer des épaves et des rochers non balisés. Doit être synchronisé en rade tous les 3 mois pour garder son bonus (les avis récents arrivent avec le délai lumière).</p>",
+    "category": "utility",
+    "host": "tablet",
+    "assistedSkill": "Opérations de bord, Vigilance, Enquête",
+    "skillBonus": 10,
+    "autonomousScore": 0,
+    "sereguineLock": true,
+    "legality": "légal"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 900000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

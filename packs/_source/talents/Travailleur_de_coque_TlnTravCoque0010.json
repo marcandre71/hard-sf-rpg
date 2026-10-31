@@ -1,0 +1,29 @@
+{
+  "_id": "TlnTravCoque0010",
+  "_key": "!items!TlnTravCoque0010",
+  "name": "Travailleur de coque",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Réduit de 10 les pénalités de manipulation fine et de perception des combinaisons pressurisées lors des travaux en extérieur (souple : 0 / 0 ; armure de pont : −10 / −10).</p>",
+    "xpCost": 15,
+    "domain": "space",
+    "prerequisites": "Sortie extravéhiculaire +20",
+    "effect": "<p>Réduit de 10 les pénalités de manipulation fine et de perception des combinaisons pressurisées lors des travaux en extérieur (souple : 0 / 0 ; armure de pont : −10 / −10).</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "SubDecondit00010",
+  "_key": "!items!SubDecondit00010",
+  "name": "Médicaments contre le déconditionnement",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Avec ce traitement, le personnage n'a pas de test mensuel de CON contre le déconditionnement (LdR §8). Ralentit la fonte osseuse et musculaire.</p>\n<p>Effets secondaires : Crampes et calculs rénaux en cas de rationnement d'eau.</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "gravity",
+    "administration": "oral",
+    "duration": "quotidien, cure d'1 mois",
+    "doses": {
+      "value": null,
+      "max": 30
+    },
+    "effect": "<p>Avec ce traitement, le personnage n'a pas de test mensuel de CON contre le déconditionnement (LdR §8). Ralentit la fonte osseuse et musculaire.</p>",
+    "sideEffects": "<p>Crampes et calculs rénaux en cas de rationnement d'eau.</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

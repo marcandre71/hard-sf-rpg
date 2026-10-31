@@ -1,0 +1,35 @@
+{
+  "_id": "SubStopSang00010",
+  "_key": "!items!SubStopSang00010",
+  "name": "Coagulant systémique d'urgence « Stop-Sang »",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Arrête l'état Saignement en 1 action, sans test de Premiers secours (utile quand on ne peut pas ouvrir la combinaison du blessé). L'injection passe par le port médical auto-obturant de la combinaison.</p>\n<p>Effets secondaires : Sans danger à la 1re dose ; une 2e dose en 24 h impose un test de CON (risque de thrombose).</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "medical",
+    "administration": "autoInjector",
+    "duration": "6 h",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>Arrête l'état Saignement en 1 action, sans test de Premiers secours (utile quand on ne peut pas ouvrir la combinaison du blessé). L'injection passe par le port médical auto-obturant de la combinaison.</p>",
+    "sideEffects": "<p>Sans danger à la 1re dose ; une 2e dose en 24 h impose un test de CON (risque de thrombose).</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 700000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

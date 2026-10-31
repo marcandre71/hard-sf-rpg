@@ -1,0 +1,32 @@
+{
+  "_id": "SofCameleon00010",
+  "_key": "!items!SofCameleon00010",
+  "name": "Simulateur de transpondeur « Caméléon »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+10 pour afficher un faux code de transpondeur civil ou maquiller la signature d'un vaisseau (Règles des vaisseaux §1). Infraction grave au Traité de Genève : immobilisation immédiate du vaisseau en cas d'inspection physique. Utilisé par la Caisse Noire.</p>",
+    "category": "falsification",
+    "host": "ship",
+    "assistedSkill": "Opérations de bord, Tromperie",
+    "skillBonus": 10,
+    "autonomousScore": 0,
+    "sereguineLock": true,
+    "legality": "illégal"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

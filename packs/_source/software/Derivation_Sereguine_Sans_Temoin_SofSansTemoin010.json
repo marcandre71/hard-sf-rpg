@@ -1,0 +1,32 @@
+{
+  "_id": "SofSansTemoin010",
+  "_key": "!items!SofSansTemoin010",
+  "name": "Dérivation Sereguine « Sans-Témoin »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Aussi sur drone. Supprime le bridage de la Règle Sereguine : permet à un greffier ou à un drone de décider seul d'un tir létal (score autonome 50), d'une déviation de masse ou d'un abandon d'équipage, sans validation humaine. Contourner la Règle Sereguine est un crime grave : la simple détention de ce code entraîne la saisie définitive du vaisseau par l'Office de la Veille, la radiation de la Mutuelle et de lourdes peines.</p>",
+    "category": "intrusion",
+    "host": "ship",
+    "assistedSkill": "Informatique",
+    "skillBonus": 0,
+    "autonomousScore": 50,
+    "sereguineLock": false,
+    "legality": "crime grave dans tout le système solaire"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "TlnChirurgien010",
+  "_key": "!items!TlnChirurgien010",
+  "name": "Chirurgien d'apesanteur",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Ignore les pénalités de basse gravité ou d'apesanteur lors des actes médicaux ; réduit d'un tiers le temps de guérison des blessures graves ou critiques qu'il a opérées.</p>",
+    "xpCost": 15,
+    "domain": "endurance",
+    "prerequisites": "Médecine (chirurgie) +20",
+    "effect": "<p>Ignore les pénalités de basse gravité ou d'apesanteur lors des actes médicaux ; réduit d'un tiers le temps de guérison des blessures graves ou critiques qu'il a opérées.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

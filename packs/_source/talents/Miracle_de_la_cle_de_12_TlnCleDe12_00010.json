@@ -1,0 +1,29 @@
+{
+  "_id": "TlnCleDe12_00010",
+  "_key": "!items!TlnCleDe12_00010",
+  "name": "Miracle de la clé de 12",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Au poste d'Ingénieur en combat spatial, ignore le −20 d'une Réparation de fortune (Règles des vaisseaux §3).</p>",
+    "xpCost": 15,
+    "domain": "technical",
+    "prerequisites": "Mécanique +20",
+    "effect": "<p>Au poste d'Ingénieur en combat spatial, ignore le −20 d'une Réparation de fortune (Règles des vaisseaux §3).</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 700000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "SubSilence000010",
+  "_key": "!items!SubSilence000010",
+  "name": "Analgésique de chantier « Silence »",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Permet d'ignorer la pénalité (−10 ou −20) d'une blessure légère ou grave pendant 2 heures.</p>\n<p>Effets secondaires : À la fin de l'effet, perte d'1 point d'Endurance ; après des efforts violents, une blessure grave non suturée se remet à saigner.</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "medical",
+    "administration": "autoInjector ou timbre",
+    "duration": "2 h",
+    "doses": {
+      "value": null,
+      "max": 1
+    },
+    "effect": "<p>Permet d'ignorer la pénalité (−10 ou −20) d'une blessure légère ou grave pendant 2 heures.</p>",
+    "sideEffects": "<p>À la fin de l'effet, perte d'1 point d'Endurance ; après des efforts violents, une blessure grave non suturée se remet à saigner.</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 900000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

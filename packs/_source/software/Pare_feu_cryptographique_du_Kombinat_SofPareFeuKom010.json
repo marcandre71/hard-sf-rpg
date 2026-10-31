@@ -1,0 +1,32 @@
+{
+  "_id": "SofPareFeuKom010",
+  "_key": "!items!SofPareFeuKom010",
+  "name": "Pare-feu cryptographique du Kombinat",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. −20 à toute tentative d'intrusion ou d'écoute électronique visant le système protégé. Chiffrement développé par le Kombinat Hélion et les plénipotentiaires.</p>",
+    "category": "defense",
+    "host": "tablet",
+    "assistedSkill": "Informatique",
+    "skillBonus": 0,
+    "autonomousScore": 0,
+    "sereguineLock": true,
+    "legality": "légal (restreint en version diplomatique)"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "SubHorizonCalm10",
+  "_key": "!items!SubHorizonCalm10",
+  "name": "Stabilisateur d'anxiété « Horizon Calme »",
+  "type": "substance",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Rend 2 points de Sang-froid, une fois par scénario.</p>\n<p>Effets secondaires : −10 en Vigilance et en Psychologie pendant 8 heures.</p>\n<p>Légalité : [à compléter].</p>",
+    "category": "medical",
+    "administration": "oral ou timbre",
+    "duration": "8 h",
+    "doses": {
+      "value": null,
+      "max": 5
+    },
+    "effect": "<p>Rend 2 points de Sang-froid, une fois par scénario.</p>",
+    "sideEffects": "<p>−10 en Vigilance et en Psychologie pendant 8 heures.</p>",
+    "legality": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

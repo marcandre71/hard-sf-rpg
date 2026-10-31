@@ -1,0 +1,29 @@
+{
+  "_id": "TlnEndurciMil010",
+  "_key": "!items!TlnEndurciMil010",
+  "name": "Endurci aux milieux extrêmes",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Peut utiliser CON au lieu d'INT, au choix, pour les tests de Survie (Atout annoncé au LdR §4).</p>",
+    "xpCost": 15,
+    "domain": "endurance",
+    "prerequisites": "Survie +10, CON 40+",
+    "effect": "<p>Peut utiliser CON au lieu d'INT, au choix, pour les tests de Survie (Atout annoncé au LdR §4).</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1200000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "TlnMurmureur0010",
+  "_key": "!items!TlnMurmureur0010",
+  "name": "Murmureur de greffiers",
+  "type": "talent",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>+10 pour diagnostiquer, reprogrammer ou contourner un greffier ; divise par deux l'intervalle de temps des tests prolongés d'Informatique.</p>",
+    "xpCost": 15,
+    "domain": "technical",
+    "prerequisites": "Informatique +20",
+    "effect": "<p>+10 pour diagnostiquer, reprogrammer ou contourner un greffier ; divise par deux l'intervalle de temps des tests prolongés d'Informatique.</p>"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

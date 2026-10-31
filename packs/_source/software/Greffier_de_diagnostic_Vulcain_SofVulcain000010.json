@@ -1,0 +1,32 @@
+{
+  "_id": "SofVulcain000010",
+  "_key": "!items!SofVulcain000010",
+  "name": "Greffier de diagnostic « Vulcain »",
+  "type": "software",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 d'Aide aux diagnostics de panne et aux tests prolongés de réparation. Croise en temps réel pressions, vibrations et historiques d'usure. Ne peut pas couper le réacteur en combat sans validation de l'Ingénieur.</p>",
+    "category": "greffier",
+    "host": "tablet",
+    "assistedSkill": "Mécanique, Électronique, Réacteurs et propulsion",
+    "skillBonus": 10,
+    "autonomousScore": 45,
+    "sereguineLock": true,
+    "legality": "légal"
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.2",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}
