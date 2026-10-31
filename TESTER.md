@@ -1,4 +1,4 @@
-# Tester le système « Sol, Nouvelle Ère » (0.9.3)
+# Tester le système « Sol, Nouvelle Ère » (0.9.4)
 
 Pour Marc, sans connaissances techniques.
 Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
@@ -8,8 +8,8 @@ La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle ser
 La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
 La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 La section 16 est la **0.9.2** (atouts, augmentations, logiciels, substances). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
-La section 17 est réservée à la **0.9.4** (blessures, journaux, vaisseaux PNJ), sur la branche séparée `dev/0.9.4`. Elle n'est pas dans ce ZIP.
-La section 18 est la **0.9.3** (habillage des fiches). C'est une PR brouillon vers `main`. Le ZIP de `main` ne la contient pas. L'étape 1 donne le ZIP de `dev/0.9.3-style`. Ne pas la fusionner.
+La section 17 est la **0.9.4** (blessures, journaux, vaisseaux PNJ). Elle passe après l'habillage. Le ZIP de `main` ne la contient pas. L'étape 1 donne le ZIP de `dev/0.9.4`. Ne pas la fusionner. Ne pas la finir maintenant.
+La section 18 est la **0.9.3** (habillage des fiches). Elle est dans `main`. La séance de test reste cette section.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -329,6 +329,29 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
    **Résultat attendu :** le domaine peut rester vide. Le coût en XP part à **0**, pas à 15.
 10. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 17. 0.9.4 Blessures, journaux et vaisseaux PNJ
+
+Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.4 qu'après fusion de l'habillage, puis de cette branche. D'ici là, prenez le ZIP de `dev/0.9.4`.
+
+1. Prenez le ZIP de `dev/0.9.4` :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.4.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.4`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.4**.
+2. Ouvrez le compendium **Blessures**.
+   **Résultat attendu :** les quatre **Blessure légère**, **grave**, **critique** et **mortelle** sont encore là, ainsi que les quatre **Blessure de machine**. Il y a en plus les blessures nommées, par exemple **Contusion faciale, arcade ouverte** (tête, légère, −10) et **Cœur ou aorte déchirés** (torse, mortelle). Il n'y a pas de **Lentille étoilée**.
+3. Ouvrez **Cataracte radique précoce** dans **Séquelles**. Puis **Cancer radio-induit**.
+   **Résultat attendu :** catégorie **Radiation**, permanente. Le cancer dit **[à compléter]**. La description dit que le tirage au dé est **[à compléter]**.
+4. Ouvrez **Habitat tournant (station)** dans **Origines**.
+   **Résultat attendu :** la description est **0,3 à 0,7 g**. Les modificateurs sont **ADA +10, PER +5, FOR −5, CON −5**. Le nom n'a pas changé.
+5. Ouvrez le compendium **Univers et factions**, journal **Factions**.
+   **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Mutuelle, Kombinat Hélion, Collège de Valhalla, Partants de la Longue Patience. Le texte de la Veille parle du Traité de Genève de 1981. Le journal **Glossaire** a une page.
+6. Dans **Vaisseaux**, ouvrez **Patrouilleur de la Veille** et **Cargo**. N'ouvrez pas la Petite Fortune pour la modifier.
+   **Résultat attendu :** les notes disent **À confirmer par Marc** et **provisoire**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**.
+7. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 
 ## 18. 0.9.3 Habillage des fiches
 

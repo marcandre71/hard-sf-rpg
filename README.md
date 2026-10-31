@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.9.3 sur `dev/0.9.3-style`
+## État du système : version 0.9.4 sur `dev/0.9.4`
 
-`main` contient la 0.9.2 revue (`8db71c4`). Cette branche habille les fiches. C'est une PR brouillon vers `main`. Ne pas la fusionner : Relecteur la vérifie encore. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 18. D'ici là, l'étape 1 donne le ZIP de `dev/0.9.3-style`. La suite est dans [ROADMAP.md](ROADMAP.md).
+`main` contient la 0.9.2 (`a194c10`) et l'habillage 0.9.3 (`20be91c`). Cette branche ajoute les blessures nommées, les séquelles de radiation, les journaux et deux vaisseaux PNJ provisoires. Elle passe après l'habillage. C'est une PR brouillon vers `main`. Ne pas la fusionner. Ne pas la finir maintenant. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 17. D'ici là, l'étape 1 donne le ZIP de `dev/0.9.4`. La suite est dans [ROADMAP.md](ROADMAP.md).
 
 Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Décision Marc 25/10/2026 : un tir qui touche a un bouton « Appliquer les dégâts » (MJ, une fois). Les dégâts sont la valeur de l'arme plus le DR. Décision Marc 30/10/2026 : la chaleur, Pousser, les réparations et le canon sont dans la 0.7.4. Marc testera l'ensemble à la v1.0.
 
