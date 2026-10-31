@@ -7,7 +7,7 @@ La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main
 La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
 La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
-La section 16 est la **0.9.2** (atouts, augmentations, logiciels, substances). C'est une PR brouillon : le ZIP de `main` ne la contient pas. L'étape 1 donne le ZIP de `dev/0.9.2`. Ne pas la fusionner.
+La section 16 est la **0.9.2** (atouts, augmentations, logiciels, substances). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -299,13 +299,13 @@ Les malus écrits dans les descriptions (fusil à pompe, gyrojet à bout portant
 
 ## 16. 0.9.2 Atouts, augmentations, logiciels et substances
 
-Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.2 qu'après fusion. D'ici là, prenez le ZIP de la branche.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` :
 
-1. Prenez le ZIP de `dev/0.9.2` :
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.2.zip
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
 
-   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.2`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+1. Le système vient du ZIP de `main` (lien ci-dessus).
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.2**.
 2. Ouvrez les compendiums **Atouts**, **Augmentations**, **Logiciels** et **Substances**.
    **Résultat attendu :** **25** atouts, **14** augmentations, **15** logiciels, **15** substances. Il n'y a pas de seconde entrée pour **Pied marin du vide**.

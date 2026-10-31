@@ -2,7 +2,7 @@
 
 ## 0.9.2
 
-Branche `dev/0.9.2`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.9.1 (`eabc8a4`, notes de fusion `9877ce2`). La section 16 de TESTER.md sert à la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.2 qu'après fusion.
+Entrée dans `main` en avance rapide depuis `dev/0.9.2` (`8db71c4`). Relue par Relecteur, test Marc reporté à la v1. La section 16 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.
 
 Décision Marc 30/10/2026. Réf. Atouts v0.3, Augmentations v0.3, Logiciels v0.3, Substances v0.3. Effets en texte seulement. Pas d'ActiveEffect, pas de jet autonome, pas de champ `geneTherapy` sur le personnage.
 
