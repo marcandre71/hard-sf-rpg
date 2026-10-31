@@ -862,3 +862,7 @@
 .sol-nouvelle-ere.actor button.sol-roll-characteristic {
   color: var(--sol-accent);
 }
+
+.sol-nouvelle-ere.actor .sol-ch-roll {
+  justify-content: center;
+}

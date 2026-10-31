@@ -62,7 +62,10 @@ assert.equal(ship.includes("step >= 6"), false);
 const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
 assert.equal(tester.includes("La section 17 est réservée à la **0.9.4**"), true);
 assert.equal(tester.includes("Ouvrez l'arme, changez Munitions actuelles"), true);
-assert.equal(tester.includes("Double-cliquez une image, ou cliquez-la puis **Choisir**"), true);
+assert.equal(tester.includes("Cliquez le portrait. Dans le sélecteur, double-cliquez une image, ou cliquez-la puis **Choisir**"), true);
+assert.equal(tester.includes("le 7ᵉ segment passe en ambre"), true);
+assert.equal(css.includes(".sol-nouvelle-ere.actor .sol-ch-roll"), true);
+assert.equal(principal.includes('role="img"'), true);
 assert.equal(portrait.includes("if ( !this.isEditable ) return;"), true);
 assert.equal(portrait.includes("FilePicker.implementation"), true);
 

@@ -40,7 +40,7 @@
           {{#each armorZones}}
           <div class="sol-zone{{#if hurt}} sol-tone-warn{{/if}}">
             <span class="sol-lbl">{{localize label}}</span>
-            <span class="sol-num">{{value}}{{#if hurt}} <span aria-label="{{localize 'SOL.Sheet.zoneHurt'}}">▲</span>{{/if}}</span>
+            <span class="sol-num">{{value}}{{#if hurt}} <span role="img" aria-label="{{localize 'SOL.Sheet.zoneHurt'}}">▲</span>{{/if}}</span>
           </div>
           {{/each}}
         </div>
