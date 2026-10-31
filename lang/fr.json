@@ -783,6 +783,18 @@
         "toxin": "Toxine"
       },
       "administration": "Administration",
+      "administrationMode": {
+        "autoInjector": "auto-injecteur",
+        "autoInjectorOrPatch": "auto-injecteur ou timbre",
+        "timbre": "timbre",
+        "projectile": "projectile ou injection",
+        "oralInjection": "oral et injection",
+        "perfusion": "perfusion",
+        "oral": "oral",
+        "inhalation": "inhalation",
+        "perfusionBay": "perfusion en caisson",
+        "oralPatch": "oral ou timbre"
+      },
       "duration": "Durée",
       "doses": "Doses",
       "sideEffects": "Effets secondaires",

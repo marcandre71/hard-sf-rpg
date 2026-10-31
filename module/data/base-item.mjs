@@ -45,8 +45,14 @@ export class SubstanceData extends BaseItemData {
         blank: true,
         choices: SOL.substanceCategories
       }),
-      // Décision Marc 30/10/2026 : chaîne libre, pas de liste fermée.
-      administration: stringField("SOL.Substance.administration"),
+      // Décision Marc 30/10/2026 : les voies du catalogue, pas une liste inventée.
+      // Décision Marc 31/10/2026 : la clé reste (autoInjector). La fiche
+      // affiche le libellé français. Vide permis.
+      administration: stringField("SOL.Substance.administration", {
+        initial: "",
+        blank: true,
+        choices: SOL.substanceAdministrations
+      }),
       // Décision Marc 30/10/2026 : chaîne libre (« 1 h », « 1D10 × 5 min »).
       duration: stringField("SOL.Substance.duration"),
       // Le catalogue donne le maximum. Décision Marc 31/10/2026 :

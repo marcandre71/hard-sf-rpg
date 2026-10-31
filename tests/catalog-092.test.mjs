@@ -92,6 +92,14 @@ const iron = substances.find(entry => entry.name.includes("Jus de Fer"));
 assert.equal(iron.system.doses.max, 1);
 assert.equal(iron.system.doses.value, 1);
 assert.equal(iron.system.administration, "autoInjector");
+assert.equal(SOL.substanceAdministrations.autoInjector, "SOL.Substance.administrationMode.autoInjector");
+assert.equal(SOL.substanceAdministrations["autoInjector ou timbre"], "SOL.Substance.administrationMode.autoInjectorOrPatch");
+for (const entry of substances) {
+  assert.equal(entry.system.administration in SOL.substanceAdministrations, true, entry.name);
+}
+const fr = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));
+assert.equal(fr.SOL.Substance.administrationMode.autoInjector, "auto-injecteur");
+assert.equal(fr.SOL.Substance.administrationMode.autoInjectorOrPatch, "auto-injecteur ou timbre");
 
 // Décision Marc 31/10/2026. Création seulement : un 0 reste 0, une fiche sans maximum reste vide.
 assert.equal(fullDosesValue({ value: null, max: 1 }), 1);

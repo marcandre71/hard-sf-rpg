@@ -317,13 +317,13 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** catégorie **Greffier**, support **Vaisseau**, bonus d'aide **10**, score autonome **50**. Le score est une case, pas un bouton de jet. **Verrou Sereguine** est coché.
 6. Ouvrez **Dérivation Sereguine « Sans-Témoin »**.
    **Résultat attendu :** **Verrou Sereguine** est décoché. Score autonome **50**. La description dit que c'est un crime grave.
-7. Sur un personnage, glissez **Cocktail de poussée « Jus de Fer »**.
-   **Résultat attendu :** catégorie **Gravité**, administration **autoInjector**, durée **1 h**, doses **1 / 1**. La légalité dit **[à compléter]**. Rouvrez la fiche : les champs sont encore là.
+7. Sur un personnage, glissez **Cocktail de poussée « Jus de Fer »**, puis ouvrez-le depuis la fiche.
+   **Résultat attendu :** catégorie **Gravité**, administration **auto-injecteur**, durée **1 h**, doses **1 / 1**. Légalité : vide. La description dit Légalité : [à compléter]. Rouvrez la fiche : les champs sont encore là.
    Créez une substance à la main sur le même personnage, sans rien saisir.
    **Résultat attendu :** les doses restent **vide / vide**. La catégorie peut rester vide.
 8. Ouvrez **Oxygénateur sanguin perfluoré « Souffle Noir »**, **Chélateur d'actinides (Bleu de Prusse, DTPA)** et **Charge sédative « Dortoir » (pour fléchettes)**.
    **Résultat attendu :** chacun dit **[à compléter]** dans l'effet. Rien ne change le compte à rebours d'une combinaison percée, ni un test de Médecine, ni un délai d'inconscience.
-9. Créez un atout à la main sur le personnage. Laissez le domaine vide. Cochez rien d'autre.
+9. Créez un atout à la main sur le personnage. Laissez le domaine vide. Ne cochez rien d'autre.
    **Résultat attendu :** le domaine peut rester vide. Le coût en XP part à **0**, pas à 15.
 10. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

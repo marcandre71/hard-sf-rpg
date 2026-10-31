@@ -427,6 +427,31 @@ try {
   if ( !acceleration || acceleration.decimal ) {
     throw new Error("ShipData : l'accélération ne doit pas être une saisie au dixième");
   }
+
+  // Décision Marc 31/10/2026. cleanData pose les défauts. Il ne remplit pas les doses.
+  const softwareClean = SoftwareData.cleanData({});
+  if ( softwareClean.category !== "utility" ) {
+    throw new Error(`Logiciel : category ${softwareClean.category}, utility attendu`);
+  }
+  if ( softwareClean.sereguineLock !== true ) {
+    throw new Error("Logiciel : sereguineLock doit partir coché");
+  }
+  const substanceClean = SubstanceData.cleanData({});
+  if ( substanceClean.doses?.value !== null || substanceClean.doses?.max !== null ) {
+    throw new Error("Substance : cleanData laisse les doses vides");
+  }
+  const substanceMax = SubstanceData.cleanData({ doses: { max: 4 } });
+  if ( substanceMax.doses?.value !== null ) {
+    throw new Error("Substance : cleanData a copié le maximum dans la valeur");
+  }
+  const talentClean = TalentData.cleanData({});
+  if ( talentClean.domain !== "" || talentClean.xpCost !== 0 ) {
+    throw new Error("Atout : domaine vide et coût 0 au nettoyage");
+  }
+  const augmentationClean = AugmentationData.cleanData({});
+  if ( augmentationClean.cost !== 0 ) {
+    throw new Error("Augmentation : le coût nettoyé reste 0");
+  }
 } catch (error) {
   console.error(error);
   process.exit(1);
