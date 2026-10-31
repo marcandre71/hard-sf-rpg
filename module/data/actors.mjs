@@ -119,7 +119,8 @@ export class CreatureData extends ForConActorData {}
  *
  * @extends ForConActorData
  */
-// À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir.
+// À confirmer par Marc : la liste nommée est [à compléter]. Réf. LdR v0.2 §7.
+// Décision Marc 31/10/2026 : les repères du compendium restent, sans nom inventé.
 export class SyntheticData extends ForConActorData {}
 
 /**
@@ -128,7 +129,8 @@ export class SyntheticData extends ForConActorData {}
  *
  * @extends ForConActorData
  */
-// À confirmer par Marc : blessures propres aux machines (synthétique, drone) à définir.
+// À confirmer par Marc : la liste nommée est [à compléter]. Réf. LdR v0.2 §7.
+// Décision Marc 31/10/2026 : Luciole, Crabe et TATI sont des acteurs, pas des coquilles.
 export class DroneData extends ForConActorData {}
 
 /**

@@ -389,3 +389,24 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** l'interface Foundry hors fiche n'a pas pris le fond de la feuille. La carte de jet garde ses couleurs d'avant.
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 19. 0.8.0 Machines
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.8.0`. Remplacez le dossier du système. N'utilisez pas le bouton de mise à jour de Foundry si celui-ci dit que 0.8.0 est plus ancien que 0.9.4.
+
+1. Prenez le ZIP de `dev/0.8.0` :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.8.0.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.8.0`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.8.0**.
+2. Ouvrez le compendium **Machines**. Regardez aussi **Équipement**.
+   **Résultat attendu :** **Luciole**, **Crabe** et **TATI** sont dans Machines. Ils ne sont pas dans Équipement.
+3. Ouvrez **TATI**, puis **Crabe**, puis **Luciole**.
+   **Résultat attendu :** le type est **Drone**. La fiche a le même habillage sombre que le personnage, avec un portrait cliquable. Elle montre **FOR**, **CON**, **PER** et le **Seuil**. La description dit **[à compléter]** pour ces caractéristiques. La masse du TATI dit **[à compléter]**. Crabe et TATI parlent du sas qui recharge des drones TATI ou Crabe. Luciole ne le dit pas.
+4. Dans le monde, créez une **Créature**, un **Synthétique** et un **Véhicule**.
+   **Résultat attendu :** la créature et le synthétique montrent FOR, CON, PER et le Seuil. Le véhicule n'a pas ces caractéristiques. Sa catégorie est **Terrestre**.
+5. Ouvrez le compendium **Blessures**. Cherchez **Blessure de machine** et **Lentille**.
+   **Résultat attendu :** les quatre **Blessure de machine** sont là (légère, grave, critique, mortelle). Chacune dit **[à compléter]** et **À confirmer par Marc**. Il n'y a pas de **Lentille étoilée**.
+6. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

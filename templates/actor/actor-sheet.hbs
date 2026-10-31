@@ -4,6 +4,7 @@
   Les champs viennent du schéma du type. Nom lu dans document._source.
   Objets groupés par type, même partiel que le personnage.
   Décision Marc 18/10/2026 : FOR, CON et Seuil si le modèle les a.
+  Décision Marc 31/10/2026 : même habillage que la fiche personnage.
 --}}
 <section class="sol-sheet">
   <header class="sol-header">
@@ -13,9 +14,9 @@
       <img class="sol-portrait" src="{{actor.img}}" alt="{{docSource.name}}">
     </button>
     <div class="sol-identity">
-      <p class="sol-type">{{localize typeLabel}}</p>
-      <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
-      <input id="{{rootId}}-name" type="text" name="name" value="{{docSource.name}}">
+      <p class="sol-lbl">{{localize typeLabel}}</p>
+      <label class="sol-name-label" for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
+      <input id="{{rootId}}-name" class="sol-name" type="text" name="name" value="{{docSource.name}}">
     </div>
   </header>
 

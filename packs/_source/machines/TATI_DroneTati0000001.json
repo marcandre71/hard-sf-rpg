@@ -1,0 +1,27 @@
+{
+  "_id": "DroneTati0000001",
+  "_key": "!actors!DroneTati0000001",
+  "name": "TATI",
+  "type": "drone",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<!-- Décision Marc 31/10/2026. Réf. LdR v0.2 §15. Réf. Atouts v0.3 §3. -->\n<p>Drone. Pas une coquille d'équipement : c'est un acteur Drone. Décision Marc 31/10/2026.</p>\n<p>Un atout Symbiose drone peut lui ordonner une action simple en dépensant une réaction. Réf. Atouts v0.3 §3.</p>\n<p>Le sas d'EVA recharge des drones TATI ou Crabe. Réf. Modules v0.3 §7.</p>\n<p>Masse : [à compléter]. Réf. Équipement v0.3 §5.</p>\n<p>FOR, CON, PER, armement, autonomie : [à compléter].</p>\n<p>La fiche affiche FOR, CON, PER et le Seuil. Décision Marc 18/10/2026. Réf. LdR v0.2 §3. Les cases vides prennent le défaut du modèle : ce n'est pas un chiffre du catalogue.</p>",
+    "notes": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.8.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

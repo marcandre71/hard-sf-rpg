@@ -1,5 +1,16 @@
 # Journal des versions
 
+## 0.8.0
+
+Branche `dev/0.8.0`, depuis `main` (`6f19056`). PR brouillon vers `main`. Ne pas fusionner. La section 19 de TESTER.md sert à la séance de test de la v1.
+
+Décision Marc 31/10/2026. Réf. LdR v0.2 §3, §7 et §15. Réf. Atouts v0.3 §3. Réf. Modules v0.3 §7. Réf. Équipement v0.3 §5. Décision Marc 18/10/2026.
+
+- Luciole, Crabe et TATI sont des acteurs Drone, dans le compendium Machines. Pas des coquilles d'équipement. FOR, CON, PER, armement et autonomie sont [à compléter]. La masse du TATI est [à compléter]. Le sas d'EVA cite TATI et Crabe, pas Luciole.
+- Créature, synthétique et drone gardent FOR, CON, PER et le Seuil. Le véhicule n'a pas ces caractéristiques. La feuille reprend l'habillage de la 0.9.3.
+- Blessures de machine : les quatre repères restent. La liste nommée est [à compléter]. Aucun nom n'est inventé.
+- Réserves de Relecteur sur la 0.9.4, notées, pas codées : un vrai test de `rollItem` avec un acteur et un `performRoll` factices ; une notification légère quand le verrou de tir refuse un double-clic.
+
 ## 0.9.4
 
 Branche `dev/0.9.4`, entrée dans `main` en avance rapide. Relue par Relecteur, test Marc reporté à la v1. La section 17 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.
