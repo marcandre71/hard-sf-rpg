@@ -1,0 +1,28 @@
+{
+  "_id": "SqlFibrosePul010",
+  "_key": "!items!SqlFibrosePul010",
+  "name": "Fibrose pulmonaire radique",
+  "type": "sequel",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Blessures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Le LdR prévoit un tirage à chaque tranche de 1 000 mSv de dose cumulée, sur une table comprenant cataracte, risque de cancer, stérilité et troubles cognitifs. Dé et ordre de la table : [à compléter].</p>\n<p>Endurance maximale −1 (minimum 1). Traitement : poumons de culture.</p>",
+    "category": "radiation",
+    "effect": "<p>Endurance maximale −1 (minimum 1). Traitement : poumons de culture.</p>",
+    "permanent": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.3",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

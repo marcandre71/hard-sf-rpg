@@ -1,0 +1,34 @@
+{
+  "_id": "InjBassinJg00010",
+  "_key": "!items!InjBassinJg00010",
+  "name": "Hémorragie pelvienne massive (jambe gauche)",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<!-- Réf. Blessures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Mortelle (3 SB et plus) : mort immédiate ou en quelques tours, selon la zone.</p>\n<p>Jambe, mortelle : mort en 2 tours.</p>",
+    "location": "leftLeg",
+    "severity": "mortal",
+    "bleeding": false,
+    "penalty": 0,
+    "treated": false,
+    "endOfOrder": true,
+    "activeRoundOne": false,
+    "healingTime": "sans objet",
+    "source": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2400000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.3",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

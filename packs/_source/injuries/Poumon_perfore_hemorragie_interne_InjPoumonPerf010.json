@@ -1,0 +1,34 @@
+{
+  "_id": "InjPoumonPerf010",
+  "_key": "!items!InjPoumonPerf010",
+  "name": "Poumon perforé, hémorragie interne",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<!-- Réf. Blessures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Critique (2 SB à 3 SB − 1) : zone hors d'usage, test de CON pour rester conscient ; à la tête ou au torse, risque de mort sans soins en quelques minutes. Une blessure critique à la tête entraîne l'inconscience.</p>\n<p>Torse, critique : risque de mort sans soins en quelques minutes.</p>",
+    "location": "torso",
+    "severity": "critical",
+    "bleeding": false,
+    "penalty": 0,
+    "treated": false,
+    "endOfOrder": true,
+    "activeRoundOne": false,
+    "healingTime": "6 semaines (chirurgie vitale requise)",
+    "source": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1500000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.3",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

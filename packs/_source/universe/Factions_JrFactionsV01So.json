@@ -1,0 +1,135 @@
+{
+  "_id": "JrFactionsV01So0",
+  "_key": "!journal!JrFactionsV01So0",
+  "name": "Factions",
+  "pages": [
+    {
+      "_id": "PgVeilleOffice01",
+      "name": "L'Office de la Veille",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Réf. Bible v0.1 §6. Texte recopié, sans ajout. --><p>Qui : l'héritier du Traité de Genève de 1981. Une autorité supranationale financée par les États terriens, avec sa flotte d'interception, ses télescopes et ses inspecteurs. Siège politique à Genève, siège opérationnel sur la Lune.</p><p>Ce qu'ils veulent : garder le monopole des « grandes masses » : aucune orbite d'astéroïde ne doit être modifiée sans autorisation. Pour eux, c'est une question de survie de l'espèce.</p><p>Méthodes : inspections, licences de remorquage, saisies, renseignement. Les inspecteurs de la Veille ont autorité partout, en théorie.</p><p>Tension interne : une vieille garde idéaliste, fidèle à l'esprit de Sereguine, face à une nouvelle génération qui voit l'Office comme l'instrument de la domination terrienne. La comète Sereguine met cette fracture à nu : faut-il dire la vérité au public ?</p><p>Ce qui les rend intéressants : ils ont souvent raison sur le danger, et presque toujours tort sur la manière.</p><p>Le vice et la lueur : la peur du ciel est devenue soif de contrôle, et les grandes puissances s'en disputent les postes ; mais c'est encore chez elle qu'on trouve des inspecteurs prêts à tout perdre pour dire la vérité.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!JrFactionsV01So0.PgVeilleOffice01"
+    },
+    {
+      "_id": "PgCompactHellas0",
+      "name": "Le Compact d'Hellas",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Réf. Bible v0.1 §6. Texte recopié, sans ajout. --><p>Qui : la fédération de la plupart des cités martiennes (environ cinq millions d'habitants sur sept), née dans le bassin d'Hellas ; les Concessions de Tharsis n'en font pas partie (section 6 bis). Une république technocratique dirigée par un Conseil des Bassins élu, très attachée à la planification.</p><p>Ce qu'ils veulent : l'indépendance pleine vis-à-vis de l'Office, et surtout la sécurité de l'eau. Projet à très long terme : épaissir l'atmosphère de Mars (le « Grand Œuvre »), ce qui implique de détourner des comètes.</p><p>Méthodes : diplomatie dure, contrats d'eau à long terme, flotte de défense modeste mais moderne, chantiers navals de Phobos.</p><p>Tension : le Grand Œuvre exige exactement ce que la Veille interdit. Des tribuns martiens ont rêvé de capturer la comète Sereguine pour Mars, ce qui est physiquement impossible ; le Compact s'est rabattu sur une mission d'échantillonnage en 2188 et détient depuis des échantillons dont il ne parle pas (section 10).</p><p>Le vice et la lueur : la république des Bassins planifie au nom de tous et rationne d'abord les plus pauvres, comme tant d'États avant elle ; mais le Grand Œuvre est aussi le seul projet humain pensé pour mille ans.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!JrFactionsV01So0.PgCompactHellas0"
+    },
+    {
+      "_id": "PgMutuelleCeint0",
+      "name": "La Mutuelle",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Réf. Bible v0.1 §6. Texte recopié, sans ajout. --><p>Qui : à l'origine une coopérative d'assurance créée par les familles de prospecteurs après la catastrophe de Pallas (2094). Aujourd'hui, c'est le quasi-gouvernement de la Ceinture. Ses membres s'appellent les sociétaires ; chaque habitat ou équipage détient des « parts de risque ».</p><p>Ce qu'ils veulent : l'autonomie totale de la Ceinture, des prix justes pour l'eau et les métaux, et le droit de déplacer leurs propres rochers.</p><p>Méthodes : solidarité obligatoire (un appel de détresse impose à tout sociétaire de se dérouter), grèves, embargos, et une branche discrète, la Caisse Noire, qui finance la contrebande et parfois le sabotage.</p><p>Tension : démocratique mais lente, divisée entre grandes familles de Cérès et petits habitats isolés.</p><p>Le vice et la lueur : la Caisse Noire, les grandes familles et la contrebande reproduisent les mafias de toujours ; mais nulle part ailleurs un inconnu en détresse n'est aussi sûr d'être secouru.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!JrFactionsV01So0.PgMutuelleCeint0"
+    },
+    {
+      "_id": "PgKombinatHelio0",
+      "name": "Le Kombinat Hélion",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Réf. Bible v0.1 §6. Texte recopié, sans ajout. --><p>Qui : un conglomérat né de la fusion d'entreprises d'État de l'Union des Républiques Souveraines et de capitaux privés. Il contrôle environ 70 % de l'hélium 3 du système (plateformes saturniennes, mines lunaires). Siège à Novossibirsk, mais le vrai pouvoir est sur Titan.</p><p>Ce qu'ils veulent : préserver le monopole du carburant qui fait tourner les centrales et les vaisseaux rapides. Sans hélium 3, pas de fusion.</p><p>Méthodes : contrats, prix, dépendance, sécurité privée, lobbying au sein de l'Office.</p><p>Tension : en 2191, une partie des débris de la comète Sereguine retombe sur Titan, son fief. Le Kombinat contrôle l'accès aux lacs où apparaît une chimie inexpliquée, et redoute par-dessus tout une quarantaine qui ruinerait Shangri-La (section 10). Il soutient en secret des recherches sur d'autres carburants, pour ne jamais être pris de court.</p><p>Le vice et la lueur : l'avidité à l'état pur, une compagnie à charte comme la Terre en a connu des dizaines ; mais ses ingénieurs sont aussi ceux qui gardent Shangri-La en vie à -180 °C.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!JrFactionsV01So0.PgKombinatHelio0"
+    },
+    {
+      "_id": "PgCollegeValhal0",
+      "name": "Le Collège de Valhalla",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Réf. Bible v0.1 §6. Texte recopié, sans ajout. --><p>Qui : une république de savants installée sur Callisto. Gouvernée par une assemblée de chercheurs, d'ingénieurs et de médecins élus par leurs pairs. Garante de la Quarantaine de Conamara autour d'Europe.</p><p>Ce qu'ils veulent : la connaissance avant l'exploitation. Comprendre ce qui se passe dans l'océan d'Europe sans le contaminer, et rester neutres.</p><p>Méthodes : expertise (la meilleure médecine spatiale et la meilleure biotechnologie du système), arbitrage scientifique, accès contrôlé aux données.</p><p>Tension : sa neutralité est un luxe financé par d'autres. Et certains membres trouvent que la quarantaine sert surtout à cacher quelque chose. Depuis 2188, le Collège détient aussi les meilleurs échantillons de la comète Sereguine, et le plus lourd des secrets (section 10).</p><p>Le vice et la lueur : l'orgueil du savoir et la tentation du secret ; mais c'est là que se forment les meilleurs médecins du système, qui soignent sans demander de quel camp on vient.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!JrFactionsV01So0.PgCollegeValhal0"
+    },
+    {
+      "_id": "PgPartantsLongs0",
+      "name": "Les Partants de la Longue Patience",
+      "type": "text",
+      "sort": 600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Réf. Bible v0.1 §6. Texte recopié, sans ajout. --><p>Qui : un mouvement philosophique et quasi religieux, inspiré du cosmisme et du traumatisme de Iamal. Leur conviction : une espèce qui ne vit qu'autour d'une seule étoile est condamnée. Environ 30 000 fidèles, surtout dans les confins.</p><p>Ce qu'ils veulent : construire et lancer un vaisseau-monde vers une autre étoile, un voyage de plusieurs siècles, sans retour. Le chantier, en orbite de Triton, s'appelle la Patience.</p><p>Méthodes : travail communautaire, dons, recrutement de spécialistes, accords discrets avec le Kombinat pour le carburant.</p><p>Tension : ils ont besoin d'une quantité colossale de glace et de deutérium. Pour eux, les molécules de la comète Sereguine sont un signe : la vie, ou ce qui la précède, voyage entre les étoiles. Certains veulent en emporter à bord de la Patience (section 10).</p><p>Le vice et la lueur : le fanatisme et l'exode des élus, vieux comme les religions ; mais aussi l'espoir le plus têtu de l'humanité : partir, pour que quelque chose de nous survive.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!JrFactionsV01So0.PgPartantsLongs0"
+    }
+  ],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.3",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

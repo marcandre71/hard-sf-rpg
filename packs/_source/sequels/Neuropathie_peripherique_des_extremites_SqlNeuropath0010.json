@@ -1,0 +1,28 @@
+{
+  "_id": "SqlNeuropath0010",
+  "_key": "!items!SqlNeuropath0010",
+  "name": "Neuropathie périphérique des extrémités",
+  "type": "sequel",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Blessures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Le LdR prévoit un tirage à chaque tranche de 1 000 mSv de dose cumulée, sur une table comprenant cataracte, risque de cancer, stérilité et troubles cognitifs. Dé et ordre de la table : [à compléter].</p>\n<p>Légers tremblements : −5 en COO pour les gestes de précision. Traitement : rééducation en clinique (6 semaines).</p>",
+    "category": "radiation",
+    "effect": "<p>Légers tremblements : −5 en COO pour les gestes de précision. Traitement : rééducation en clinique (6 semaines).</p>",
+    "permanent": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.3",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

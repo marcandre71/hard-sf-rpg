@@ -8,7 +8,7 @@
     "characteristicModifiers": "ADA +10, PER +5, FOR -5, CON -5",
     "gToleranceModifier": -1,
     "trait": "Réflexes de sécurité : +10 pour détecter une fuite ou une anomalie de pression.",
-    "description": "<p>0,3 à 0,7 g selon l'habitat</p>"
+    "description": "<p>0,3 à 0,7 g</p>"
   },
   "effects": [],
   "folder": null,
