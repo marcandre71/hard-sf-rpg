@@ -22,14 +22,14 @@ export function fullDosesValue(doses) {
 }
 
 /**
- * Pose la valeur pleine sur le modèle en cours de création.
- * `updateSource` est le seul chemin qui reste dans la fiche.
+ * Pose la valeur pleine sur le document en cours de création.
+ * `parent` est l'objet, pas le TypeDataModel.
  *
- * @param {{ doses?: { value?: number|null, max?: number|null }, updateSource?: (changes: object) => unknown }} model
+ * @param {{ doses?: { value?: number|null, max?: number|null }, parent?: { updateSource: (changes: object) => unknown } }} model
  * @returns {void}
  */
 export function applyFullDoses(model) {
   const value = fullDosesValue(model?.doses);
   if ( value === undefined ) return;
-  model.updateSource({ "doses.value": value });
+  model.parent.updateSource({ "system.doses.value": value });
 }

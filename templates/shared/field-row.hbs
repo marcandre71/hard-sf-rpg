@@ -25,6 +25,9 @@
     {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
     {{else}}
     {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+    {{#if row.reading}}
+    <p class="sol-admin-reading">{{row.reading}}</p>
+    {{/if}}
     {{/if}}
   {{/if}}
 {{/if}}

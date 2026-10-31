@@ -7,6 +7,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { SOL } from "../module/config.mjs";
 import { applyFullDoses, fullDosesValue } from "../module/data/substance-doses.mjs";
+import { administrationReading } from "../module/sheets/administration-label.mjs";
 
 const root = new URL("../packs/_source/", import.meta.url);
 
@@ -92,11 +93,10 @@ const iron = substances.find(entry => entry.name.includes("Jus de Fer"));
 assert.equal(iron.system.doses.max, 1);
 assert.equal(iron.system.doses.value, 1);
 assert.equal(iron.system.administration, "autoInjector");
-assert.equal(SOL.substanceAdministrations.autoInjector, "SOL.Substance.administrationMode.autoInjector");
-assert.equal(SOL.substanceAdministrations["autoInjector ou timbre"], "SOL.Substance.administrationMode.autoInjectorOrPatch");
-for (const entry of substances) {
-  assert.equal(entry.system.administration in SOL.substanceAdministrations, true, entry.name);
-}
+assert.equal(administrationReading("autoInjector"), "SOL.Substance.administrationMode.autoInjector");
+assert.equal(administrationReading("autoInjector ou timbre"), "SOL.Substance.administrationMode.autoInjectorOrPatch");
+assert.equal(administrationReading("sous-cutanée"), "");
+assert.equal(administrationReading("timbre"), "");
 const fr = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));
 assert.equal(fr.SOL.Substance.administrationMode.autoInjector, "auto-injecteur");
 assert.equal(fr.SOL.Substance.administrationMode.autoInjectorOrPatch, "auto-injecteur ou timbre");
@@ -112,19 +112,19 @@ assert.equal(fullDosesValue(null), undefined);
 const created = [];
 applyFullDoses({
   doses: { value: null, max: 4 },
-  updateSource(changes) { created.push(changes); }
+  parent: { updateSource(changes) { created.push(changes); } }
 });
-assert.deepEqual(created, [{ "doses.value": 4 }]);
+assert.deepEqual(created, [{ "system.doses.value": 4 }]);
 
 const kept = [];
 applyFullDoses({
   doses: { value: 0, max: 4 },
-  updateSource(changes) { kept.push(changes); }
+  parent: { updateSource(changes) { kept.push(changes); } }
 });
 assert.deepEqual(kept, []);
 applyFullDoses({
   doses: { value: null, max: null },
-  updateSource(changes) { kept.push(changes); }
+  parent: { updateSource(changes) { kept.push(changes); } }
 });
 assert.deepEqual(kept, []);
 
@@ -135,6 +135,8 @@ const substanceBlock = substanceSource.slice(
 );
 assert.equal(substanceBlock.includes("// Décision Marc 31/10/2026"), true);
 assert.equal(substanceBlock.includes("_preCreate"), true);
+assert.equal(substanceBlock.includes("this.parent.updateSource"), true);
+assert.equal(substanceBlock.includes("substanceAdministration"), false);
 assert.equal(substanceBlock.includes("static migrateData"), false);
 
 console.log("catalog-092.test.mjs : ok");

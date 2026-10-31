@@ -7,7 +7,7 @@
  * catalogue v0.3, effets en texte seulement.
  */
 import { SOL } from "../config.mjs";
-import { applyFullDoses } from "./substance-doses.mjs";
+import { fullDosesValue } from "./substance-doses.mjs";
 import { boolField, htmlField, numberField, stringField, valueMaxField } from "./fields.mjs";
 
 /**
@@ -45,14 +45,10 @@ export class SubstanceData extends BaseItemData {
         blank: true,
         choices: SOL.substanceCategories
       }),
-      // Décision Marc 30/10/2026 : les voies du catalogue, pas une liste inventée.
-      // Décision Marc 31/10/2026 : la clé reste (autoInjector). La fiche
-      // affiche le libellé français. Vide permis.
-      administration: stringField("SOL.Substance.administration", {
-        initial: "",
-        blank: true,
-        choices: SOL.substanceAdministrations
-      }),
+      // Décision Marc 30/10/2026 : chaîne libre, pas de liste fermée.
+      // Décision Marc 31/10/2026 : une clé connue s'affiche traduite.
+      // Le texte saisi à la main reste tel quel. Pas de `choices`.
+      administration: stringField("SOL.Substance.administration"),
       // Décision Marc 30/10/2026 : chaîne libre (« 1 h », « 1D10 × 5 min »).
       duration: stringField("SOL.Substance.duration"),
       // Le catalogue donne le maximum. Décision Marc 31/10/2026 :
@@ -84,8 +80,9 @@ export class SubstanceData extends BaseItemData {
    * @see https://foundryvtt.com/api/v14/classes/foundry.abstract.DataModel.html#_preCreate
    */
   _preCreate(data, options, user) {
-    // Décision Marc 31/10/2026
-    applyFullDoses(this);
+    // Décision Marc 31/10/2026. Le document parent, pas le modèle.
+    const next = fullDosesValue(this.doses);
+    if ( next !== undefined ) this.parent.updateSource({ "system.doses.value": next });
     if ( typeof super._preCreate === "function" ) return super._preCreate(data, options, user);
   }
 }

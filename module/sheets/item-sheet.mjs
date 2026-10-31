@@ -8,6 +8,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ItemSheetV2.html
  * @see https://foundryvtt.com/api/v14/functions/foundry.applications.handlebars.formGroup.html
  */
+import { administrationReading } from "./administration-label.mjs";
 import { prepareFieldGroups } from "./prepare-fields.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -51,6 +52,17 @@ export class GenericItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       prefix: "system",
       rootId: context.rootId
     });
+    if ( item.type === "substance" ) {
+      // Affichage seulement. Le champ reste le texte stocké.
+      // Décision Marc 31/10/2026.
+      for ( const group of context.groups ) {
+        for ( const line of group.rows ?? [] ) {
+          if ( line.name !== "system.administration" ) continue;
+          const key = administrationReading(line.value);
+          if ( key ) line.reading = game.i18n.localize(key);
+        }
+      }
+    }
     if ( item.type === "shipModule" ) {
       // Arme et blindage : champs affichés seulement pour leur catégorie.
       // Les valeurs restent stockées quand on change de catégorie.

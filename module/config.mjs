@@ -334,21 +334,11 @@ export const SOL = {
   },
 
   /**
-   * Voies déjà écrites dans le catalogue. La clé stockée ne change pas.
-   * Le libellé français est dans lang/fr.json. Décision Marc 31/10/2026.
-   * Vide permis : une substance créée à la main n'a pas de voie.
+   * Affichage seulement. Pas un `choices` : le champ reste un texte libre.
+   * Clés courtes. Décision Marc 31/10/2026.
    */
-  substanceAdministrations: {
-    autoInjector: "SOL.Substance.administrationMode.autoInjector",
-    "autoInjector ou timbre": "SOL.Substance.administrationMode.autoInjectorOrPatch",
-    timbre: "SOL.Substance.administrationMode.timbre",
-    "projectile ou injection": "SOL.Substance.administrationMode.projectile",
-    "oral et injection": "SOL.Substance.administrationMode.oralInjection",
-    perfusion: "SOL.Substance.administrationMode.perfusion",
-    oral: "SOL.Substance.administrationMode.oral",
-    inhalation: "SOL.Substance.administrationMode.inhalation",
-    "perfusion en caisson": "SOL.Substance.administrationMode.perfusionBay",
-    "oral ou timbre": "SOL.Substance.administrationMode.oralPatch"
+  substanceAdministrationLabels: {
+    autoInjector: "SOL.Substance.administrationMode.autoInjector"
   },
 
   /**

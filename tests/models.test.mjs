@@ -444,6 +444,17 @@ try {
   if ( substanceMax.doses?.value !== null ) {
     throw new Error("Substance : cleanData a copié le maximum dans la valeur");
   }
+  const customRoute = SubstanceData.cleanData({ administration: "sous-cutanée" });
+  if ( customRoute.administration !== "sous-cutanée" ) {
+    throw new Error("Substance : cleanData a effacé une voie libre");
+  }
+  const customModel = new SubstanceData(customRoute);
+  if ( customModel.validate() !== true || customModel.administration !== "sous-cutanée" ) {
+    throw new Error("Substance : la validation refuse une voie libre");
+  }
+  if ( customModel.schema.fields.administration.choices ) {
+    throw new Error("Substance : administration ne doit pas avoir de liste fermée");
+  }
   const talentClean = TalentData.cleanData({});
   if ( talentClean.domain !== "" || talentClean.xpCost !== 0 ) {
     throw new Error("Atout : domaine vide et coût 0 au nettoyage");
