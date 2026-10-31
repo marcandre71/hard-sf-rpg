@@ -160,7 +160,8 @@ function presentItem(item, actor) {
     endOfOrder: item.type === "injury" && item.system?.endOfOrder === true,
     showSeal: Boolean(seal) && Number(item.system.quantity) >= 1,
     canRoll: rollable && (item.type === "skill" || (isWeapon && equipped)),
-    // Jauge d'affichage. Le tir écrit déjà ammo. Le rendu de la fiche la relit.
+    // Jauge d'affichage. Un jet de personnage n'écrit pas les munitions.
+    // Le nombre change quand on édite l'arme. Le rendu de la fiche le relit.
     ...ammoGauge(item.type === "weapon" ? item.system._source?.ammo : null)
   };
 }

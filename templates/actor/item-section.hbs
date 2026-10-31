@@ -48,7 +48,8 @@
       {{#if item.ammoMax}}
       <span class="sol-ammo">
         <span class="sol-num">{{item.ammoValue}} / {{item.ammoMax}}</span>
-        <span class="sol-gauge" role="meter" aria-valuemin="0" aria-valuemax="{{item.ammoMax}}" aria-valuenow="{{item.ammoValue}}">
+        <span class="sol-gauge" role="meter" aria-valuemin="0" aria-valuemax="{{item.ammoMax}}" aria-valuenow="{{item.ammoValue}}"
+              aria-label="{{localize 'SOL.Weapon.ammo'}}">
           <span class="sol-gauge-fill" style="width: {{item.ammoPct}}%"></span>
         </span>
       </span>

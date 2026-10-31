@@ -76,7 +76,9 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["sol", "sol-nouvelle-ere", "actor", "character"],
-    position: { width: 1120, height: 900 },
+    // 960 px : la fenêtre du jeu. La maquette de 1232 px était un aperçu.
+    // Les grilles passent à la ligne. Décision Marc 31/10/2026.
+    position: { width: 960, height: 900 },
     window: { resizable: true },
     form: { submitOnChange: true },
     actions: { ...itemListActions, rollCharacteristic, stopBreachClock, removeStatus, editImage }

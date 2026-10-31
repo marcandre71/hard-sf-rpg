@@ -10,7 +10,7 @@ Décision Marc 31/10/2026. Ancienne 0.8.1 / 0.10.0. Habillage seulement : aucune
 - Polices SIL OFL dans `fonts/` (woff2 et OFL). IBM Plex Sans Condensed, IBM Plex Mono, Atkinson Hyperlegible Next. Pas de CDN. Le manifeste v14 n'a pas de clé `fonts` : `@font-face` dans `styles/sol.css` (clé `styles`), et `CONFIG.fontDefinitions` au démarrage.
 - Fiche de personnage : en-tête, caractéristiques, compétences, armures par zone, équipement, états, Endurance, notes. Le portrait ouvre `foundry.applications.apps.FilePicker` (action `editImage`) sur toutes les fiches d'acteur.
 - Jauges : Endurance, munitions, chaleur (segments), Intégrité des sections. Elles suivent le rendu de `updateActor` ou `updateItem`. Un objet incorporé rafraîchit déjà la fiche parente.
-- Fiche vaisseau : même palette, tuiles de section, jauge de chaleur. Les règles de chaleur ne changent pas (malus à partir de 7).
+- Fiche vaisseau : même palette, tuiles de section, jauge de chaleur. L'ambre commence à 7, avec le malus. Réf. 0.7.4-decisions. Aucun tir ne retire de munition : la jauge suit l'édition de l'arme. Largeur de fiche 960 px. La maquette de 1232 px était un aperçu.
 - Texte au moins 12 px. Focus visible. L'état ne passe pas que par la couleur (mot ou ▲).
 
 ## 0.9.2

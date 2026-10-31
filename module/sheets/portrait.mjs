@@ -19,11 +19,10 @@
  * @returns {Promise<void>}
  */
 export async function editImage(_event, target) {
+  if ( !this.isEditable ) return;
   const attr = target?.dataset?.edit || "img";
   const current = foundry.utils.getProperty(this.document._source, attr) ?? "";
-  const FilePicker = foundry.applications.apps.FilePicker;
-  const Picker = FilePicker?.implementation ?? FilePicker;
-  const picker = new Picker({
+  const picker = new foundry.applications.apps.FilePicker.implementation({
     type: "image",
     current,
     callback: path => {

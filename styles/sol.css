@@ -600,10 +600,19 @@
 }
 
 .sol-nouvelle-ere.actor .sol-header {
-  display: grid;
-  grid-template-columns: 96px 1fr minmax(220px, 300px);
+  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   align-items: center;
+}
+
+.sol-nouvelle-ere.actor .sol-identity {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.sol-nouvelle-ere.actor .sol-endurance-panel {
+  flex: 1 1 14rem;
 }
 
 .sol-nouvelle-ere.actor .sol-portrait-button {
@@ -671,7 +680,7 @@
 
 .sol-nouvelle-ere.actor .sol-split {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 12px;
 }
 
@@ -846,5 +855,10 @@
 }
 
 .sol-nouvelle-ere.actor a {
+  color: var(--sol-accent);
+}
+
+.sol-nouvelle-ere.actor button.sol-item-roll,
+.sol-nouvelle-ere.actor button.sol-roll-characteristic {
   color: var(--sol-accent);
 }

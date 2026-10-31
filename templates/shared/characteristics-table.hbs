@@ -6,7 +6,7 @@
 <div class="sol-chars">
   {{#each characteristics as |c|}}
   <div class="sol-ch" data-characteristic="{{c.key}}">
-    <button type="button" class="sol-ch-roll" data-action="rollCharacteristic" data-characteristic="{{c.key}}">
+    <button type="button" class="sol-ch-roll sol-roll-characteristic" data-action="rollCharacteristic" data-characteristic="{{c.key}}">
       <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
       <span class="sol-abbr">{{localize c.abbr}}</span>
     </button>

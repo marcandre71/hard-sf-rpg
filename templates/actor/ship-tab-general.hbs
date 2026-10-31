@@ -74,7 +74,8 @@
       <span class="sol-lbl"><i class="fa-solid fa-temperature-high" aria-hidden="true"></i> {{localize "SOL.Ship.heat.label"}}</span>
       <span class="sol-num">{{heatValue}} / {{heatMax}}</span>
     </div>
-    <div class="sol-heat-segments" role="meter" aria-valuemin="0" aria-valuemax="{{heatMax}}" aria-valuenow="{{heatValue}}">
+    <div class="sol-heat-segments" role="meter" aria-valuemin="0" aria-valuemax="{{heatMax}}" aria-valuenow="{{heatValue}}"
+         aria-label="{{localize 'SOL.Ship.heat.label'}}">
       {{#each heatSegments}}
       <span class="sol-heat-seg sol-heat-{{this}}"></span>
       {{/each}}

@@ -37,7 +37,7 @@ import { itemListActions, prepareSections } from "./item-list.mjs";
 import { dragData } from "./states.mjs";
 import { markGroupDisabled, prepareFieldGroups } from "./prepare-fields.mjs";
 import { editImage } from "./portrait.mjs";
-import { clampHeat } from "../ships/reactor.mjs";
+import { HEAT_STRAIN, clampHeat } from "../ships/reactor.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -138,15 +138,15 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.typeLabel = `TYPES.Actor.${actor.type}`;
     context.fixed = refusesManeuver(stored.category);
     context.heatMax = REACTOR_HEAT_MAX;
-    // Segments d'affichage. Le malus de poste reste dans reactor.mjs (à partir de 7).
-    // La maquette colore à partir de 6, et le maximum en alerte. Décision Marc 31/10/2026.
+    // Segments d'affichage. Le maximum est en alerte.
+    // Réf. 0.7.4-decisions : malus à partir de 7
     const heatNow = clampHeat(stored.heat?.value ?? 0);
     context.heatValue = heatNow;
     context.heatSegments = Array.from({ length: REACTOR_HEAT_MAX }, (_unused, index) => {
       const step = index + 1;
       if ( step > heatNow ) return "empty";
       if ( step >= REACTOR_HEAT_MAX ) return "alert";
-      if ( step >= 6 ) return "warn";
+      if ( step >= HEAT_STRAIN ) return "warn";
       return "accent";
     });
     context.departureMass = actor.system.departureMass;
@@ -357,13 +357,6 @@ export class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 }
 
 /**
- * Sections et modules installés, avec la plaque calculée.
- *
- * @param {Actor} actor
- * @param {object} stored
- * @returns {object[]}
- */
-/**
  * Couleur de tuile. Affichage seulement : alerte à 0 ou détruite,
  * ambre si la section est entamée ou si la structure est tordue.
  *
@@ -387,6 +380,13 @@ function sectionTone(id, source, stored, followed) {
   return "";
 }
 
+/**
+ * Sections et modules installés, avec la plaque calculée.
+ *
+ * @param {Actor} actor
+ * @param {object} stored
+ * @returns {object[]}
+ */
 function presentSections(actor, stored) {
   const items = actor.items.filter(item => item.type === "shipModule");
   const raw = items.map(item => ({
