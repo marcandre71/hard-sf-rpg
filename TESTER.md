@@ -334,13 +334,13 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 
 ## 17. 0.9.4 Blessures, journaux et vaisseaux PNJ
 
-Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.4 qu'après fusion de l'habillage, puis de cette branche. D'ici là, prenez le ZIP de `dev/0.9.4`.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`.
 
-1. Prenez le ZIP de `dev/0.9.4` :
+1. Prenez le ZIP de `main` :
 
-   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.4.zip
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.4`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.4**.
 2. Ouvrez le compendium **Blessures**.
    **Résultat attendu :** les quatre **Blessure légère**, **grave**, **critique** et **mortelle** sont encore là, ainsi que les quatre **Blessure de machine**. Il y a en plus les blessures nommées, par exemple **Contusion faciale, arcade ouverte** (tête, légère, −10) et **Cœur ou aorte déchirés** (torse, mortelle). Il n'y a pas de **Lentille étoilée**.
@@ -351,7 +351,7 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 5. Ouvrez le compendium **Univers et factions**, journal **Factions**.
    **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Mutuelle, Kombinat Hélion, Collège de Valhalla, Partants de la Longue Patience. Le texte de la Veille parle du Traité de Genève de 1981. Le journal **Glossaire** a une page. Son titre dit **Glossaire (v0.2)**. Le texte de la page n'a pas été réécrit.
 6. Dans **Vaisseaux**, ouvrez **Patrouilleur de la Veille** et **Cargo**. N'ouvrez pas la Petite Fortune pour la modifier.
-   **Résultat attendu :** les notes disent **provisoire** et **À confirmer par Marc** pour le reste des chiffres de coque. L'accélération du patrouilleur est **50**. Celle du cargo est **0,05**. Le type de propulsion du cargo est **Propulseur à plasma (cargo lent)**. Le delta-v affiché reste **3,6**. Les notes du cargo disent que le delta-v et la masse de réaction sont **provisoire, copie de la Petite Fortune**. Le moteur du patrouilleur dit **113 kN** et **50 milli-g pour 230 t**. Il ne dit pas **21 milli-g** ni **2,9 h**. Durée, accélération à vide, masse et delta-v y sont marqués **provisoire**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**. Son moteur dit encore **47 kN**.
+   **Résultat attendu :** les notes disent **provisoire** et **À confirmer par Marc** pour le reste des chiffres de coque. L'accélération du patrouilleur est **50**. Celle du cargo est **0,05**. Le type de propulsion du cargo est **Propulseur à plasma (cargo lent)**. Le delta-v affiché reste **3,6**. Les notes du cargo disent que le delta-v et la masse de réaction sont **provisoire, copie de la Petite Fortune**. Le moteur du patrouilleur dit **Isp ~350 à 380 s**, **113 kN** et **50 milli-g pour 230 t**. Il cite **Décision Marc 21/10/2026** et **Vaisseaux v0.1 §8**. Il ne dit pas **21 milli-g** ni **2,9 h**. Durée, accélération à vide, masse et delta-v y sont marqués **provisoire**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**. Son moteur dit encore **47 kN**.
 7. Sur un personnage, glissez le **Pistolet de bord 9 mm basse vélocité**. Cochez **Équipé**. La fiche du personnage reste ouverte. Les munitions sont **15 / 15**. Lancez-le une fois, réussite ou échec.
    **Résultat attendu :** la jauge et le nombre passent à **14 / 15**.
    Lancez encore, puis **Annuler** dans la fenêtre.
@@ -360,7 +360,7 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** le tir est refusé. Le message dit qu'il n'y a plus de munitions. Le nombre reste **0**. Remettez **15** avant de continuer.
    Décochez le pistolet. Glissez le **Couteau d'arrimage, lame de sas en céramique**, cochez **Équipé**, et lancez-le.
    **Résultat attendu :** un couteau attaque normalement. Les munitions restent **0 / 0**.
-   Revenez au pistolet équipé, munitions au-dessus de 0. Connectez-vous avec un joueur qui n'est pas propriétaire de ce personnage, et lancez le pistolet.
+   Revenez au pistolet équipé, munitions au-dessus de 0. Connectez-vous avec un joueur qui n'est pas propriétaire de ce personnage : donnez-lui le droit **Observateur** sur ce personnage, et lancez le pistolet.
    **Résultat attendu :** le tir est refusé. Le message dit que vous n'êtes pas propriétaire. Les munitions ne bougent pas.
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

@@ -2,7 +2,7 @@
 
 ## 0.9.4
 
-Branche `dev/0.9.4`, anciennement `dev/0.9.3`. PR brouillon vers `main`. La 0.9.2 (`a194c10`) et l'habillage 0.9.3 (`20be91c`) sont dans `main`. Ne pas fusionner. La section 17 de TESTER.md sert à la séance de test de la v1.
+Branche `dev/0.9.4`, entrée dans `main` en avance rapide. Relue par Relecteur, test Marc reporté à la v1. La section 17 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.
 
 Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Glossaire v0.2, Vaisseaux v0.1 §2 et §8. Séquelles v0.3.
 
@@ -13,7 +13,7 @@ Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, 
 - Vaisseaux : Patrouilleur de la Veille et Cargo, provisoires, chiffres de coque repris de la Petite Fortune et marqués à confirmer. Le patrouilleur porte le laser lourd du pack. Le cargo porte le propulseur à plasma du pack. La Petite Fortune n'est pas modifiée.
 - Munitions : chaque tir d'une arme de personnage ou de PNJ retire 1 à `system.ammo.value`. Décision Didier/Marc 31/10/2026. Réf. Vaisseaux v0.1 §4. Un 0 avec un maximum supérieur à 0 refuse le tir, comme le canon. Valeur null, maximum null, ou maximum 0 : le tir part, rien n'est écrit. Un maximum 0 veut dire sans chargeur (couteau, mains nues). Le rechargement reste manuel.
 - Vaisseaux PNJ : le patrouilleur a une accélération de 50 milli-g (Réf. Vaisseaux v0.1 §8). Le cargo a 0,05 milli-g, le milieu de la fourchette du plasma. Décision Didier/Marc 31/10/2026.
-- Décision Didier/Marc 31/10/2026 : la poussée du moteur du patrouilleur est 113 kN, ce qui correspond à 50 milli-g pour 230 t. Durée de poussée, accélération à vide, masse et delta-v restent provisoires jusqu'à la 1.0. Les masses stockées restent 80 t et 150 t. Le delta-v reste 3,6 / 3,6.
+- Décision Didier/Marc 31/10/2026 : la poussée du moteur du patrouilleur est 113 kN, ce qui correspond à 50 milli-g pour 230 t. L'Isp reste ~350 à 380 s : il ne dépend pas de la poussée. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §8. Durée de poussée, accélération à vide, masse et delta-v restent provisoires jusqu'à la 1.0. Les masses stockées restent 80 t et 150 t. Le delta-v reste 3,6 / 3,6.
 - Décision Didier/Marc 31/10/2026 : le type de propulsion du cargo est le Propulseur à plasma (cargo lent), le même libellé que le module. Delta-v et masse de réaction : provisoire, copie de la Petite Fortune.
 - Séquelles : pas de dé. C'est une liste, le MJ choisit. Le cancer se déclare plus tard, sans effet immédiat. Les troubles cognitifs rappellent −10 aux tests d'INT, sans malus automatique.
 - Décision Didier/Marc 31/10/2026 : la fragilité cellulaire a un seuil de 150 mSv, comme dans Séquelles v0.3. Texte seulement, sans nouveau champ.

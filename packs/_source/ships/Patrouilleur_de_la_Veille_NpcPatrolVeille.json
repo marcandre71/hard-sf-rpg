@@ -114,14 +114,14 @@
       "type": "shipModule",
       "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<!-- Réf. Modules v0.3 §2. Décision Didier/Marc 31/10/2026 : poussée 113 kN, soit 50 milli-g pour 230 t. Durée de poussée, accélération à vide, masse et delta-v : provisoire jusqu'à la 1.0. -->\n<p>Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
+        "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §8. Décision Didier/Marc 31/10/2026 : poussée 113 kN, soit 50 milli-g pour 230 t. L'Isp ne dépend pas de la poussée. Durée de poussée, accélération à vide, masse et delta-v : provisoire jusqu'à la 1.0. -->\n<p>Isp ~350 à 380 s. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §8. Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
         "category": "propulsion",
         "section": "stern",
         "integrity": {
           "value": 10,
           "max": 10
         },
-        "effects": "<p>Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
+        "effects": "<p>Isp ~350 à 380 s. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §8. Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
         "mass": 6,
         "weapon": {
           "damage": 0,
