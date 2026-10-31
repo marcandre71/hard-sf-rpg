@@ -17,6 +17,7 @@ import { showsAttackRange } from "../dice/attack.mjs";
 import { performRoll } from "../dice/chat.mjs";
 import { applySealAction } from "../dice/seal-apply.mjs";
 import { findSealMethod } from "../dice/seal.mjs";
+import { personalAmmoSpend } from "../dice/personal-ammo.mjs";
 import { skillScore, weaponAttackScore } from "../dice/skill-score.mjs";
 
 /**
@@ -160,8 +161,8 @@ function presentItem(item, actor) {
     endOfOrder: item.type === "injury" && item.system?.endOfOrder === true,
     showSeal: Boolean(seal) && Number(item.system.quantity) >= 1,
     canRoll: rollable && (item.type === "skill" || (isWeapon && equipped)),
-    // Jauge d'affichage. Un jet de personnage n'écrit pas les munitions.
-    // Le nombre change quand on édite l'arme. Le rendu de la fiche le relit.
+    // Jauge d'affichage. Le tir retire 1 si le compteur est un nombre.
+    // Décision Marc 31/10/2026. Le rendu de la fiche relit la valeur.
     ...ammoGauge(item.type === "weapon" ? item.system._source?.ammo : null)
   };
 }
@@ -374,6 +375,13 @@ async function rollItem(event, target) {
   }
 
   if ( item.type !== "weapon" || !item.system.equipped ) return;
+  // Décision Marc 31/10/2026. 0 : refus, comme le canon. Vide : le tir part.
+  // Réf. Vaisseaux v0.1 §4. Le rechargement reste manuel.
+  const ammoPlan = personalAmmoSpend(item.system._source?.ammo ?? item.system.ammo);
+  if ( !ammoPlan.fire ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Ship.ammoEmpty"));
+    return;
+  }
   // Réf. LdR v0.2 §15 : sans compétence, ou nom inconnu, on lance
   // quand même, sur la caractéristique. Le jet n'est refusé que si
   // la compétence est sur la fiche et que la formation l'interdit.
@@ -384,7 +392,7 @@ async function rollItem(event, target) {
     return;
   }
   const skillLabel = String(rated.label ?? "").trim();
-  await performRoll({
+  const outcome = await performRoll({
     actor,
     label: skillLabel ? `${item.name} — ${skillLabel}` : item.name,
     score: rated.score,
@@ -394,4 +402,7 @@ async function rollItem(event, target) {
     // Décision Marc 31/10/2026 : l'électrochoc et le pistolet de scellement l'ont.
     rangeChoice: showsAttackRange(item)
   });
+  // Annulation de la fenêtre : on ne retire pas. Réussi ou raté : on retire.
+  if ( !outcome || ammoPlan.next === null ) return;
+  await item.update({ "system.ammo.value": ammoPlan.next });
 }

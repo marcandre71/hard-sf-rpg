@@ -335,10 +335,12 @@ export const SOL = {
 
   /**
    * Affichage seulement. Pas un `choices` : le champ reste un texte libre.
-   * Clés courtes. Décision Marc 31/10/2026.
+   * La seconde clé est le texte déjà stocké par le catalogue.
+   * Décision Marc 31/10/2026.
    */
   substanceAdministrationLabels: {
-    autoInjector: "SOL.Substance.administrationMode.autoInjector"
+    autoInjector: "SOL.Substance.administrationMode.autoInjector",
+    "autoInjector ou timbre": "SOL.Substance.administrationMode.autoInjectorOrPatch"
   },
 
   /**

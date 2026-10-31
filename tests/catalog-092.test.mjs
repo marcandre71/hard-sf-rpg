@@ -95,6 +95,10 @@ assert.equal(iron.system.doses.value, 1);
 assert.equal(iron.system.administration, "autoInjector");
 assert.equal(administrationReading("autoInjector"), "SOL.Substance.administrationMode.autoInjector");
 assert.equal(administrationReading("autoInjector ou timbre"), "SOL.Substance.administrationMode.autoInjectorOrPatch");
+assert.equal(
+  SOL.substanceAdministrationLabels["autoInjector ou timbre"],
+  "SOL.Substance.administrationMode.autoInjectorOrPatch"
+);
 assert.equal(administrationReading("sous-cutanée"), "");
 assert.equal(administrationReading("timbre"), "");
 const fr = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));

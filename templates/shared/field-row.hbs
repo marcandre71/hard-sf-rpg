@@ -25,6 +25,7 @@
     {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true type="number"}}
     {{else}}
     {{formGroup row.field name=row.name value=row.value rootId=row.rootId label=row.label localize=true}}
+    {{!-- La case garde la clé stockée. La ligne dit le libellé. Décision Marc 31/10/2026. --}}
     {{#if row.reading}}
     <p class="sol-admin-reading">{{row.reading}}</p>
     {{/if}}

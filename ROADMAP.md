@@ -22,10 +22,10 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 ## Ensuite
 
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.9.4 — blessures, journaux et vaisseaux PNJ. Passe après l'habillage. Branche `dev/0.9.4`. En pause : à reprendre, ne pas finir maintenant. Réserves mineures de Relecteur et décision munitions : voir le CHANGELOG. Pas corrigé, pas codé.
+- [ ] 0.9.4 — blessures, journaux, vaisseaux PNJ, et une munition retirée à chaque tir. En relecture. Branche `dev/0.9.4`. Ne pas finir au-delà de cette version. Ne pas fusionner.
 - [ ] 0.8.0 — machines : fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines. Luciole, Crabe et TATI arrivent ici, pas de coquille en 0.9.1. Masse du TATI : à compléter (Équipement v0.3 §5). Décision Marc 31/10/2026.
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée.
 
 Décision Marc 31/10/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4 blessures, journaux et vaisseaux PNJ, 0.8.0 machines, 1.0.0.
 
-Décision Marc 31/10/2026, pas codée : chaque tir d'une arme de personnage retire 1 munition (`system.ammo`), comme pour le canon d'un vaisseau. Si le champ est vide, rien n'est retiré. Le rechargement reste manuel.
+Décision Marc 31/10/2026 : chaque tir d'une arme de personnage retire 1 munition (`system.ammo`). À 0, le tir est refusé. Si la valeur ou le maximum est vide, rien n'est retiré. Le rechargement reste manuel.

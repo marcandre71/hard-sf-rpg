@@ -320,7 +320,9 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 6. Ouvrez **Dérivation Sereguine « Sans-Témoin »**.
    **Résultat attendu :** **Verrou Sereguine** est décoché. Score autonome **50**. La description dit que c'est un crime grave.
 7. Sur un personnage, glissez **Cocktail de poussée « Jus de Fer »**, puis ouvrez-le depuis la fiche.
-   **Résultat attendu :** catégorie **Gravité**, administration **auto-injecteur**, durée **1 h**, doses **1 / 1**. Légalité : vide. La description dit Légalité : [à compléter]. Rouvrez la fiche : les champs sont encore là.
+   **Résultat attendu :** catégorie **Gravité**, durée **1 h**, doses **1 / 1**. La case Administration contient **autoInjector**. Sous la case, la ligne dit **auto-injecteur**. Légalité : vide. La description dit Légalité : [à compléter]. Rouvrez la fiche : les champs sont encore là.
+   Ouvrez aussi **Analgésique de chantier « Silence »**.
+   **Résultat attendu :** la case contient **autoInjector ou timbre**. La ligne sous la case dit **auto-injecteur ou timbre**.
    Créez une substance à la main sur le même personnage, sans rien saisir.
    **Résultat attendu :** les doses restent **vide / vide**. La catégorie peut rester vide.
 8. Ouvrez **Oxygénateur sanguin perfluoré « Souffle Noir »**, **Chélateur d'actinides (Bleu de Prusse, DTPA)** et **Charge sédative « Dortoir » (pour fléchettes)**.
@@ -350,7 +352,11 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Mutuelle, Kombinat Hélion, Collège de Valhalla, Partants de la Longue Patience. Le texte de la Veille parle du Traité de Genève de 1981. Le journal **Glossaire** a une page.
 6. Dans **Vaisseaux**, ouvrez **Patrouilleur de la Veille** et **Cargo**. N'ouvrez pas la Petite Fortune pour la modifier.
    **Résultat attendu :** les notes disent **À confirmer par Marc** et **provisoire**. Le patrouilleur a le **Laser lourd à miroir de proue**, type **Laser**. Le cargo a le **Propulseur à plasma (cargo lent)**. La **Petite Fortune** a toujours 13 modules et la plaque de proue **8 / 8**.
-7. Console (**F12**).
+7. Sur un personnage, glissez le **Pistolet de bord 9 mm basse vélocité**. Cochez **Équipé**. La fiche du personnage reste ouverte. Les munitions sont **15 / 15**. Lancez-le une fois, réussite ou échec.
+   **Résultat attendu :** la jauge et le nombre passent à **14 / 15**.
+   Mettez les munitions actuelles à **0**, puis lancez encore.
+   **Résultat attendu :** le tir est refusé. Le message dit qu'il n'y a plus de munitions. Le nombre reste **0**. Remettez **15** avant de continuer.
+8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 
 ## 18. 0.9.3 Habillage des fiches

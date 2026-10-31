@@ -2,7 +2,7 @@
 
 ## 0.9.4
 
-Branche `dev/0.9.4`, anciennement `dev/0.9.3`, créée depuis `dev/0.9.2`. PR brouillon vers `main`. La 0.9.2 (`a194c10`) et l'habillage 0.9.3 (`20be91c`) sont dans `main`. Cette branche passe après. Ne pas fusionner. Ne pas la finir maintenant. La section 17 de TESTER.md sert à la séance de test de la v1.
+Branche `dev/0.9.4`, anciennement `dev/0.9.3`. PR brouillon vers `main`. La 0.9.2 (`a194c10`) et l'habillage 0.9.3 (`20be91c`) sont dans `main`. Ne pas fusionner. La section 17 de TESTER.md sert à la séance de test de la v1.
 
 Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, Glossaire v0.1, Vaisseaux v0.1 §2 et §8.
 
@@ -11,14 +11,12 @@ Décision Marc 30/10/2026. Réf. Blessures v0.3, Origines v0.3, Bible v0.1 §6, 
 - Origines : les 6 concordent, sauf l'habitat tournant, dont la gravité perd « selon l'habitat ».
 - Journaux : une page par faction, recopiée de la Bible v0.1 §6, et le glossaire en une page.
 - Vaisseaux : Patrouilleur de la Veille et Cargo, provisoires, chiffres de coque repris de la Petite Fortune et marqués à confirmer. Le patrouilleur porte le laser lourd du pack. Le cargo porte le propulseur à plasma du pack. La Petite Fortune n'est pas modifiée.
+- Munitions : chaque tir d'une arme de personnage ou de PNJ retire 1 à `system.ammo.value`. Décision Marc 31/10/2026. Réf. Vaisseaux v0.1 §4. À 0, le tir est refusé, comme le canon. Valeur null ou maximum null : le tir part, rien n'est écrit. Le rechargement reste manuel.
 
-Réserves mineures de Relecteur sur la 0.9.2, notées ici, pas corrigées :
+Réserves mineures de Relecteur sur la 0.9.2, traitées :
 
-- Le champ administration affiche encore la valeur brute « autoInjector » (`item-sheet.mjs`, `field-row.hbs`). TESTER §16.7 doit le dire, ou l'affichage doit changer.
-- « autoInjector ou timbre » est codé en dur dans `administration-label.mjs`. À mettre dans `SOL.substanceAdministrationLabels`.
-- La ligne `sol-admin-reading` doit être contrôlée à la main dans TESTER §16.7.
-
-Décision Marc 31/10/2026, pas codée : chaque tir d'une arme de personnage retire 1 munition (`system.ammo`), comme pour le canon d'un vaisseau. Si le champ est vide, rien n'est retiré. Le rechargement reste manuel.
+- La case Administration garde la clé stockée (`autoInjector`). La ligne `sol-admin-reading` en dessous dit **auto-injecteur**. TESTER §16.7 le contrôle.
+- `autoInjector ou timbre` est une entrée de `SOL.substanceAdministrationLabels`. La ligne dit **auto-injecteur ou timbre**.
 
 ## 0.9.3
 
