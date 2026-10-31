@@ -6,7 +6,7 @@ La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible),
 La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main`. Prenez le ZIP de `main`.
 La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
-La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Le ZIP de `main` ne contient la 0.9.1 qu'après fusion de `dev/0.9.1` dans `main`. D'ici là, l'étape 1 de la section 15 donne le ZIP de la branche `dev/0.9.1`.
+La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -268,13 +268,14 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 
 ## 15. 0.9.1 Équipement et modules
 
-Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.1 qu'après fusion de `dev/0.9.1` dans `main`. D'ici là, l'étape 1 donne le ZIP de la branche `dev/0.9.1`.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` :
 
-1. Prenez le ZIP de la branche `dev/0.9.1` :
+https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.1.zip
+Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
 
-   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.1`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`. Après fusion de `dev/0.9.1` dans `main`, prenez à la place le ZIP de `main` (https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip) : le dossier s'appelle alors `hard-sf-rpg-main`.
+1. Le système vient du ZIP de `main` (lien ci-dessus).
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.1**.
 2. Ouvrez les compendiums **Équipement** et **Modules de vaisseau**.
    **Résultat attendu :** **Équipement** contient la **Rustine** et les objets du catalogue, plus les cinq accessoires déjà là (buse, dragonne, essuie-visière, manchons, phares). Il n'y a pas de **Luciole**, de **Crabe** ni de **TATI**. **Modules de vaisseau** n'a qu'une entrée pour chaque module fondu : **Laser de forage (outil civil)**, **Laser de défense (tourelle)**, **Casier lance-missiles (4 missiles)**, **Antenne radio et laser de communication**, **Capteurs civils (radar, lidar, infrarouge)**, **Moteur nucléaire thermique à l'eau (standard Mutuelle)**, **Panneaux radiateurs repliables (~50 m², prospecteur)**, **Cœur à fission bimodal (avec bouclier d'ombre)**, **Réservoir d'eau de masse de réaction (75 t)** (deux fois : bâbord et tribord, pas une troisième), **Sas d'EVA, treuil et baie de drones**, **Sondes et foreuses d'astéroïdes (6)**, **Soute à minerai ou conteneurs (20 t)**. Il n'y a pas de seconde **Combinaison renforcée de chantier**, ni de seconde **Combinaison souple de travail**, ni de seconde **Armure de pont (assaut et abordage)**.
 3. Ouvrez la **Rustine**.

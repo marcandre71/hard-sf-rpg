@@ -15,11 +15,11 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 - [x] 0.7.3 — dégâts localisés des vaisseaux, critiques, dépressurisation, missiles. Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.7.4 — chaleur du réacteur, Pousser, réparations. Règles des vaisseaux §6-7. Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.9.0 — armes, armures et portée. Relue par Relecteur, test Marc reporté à la v1.
+- [x] 0.9.1 — équipement et modules. Relue par Relecteur, test Marc reporté à la v1.
 
 ## Ensuite
 
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.9.1 — équipement et modules. En relecture. Branche `dev/0.9.1`.
 - [ ] 0.9.2 — atouts, augmentations, logiciels et substances.
 - [ ] 0.9.3 — blessures, journaux et vaisseaux PNJ.
 - [ ] 0.8.0 — machines : fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines. Luciole, Crabe et TATI arrivent ici, pas de coquille en 0.9.1. Masse du TATI : à compléter (Équipement v0.3 §5). Décision Marc 31/10/2026.

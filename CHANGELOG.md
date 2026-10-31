@@ -2,7 +2,7 @@
 
 ## 0.9.1
 
-Branche `dev/0.9.1`, PR brouillon vers `main`. Ne pas fusionner. `main` est en 0.9.0 (`50f0289`). La section 15 de TESTER.md sert à la séance de test de la v1. Le ZIP de `main` ne contient la 0.9.1 qu'après fusion de `dev/0.9.1` dans `main`. D'ici là, l'étape 1 donne le ZIP de la branche.
+Entrée dans `main` en avance rapide depuis `dev/0.9.1` (`eabc8a4`), accord de Didier le 31/10/2026. Relue par Relecteur. La section 15 de TESTER.md sert à la séance de test de la v1, avec le ZIP de `main`.
 
 Décision Marc 30/10/2026. Réf. Équipement v0.3 et Modules v0.3.
 
