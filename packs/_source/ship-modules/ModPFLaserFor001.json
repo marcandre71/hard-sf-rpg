@@ -1,18 +1,19 @@
 {
   "_id": "ModPFLaserFor001",
-  "name": "Laser de forage",
+  "name": "Laser de forage (outil civil)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Outil légal. S'en servir contre un vaisseau est une infraction pour la Veille (non automatisée). Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §9 Q4.</p>",
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",
     "section": "bow",
     "integrity": {
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Outil légal : dégâts 6, portée proche au contact seulement (quelques km), énergie, +1 chaleur par tir. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §4 et §9 Q4.</p>",
+    "effects": "<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "mass": 2,
+    "armorPoints": 0,
     "weapon": {
       "damage": 6,
       "rangeClose": true,
@@ -22,9 +23,9 @@
         "value": null,
         "max": null
       },
-      "heatPerShot": 1
-    },
-    "armorPoints": 0
+      "heatPerShot": 1,
+      "class": "laser"
+    }
   },
   "effects": [],
   "folder": null,
@@ -36,7 +37,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.3",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

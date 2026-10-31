@@ -1,26 +1,18 @@
 {
   "_id": "ModPFReservTri01",
-  "name": "Réservoir d'eau tribord",
+  "name": "Réservoir d'eau de masse de réaction (75 t)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
     "category": "other",
     "section": "starboard",
     "integrity": {
       "value": 8,
       "max": 8
     },
-    "effects": "<p>75 t d'eau, comme le réservoir bâbord. Masse du module : 3 t à vide. Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
     "mass": 3,
-    "weapon": {
-      "damage": 0,
-      "rangeClose": false,
-      "rangeMedium": false,
-      "rangeLong": false,
-      "ammunition": "",
-      "heatPerShot": 0
-    },
     "armorPoints": 0
   },
   "effects": [],
@@ -33,7 +25,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

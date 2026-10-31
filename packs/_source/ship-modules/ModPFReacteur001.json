@@ -1,26 +1,18 @@
 {
   "_id": "ModPFReacteur001",
-  "name": "Cœur du réacteur (bimodal)",
+  "name": "Cœur à fission bimodal (avec bouclier d'ombre)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
     "category": "reactor",
     "section": "stern",
     "integrity": {
       "value": 8,
       "max": 8
     },
-    "effects": "<p>Porte la jauge de chaleur du vaisseau. Environ 100 kW électriques à l'arrêt, avec le bouclier d'ombre. Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
     "mass": 12,
-    "weapon": {
-      "damage": 0,
-      "rangeClose": false,
-      "rangeMedium": false,
-      "rangeLong": false,
-      "ammunition": "",
-      "heatPerShot": 0
-    },
     "armorPoints": 0
   },
   "effects": [],
@@ -33,7 +25,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

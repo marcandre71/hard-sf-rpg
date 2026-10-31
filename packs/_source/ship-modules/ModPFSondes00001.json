@@ -1,26 +1,18 @@
 {
   "_id": "ModPFSondes00001",
-  "name": "Sondes et foreuses",
+  "name": "Sondes et foreuses d'astéroïdes (6)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
     "category": "other",
     "section": "port",
     "integrity": {
       "value": 4,
       "max": 4
     },
-    "effects": "<p>6 sondes de forage. Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
     "mass": 2,
-    "weapon": {
-      "damage": 0,
-      "rangeClose": false,
-      "rangeMedium": false,
-      "rangeLong": false,
-      "ammunition": "",
-      "heatPerShot": 0
-    },
     "armorPoints": 0
   },
   "effects": [],
@@ -33,7 +25,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

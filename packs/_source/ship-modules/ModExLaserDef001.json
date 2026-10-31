@@ -1,18 +1,19 @@
 {
   "_id": "ModExLaserDef001",
-  "name": "Laser de défense",
+  "name": "Laser de défense (tourelle)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Repère d'arme du §4, pas installé sur la Petite Fortune. Section proue. Intégrité 4/4 : Décision Marc 21/10/2026. La masse n'est pas dans le tableau : 0 en attendant. À confirmer par Marc.</p>",
+    "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc. Précis contre radiateurs et capteurs ; peut tirer sur un missile en approche (une attaque normale ; un missile touché est détruit). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",
     "section": "bow",
     "integrity": {
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Intégrité provisoire, ajustable en jeu. Dégâts 8, portée proche, énergie, +1 chaleur par tir. Réf. Vaisseaux v0.1 §4.</p>",
-    "mass": 0,
+    "effects": "<p>Aussi sur un flanc. Précis contre radiateurs et capteurs ; peut tirer sur un missile en approche (une attaque normale ; un missile touché est détruit). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
+    "mass": 3,
+    "armorPoints": 0,
     "weapon": {
       "damage": 8,
       "rangeClose": true,
@@ -22,9 +23,9 @@
         "value": null,
         "max": null
       },
-      "heatPerShot": 1
-    },
-    "armorPoints": 0
+      "heatPerShot": 1,
+      "class": "laser"
+    }
   },
   "effects": [],
   "folder": null,
@@ -36,7 +37,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.3",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

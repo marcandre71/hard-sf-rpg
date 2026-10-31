@@ -1,26 +1,18 @@
 {
   "_id": "ModPFCapteurs001",
-  "name": "Capteurs (radar, lidar, télescope infrarouge)",
+  "name": "Capteurs civils (radar, lidar, infrarouge)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
     "category": "sensors",
     "section": "bow",
     "integrity": {
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Prospection et veille. Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
     "mass": 1,
-    "weapon": {
-      "damage": 0,
-      "rangeClose": false,
-      "rangeMedium": false,
-      "rangeLong": false,
-      "ammunition": "",
-      "heatPerShot": 0
-    },
     "armorPoints": 0
   },
   "effects": [],
@@ -33,7 +25,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

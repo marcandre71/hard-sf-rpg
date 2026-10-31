@@ -1,26 +1,18 @@
 {
   "_id": "ModPFSoute000001",
-  "name": "Soute à échantillons",
+  "name": "Soute à minerai ou conteneurs (20 t)",
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<p>Réf. Vaisseaux v0.1 §8. Chiffres provisoires.</p>",
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
     "category": "cargo",
     "section": "port",
     "integrity": {
       "value": 6,
       "max": 6
     },
-    "effects": "<p>20 t de carottes et d'échantillons. Réf. Vaisseaux v0.1 §8.</p>",
+    "effects": "<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
     "mass": 5,
-    "weapon": {
-      "damage": 0,
-      "rangeClose": false,
-      "rangeMedium": false,
-      "rangeLong": false,
-      "ammunition": "",
-      "heatPerShot": 0
-    },
     "armorPoints": 0
   },
   "effects": [],
@@ -33,7 +25,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.7.0",
+    "systemVersion": "0.9.1",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"
