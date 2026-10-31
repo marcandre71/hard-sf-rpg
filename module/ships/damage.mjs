@@ -499,10 +499,11 @@ export function isMissileWeapon(weapon) {
 }
 
 /**
- * Laser du catalogue : le nom contient « laser ».
- * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §4.
+ * Laser. Le champ `class` prime sur le nom.
+ * Sans champ, le nom qui contient « laser ».
+ * Décision Marc 25/10/2026. Décision Marc 30/10/2026. Réf. Vaisseaux v0.1 §4.
  *
- * @param {{ name?: string }|null|undefined} weapon
+ * @param {{ name?: string, class?: string }|null|undefined} weapon
  * @returns {boolean}
  */
 export function isLaserWeapon(weapon) {

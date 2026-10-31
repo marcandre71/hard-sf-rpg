@@ -967,10 +967,16 @@ function ratedScore(actor, skill) {
 }
 
 /**
+ * Copie simplifiée des modules, celle que le tir lit.
+ * `class` doit suivre : sans lui, le type explicite est ignoré
+ * et le nom ou les portées décident à sa place.
+ * Décision Marc 31/10/2026. La tourelle double est un railgun.
+ * Le cône Berger est « autre », pas un missile.
+ *
  * @param {Actor} ship
- * @returns {{ id: string, name: string, category: string, condition: string, rangeClose: boolean, rangeMedium: boolean, rangeLong: boolean }[]}
+ * @returns {{ id: string, name: string, category: string, condition: string, class: string, rangeClose: boolean, rangeMedium: boolean, rangeLong: boolean }[]}
  */
-function weaponsOf(ship) {
+export function weaponsOf(ship) {
   return ship.items.filter(item => item.type === "shipModule").map(item => ({
     id: item.id,
     name: item.name,
@@ -981,7 +987,9 @@ function weaponsOf(ship) {
     rangeClose: item.system.weapon?.rangeClose === true,
     rangeMedium: item.system.weapon?.rangeMedium === true,
     rangeLong: item.system.weapon?.rangeLong === true,
-    heatPerShot: Number(item.system.weapon?.heatPerShot ?? 0)
+    heatPerShot: Number(item.system.weapon?.heatPerShot ?? 0),
+    // Décision Marc 31/10/2026. Vide : le nom décide encore.
+    class: item.system.weapon?.class ?? ""
   }));
 }
 

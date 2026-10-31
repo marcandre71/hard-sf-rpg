@@ -1239,6 +1239,8 @@ async function strikeAmount(strike, message) {
   const item = attacker.items?.get(strike.weaponId);
   if ( !item || item.type !== "shipModule" ) return null;
   // Un missile ne s'applique pas par la carte de tir. // Décision Marc 30/10/2026
+  // L'objet stocké porte `class`. « autre » (cône Berger) n'est pas un missile.
+  // Décision Marc 31/10/2026.
   if ( isMissileWeapon(item.system?.weapon) ) return null;
   return shipStrikeAmount(item.system?.weapon?.damage, strike.dr, { missile: false });
 }

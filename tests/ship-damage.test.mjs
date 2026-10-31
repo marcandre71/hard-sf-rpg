@@ -3,7 +3,9 @@
  * Sans Foundry. Réf. Vaisseaux v0.1 §4 et §5. Décision Marc 25/10/2026.
  */
 import { readFileSync } from "node:fs";
+import { weaponsOf } from "../module/ships/actions.mjs";
 import { ammoBlocksFire } from "../module/ships/combat.mjs";
+import { isCannonWeapon } from "../module/ships/reactor.mjs";
 import {
   MISSILE_DAMAGE,
   applyHullDamage,
@@ -255,6 +257,19 @@ check(isMissileWeapon({ class: "missile", rangeClose: true }) === true, "un miss
 check(isMissileWeapon({ class: "other", rangeClose: false, rangeMedium: true, rangeLong: true }) === false, "autre n'est pas un missile");
 check(isMissileWeapon({ class: "railgun", rangeClose: false, rangeMedium: true }) === false, "un railgun n'est pas un missile");
 check(isLaserWeapon({ name: "Laser de défense" }) === true && isLaserWeapon({ name: "Canon électromagnétique" }) === false, "laser : le nom contient laser");
+check(isLaserWeapon({ class: "other", name: "Canon laser" }) === false, "un type autre explicite n'est pas un laser");
+check(isCannonWeapon({ class: "railgun", name: "Tourelle électromagnétique double" }) === true, "la tourelle explicite est un canon");
+
+// Décision Marc 31/10/2026 : la copie du tir garde `class`.
+const asModule = doc => ({ id: doc._id, type: doc.type, name: doc.name, system: doc.system });
+const turretDoc = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/Tourelle_electromagnetique_double_ModTourelleEMDbl.json", import.meta.url), "utf8"));
+const bergerDoc = JSON.parse(readFileSync(new URL("../packs/_source/ship-modules/Cone_d_impacteurs_Berger_de_la_Veille_ModConeBerger001.json", import.meta.url), "utf8"));
+const copies = weaponsOf({ items: [asModule(turretDoc), asModule(bergerDoc)] });
+const turretCopy = copies.find(entry => entry.id === "ModTourelleEMDbl");
+const bergerCopy = copies.find(entry => entry.id === "ModConeBerger001");
+check(turretCopy?.class === "railgun" && isCannonWeapon(turretCopy) === true && isMissileWeapon(turretCopy) === false, "weaponsOf : la tourelle double reste un railgun");
+check(bergerDoc.system.weapon.class === "other" && bergerCopy?.class === "other" && isMissileWeapon(bergerCopy) === false && isCannonWeapon(bergerCopy) === false, "weaponsOf : le cône Berger reste « autre »");
+check(weaponsOf({ items: [asModule({ _id: "x", type: "shipModule", name: "Laser de forage", system: { category: "weapon", weapon: { damage: 6, rangeClose: true } } })] })[0].class === "" && isLaserWeapon(weaponsOf({ items: [asModule({ _id: "x", type: "shipModule", name: "Laser de forage", system: { category: "weapon", weapon: { damage: 6, rangeClose: true } } })] })[0]) === true, "sans class, le nom décide encore");
 check(ammoBlocksFire(0) === true && ammoBlocksFire({ value: 0 }) === true && ammoBlocksFire(null) === false && ammoBlocksFire({ value: null }) === false, "0 bloque, vide non");
 
 const fromDoc = hullFromDocument({
