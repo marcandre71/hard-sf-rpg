@@ -65,6 +65,17 @@ export class GenericItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         }];
       }).filter(group => group.rows.length);
     }
+    if ( item.type === "weapon" ) {
+      // La case est écrite ici, pas deux fois par le schéma.
+      // FormData omet une case décochée : _processFormData la relit.
+      // Décision Marc 31/10/2026.
+      context.isWeapon = true;
+      context.melee = item.system._source?.melee === true;
+      context.groups = context.groups.map(group => ({
+        ...group,
+        rows: group.rows.filter(line => line.name !== "system.melee")
+      })).filter(group => group.rows.length || group.groups?.length);
+    }
     if ( item.type === "armor" && item.system?.pressurized !== true ) {
       // Décision Marc 20/10/2026 : joints sans effet si l'armure n'est pas pressurisée.
       for ( const group of context.groups ) {
@@ -86,5 +97,27 @@ export class GenericItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       }
       : null;
     return context;
+  }
+
+  /**
+   * Une case décochée n'est pas dans le FormData. On lit l'élément.
+   * Décision Marc 31/10/2026.
+   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.ux.FormDataExtended.html
+   * @see https://foundryvtt.com/api/v14/classes/foundry.applications.api.DocumentSheetV2.html#_processFormData
+   *
+   * @override
+   * @param {SubmitEvent|null} event
+   * @param {HTMLFormElement} form
+   * @param {FormDataExtended} formData
+   * @returns {object}
+   */
+  _processFormData(event, form, formData) {
+    const data = super._processFormData(event, form, formData);
+    if ( this.document?.type !== "weapon" ) return data;
+    const input = form?.elements?.namedItem?.("system.melee") ?? form?.elements?.["system.melee"];
+    if ( input && input.type === "checkbox" ) {
+      foundry.utils.setProperty(data, "system.melee", input.checked === true);
+    }
+    return data;
   }
 }

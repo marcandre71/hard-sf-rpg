@@ -97,9 +97,10 @@ export function migrateWeaponContact(source) {
 }
 
 /**
- * Valeur stockée de `melee`, ou `undefined` si le champ n'est pas écrit.
- * Sur un document Foundry, le défaut du schéma remplit `system.melee`
- * sans l'écrire dans `_source` : on lit la source.
+ * `melee` stocké, ou `undefined` si la clé n'est pas dans la source.
+ * Foundry écrit le défaut `false` dans `_source` : une arme créée
+ * à la main a déjà la clé. La case de la fiche est alors le seul
+ * moyen de la passer en arme de contact.
  * Décision Marc 31/10/2026.
  *
  * @param {{ system?: { melee?: boolean, _source?: { melee?: boolean } } }|null|undefined} weapon
@@ -115,8 +116,9 @@ function storedMelee(weapon) {
 
 /**
  * Le choix de portée du jet est masqué pour une arme de contact.
- * `system.melee` stocké décide. Absent : détection provisoire
- * (Corps-à-corps, ou le mot « contact » dans la description).
+ * `system.melee` stocké décide. La case « Arme de contact » écrit ce champ.
+ * Absent seulement : repli provisoire (Corps-à-corps, ou « contact »
+ * dans la description), pour une source d'avant le champ et pour les tests.
  * Le Lance-filet, l'électrochoc (5 m) et le pistolet de scellement (4 m)
  * gardent le choix. Décision Marc 30/10/2026. Décision Marc 31/10/2026.
  *
@@ -131,7 +133,9 @@ export function showsAttackRange(weapon) {
 }
 
 /**
- * Repli tant que `melee` n'est pas stocké. Provisoire.
+ * Repli tant que `melee` n'est pas dans la source. Provisoire.
+ * Dès que Foundry a écrit `false`, ce texte ne s'applique plus :
+ * la case de la fiche décide.
  * Décision Marc 31/10/2026.
  *
  * @param {{ name?: string, system?: { skill?: string, description?: string } }|null|undefined} weapon

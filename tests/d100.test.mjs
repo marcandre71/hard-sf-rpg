@@ -4,6 +4,7 @@
  * Réf. LdR v0.2 §2, §4, §5, §7. Décisions Marc 18/10/2026.
  */
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
 import { characteristicFieldsFor, characteristicRollLabel, SOL } from "../module/config.mjs";
 import {
   cappedModifier,
@@ -292,6 +293,41 @@ check("portée du jet d'attaque", () => {
   const kept = fullWeapon({ skill: "Corps-à-corps", melee: false });
   migrateWeaponContact(kept);
   assert.equal(kept.melee, false);
+  // Foundry écrit false dans _source : le repli ne s'applique plus.
+  // Sans la clé, Corps-à-corps masque encore le choix.
+  assert.equal(showsAttackRange({
+    name: "Outil",
+    system: { _source: { melee: false, skill: "Corps-à-corps", description: "<p>Contact.</p>" }, skill: "Corps-à-corps", description: "<p>Contact.</p>" }
+  }), true);
+});
+
+check("arme de contact du pack et case de la fiche", () => {
+  const sheet = readFileSync(new URL("../templates/item/item-sheet.hbs", import.meta.url), "utf8");
+  assert.equal(sheet.includes('name="system.melee"'), true);
+  assert.equal(sheet.includes("SOL.Weapon.melee"), true);
+  const contact = new Set([
+    "Couteau d'arrimage, lame de sas en céramique",
+    "Gantelet d'impulsion piézoélectrique",
+    "Découpeur plasma de main",
+    "Mains nues, gantelets et bottes magnétiques",
+    "Clé à inertie, barre de sas",
+    "Matraque à impulsion (bâton-choc)",
+    "Matraque télescopique à inertie"
+  ]);
+  const ranged = new Set([
+    "Électrochoc de coursive",
+    "Pistolet de scellement thermique",
+    "Lance-filet et harpon magnétique d'EVA"
+  ]);
+  const dir = new URL("../packs/_source/weapons/", import.meta.url);
+  const files = readdirSync(dir).filter(name => name.endsWith(".json"));
+  assert.equal(files.length > 0, true);
+  for (const file of files) {
+    const weapon = JSON.parse(readFileSync(new URL(file, dir), "utf8"));
+    assert.equal(typeof weapon.system.melee, "boolean", weapon.name);
+    if (contact.has(weapon.name)) assert.equal(weapon.system.melee, true, weapon.name);
+    if (ranged.has(weapon.name)) assert.equal(weapon.system.melee, false, weapon.name);
+  }
 });
 
 check("Base du PNJ", () => {

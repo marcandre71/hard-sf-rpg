@@ -16,6 +16,20 @@
     </div>
   </header>
 
+  {{!--
+    Arme de contact : écrit system.melee. Foundry pose déjà false
+    dans la source, donc une arme créée à la main se coche ici.
+    Décision Marc 31/10/2026.
+  --}}
+  {{#if isWeapon}}
+  <div class="form-group">
+    <label for="{{rootId}}-system.melee">{{localize "SOL.Weapon.melee"}}</label>
+    <div class="form-fields">
+      <input type="checkbox" id="{{rootId}}-system.melee" name="system.melee" {{#if melee}}checked{{/if}}>
+    </div>
+  </div>
+  {{/if}}
+
   {{> "systems/sol-nouvelle-ere/templates/shared/field-groups.hbs" groups=groups}}
 
   {{#if description}}

@@ -287,7 +287,7 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
    **Résultat attendu :** le couteau n'a pas de choix **Portée**. Le lance-filet en a un, **Courte (0)** déjà choisie.
 7. Glissez l'**Électrochoc de coursive** et le **Pistolet de scellement thermique** sur le personnage. Équipez-en un seul à la fois et lancez-le.
    **Résultat attendu :** les deux ont le choix **Portée**, **Courte (0)** déjà choisie. Une vraie arme de contact (le couteau, une matraque) ne l'a pas.
-8. Sur la Petite Fortune, dans le Combat Tracker, fiche ouverte **depuis son jeton**, portée **Proche** ou **Moyenne**. Glissez la **Tourelle électromagnétique double** du compendium **Modules de vaisseau** sur le vaisseau. Onglet **Postes**, **Tirer** avec cette tourelle, réussite ou échec.
+8. Sur la Petite Fortune, dans le Combat Tracker, fiche ouverte **depuis son jeton**. Lancez le combat et attendez le tour de la Petite Fortune, sinon le bouton **Tirer** n'apparaît pas. Portée **Proche** ou **Moyenne**. Glissez la **Tourelle électromagnétique double** du compendium **Modules de vaisseau** sur le vaisseau. Onglet **Postes**, **Tirer** avec cette tourelle, réussite ou échec.
    **Résultat attendu :** les munitions passent de **30** à **29**. Onglet **Général**, cochez **Réacteur coupé**, puis **Tirer** encore avec la tourelle.
    **Résultat attendu :** le tir est refusé. Les munitions restent à **29**. Décochez **Réacteur coupé**.
 9. Console (**F12**).
