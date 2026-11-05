@@ -34,6 +34,8 @@ import { ShipSheet } from "./sheets/ship-sheet.mjs";
 import { registerShipPlay } from "./ships/actions.mjs";
 import { registerShipStrike } from "./ships/strike.mjs";
 
+// Choix technique : numéro croissant pour la mise à jour Foundry.
+// La branche reste dev/0.8.0. Le manifeste dit 0.9.5.
 const SYSTEM_ID = "sol-nouvelle-ere";
 
 /**

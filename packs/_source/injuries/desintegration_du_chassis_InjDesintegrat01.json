@@ -1,0 +1,34 @@
+{
+  "_id": "InjDesintegrat01",
+  "_key": "!items!InjDesintegrat01",
+  "name": "Désintégration du châssis",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Châssis, mortelle : épave irrécupérable ; pièces récupérables [à compléter].</p>",
+    "location": "torso",
+    "severity": "mortal",
+    "bleeding": false,
+    "penalty": 0,
+    "treated": false,
+    "endOfOrder": true,
+    "activeRoundOne": false,
+    "healingTime": "sans objet",
+    "source": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 815000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.5",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -16,6 +16,7 @@
  * Vaisseau : fiche unique 0.7.0 (`module/data/ship.mjs`).
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
+import { migrateDroneSource } from "./drone-migrate.mjs";
 import { migrateNpcSource } from "./npc-migrate.mjs";
 import { characteristicSchema, deriveCharacteristicValues, PersonData } from "./person.mjs";
 import { htmlField, numberField, stringField } from "./fields.mjs";
@@ -24,6 +25,13 @@ export { ShipData } from "./ship.mjs";
 
 /** FOR, CON et PER. Pas les six autres caractéristiques du personnage. */
 export const FOR_CON_PER_KEYS = ["for", "con", "per"];
+
+/**
+ * Drone : FOR, CON, COO, ADA, PER.
+ * Décision Didier/Marc 31/10/2026. Base du PNJ, jusqu'à 100.
+ * Décision Marc 18/10/2026.
+ */
+export const DRONE_CHARACTER_KEYS = ["for", "con", "coo", "ada", "per"];
 
 /**
  * Schéma commun : description + notes, toutes deux HTML.
@@ -119,19 +127,62 @@ export class CreatureData extends ForConActorData {}
  *
  * @extends ForConActorData
  */
-// À confirmer par Marc : la liste nommée est [à compléter]. Réf. LdR v0.2 §7.
-// Décision Marc 31/10/2026 : les repères du compendium restent, sans nom inventé.
+// Réf. Blessures et Séquelles v0.3 corrigée §3. Décision Marc 31/10/2026.
 export class SyntheticData extends ForConActorData {}
 
 /**
  * Drone (machine simple, intelligence très limitée).
  * Réf. LdR v0.2 §15, Fiche v0.2 §4.
+ * Décision Didier/Marc 31/10/2026 : COO, ADA et le score autonome,
+ * chacun lancé comme une caractéristique. La protection vient des
+ * armures glissées sur la fiche. Réf. Équipement v0.3 §5.
  *
- * @extends ForConActorData
+ * @extends foundry.abstract.TypeDataModel
  */
-// À confirmer par Marc : la liste nommée est [à compléter]. Réf. LdR v0.2 §7.
-// Décision Marc 31/10/2026 : Luciole, Crabe et TATI sont des acteurs, pas des coquilles.
-export class DroneData extends ForConActorData {}
+// Décision Didier/Marc 31/10/2026 : masse du TATI, 350 kg.
+export class DroneData extends foundry.abstract.TypeDataModel {
+  /** @override */
+  static defineSchema() {
+    return {
+      ...describedActorSchema(),
+      characteristics: characteristicSchema(DRONE_CHARACTER_KEYS, characteristicFieldsFor("npc")),
+      // Défaut 0. Un diff partiel ne le reçoit pas : voir migrateDroneSource.
+      autonomousScore: numberField("SOL.Drone.autonomousScore", {
+        initial: 0,
+        integer: true,
+        min: 0,
+        max: 100,
+        step: 1
+      }),
+      endurance: numberField("SOL.Actor.endurance", {
+        initial: null,
+        nullable: true,
+        integer: true,
+        min: 0,
+        step: 1,
+        hint: "SOL.Actor.enduranceHint"
+      })
+    };
+  }
+
+  /**
+   * Ne pose pas COO, ADA ni le score autonome sur un fragment.
+   *
+   * @override
+   * @param {object} source
+   * @returns {object}
+   */
+  static migrateData(source) {
+    migrateDroneSource(source);
+    return super.migrateData(source);
+  }
+
+  /** @override */
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    deriveCharacteristicValues(this.characteristics, DRONE_CHARACTER_KEYS);
+  }
+}
 
 /**
  * Véhicule : catégorie terrestre, maritime ou aérien.

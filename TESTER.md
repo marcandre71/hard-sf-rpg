@@ -390,23 +390,25 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 
-## 19. 0.8.0 Machines
+## 19. 0.9.5 Machines (ex-0.8.0)
 
-Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.8.0`. Remplacez le dossier du système. N'utilisez pas le bouton de mise à jour de Foundry si celui-ci dit que 0.8.0 est plus ancien que 0.9.4.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de la branche `dev/0.8.0`. Le système affiché est **0.9.5**.
 
 1. Prenez le ZIP de `dev/0.8.0` :
 
    https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.8.0.zip
 
    Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.8.0`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
-   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.8.0**.
-2. Ouvrez le compendium **Machines**. Regardez aussi **Équipement**.
-   **Résultat attendu :** **Luciole**, **Crabe** et **TATI** sont dans Machines. Ils ne sont pas dans Équipement.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.5**.
+2. Ouvrez le compendium **Machines**. Regardez aussi **Équipement** et **Armures et vêtements**.
+   **Résultat attendu :** **Luciole**, **Crabe** et **TATI** sont dans Machines. Ils ne sont pas dans Équipement. Les armures **Coque de Luciole**, **Carapace de Crabe** et **Blindage alu-titane oléophobe** sont dans Armures et vêtements.
 3. Ouvrez **TATI**, puis **Crabe**, puis **Luciole**.
-   **Résultat attendu :** le type est **Drone**. La fiche a le même habillage sombre que le personnage, avec un portrait cliquable. Elle montre **FOR**, **CON**, **PER** et le **Seuil**. La description dit **[à compléter]** pour ces caractéristiques. La masse du TATI dit **[à compléter]**. Crabe et TATI parlent du sas qui recharge des drones TATI ou Crabe. Luciole ne le dit pas.
-4. Dans le monde, créez une **Créature**, un **Synthétique** et un **Véhicule**.
-   **Résultat attendu :** la créature et le synthétique montrent FOR, CON, PER et le Seuil. Le véhicule n'a pas ces caractéristiques. Sa catégorie est **Terrestre**.
-5. Ouvrez le compendium **Blessures**. Cherchez **Blessure de machine** et **Lentille**.
-   **Résultat attendu :** les quatre **Blessure de machine** sont là (légère, grave, critique, mortelle). Chacune dit **[à compléter]** et **À confirmer par Marc**. Il n'y a pas de **Lentille étoilée**.
+   **Résultat attendu :** le type est **Drone**. La fiche a le même habillage sombre que le personnage. Elle montre **FOR**, **CON**, **COO**, **ADA**, **PER**, le **Score autonome** et le **Seuil**. Le TATI a FOR **75**, CON **65**, Score autonome **50**, Endurance **13**, Seuil **7**, masse **350 kg**. La Luciole a l'armure **Coque de Luciole** sur la fiche, **1** sur chaque zone, non pressurisée. Crabe et TATI parlent du sas. Luciole ne le dit pas.
+   Sur le TATI, cliquez **Score autonome** et lancez le dé.
+   **Résultat attendu :** la fenêtre est celle d'une caractéristique. Le message du chat est du même genre.
+4. En tant que MJ, dans le monde, créez une **Créature**, un **Synthétique** et un **Véhicule**.
+   **Résultat attendu :** la créature et le synthétique montrent FOR, CON, PER et le Seuil. Ils n'ont pas COO, ADA ni Score autonome. Le véhicule n'a pas ces caractéristiques. Sa catégorie est **Terrestre**.
+5. Ouvrez le compendium **Blessures**. Cherchez **Lentille étoilée (optiques)** et **Désintégration du châssis**.
+   **Résultat attendu :** il y a **24** blessures de machine, sur tête, torse, deux bras et deux jambes. **Lentille étoilée (optiques)** est légère, tête, pénalité **−10**. **Fuite de refroidissement ou batterie percée (châssis)** parle d'une conversion **[à compléter]**. **Brèche du microréacteur ou de la pile (châssis)** parle d'une explosion **[à compléter]**. Il n'y a plus les quatre titres **Blessure de machine**.
 6. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

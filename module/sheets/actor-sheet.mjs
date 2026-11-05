@@ -13,7 +13,7 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.applications.sheets.ActorSheetV2.html
  */
 import { characteristicFieldsFor, SOL } from "../config.mjs";
-import { FOR_CON_PER_KEYS } from "../data/actors.mjs";
+import { DRONE_CHARACTER_KEYS, FOR_CON_PER_KEYS } from "../data/actors.mjs";
 import { breachContext, stopBreachClock } from "../dice/breach-countdown.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
 import { resolveEndurance } from "../dice/derived.mjs";
@@ -70,7 +70,9 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     if ( prepared?.for && prepared?.con ) {
       const fieldBounds = characteristicFieldsFor("npc");
       context.bounds = fieldBounds;
-      context.characteristics = FOR_CON_PER_KEYS.map(key => {
+      // Décision Didier/Marc 31/10/2026 : le drone a aussi COO et ADA.
+      const keys = actor.type === "drone" ? DRONE_CHARACTER_KEYS : FOR_CON_PER_KEYS;
+      context.characteristics = keys.map(key => {
         const cfg = SOL.characteristics[key];
         const source = stored.characteristics?.[key] ?? {};
         return {
@@ -94,6 +96,11 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       context.endurancePct = endurance.max > 0
         ? Math.max(0, Math.min(100, Math.round((100 * endurance.current) / endurance.max)))
         : 0;
+      if ( actor.type === "drone" ) {
+        context.showAutonomousScore = true;
+        const storedScore = stored.autonomousScore;
+        context.autonomousScore = typeof storedScore === "number" ? storedScore : 0;
+      }
     }
     const breach = breachContext(actor);
     context.breachText = breach.text;

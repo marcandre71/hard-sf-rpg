@@ -170,6 +170,7 @@ if ( i18n.localize("SOL.Sheet.Name") !== "SOL.Sheet.Name" ) {
   process.exit(1);
 }
 
+const { seuilFromCharacteristics } = await import("../module/dice/damage.mjs");
 const { CharacterData } = await import("../module/data/character.mjs");
 const { CreatureData, DroneData, NpcData, ShipData, SyntheticData, VehicleData } = await import("../module/data/actors.mjs");
 const { SkillData } = await import("../module/data/skill.mjs");
@@ -268,10 +269,14 @@ try {
   if ( !sequel.schema.fields.category || !shipModule.schema.fields.category ) {
     throw new Error("sequel et shipModule doivent avoir un champ category");
   }
-  for ( const Model of [CreatureData, SyntheticData, DroneData] ) {
+  for ( const [Model, expectedKeys] of [
+    [CreatureData, ["for", "con", "per"]],
+    [SyntheticData, ["for", "con", "per"]],
+    [DroneData, ["for", "con", "coo", "ada", "per"]]
+  ] ) {
     const keys = Object.keys(new Model({}).schema.fields.characteristics.fields);
-    if ( keys.length !== 3 || !keys.includes("for") || !keys.includes("con") || !keys.includes("per") ) {
-      throw new Error(`${Model.name} : FOR, CON et PER, reçu ${keys.join(", ")}`);
+    if ( keys.length !== expectedKeys.length || expectedKeys.some(key => !keys.includes(key)) ) {
+      throw new Error(`${Model.name} : ${expectedKeys.join(", ")}, reçu ${keys.join(", ")}`);
     }
     const baseMax = new Model({}).schema.fields.characteristics.fields.for.fields.base.max;
     const perMax = new Model({}).schema.fields.characteristics.fields.per.fields.base.max;
@@ -340,6 +345,29 @@ try {
     }
     if ( old.description !== "<p>a</p>" || old.notes !== "b" ) {
       throw new Error(`${Model.name} : le nettoyage a perdu description ou notes`);
+    }
+    if ( Model === DroneData ) {
+      if ( "autonomousScore" in cleanedDiff ) {
+        throw new Error("DroneData : un nettoyage partiel a injecté le score autonome");
+      }
+      const tati = new DroneData({
+        characteristics: {
+          for: { base: 75, origin: 0, advance: 0, temp: 0 },
+          con: { base: 65, origin: 0, advance: 0, temp: 0 }
+        },
+        autonomousScore: 50,
+        endurance: 13
+      });
+      tati.prepareDerivedData();
+      if ( tati.validate({ strict: true }) !== true ) {
+        throw new Error("DroneData : TATI FOR 75 et CON 65 refusé");
+      }
+      if ( tati.characteristics.for.value !== 75 || tati.characteristics.con.value !== 65 ) {
+        throw new Error("DroneData : actuelles du TATI");
+      }
+      if ( seuilFromCharacteristics(tati.characteristics) !== 7 ) {
+        throw new Error("DroneData : SB du TATI");
+      }
     }
   }
   const skillDiff = { training: 20 };

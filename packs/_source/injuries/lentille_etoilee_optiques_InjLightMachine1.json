@@ -1,0 +1,34 @@
+{
+  "_id": "InjLightMachine1",
+  "_key": "!items!InjLightMachine1",
+  "name": "Lentille étoilée (optiques)",
+  "type": "injury",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>",
+    "location": "head",
+    "severity": "light",
+    "bleeding": false,
+    "penalty": -10,
+    "treated": false,
+    "endOfOrder": false,
+    "activeRoundOne": false,
+    "healingTime": "réparation",
+    "source": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 800000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.5",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

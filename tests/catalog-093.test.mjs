@@ -26,10 +26,11 @@ const origins = load("origins");
 const universe = load("universe");
 const ships = load("ships");
 
-assert.equal(injuries.length, 32, "8 déjà là + 24 blessures nommées");
+assert.equal(injuries.length, 52, "4 humaines + 24 nommées + 24 machines");
 const kept = ["InjLightHuman001", "InjSeriousHuman1", "InjCritHuman0001", "InjMortalHuman01", "InjLightMachine1", "InjSeriousMach01", "InjCritMach00001", "InjMortalMach001"];
 for (const id of kept) assert.equal(injuries.some(entry => entry._id === id), true, id);
-assert.equal(injuries.some(entry => entry.name.includes("Lentille")), false, "pas la table des machines");
+const lentille = injuries.find(entry => entry._id === "InjLightMachine1");
+assert.equal(lentille.name, "Lentille étoilée (optiques)");
 const named = injuries.find(entry => entry.name === "Contusion faciale, arcade ouverte");
 assert.equal(named.system.location, "head");
 assert.equal(named.system.severity, "light");
@@ -39,9 +40,6 @@ assert.equal(named.system.endOfOrder, false);
 const mortal = injuries.find(entry => entry.name === "Cœur ou aorte déchirés");
 assert.equal(mortal.system.severity, "mortal");
 assert.equal(mortal.system.endOfOrder, true);
-for (const machine of injuries.filter(entry => entry.name.startsWith("Blessure de machine"))) {
-  assert.equal(machine.system.description.includes("À confirmer par Marc"), true, machine.name);
-}
 
 assert.equal(sequels.length, 8);
 for (const sequel of sequels) {

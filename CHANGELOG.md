@@ -1,14 +1,15 @@
 # Journal des versions
 
-## 0.8.0
+## 0.9.5
 
-Branche `dev/0.8.0`, depuis `main` (`6f19056`). PR brouillon vers `main`. Ne pas fusionner. La section 19 de TESTER.md sert à la séance de test de la v1.
+Branche `dev/0.8.0`, depuis `main` (`6f19056`). Ancienne 0.8.0. Le manifeste dit 0.9.5 pour que Foundry la voie plus récente que la 0.9.4. PR brouillon vers `main`. Ne pas fusionner. La section 19 de TESTER.md sert à la séance de test de la v1.
 
-Décision Marc 31/10/2026. Réf. LdR v0.2 §3, §7 et §15. Réf. Atouts v0.3 §3. Réf. Modules v0.3 §7. Réf. Équipement v0.3 §5. Décision Marc 18/10/2026.
+Décision Didier/Marc 31/10/2026. Réf. Équipement v0.3 §5. Réf. Blessures et Séquelles v0.3 corrigée §3. Réf. LdR v0.2 §3. Décision Marc 18/10/2026 : Base des machines jusqu'à 100.
 
-- Luciole, Crabe et TATI sont des acteurs Drone, dans le compendium Machines. Pas des coquilles d'équipement. FOR, CON, PER, armement et autonomie sont [à compléter]. La masse du TATI est [à compléter]. Le sas d'EVA cite TATI et Crabe, pas Luciole.
-- Créature, synthétique et drone gardent FOR, CON, PER et le Seuil. Le véhicule n'a pas ces caractéristiques. La feuille reprend l'habillage de la 0.9.3.
-- Blessures de machine : les quatre repères restent. La liste nommée est [à compléter]. Aucun nom n'est inventé.
+- Luciole, Crabe et TATI sont des acteurs Drone. FOR, CON, PER, COO, ADA, score autonome, Endurance et Seuil sont ceux du catalogue. La masse du TATI est 350 kg. Le sas concerne le TATI et le Crabe. Les bonus +10 restent en texte.
+- La fiche Drone a COO, ADA et le Score autonome. Chacun se lance comme une caractéristique. La migration ne les injecte pas dans un diff partiel. La protection vient des armures de la fiche. Coque de Luciole, Carapace de Crabe et Blindage alu-titane oléophobe sont dans Armures et vêtements, et embarqués sur le drone.
+- Blessures de machine : 24 objets du tableau, six zones. Les ids `InjLightMachine1`, `InjSeriousMach01`, `InjCritMach00001` et `InjMortalMach001`, déjà sur `main`, deviennent les quatre optiques. Les vingt autres ids sont nouveaux. Restent visibles : conversion de la fuite, explosion du châssis, pièces récupérables, report sur une zone absente.
+- L'Endurance calculée (CON/5, arrondi au supérieur) redonne 3, 9 et 13. Le Seuil redonne 1, 5 et 7. Les blessures de machine suivent la Blessure standard, test de CON sur critique compris. Rien de plus n'est codé.
 - Réserves de Relecteur sur la 0.9.4, notées, pas codées : un vrai test de `rollItem` avec un acteur et un `performRoll` factices ; une notification légère quand le verrou de tir refuse un double-clic.
 
 ## 0.9.4

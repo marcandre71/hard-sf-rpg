@@ -15,7 +15,7 @@
     </button>
     <div class="sol-identity">
       <p class="sol-lbl">{{localize typeLabel}}</p>
-      <label class="sol-name-label" for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
+      <label for="{{rootId}}-name">{{localize "SOL.Sheet.Name"}}</label>
       <input id="{{rootId}}-name" class="sol-name" type="text" name="name" value="{{docSource.name}}">
     </div>
   </header>
@@ -23,6 +23,21 @@
   {{#if characteristics}}
   <h2 class="sol-section-title">{{localize "SOL.Sheet.Characteristics"}}</h2>
   {{> "systems/sol-nouvelle-ere/templates/shared/characteristics-table.hbs"}}
+  {{#if showAutonomousScore}}
+  <div class="sol-chars">
+    <div class="sol-ch" data-characteristic="autonomousScore">
+      <button type="button" class="sol-ch-roll sol-roll-characteristic" data-action="rollCharacteristic" data-characteristic="autonomousScore">
+        <i class="fa-solid fa-dice-d20" aria-hidden="true"></i>
+        <span class="sol-abbr">{{localize "SOL.Drone.autonomousScore"}}</span>
+      </button>
+      <output class="sol-ch-value">{{autonomousScore}}</output>
+      <label class="sol-ch-field">
+        <span class="sol-lbl">{{localize "SOL.Drone.autonomousScore"}}</span>
+        <input type="number" name="system.autonomousScore" value="{{autonomousScore}}" min="0" max="100" step="1">
+      </label>
+    </div>
+  </div>
+  {{/if}}
   <p class="sol-seuil">{{localize "SOL.Damage.sb"}} : <strong>{{seuil}}</strong></p>
   {{#if showEndurance}}
   <div class="sol-endurance-line">

@@ -23,11 +23,11 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 ## Ensuite
 
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.8.0 — machines : fiches jouables du drone, du synthétique, du véhicule et de la créature ; blessures propres aux machines. Luciole, Crabe et TATI arrivent ici, pas de coquille en 0.9.1. Masse du TATI : à compléter (Équipement v0.3 §5). La liste nommée des blessures de machine est [à compléter] (LdR v0.2 §7). En relecture. Branche `dev/0.8.0`. Ne pas fusionner. Décision Marc 31/10/2026.
+- [ ] 0.9.5 Machines (ex-0.8.0) — fiches du drone, du synthétique, du véhicule et de la créature ; 24 blessures de machine. Luciole, Crabe et TATI. Masse du TATI : 350 kg. Branche `dev/0.8.0`. En relecture. Ne pas fusionner. Décision Didier/Marc 31/10/2026.
 
 Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et un `performRoll` factices ; une notification légère quand le verrou de tir refuse un double-clic. Réserves mineures de Relecteur sur la 0.9.4 (`84517bb`).
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée.
 
-Décision Marc 31/10/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4 blessures, journaux et vaisseaux PNJ, 0.8.0 machines, 1.0.0.
+Décision Marc 31/10/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4 blessures, journaux et vaisseaux PNJ, 0.9.5 Machines (ex-0.8.0), 1.0.0.
 
 Décision Didier/Marc 31/10/2026 : un maximum de munitions à 0 veut dire sans chargeur. Le tir passe et rien n'est retiré. Un 0 avec un maximum supérieur à 0 refuse le tir. Un non-propriétaire ne tire pas une arme à chargeur, sans relais au MJ. Le patrouilleur accélère à 50 milli-g, poussée 113 kN pour 230 t. Le cargo accélère à 0,05 milli-g, type plasma. Delta-v, masse de réaction, durée et accélération à vide restent provisoires. La fragilité cellulaire est à 150 mSv. Les séquelles de radiation sont une liste, en texte seulement.

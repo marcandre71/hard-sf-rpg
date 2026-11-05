@@ -288,11 +288,19 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 export async function rollCharacteristic(event, target) {
   if ( event?.detail > 1 ) return;
   const key = target.closest("[data-characteristic]")?.dataset.characteristic;
+  const actor = this.document;
+  // Décision Didier/Marc 31/10/2026. Même fenêtre, même type de message.
+  if ( key === "autonomousScore" ) {
+    const raw = Number(actor.system?.autonomousScore);
+    const score = Number.isFinite(raw) ? raw : 0;
+    const label = game.i18n.localize("SOL.Drone.autonomousScore");
+    await performRoll({ actor, label, score, type: "characteristic" });
+    return;
+  }
   const cfg = SOL.characteristics[key];
   if ( !cfg ) return;
   const label = characteristicRollLabel(cfg, text => game.i18n.localize(text));
   if ( !label ) return;
-  const actor = this.document;
   const score = actor.system.characteristics[key]?.value ?? 0;
   await performRoll({ actor, label, score, type: "characteristic" });
 }

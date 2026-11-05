@@ -5,10 +5,94 @@
   "type": "drone",
   "img": "icons/svg/mystery-man.svg",
   "system": {
-    "description": "<!-- Décision Marc 31/10/2026. Réf. LdR v0.2 §15. Réf. Atouts v0.3 §3. -->\n<p>Drone. Pas une coquille d'équipement : c'est un acteur Drone. Décision Marc 31/10/2026.</p>\n<p>Un atout Symbiose drone peut lui ordonner une action simple en dépensant une réaction. Réf. Atouts v0.3 §3.</p>\n<p>FOR, CON, PER, masse, armement, autonomie : [à compléter].</p>\n<p>La fiche affiche FOR, CON, PER et le Seuil. Décision Marc 18/10/2026. Réf. LdR v0.2 §3. Les cases vides prennent le défaut du modèle : ce n'est pas un chiffre du catalogue.</p>",
-    "notes": ""
+    "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026. Réf. Atouts v0.3 §3. -->\n<p>Drone. Pas une coquille d'équipement. Décision Marc 31/10/2026.</p>\n<p>FOR 5, CON 15, PER 50, COO 50, ADA 60. Score autonome 35. Endurance 3. Seuil 1.</p>\n<p>Pas d'arme. Autonomie 4 h. Masse 2,5 kg.</p>\n<p>+10 en Fouille ou Vigilance dans les conduits étroits ou hors coque. Texte seulement.</p>\n<p>Un atout Symbiose drone peut lui ordonner une action simple en dépensant une réaction. Réf. Atouts v0.3 §3.</p>",
+    "notes": "",
+    "characteristics": {
+      "for": {
+        "base": 5,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 15,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 50,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "coo": {
+        "base": 50,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ada": {
+        "base": 60,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "autonomousScore": 35,
+    "endurance": 3
   },
-  "items": [],
+  "items": [
+    {
+      "_id": "ArmLucioleCoque1",
+      "_key": "!actors.items!DroneLuciole0001.ArmLucioleCoque1",
+      "name": "Coque de Luciole",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026 -->\n<p>1 sur toutes les zones. Non pressurisée.</p>",
+        "protection": {
+          "head": 1,
+          "torso": 1,
+          "rightArm": 1,
+          "leftArm": 1,
+          "rightLeg": 1,
+          "leftLeg": 1
+        },
+        "pressurized": false,
+        "breachThreshold": null,
+        "airReserve": {
+          "value": 0,
+          "max": 0
+        },
+        "penalty": {
+          "manipulation": 0,
+          "perception": 0
+        },
+        "dosimeter": false,
+        "radio": false,
+        "mass": 0,
+        "enc": 0,
+        "sealState": "intact",
+        "equipped": true
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.9.5",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      }
+    }
+  ],
   "effects": [],
   "folder": null,
   "sort": 100000,
@@ -19,7 +103,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.8.0",
+    "systemVersion": "0.9.5",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

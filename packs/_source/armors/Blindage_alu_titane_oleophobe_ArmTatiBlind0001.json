@@ -1,0 +1,49 @@
+{
+  "_id": "ArmTatiBlind0001",
+  "_key": "!items!ArmTatiBlind0001",
+  "name": "Blindage alu-titane oléophobe",
+  "type": "armor",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026 -->\n<p>4 sur toutes les zones.</p>",
+    "protection": {
+      "head": 4,
+      "torso": 4,
+      "rightArm": 4,
+      "leftArm": 4,
+      "rightLeg": 4,
+      "leftLeg": 4
+    },
+    "pressurized": false,
+    "breachThreshold": null,
+    "airReserve": {
+      "value": 0,
+      "max": 0
+    },
+    "penalty": {
+      "manipulation": 0,
+      "perception": 0
+    },
+    "dosimeter": false,
+    "radio": false,
+    "mass": 0,
+    "enc": 0,
+    "sealState": "intact",
+    "equipped": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1220000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "0.9.5",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

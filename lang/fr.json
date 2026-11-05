@@ -167,6 +167,9 @@
       "biography": "Biographie",
       "notes": "Notes"
     },
+    "Drone": {
+      "autonomousScore": "Score autonome"
+    },
     "Actor": {
       "description": "Description",
       "notes": "Notes",

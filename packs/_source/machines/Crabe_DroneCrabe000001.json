@@ -5,10 +5,94 @@
   "type": "drone",
   "img": "icons/svg/mystery-man.svg",
   "system": {
-    "description": "<!-- Décision Marc 31/10/2026. Réf. LdR v0.2 §15. Réf. Atouts v0.3 §3. -->\n<p>Drone. Pas une coquille d'équipement : c'est un acteur Drone. Décision Marc 31/10/2026.</p>\n<p>Un atout Symbiose drone peut lui ordonner une action simple en dépensant une réaction. Réf. Atouts v0.3 §3.</p>\n<p>Le sas d'EVA recharge des drones TATI ou Crabe. Réf. Modules v0.3 §7.</p>\n<p>FOR, CON, PER, masse, armement, autonomie : [à compléter].</p>\n<p>La fiche affiche FOR, CON, PER et le Seuil. Décision Marc 18/10/2026. Réf. LdR v0.2 §3. Les cases vides prennent le défaut du modèle : ce n'est pas un chiffre du catalogue.</p>",
-    "notes": ""
+    "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026. Réf. Modules v0.3 §7. Réf. Atouts v0.3 §3. -->\n<p>Drone. Pas une coquille d'équipement. Décision Marc 31/10/2026.</p>\n<p>FOR 45, CON 45, PER 40, COO 45, ADA 55. Score autonome 40. Endurance 9. Seuil 5.</p>\n<p>Pas d'arme : la soudeuse est un outil. Batterie de 12 h, rechargée au sas. Masse 45 kg.</p>\n<p>Pattes magnétiques, +10 en Mécanique sur la coque externe. Texte seulement.</p>\n<p>Le sas d'EVA recharge des drones TATI ou Crabe. Réf. Modules v0.3 §7.</p>\n<p>Un atout Symbiose drone peut lui ordonner une action simple en dépensant une réaction. Réf. Atouts v0.3 §3.</p>",
+    "notes": "",
+    "characteristics": {
+      "for": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 40,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "coo": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ada": {
+        "base": 55,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "autonomousScore": 40,
+    "endurance": 9
   },
-  "items": [],
+  "items": [
+    {
+      "_id": "ArmCrabeCarap001",
+      "_key": "!actors.items!DroneCrabe000001.ArmCrabeCarap001",
+      "name": "Carapace de Crabe",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026 -->\n<p>3 sur toutes les zones.</p>",
+        "protection": {
+          "head": 3,
+          "torso": 3,
+          "rightArm": 3,
+          "leftArm": 3,
+          "rightLeg": 3,
+          "leftLeg": 3
+        },
+        "pressurized": false,
+        "breachThreshold": null,
+        "airReserve": {
+          "value": 0,
+          "max": 0
+        },
+        "penalty": {
+          "manipulation": 0,
+          "perception": 0
+        },
+        "dosimeter": false,
+        "radio": false,
+        "mass": 0,
+        "enc": 0,
+        "sealState": "intact",
+        "equipped": true
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1210000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "sol-nouvelle-ere",
+        "systemVersion": "0.9.5",
+        "createdTime": 0,
+        "modifiedTime": 0,
+        "lastModifiedBy": "SolNouvelleEre00"
+      }
+    }
+  ],
   "effects": [],
   "folder": null,
   "sort": 200000,
@@ -19,7 +103,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.8.0",
+    "systemVersion": "0.9.5",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"
