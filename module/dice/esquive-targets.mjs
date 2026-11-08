@@ -42,7 +42,8 @@ export function defenderFromActor(actor) {
     uuid,
     name: typeof actor.name === "string" ? actor.name : "",
     hasRef: typeof ref === "number",
-    hasEsquive: actorHasEsquive(actor),
+    actorType: actor.type,
+    hasEsquive: actor.type === "synthetic" && actorHasEsquive(actor),
     tracked,
     reactionSpent: tracked && reaction?.spent === true
   };

@@ -169,11 +169,13 @@ export async function applyPlannedInjury(actor, plan, extra = {}) {
   if ( !plan ) return null;
   const system = { ...plan.system };
   if ( extra.description ) system.description = extra.description;
-  const [created] = await actor.createEmbeddedDocuments("Item", [{
+  const data = {
     name: extra.name ?? "",
     type: plan.type,
     system
-  }]);
+  };
+  if ( extra.flags ) data.flags = extra.flags;
+  const [created] = await actor.createEmbeddedDocuments("Item", [data]);
   if ( plan.statusId ) await actor.toggleStatusEffect(plan.statusId, { active: true });
   return created ?? null;
 }

@@ -478,7 +478,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-
 8. Sans combat démarré, touchez un personnage et esquivez.
    **Résultat attendu :** le jet a lieu. Une phrase dit que le MJ note la réaction. Le coup suivant propose encore **Esquiver** : le jeu ne la bloque pas tout seul.
 9. Touchez un drone ou un synthétique.
-   **Résultat attendu :** sans la compétence Esquive, pas de bouton **Esquiver**. Le texte dit qu'il n'a pas de RÉF. Les dégâts s'appliquent. La fiche ne gagne pas le statut **Saignement**. Ni la COO, ni l'ADA, ni le score autonome n'ouvrent l'esquive. Si le synthétique a vraiment la compétence Esquive, le bouton apparaît et le score est celui déjà calculé sur la fiche (formation, RÉF absente comptée 0). Une créature ou un drone, sans cette compétence, n'a toujours pas le bouton.
+   **Résultat attendu :** sans la compétence Esquive, pas de bouton **Esquiver**. Le texte dit qu'il n'a pas de RÉF. Les dégâts s'appliquent. La fiche ne gagne pas le statut **Saignement**. Ni la COO, ni l'ADA, ni le score autonome n'ouvrent l'esquive. Si le synthétique a vraiment la compétence Esquive, le bouton apparaît et le score est celui déjà calculé sur la fiche (formation, RÉF absente comptée 0). Une créature ou un drone n'a pas le bouton, même si une compétence Esquive a été glissée sur la fiche.
 10. Avec un joueur qui ne possède pas le défenseur, ouvrez la carte.
     **Résultat attendu :** il ne voit pas **Esquiver**. Le MJ le voit, ainsi que **Passer l'esquive**. Le bouton **Appliquer les dégâts** reste au MJ.
 11. Console (**F12**).

@@ -24,7 +24,7 @@ import {
   reactionOnTurnStart,
   skipDodge
 } from "./esquive.mjs";
-import { applyDodgeCommand, createSerialQueue, provenSender } from "./gm-authority.mjs";
+import { activeGmNow, applyDodgeCommand, createSerialQueue, planDodgeWrites, provenSender } from "./gm-authority.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const SOCKET = `system.${SYSTEM_ID}`;
@@ -177,11 +177,14 @@ async function askDodge(message, uuid, action, extra = {}) {
     if ( result?.ok === false ) ui.notifications.warn(game.i18n.localize("SOL.Dodge.denied"));
     return;
   }
-  if ( !game.users?.activeGM || !game.socket?.emit ) {
+  const gm = game.users?.activeGM;
+  if ( !gm || typeof gm.query !== "function" ) {
     ui.notifications.warn(game.i18n.localize("SOL.Dodge.noActiveGm"));
     return;
   }
-  game.socket.emit(SOCKET, payload);
+  // API v14 : le contexte { user } est celui de la session, pas un champ du message.
+  // @see https://foundryvtt.com/api/v14/classes/foundry.documents.User.html#query
+  await gm.query(`${SYSTEM_ID}.dodge`, payload);
 }
 
 /**
@@ -198,9 +201,15 @@ export async function executeDodge(payload, senderId) {
   }
   if ( provenSender(senderId, payload) == null ) return { ok: false, reason: "unproven" };
   return serial(`actor:${defenderUuid}`, () => serial(`card:${messageId}`, async () => {
+    if ( !activeGmNow() ) return { ok: false, reason: "not-active" };
     const built = await dodgeWorld(payload, senderId);
+    if ( !activeGmNow() ) return { ok: false, reason: "not-active" };
     if ( !built ) return { ok: false, reason: "missing" };
+    if ( payload.action === "finish" || payload.action === "recover" ) {
+      return applyDodgeWrites(built, payload, senderId);
+    }
     const result = applyDodgeCommand(built.world, built.command, senderId);
+    if ( !activeGmNow() ) return { ok: false, reason: "not-active" };
     await persistDodgeWorld(built.world);
     if ( result?.remind ) ui.notifications.info(game.i18n.localize("SOL.Dodge.remind"));
     return result;
@@ -233,23 +242,12 @@ async function dodgeWorld(payload, senderId) {
   if ( !message || !actor || !user ) return null;
   const owns = actor.testUserPermission?.(user, "OWNER") === true;
   let command = payload;
-  if ( payload.action === "finish" ) {
-    const roll = game.messages?.get?.(payload.rollMessageId);
-    const authorId = roll?.author?.id ?? roll?.user?.id ?? null;
-    const link = roll?.getFlag?.(SYSTEM_ID, "esquiveFor");
-    const score = dodgeScore(actor);
+  if ( payload.action === "reserve" ) {
     command = {
-      action: "finish",
+      action: "reserve",
       messageId: payload.messageId,
       defenderUuid: payload.defenderUuid,
-      roll: {
-        authorId,
-        attackMessageId: link?.attackMessageId,
-        defenderUuid: link?.defenderUuid,
-        die: roll?.getFlag?.(SYSTEM_ID, "die"),
-        score: score?.score,
-        messageId: roll?.id ?? null
-      }
+      authorizedBase: dodgeScore(actor)?.score
     };
   }
   const card = {
@@ -281,13 +279,106 @@ async function dodgeWorld(payload, senderId) {
  */
 async function persistDodgeWorld(world) {
   for ( const card of Object.values(world.cards ?? {}) ) {
+    if ( !activeGmNow() ) throw new Error("not-active");
     const message = game.messages?.get?.(card.id);
     if ( message ) await message.setFlag(SYSTEM_ID, "dodge", card.dodge);
   }
   for ( const actorSnap of Object.values(world.actors ?? {}) ) {
+    if ( !activeGmNow() ) throw new Error("not-active");
     const actor = await foundry.utils.fromUuid(actorSnap.uuid);
+    if ( !activeGmNow() ) throw new Error("not-active");
     if ( actor ) await actor.setFlag(SYSTEM_ID, "reaction", actorSnap.reaction);
   }
+}
+
+/**
+ * @param {object} built
+ * @param {object} payload
+ * @param {string} senderId
+ * @returns {Promise<{ ok: boolean, reason?: string, verdict?: string|null }>}
+ */
+async function applyDodgeWrites(built, payload, senderId) {
+  const message = game.messages?.get?.(payload.messageId);
+  const actor = await foundry.utils.fromUuid(payload.defenderUuid);
+  if ( !message || !actor ) return { ok: false, reason: "missing" };
+  if ( !activeGmNow() ) return { ok: false, reason: "not-active" };
+  const user = game.users?.get?.(senderId);
+  const entry = readDodge(message)[payload.defenderUuid];
+  if ( !entry || !user ) return { ok: false, reason: "missing" };
+  const gm = user.isGM === true;
+  const owner = actor.testUserPermission?.(user, "OWNER") === true;
+  if ( payload.action === "recover" && !gm ) return { ok: false, reason: "rights" };
+  if ( payload.action === "finish" && !gm && !owner ) return { ok: false, reason: "rights" };
+  const roll = payload.action === "recover" || payload.action === "finish"
+    ? findLinkedRoll(message, payload.defenderUuid, entry)
+    : null;
+  const plan = planDodgeWrites({
+    action: payload.action,
+    entry,
+    reaction: actor.getFlag(SYSTEM_ID, "reaction") ?? blankReaction(),
+    tracked: trackedCombatant(actor),
+    roll,
+    attack: {
+      success: message.getFlag(SYSTEM_ID, "success") === true,
+      dr: message.getFlag(SYSTEM_ID, "dr"),
+      score: message.getFlag(SYSTEM_ID, "target")
+    },
+    isGM: gm
+  });
+  if ( !plan.ok ) return plan;
+  for ( const write of plan.writes ) {
+    if ( !activeGmNow() ) return { ok: false, reason: "not-active" };
+    if ( write.kind === "card" ) {
+      const map = readDodge(message);
+      map[payload.defenderUuid] = write.entry;
+      await message.setFlag(SYSTEM_ID, "dodge", map);
+    } else if ( write.kind === "actor" ) {
+      if ( !activeGmNow() ) return { ok: false, reason: "not-active" };
+      await actor.setFlag(SYSTEM_ID, "reaction", write.reaction);
+    }
+  }
+  if ( plan.verdict && trackedCombatant(actor) !== true ) {
+    ui.notifications.info(game.i18n.localize("SOL.Dodge.remind"));
+  }
+  return { ok: true, verdict: plan.verdict ?? null };
+}
+
+/**
+ * Carte de jet liée à cette attaque. Le score lu est celui du document.
+ *
+ * @param {ChatMessage} attack
+ * @param {string} defenderUuid
+ * @param {object} entry
+ * @returns {object|null}
+ */
+function findLinkedRoll(attack, defenderUuid, entry) {
+  const bag = game.messages;
+  const list = Array.isArray(bag?.contents) ? bag.contents : [];
+  const byId = typeof bag?.get === "function" ? bag.get.bind(bag) : () => null;
+  const ids = [];
+  if ( typeof entry?.rollMessageId === "string" ) ids.push(entry.rollMessageId);
+  for ( const message of list ) {
+    if ( message?.id && !ids.includes(message.id) ) ids.push(message.id);
+  }
+  for ( const id of ids ) {
+    const message = byId(id) ?? list.find(item => item?.id === id);
+    const link = message?.getFlag?.(SYSTEM_ID, "esquiveFor");
+    if ( !message || !link ) continue;
+    if ( link.attackMessageId !== attack.id || link.defenderUuid !== defenderUuid ) continue;
+    const authorId = message.author?.id ?? message.user?.id ?? null;
+    if ( entry?.roller && authorId && authorId !== entry.roller ) continue;
+    const target = message.getFlag?.(SYSTEM_ID, "target");
+    const die = message.getFlag?.(SYSTEM_ID, "die");
+    return {
+      messageId: message.id,
+      authorId,
+      attackMessageId: link.attackMessageId,
+      defenderUuid: link.defenderUuid,
+      die,
+      target
+    };
+  }
+  return null;
 }
 
 /**
@@ -301,7 +392,8 @@ async function persistDodgeWorld(world) {
 async function rollAfterReserve(message, uuid) {
   const actor = await foundry.utils.fromUuid(uuid);
   if ( !actor ) return;
-  const score = dodgeScore(actor);
+  const fixed = readDodge(message)[uuid]?.authorizedBase;
+  const score = typeof fixed === "number" ? { score: fixed } : dodgeScore(actor);
   if ( !score ) {
     await askDodge(message, uuid, "release");
     return;
@@ -326,12 +418,6 @@ async function rollAfterReserve(message, uuid) {
  * @param {string|undefined} senderId
  * @returns {Promise<void>}
  */
-function onSocket(payload, senderId) {
-  if ( !payload || payload.type !== "sol-dodge" ) return;
-  if ( game.user?.isActiveGM !== true ) return;
-  void executeDodge(payload, senderId);
-}
-
 /**
  * @param {ChatMessage} message
  * @returns {void}
@@ -363,6 +449,7 @@ export async function resetReactionsForCombat(combat) {
     const uuid = actor?.uuid;
     if ( !actor || typeof uuid !== "string" || seen.has(uuid) ) continue;
     seen.add(uuid);
+    if ( game.user?.isActiveGM !== true ) return;
     await actor.setFlag(SYSTEM_ID, "reaction", blankReaction());
   }
 }
@@ -386,6 +473,7 @@ export async function refreshPersonalReaction(combatant, combat) {
     combatantId
   });
   if ( next.replay ) return;
+  if ( game.user?.isActiveGM !== true ) return;
   await actor.setFlag(SYSTEM_ID, "reaction", next.state);
 }
 
@@ -395,5 +483,10 @@ export async function refreshPersonalReaction(combatant, combat) {
 export function registerEsquive() {
   Hooks.on("renderChatMessageHTML", onChatCard);
   Hooks.on("updateChatMessage", onUpdate);
-  game.socket?.on(SOCKET, onSocket);
+  globalThis.CONFIG ??= {};
+  CONFIG.queries ??= {};
+  const query = `${SYSTEM_ID}.dodge`;
+  if ( !CONFIG.queries[query] ) {
+    CONFIG.queries[query] = (data, context) => executeDodge(data, context?.user?.id);
+  }
 }

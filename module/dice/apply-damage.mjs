@@ -135,11 +135,12 @@ function followupAllowed(uuid) {
 export function registerDamage() {
   registerStatuses();
   Hooks.on("renderChatMessageHTML", onChatCard);
-  game.socket?.on(SOCKET, (payload, senderId) => {
-    if ( !payload || payload.type !== "sol-damage" ) return;
-    if ( game.user?.isActiveGM !== true ) return;
-    void executeDamage(payload, senderId);
-  });
+  globalThis.CONFIG ??= {};
+  CONFIG.queries ??= {};
+  const query = `${SYSTEM_ID}.damage`;
+  if ( !CONFIG.queries[query] ) {
+    CONFIG.queries[query] = (data, context) => executeDamage(data, context?.user?.id);
+  }
 }
 
 /**
@@ -442,7 +443,17 @@ function damageWriters(target, zone, attack, source, strike, plan) {
   const { actor } = target;
   const visor = attack.visor === true && zone === "head";
   return {
+    findInjury: plan ? async () => {
+      const opId = damageOpId(source.id, actor.uuid);
+      const found = actor.items?.find?.(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId
+        || item.flags?.[SYSTEM_ID]?.damageOp === opId);
+      return found?.id ?? null;
+    } : null,
     injury: plan ? async () => {
+      const opId = damageOpId(source.id, actor.uuid);
+      const existing = actor.items?.find?.(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId
+        || item.flags?.[SYSTEM_ID]?.damageOp === opId);
+      if ( existing?.id ) return existing.id;
       const key = consequenceKey(strike.severity, zone);
       const description = key
         ? `<p>${foundry.utils.escapeHTML(game.i18n.localize(`SOL.Damage.consequence.${key}`))}</p>`
@@ -452,7 +463,8 @@ function damageWriters(target, zone, attack, source, strike, plan) {
           severity: game.i18n.localize(SOL.injurySeverities[strike.severity]),
           zone: game.i18n.localize(SOL.bodyLocations[zone])
         }),
-        description
+        description,
+        flags: { [SYSTEM_ID]: { damageOp: opId } }
       });
       const id = created?.id;
       if ( typeof id !== "string" ) throw new Error("injury");
@@ -473,7 +485,17 @@ function damageWriters(target, zone, attack, source, strike, plan) {
         await actor.toggleStatusEffect(SUIT_BREACH, { active: true });
       }
     } : null,
+    findSummary: async () => {
+      const opId = damageOpId(source.id, actor.uuid);
+      const list = Array.isArray(game.messages?.contents) ? game.messages.contents : [];
+      const found = list.find(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId);
+      return found?.id ?? null;
+    },
     summary: async () => {
+      const opId = damageOpId(source.id, actor.uuid);
+      const list = Array.isArray(game.messages?.contents) ? game.messages.contents : [];
+      const existing = list.find(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId);
+      if ( existing?.id ) return existing.id;
       const followup = plan?.followup ?? null;
       const reminders = (plan?.reminders ?? []).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
       const content = await foundry.applications.handlebars.renderTemplate(CARD, {
@@ -499,7 +521,7 @@ function damageWriters(target, zone, attack, source, strike, plan) {
             type: "damage",
             actorUuid: actor.uuid,
             characteristic: followup,
-            damageOp: damageOpId(source.id, actor.uuid)
+            damageOp: opId
           }
         }
       });
@@ -525,6 +547,7 @@ async function executeDamage(payload, senderId) {
   const messageId = payload?.messageId;
   if ( typeof messageId !== "string" ) return;
   await damageSerial(`card:${messageId}`, async () => {
+    if ( game.user?.isActiveGM !== true ) return;
     const message = game.messages?.get?.(messageId);
     const attack = message ? readAttack(message) : null;
     if ( !message || !attack ) return;
@@ -532,9 +555,11 @@ async function executeDamage(payload, senderId) {
     for ( const uuid of payload.defenderUuids ?? [] ) {
       if ( typeof uuid !== "string" ) continue;
       const actor = await foundry.utils.fromUuid(uuid);
+      if ( game.user?.isActiveGM !== true ) return;
       if ( actor ) actors.push(actor);
     }
     if ( !actors.length ) return;
+    if ( game.user?.isActiveGM !== true ) return;
     let dodge = readDodgeMap(message);
     if ( payload.reapply === true && message.getFlag(SYSTEM_ID, "applied") === true ) {
       dodge = reopenDamage(dodge);
@@ -546,11 +571,14 @@ async function executeDamage(payload, senderId) {
       actorTypes: actors.map(actor => actor.type),
       rolledZone: attack.location
     });
+    if ( game.user?.isActiveGM !== true ) return;
     if ( !zone || !attackDamageGate(dodge) ) {
       ui.notifications.warn(game.i18n.localize("SOL.Dodge.blocked"));
+      if ( game.user?.isActiveGM !== true ) return;
       await message.setFlag(SYSTEM_ID, "dodge", dodge);
       return;
     }
+    if ( game.user?.isActiveGM !== true ) return;
     await message.setFlag(SYSTEM_ID, "dodge", dodge);
     const targets = [];
     for ( const actor of actors ) {
@@ -570,7 +598,10 @@ async function executeDamage(payload, senderId) {
       }
     }
     const after = readDodgeMap(message);
-    if ( attackFullyApplied(after) ) await message.setFlag(SYSTEM_ID, "applied", true);
+    if ( attackFullyApplied(after) ) {
+      if ( game.user?.isActiveGM !== true ) return;
+      await message.setFlag(SYSTEM_ID, "applied", true);
+    }
   });
 }
 
@@ -634,11 +665,12 @@ async function applyDamage(message, button) {
     senderIsGM: true
   });
   if ( route === "relay" ) {
-    if ( !game.users?.activeGM || !game.socket?.emit ) {
+    const gm = game.users?.activeGM;
+    if ( !gm || typeof gm.query !== "function" ) {
       ui.notifications.warn(game.i18n.localize("SOL.Dodge.noActiveGm"));
       return;
     }
-    game.socket.emit(SOCKET, payload);
+    await gm.query(`${SYSTEM_ID}.damage`, payload);
     return;
   }
   if ( route !== "write" ) return;

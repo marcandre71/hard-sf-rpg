@@ -228,11 +228,21 @@ check("synthétique : compétence possédée, sinon pas d'offre", () => {
   assert.equal(skillScore(characteristics, skill).score, 40);
   assert.equal(esquiveScore({ characteristics, skill }), 40);
   assert.equal(esquiveScore({ characteristics, skill: null }), null);
-  const withSkill = dodgeEntry({ uuid: "Actor.s", name: "Synth", hasRef: false, hasEsquive: true });
-  const withoutSkill = dodgeEntry({ uuid: "Actor.s2", name: "Nu", hasRef: false, hasEsquive: false });
-  const creature = dodgeEntry({ uuid: "Actor.c", name: "Bête", hasRef: false });
-  const drone = dodgeEntry({ uuid: "Actor.d", name: "Luciole", hasRef: false, hasEsquive: false });
-  assert.equal(esquiveOffered({ hasRef: false, hasEsquive: true }), true);
+  const withSkill = dodgeEntry({
+    uuid: "Actor.s", name: "Synth", hasRef: false, hasEsquive: true, actorType: "synthetic"
+  });
+  const withoutSkill = dodgeEntry({
+    uuid: "Actor.s2", name: "Nu", hasRef: false, hasEsquive: false, actorType: "synthetic"
+  });
+  const creature = dodgeEntry({
+    uuid: "Actor.c", name: "Bête", hasRef: false, hasEsquive: true, actorType: "creature"
+  });
+  const drone = dodgeEntry({
+    uuid: "Actor.d", name: "Luciole", hasRef: false, hasEsquive: true, actorType: "drone"
+  });
+  assert.equal(esquiveOffered({ hasRef: false, hasEsquive: true, actorType: "synthetic" }), true);
+  assert.equal(esquiveOffered({ hasRef: false, hasEsquive: true, actorType: "creature" }), false);
+  assert.equal(esquiveOffered({ hasRef: false, hasEsquive: true, actorType: "drone" }), false);
   assert.equal(withSkill.state, "pending");
   assert.equal(withoutSkill.state, "no-ref");
   assert.equal(creature.state, "no-ref");

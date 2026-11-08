@@ -99,7 +99,7 @@ export function applyDodgeCommand(world, command, senderId) {
   if ( action !== "recover" && action !== "skip" && !gm && !owner ) return { ok: false, reason: "rights" };
   if ( action === "skip" && !gm ) return { ok: false, reason: "rights" };
   const reaction = actor.reaction ?? blankReaction();
-  if ( action === "reserve" ) return commitReserve(world, card, actor, entry, reaction, messageId, proven);
+  if ( action === "reserve" ) return commitReserve(world, card, actor, entry, reaction, messageId, proven, command);
   if ( action === "release" || action === "recover" ) {
     return commitRelease(world, card, actor, entry, reaction, proven, gm, action === "recover");
   }
@@ -118,7 +118,7 @@ export function applyDodgeCommand(world, command, senderId) {
  * @param {string} senderId
  * @returns {{ ok: boolean, reason?: string }}
  */
-function commitReserve(world, card, actor, entry, reaction, messageId, senderId) {
+function commitReserve(world, card, actor, entry, reaction, messageId, senderId, command) {
   if ( entry.state !== "pending" ) return { ok: false, reason: "closed" };
   if ( actor.tracked === true && reaction.spent === true ) return { ok: false, reason: "spent" };
   if ( reaction.reserved && reaction.reserved.messageId !== messageId ) {
@@ -127,6 +127,7 @@ function commitReserve(world, card, actor, entry, reaction, messageId, senderId)
   entry.state = "rolling";
   entry.roller = senderId;
   entry.launched = false;
+  if ( typeof command?.authorizedBase === "number" ) entry.authorizedBase = command.authorizedBase;
   actor.reaction = { ...reaction, reserved: { messageId, senderId } };
   card.dodge[actor.uuid] = entry;
   world.actors[actor.uuid] = actor;
@@ -217,6 +218,95 @@ function commitFinish(world, card, actor, entry, reaction, command, senderId) {
 }
 
 /**
+ * Reprise à partir des documents. La cible du jet déjà écrit prime.
+ * Pas de recalcul sur la RÉF du moment. Pas de score venu du socket.
+ *
+ * @param {object} input
+ * @returns {{ ok: boolean, reason?: string, verdict?: string|null, writes: object[] }}
+ */
+export function planDodgeWrites(input) {
+  const entry = input?.entry ?? {};
+  const reaction = input?.reaction ?? blankReaction();
+  const tracked = input?.tracked === true;
+  const roll = input?.roll ?? null;
+  const terminal = entry.state === "evaded" || entry.state === "failed";
+  const attack = input?.attack ?? {};
+  if ( input?.action === "recover" && !roll && entry.launched !== true && !terminal ) {
+    if ( input?.isGM !== true ) return { ok: false, reason: "rights", writes: [] };
+    if ( entry.state !== "rolling" ) return { ok: false, reason: "closed", writes: [] };
+    const pending = { ...entry, state: "pending", launched: false };
+    delete pending.roller;
+    return {
+      ok: true,
+      verdict: null,
+      writes: [
+        { kind: "card", entry: pending },
+        { kind: "actor", reaction: { ...reaction, reserved: null } }
+      ]
+    };
+  }
+  if ( !roll && !terminal ) return { ok: false, reason: "roll", writes: [] };
+  const effective = typeof entry.effectiveTarget === "number" ? entry.effectiveTarget : roll?.target;
+  if ( !terminal ) {
+    if ( typeof effective !== "number" || typeof roll?.die !== "number" ) {
+      return { ok: false, reason: "roll", writes: [] };
+    }
+    if ( typeof entry.authorizedBase === "number" && Math.abs(effective - entry.authorizedBase) > 50 ) {
+      return { ok: false, reason: "target", writes: [] };
+    }
+    if ( roll?.authorId && entry.roller && roll.authorId !== entry.roller ) {
+      return { ok: false, reason: "author", writes: [] };
+    }
+  }
+  const outcome = !terminal && roll ? resolveD100(roll.die, effective) : null;
+  const verdict = outcome
+    ? personalOpposed(
+      { success: attack.success === true, dr: attack.dr, score: attack.score },
+      { success: outcome.success, dr: outcome.dr, score: outcome.target }
+    )
+    : null;
+  const finalState = terminal ? entry.state : (verdict === "attack" ? "failed" : "evaded");
+  /** @type {object[]} */
+  const writes = [];
+  const launchEntry = {
+    ...entry,
+    state: "rolling",
+    launched: true,
+    rollMessageId: roll?.messageId ?? entry.rollMessageId ?? null,
+    effectiveTarget: effective
+  };
+  if ( !terminal && entry.launched !== true ) writes.push({ kind: "card", entry: launchEntry });
+  const consumed = {
+    ...reaction,
+    spent: tracked ? true : reaction.spent === true,
+    spentNonce: tracked ? (Number.isFinite(reaction.turnNonce) ? reaction.turnNonce : 0) : (reaction.spentNonce ?? null),
+    reserved: reaction.reserved ?? null
+  };
+  if ( tracked && reaction.spent !== true ) writes.push({ kind: "actor", reaction: consumed });
+  if ( !terminal ) {
+    const done = { ...launchEntry, state: finalState };
+    delete done.roller;
+    writes.push({ kind: "card", entry: done });
+  }
+  writes.push({
+    kind: "actor",
+    reaction: {
+      ...consumed,
+      reserved: null,
+      spent: tracked ? true : consumed.spent
+    }
+  });
+  return { ok: true, verdict, writes };
+}
+
+/**
+ * @returns {boolean}
+ */
+export function activeGmNow() {
+  return globalThis.game?.user?.isActiveGM === true;
+}
+
+/**
  * Une étape, puis l'appelant enregistre. Une panne laisse l'étape d'avant.
  *
  * @param {object} record
@@ -234,11 +324,37 @@ function commitFinish(world, card, actor, entry, reaction, command, senderId) {
 export async function runDamageSteps(record, writers, save) {
   let current = { ...(record ?? {}) };
   while ( current.done !== true ) {
-    const next = await advanceDamageRecord(current, writers);
-    current = next;
+    if ( writers.injury && !current.injuryId ) {
+      const found = typeof writers.findInjury === "function" ? await writers.findInjury() : null;
+      const injuryId = found || await writers.injury();
+      if ( typeof injuryId !== "string" || !injuryId ) throw new Error("injury");
+      current = { ...current, injuryId };
+      await save(current);
+      continue;
+    }
+    if ( writers.defer && current.injuryId && current.deferDone !== true ) {
+      await writers.defer(current.injuryId);
+      current = { ...current, deferDone: true };
+      await save(current);
+      continue;
+    }
+    if ( writers.breach && current.breachDone !== true ) {
+      await writers.breach();
+      current = { ...current, breachDone: true };
+      await save(current);
+      continue;
+    }
+    if ( writers.summary && !current.summaryId ) {
+      const found = typeof writers.findSummary === "function" ? await writers.findSummary() : null;
+      const summaryId = found || await writers.summary();
+      if ( typeof summaryId !== "string" || !summaryId ) throw new Error("summary");
+      current = { ...current, summaryId, done: true };
+      await save(current);
+      break;
+    }
+    current = { ...current, done: true };
     await save(current);
-    if ( next.done === true ) break;
-    if ( !writers.injury && !writers.defer && !writers.breach && !writers.summary ) break;
+    break;
   }
   return current;
 }

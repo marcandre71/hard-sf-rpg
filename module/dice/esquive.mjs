@@ -76,7 +76,8 @@ export function esquiveScore({ characteristics, skill }) {
  */
 export function esquiveOffered(defender) {
   if ( defender?.hasRef === true ) return true;
-  return defender?.hasEsquive === true;
+  // Décision Didier 08/11/2026 : seulement un synthétique sans RÉF.
+  return defender?.actorType === "synthetic" && defender?.hasEsquive === true;
 }
 
 /**
