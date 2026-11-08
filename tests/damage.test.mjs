@@ -8,14 +8,18 @@
 import assert from "node:assert/strict";
 import { migrateArmorSource } from "../module/data/armor-migrate.mjs";
 import {
+  applyPlannedInjury,
+  BIOLOGICAL_BLEEDING_STATUS,
   cardReminders,
   classifyInjury,
+  commitDamageZone,
   consequenceKey,
   damageFollowup,
   effectiveThreshold,
   INJURY_PENALTY,
   isMachineActorType,
   isUsableSeuil,
+  planTargetInjury,
   pressurizedCovers,
   resolveAppliedZone,
   resolveBreaches,
@@ -481,5 +485,134 @@ check("Épuisé et Rustine", () => {
   assert.equal(canSeal(1), true);
   assert.equal(canSeal(0), false);
 });
+
+/**
+ * Double minimal. Pas un DataModel Foundry.
+ *
+ * @param {string} type
+ * @returns {object}
+ */
+function actorDouble(type) {
+  return {
+    type,
+    created: [],
+    toggled: [],
+    async createEmbeddedDocuments(_kind, docs) {
+      this.created.push(...docs);
+      return docs.map((doc, index) => ({ id: `inj${this.created.length - docs.length + index}`, ...doc }));
+    },
+    async toggleStatusEffect(id) {
+      this.toggled.push(id);
+    }
+  };
+}
+
+try {
+  const serious = resolveStrike({ gross: 5, sb: 4, armors: [], zone: "torso", visor: false });
+  if ( serious.severity !== "serious" || serious.bleeding !== true ) {
+    throw new Error("le coup d'essai doit être grave et saignant");
+  }
+
+  const chosen = commitDamageZone("torso", { actorTypes: ["drone"], rolledZone: "rightArm" });
+  assert.equal(chosen, "torso");
+  const drone = actorDouble("drone");
+  const dronePlan = planTargetInjury({
+    actorType: drone.type,
+    alreadyBleeding: false,
+    zone: chosen,
+    strike: serious,
+    label: "tir",
+    attackerCritical: false
+  });
+  await applyPlannedInjury(drone, dronePlan, { name: "Grave, torse" });
+  assert.equal(drone.created.length, 1);
+  assert.equal(drone.created[0].type, "injury");
+  assert.equal(drone.created[0].system.location, "torso");
+  assert.equal(drone.created[0].system.bleeding, true);
+  assert.deepEqual(drone.toggled, []);
+  assert.equal(dronePlan.reminders.includes("leak"), true);
+  assert.equal(dronePlan.reminders.includes("bleeding"), false);
+  assert.equal(dronePlan.followup, null);
+
+  let writes = 0;
+  for ( const dialogResult of ["cancel", null, "apply", "reacteur"] ) {
+    const zone = commitDamageZone(dialogResult, { actorTypes: ["synthetic"], rolledZone: "head" });
+    if ( zone ) {
+      writes += 1;
+      await applyPlannedInjury(actorDouble("synthetic"), dronePlan);
+    }
+  }
+  assert.equal(writes, 0);
+
+  const rolled = commitDamageZone("head", { actorTypes: ["character"], rolledZone: "rightArm" });
+  assert.equal(rolled, "rightArm");
+  const human = actorDouble("character");
+  const humanPlan = planTargetInjury({
+    actorType: human.type,
+    alreadyBleeding: false,
+    zone: rolled,
+    strike: serious,
+    label: "tir",
+    attackerCritical: false
+  });
+  await applyPlannedInjury(human, humanPlan, { name: "Grave, bras droit" });
+  assert.equal(human.created[0].system.location, "rightArm");
+  assert.equal(human.created[0].system.bleeding, true);
+  assert.deepEqual(human.toggled, [BIOLOGICAL_BLEEDING_STATUS]);
+  assert.deepEqual(humanPlan.reminders, ["drop", "bleeding", "vol"]);
+
+  const npc = actorDouble("npc");
+  const npcZone = commitDamageZone("leftLeg", { actorTypes: ["npc"], rolledZone: "torso" });
+  assert.equal(npcZone, "torso");
+  const npcPlan = planTargetInjury({
+    actorType: npc.type,
+    alreadyBleeding: false,
+    zone: npcZone,
+    strike: serious,
+    label: "tir",
+    attackerCritical: false
+  });
+  await applyPlannedInjury(npc, npcPlan);
+  assert.equal(npc.created[0].system.location, "torso");
+  assert.deepEqual(npc.toggled, [BIOLOGICAL_BLEEDING_STATUS]);
+
+  const mixed = commitDamageZone("head", { actorTypes: ["character", "drone"], rolledZone: "leftLeg" });
+  assert.equal(mixed, "leftLeg");
+  const mixedMachine = actorDouble("drone");
+  const mixedHuman = actorDouble("character");
+  for ( const actor of [mixedMachine, mixedHuman] ) {
+    const plan = planTargetInjury({
+      actorType: actor.type,
+      alreadyBleeding: false,
+      zone: mixed,
+      strike: serious,
+      label: "tir",
+      attackerCritical: false
+    });
+    await applyPlannedInjury(actor, plan);
+  }
+  assert.equal(mixedMachine.created[0].system.location, "leftLeg");
+  assert.deepEqual(mixedMachine.toggled, []);
+  assert.equal(mixedHuman.created[0].system.location, "leftLeg");
+  assert.deepEqual(mixedHuman.toggled, [BIOLOGICAL_BLEEDING_STATUS]);
+
+  const creature = actorDouble("creature");
+  const creatureZone = commitDamageZone("rightArm", { actorTypes: ["creature"], rolledZone: "head" });
+  const creaturePlan = planTargetInjury({
+    actorType: creature.type,
+    alreadyBleeding: false,
+    zone: creatureZone,
+    strike: serious,
+    label: "tir",
+    attackerCritical: false
+  });
+  await applyPlannedInjury(creature, creaturePlan);
+  assert.equal(creature.created[0].system.location, "head");
+  assert.deepEqual(creature.toggled, [BIOLOGICAL_BLEEDING_STATUS]);
+} catch (error) {
+  console.error("échec : application des dégâts, doubles");
+  console.error(error);
+  process.exit(1);
+}
 
 console.log("damage.test.mjs : ok");

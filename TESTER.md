@@ -434,17 +434,17 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.6-
 
 ## 21. 0.9.7 Blessures des machines
 
-Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.7-machines`. Ne fusionnez pas. Ce qui reste manuel : la durée d'autonomie après une fuite, le danger secondaire d'un châssis critique, le nombre de pièces d'une épave, et le côté « le plus proche » quand une machine n'a pas le membre tiré.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` (la 0.9.7 y est entrée). Ce qui reste manuel : la durée d'autonomie après une fuite, le danger secondaire d'un châssis critique, le nombre de pièces d'une épave, et le côté « le plus proche » quand une machine n'a pas le membre tiré. Un groupe mixte (personnage ou PNJ avec une machine) ne permet pas le choix de zone : sélectionnez seulement les machines pour ce report manuel.
 
 1. Prenez le ZIP :
 
-   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.7-machines.zip
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.7-machines`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.7**.
 2. Ouvrez le compendium **Blessures**, cherchez **Capteurs aveuglés** (optiques) et **Brèche du microréacteur**.
    **Résultat attendu :** le texte grave dit **Fuite**, sans perte chiffrée d'autonomie ni d'Endurance. Le texte critique du châssis dit **arrêt d'urgence**, sans rayon ni dégâts d'explosion. Cherchez **Désintégration du châssis** : le texte dit **épave**, pièces au choix du MJ, pas de pièces de vaisseau. Aucune de ces quatre phrases ne contient `[à compléter]`.
-3. En tant que MJ, ciblez un drone ou un synthétique, faites un tir qui touche, cliquez **Appliquer les dégâts**.
+3. En tant que MJ, ciblez seulement un drone ou un synthétique, faites un tir qui touche, cliquez **Appliquer les dégâts**. Si un personnage ou un PNJ est aussi ciblé, la liste n'apparaît pas : retirez-le de la sélection, puis recommencez.
    **Résultat attendu :** une liste **Zone à appliquer** propose les six zones. La zone du tir est déjà choisie. Vous pouvez en prendre une autre, puis confirmer : la blessure créée porte cette zone. **Annuler** ne crée rien.
 4. Refaites l'étape 3 sur un personnage ou un PNJ.
    **Résultat attendu :** la zone affichée est celle du tir, sans liste. La blessure créée, si vous confirmez, a cette zone. Un humain grave rappelle encore **Saignement**, pas Fuite.

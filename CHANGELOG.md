@@ -11,7 +11,7 @@ Décision 08/11/2026. Quatre rappels des blessures de machine. Aucun calcul d'au
 - Châssis critique : le texte dit arrêt d'urgence. Le danger secondaire reste au MJ. Pas de jet d'explosion.
 - Châssis mortel : le texte dit épave. Les pièces restent au choix du MJ. Elles ne deviennent pas des pièces de vaisseau.
 - Les objets d'ancien lore (Mutuelle, Caisse Noire, Partants, talents +10) ne sont pas touchés. Avertissement narratif reporté au lot suivant.
-- DataModels, validation stricte et Foundry : non testés si le runtime est absent. Test Marc reporté à la v1.
+- Contrôles ciblés passés, runtime Foundry non exécuté, test Marc à la v1. DataModels et validation stricte non exécutés.
 
 ## 0.9.6
 

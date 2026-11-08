@@ -22,6 +22,10 @@
  */
 import { SOL } from "../config.mjs";
 import { ceilHalf } from "./derived.mjs";
+import { newInjuryEndsOrder } from "./initiative.mjs";
+
+/** Statut biologique. Une machine ne le reçoit pas. Décision 08/11/2026. */
+export const BIOLOGICAL_BLEEDING_STATUS = "sol-nouvelle-ere.bleeding";
 
 /** Synthétique et drone. Décision 08/11/2026. Réf. Blessures et Séquelles v0.3 corrigée §3. */
 const MACHINE_ACTOR_TYPES = new Set(["synthetic", "drone"]);
@@ -82,6 +86,96 @@ export function resolveAppliedZone({ actorTypes, rolledZone, chosen, cancelled =
   if ( cancelled ) return null;
   if ( typeof chosen !== "string" || !allowed.includes(chosen) ) return null;
   return chosen;
+}
+
+/**
+ * Résultat du dialogue, puis zone écrite. C'est cette fonction que
+ * l'application des dégâts appelle. Annuler, fermer, ou la valeur
+ * hors des six clés : null, rien n'est écrit.
+ * Décision 08/11/2026.
+ *
+ * @param {unknown} dialogResult
+ * @param {{ actorTypes?: unknown, rolledZone?: unknown }} input
+ * @returns {string|null}
+ */
+export function commitDamageZone(dialogResult, { actorTypes, rolledZone }) {
+  if ( dialogResult == null || dialogResult === "cancel" || dialogResult === "apply" ) return null;
+  return resolveAppliedZone({
+    actorTypes,
+    rolledZone,
+    chosen: dialogResult,
+    cancelled: false
+  });
+}
+
+/**
+ * Blessure à créer, et statut biologique éventuel. Pas d'écriture ici.
+ * Le champ `bleeding` reste pour la fuite. Le statut ne part pas sur une machine.
+ * Décision 08/11/2026.
+ *
+ * @param {object} input
+ * @param {unknown} input.actorType
+ * @param {boolean} input.alreadyBleeding
+ * @param {string} input.zone
+ * @param {{ severity: string|null, bleeding: boolean, penalty: number }} input.strike
+ * @param {string} input.label
+ * @param {boolean} input.attackerCritical
+ * @returns {object|null}
+ */
+export function planTargetInjury({
+  actorType,
+  alreadyBleeding,
+  zone,
+  strike,
+  label,
+  attackerCritical
+}) {
+  if ( !strike?.severity ) return null;
+  const machine = isMachineActorType(actorType);
+  const statusId = strike.bleeding === true && shouldApplyBiologicalBleeding(actorType) && alreadyBleeding !== true
+    ? BIOLOGICAL_BLEEDING_STATUS
+    : null;
+  return {
+    type: "injury",
+    system: {
+      location: zone,
+      severity: strike.severity,
+      bleeding: strike.bleeding,
+      penalty: strike.penalty,
+      source: label,
+      endOfOrder: newInjuryEndsOrder(strike.severity)
+    },
+    statusId,
+    followup: damageFollowup(strike.severity, actorType),
+    reminders: cardReminders({
+      severity: strike.severity,
+      zone,
+      attackerCritical,
+      machine
+    })
+  };
+}
+
+/**
+ * Crée la blessure prévue et, seulement si le plan le dit, le statut.
+ * `actor` peut être un double : `createEmbeddedDocuments`, `toggleStatusEffect`.
+ *
+ * @param {{ createEmbeddedDocuments: Function, toggleStatusEffect: Function }} actor
+ * @param {object|null} plan
+ * @param {{ name?: string, description?: string }} [extra]
+ * @returns {Promise<object|null>}
+ */
+export async function applyPlannedInjury(actor, plan, extra = {}) {
+  if ( !plan ) return null;
+  const system = { ...plan.system };
+  if ( extra.description ) system.description = extra.description;
+  const [created] = await actor.createEmbeddedDocuments("Item", [{
+    name: extra.name ?? "",
+    type: plan.type,
+    system
+  }]);
+  if ( plan.statusId ) await actor.toggleStatusEffect(plan.statusId, { active: true });
+  return created ?? null;
 }
 
 /** Pénalité stockée sur la blessure. Décision Marc 18/10/2026 : critique et mortelle à 0. */

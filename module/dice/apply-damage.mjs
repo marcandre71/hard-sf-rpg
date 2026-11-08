@@ -20,17 +20,16 @@
  */
 import { markInjuryDefer, registerHudStatus } from "../combat/initiative.mjs";
 import { characteristicRollLabel, SOL } from "../config.mjs";
-import { newInjuryEndsOrder } from "./initiative.mjs";
 import {
-  cardReminders,
+  applyPlannedInjury,
+  BIOLOGICAL_BLEEDING_STATUS,
+  commitDamageZone,
   consequenceKey,
-  damageFollowup,
   isMachineActorType,
   numeric,
-  resolveAppliedZone,
+  planTargetInjury,
   resolveStrike,
-  seuilFromCharacteristics,
-  shouldApplyBiologicalBleeding
+  seuilFromCharacteristics
 } from "./damage.mjs";
 import { performRoll } from "./chat.mjs";
 
@@ -39,7 +38,7 @@ const CARD = "systems/sol-nouvelle-ere/templates/chat/damage-card.hbs";
 
 /** Conditions. `name` reste une clé i18n : Foundry la traduit en créant l'effet. */
 const SUIT_BREACH = "sol-nouvelle-ere.suitBreach";
-const BLEEDING = "sol-nouvelle-ere.bleeding";
+const BLEEDING = BIOLOGICAL_BLEEDING_STATUS;
 
 /** Messages déjà en cours : un double clic n'ouvre pas deux fenêtres. */
 const busy = new Set();
@@ -317,12 +316,7 @@ async function askDamage(attack, targets) {
         action: "apply",
         label: game.i18n.localize("SOL.Damage.confirm"),
         default: true,
-        callback: (_event, button) => resolveAppliedZone({
-          actorTypes: targets.map(target => target.actorType),
-          rolledZone: attack.location,
-          chosen: button.form?.elements?.zone?.value,
-          cancelled: false
-        })
+        callback: (_event, button) => button.form?.elements?.zone?.value
       },
       {
         action: "cancel",
@@ -346,9 +340,10 @@ async function askDamage(attack, targets) {
     }
   });
 
-  if ( !result || result === "cancel" || result === "apply" ) return null;
-  if ( typeof result !== "string" || !(result in SOL.bodyLocations) ) return null;
-  return result;
+  return commitDamageZone(result, {
+    actorTypes: targets.map(target => target.actorType),
+    rolledZone: attack.location
+  });
 }
 
 /**
@@ -382,43 +377,33 @@ async function applyOne(target, zone, attack, source) {
     visor
   });
 
-  if ( strike.severity ) {
+  const plan = planTargetInjury({
+    actorType: actor.type,
+    alreadyBleeding: hasStatus(actor, BLEEDING),
+    zone,
+    strike,
+    label: attack.label,
+    attackerCritical: attack.attackerCritical
+  });
+  if ( plan ) {
     const key = consequenceKey(strike.severity, zone);
     // Décision Marc 18/10/2026 : la case, pas la gravité seule.
-    // Grave ou pire : cochée. Légère : décochée.
     // « Active pour le round 1 » reste décochée : cette blessure
     // naît pendant le combat, le déplacement part tout de suite.
-    const endOfOrder = newInjuryEndsOrder(strike.severity);
-    /** @type {object} */
-    const system = {
-      location: zone,
-      severity: strike.severity,
-      bleeding: strike.bleeding,
-      penalty: strike.penalty,
-      source: attack.label,
-      endOfOrder
-    };
-    if ( key ) {
-      const text = game.i18n.localize(`SOL.Damage.consequence.${key}`);
-      system.description = `<p>${foundry.utils.escapeHTML(text)}</p>`;
-    }
-    const [created] = await actor.createEmbeddedDocuments("Item", [{
+    const description = key
+      ? `<p>${foundry.utils.escapeHTML(game.i18n.localize(`SOL.Damage.consequence.${key}`))}</p>`
+      : undefined;
+    const created = await applyPlannedInjury(actor, plan, {
       name: game.i18n.format("SOL.Damage.injuryName", {
         severity: game.i18n.localize(SOL.injurySeverities[strike.severity]),
         zone: game.i18n.localize(SOL.bodyLocations[zone])
       }),
-      type: "injury",
-      system
-    }]);
-    // Réf. LdR v0.2 §11. Pas d'automatisation de l'Endurance.
-    // Décision 08/11/2026 : une machine ne reçoit pas le statut Saignement.
-    if ( strike.bleeding && shouldApplyBiologicalBleeding(actor.type) && !hasStatus(actor, BLEEDING) ) {
-      await actor.toggleStatusEffect(BLEEDING, { active: true });
-    }
+      description
+    });
     // Réf. LdR v0.2 §7. La case est relue au passage de round.
     // Décocher avant ce passage annule le déplacement de cette blessure.
     // Le drapeau Sonné (`deferEnd`) n'est pas touché.
-    if ( endOfOrder && created?.id ) await markInjuryDefer(actor, created.id, true);
+    if ( plan.system.endOfOrder && created?.id ) await markInjuryDefer(actor, created.id, true);
   }
 
   if ( strike.breach ) {
@@ -435,13 +420,8 @@ async function applyOne(target, zone, attack, source) {
     }
   }
 
-  const followup = damageFollowup(strike.severity, actor.type);
-  const reminders = cardReminders({
-    severity: strike.severity,
-    zone,
-    attackerCritical: attack.attackerCritical,
-    machine: isMachineActorType(actor.type)
-  }).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
+  const followup = plan?.followup ?? null;
+  const reminders = (plan?.reminders ?? []).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
 
   const content = await foundry.applications.handlebars.renderTemplate(CARD, {
     name: actor.name,
