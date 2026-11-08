@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.9.6 sur `dev/0.9.6-lore`
+## État du système : version 0.9.7 sur `dev/0.9.7-machines`
 
-`main` contient la 0.9.5 (`b01e6f5`). Cette branche met à jour le journal des factions et le glossaire d'après des extraits publics du 8 novembre 2026. PR brouillon. Ne pas fusionner. Les DataModels et Foundry ne sont pas exécutés sans runtime. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 20. La suite est dans [ROADMAP.md](ROADMAP.md).
+`main` contient la 0.9.6 (`8f53b38`). Cette branche remplace les quatre rappels ouverts des blessures de machine : fuite, zone choisie par le MJ, arrêt d'urgence, épave. PR brouillon. Ne pas fusionner. L'Esquive personnelle et les malus automatiques de blessure restent en attente. Les DataModels et Foundry ne sont pas exécutés sans runtime. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 21. La suite est dans [ROADMAP.md](ROADMAP.md).
 
 Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Décision Marc 25/10/2026 : un tir qui touche a un bouton « Appliquer les dégâts » (MJ, une fois). Les dégâts sont la valeur de l'arme plus le DR. Décision Marc 30/10/2026 : la chaleur, Pousser, les réparations et le canon sont dans la 0.7.4. Marc testera l'ensemble à la v1.0.
 

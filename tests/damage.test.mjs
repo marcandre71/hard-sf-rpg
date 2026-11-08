@@ -11,13 +11,17 @@ import {
   cardReminders,
   classifyInjury,
   consequenceKey,
+  damageFollowup,
   effectiveThreshold,
   INJURY_PENALTY,
+  isMachineActorType,
   isUsableSeuil,
   pressurizedCovers,
+  resolveAppliedZone,
   resolveBreaches,
   resolveStrike,
   SEUIL_DIVISOR,
+  shouldApplyBiologicalBleeding,
   seuilBlessure,
   seuilFromCharacteristics,
   sumZoneArmour,
@@ -266,6 +270,83 @@ check("conséquence et rappels", () => {
   assert.deepEqual(cardReminders({ severity: "serious", zone: "torso", attackerCritical: false }), ["bleeding", "vol"]);
   assert.deepEqual(cardReminders({ severity: "mortal", zone: "head", attackerCritical: false }), []);
   assert.deepEqual(cardReminders({ severity: "light", zone: "head", attackerCritical: false }), []);
+  // Décision 08/11/2026. Humain inchangé ci-dessus. Machine : fuite, pas VOL.
+  assert.deepEqual(
+    cardReminders({ severity: "serious", zone: "rightArm", attackerCritical: false, machine: true }),
+    ["drop", "leak"]
+  );
+  assert.deepEqual(
+    cardReminders({ severity: "serious", zone: "torso", attackerCritical: false, machine: true }),
+    ["leak"]
+  );
+  assert.equal(cardReminders({ severity: "serious", zone: "torso", attackerCritical: false, machine: true }).includes("bleeding"), false);
+  assert.equal(cardReminders({ severity: "critical", zone: "torso", attackerCritical: false, machine: true }).includes("con"), true);
+});
+
+check("fuite machine : pas de statut biologique", () => {
+  assert.equal(shouldApplyBiologicalBleeding("synthetic"), false);
+  assert.equal(shouldApplyBiologicalBleeding("drone"), false);
+  assert.equal(shouldApplyBiologicalBleeding("character"), true);
+  assert.equal(shouldApplyBiologicalBleeding("npc"), true);
+  assert.equal(shouldApplyBiologicalBleeding("creature"), true);
+  assert.equal(isMachineActorType("vehicle"), false);
+  assert.equal(damageFollowup("serious", "character"), "vol");
+  assert.equal(damageFollowup("serious", "npc"), "vol");
+  assert.equal(damageFollowup("serious", "creature"), "vol");
+  assert.equal(damageFollowup("serious", "drone"), null);
+  assert.equal(damageFollowup("serious", "synthetic"), null);
+  assert.equal(damageFollowup("critical", "drone"), "con");
+  assert.equal(damageFollowup("critical", "character"), "con");
+  assert.equal(damageFollowup("light", "drone"), null);
+});
+
+check("zone machine choisie, humain verrouillé", () => {
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["drone"],
+    rolledZone: "rightArm",
+    chosen: "torso"
+  }), "torso");
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["synthetic", "drone"],
+    rolledZone: "leftLeg",
+    chosen: "leftLeg"
+  }), "leftLeg");
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["drone"],
+    rolledZone: "rightArm",
+    chosen: "rightArm",
+    cancelled: true
+  }), null);
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["synthetic"],
+    rolledZone: "torso",
+    chosen: "reacteur"
+  }), null);
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["character"],
+    rolledZone: "head",
+    chosen: "torso"
+  }), "head");
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["npc"],
+    rolledZone: "leftArm",
+    chosen: "rightArm"
+  }), "leftArm");
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["creature"],
+    rolledZone: "torso",
+    chosen: "head"
+  }), "torso");
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["character", "drone"],
+    rolledZone: "torso",
+    chosen: "head"
+  }), "torso");
+  assert.equal(resolveAppliedZone({
+    actorTypes: ["character"],
+    rolledZone: "inventee",
+    chosen: "torso"
+  }), null);
 });
 
 check("endurance vide : le maximum, un 0 reste 0", () => {

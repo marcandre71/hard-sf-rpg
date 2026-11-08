@@ -20,7 +20,69 @@
  * équipée est divisé par 2 (arrondi supérieur), et la brèche est
  * vérifiée couche par couche. Les seuils ne s'additionnent pas.
  */
+import { SOL } from "../config.mjs";
 import { ceilHalf } from "./derived.mjs";
+
+/** Synthétique et drone. Décision 08/11/2026. Réf. Blessures et Séquelles v0.3 corrigée §3. */
+const MACHINE_ACTOR_TYPES = new Set(["synthetic", "drone"]);
+
+/**
+ * @param {unknown} actorType
+ * @returns {boolean}
+ */
+export function isMachineActorType(actorType) {
+  return typeof actorType === "string" && MACHINE_ACTOR_TYPES.has(actorType);
+}
+
+/**
+ * Le statut Saignement et le rappel biologique ne vont pas sur une machine.
+ * Le champ `bleeding` de la blessure peut rester vrai : c'est l'indicateur
+ * de fuite, sans retrait d'Endurance ni d'autonomie.
+ * Décision 08/11/2026.
+ *
+ * @param {unknown} actorType
+ * @returns {boolean}
+ */
+export function shouldApplyBiologicalBleeding(actorType) {
+  return !isMachineActorType(actorType);
+}
+
+/**
+ * Grave : VOL pour un humain, un PNJ ou une créature. Pas pour une machine.
+ * Critique : CON, y compris pour une machine. Pas de jet d'explosion.
+ * Décision 08/11/2026.
+ *
+ * @param {string|null} severity
+ * @param {unknown} actorType
+ * @returns {"vol"|"con"|null}
+ */
+export function damageFollowup(severity, actorType) {
+  if ( isMachineActorType(actorType) && severity === "serious" ) return null;
+  if ( severity === "serious" ) return "vol";
+  if ( severity === "critical" ) return "con";
+  return null;
+}
+
+/**
+ * Zone écrite. Personnage, PNJ et créature : la zone du tir, le choix est ignoré.
+ * Synthétique ou drone, toutes les cibles : le choix du MJ, parmi les six clés.
+ * Annulation ou valeur hors liste : null, rien n'est écrit.
+ * Décision 08/11/2026.
+ *
+ * @param {{ actorTypes?: unknown, rolledZone?: unknown, chosen?: unknown, cancelled?: boolean }} input
+ * @returns {string|null}
+ */
+export function resolveAppliedZone({ actorTypes, rolledZone, chosen, cancelled = false }) {
+  const types = Array.isArray(actorTypes) ? actorTypes : [];
+  const allowed = Object.keys(SOL.bodyLocations);
+  const machines = types.length > 0 && types.every(isMachineActorType);
+  if ( !machines ) {
+    return typeof rolledZone === "string" && allowed.includes(rolledZone) ? rolledZone : null;
+  }
+  if ( cancelled ) return null;
+  if ( typeof chosen !== "string" || !allowed.includes(chosen) ) return null;
+  return chosen;
+}
 
 /** Pénalité stockée sur la blessure. Décision Marc 18/10/2026 : critique et mortelle à 0. */
 export const INJURY_PENALTY = {
@@ -271,9 +333,10 @@ const LEGS = new Set(["rightLeg", "leftLeg"]);
  * @param {string|null} input.severity
  * @param {string} input.zone
  * @param {boolean} input.attackerCritical
+ * @param {boolean} [input.machine] Synthétique ou drone : fuite, pas saignement.
  * @returns {string[]}
  */
-export function cardReminders({ severity, zone, attackerCritical }) {
+export function cardReminders({ severity, zone, attackerCritical, machine = false }) {
   if ( !severity ) return [];
   /** @type {string[]} */
   const keys = [];
@@ -283,8 +346,9 @@ export function cardReminders({ severity, zone, attackerCritical }) {
   if ( severity === "serious" && LEGS.has(zone) ) keys.push("slow");
   if ( zone === "torso" && attackerCritical ) keys.push("air");
   if ( severity === "serious" ) {
-    keys.push("bleeding");
-    keys.push("vol");
+    // Décision 08/11/2026 : fuite narrative. Pas de retrait biologique.
+    keys.push(machine ? "leak" : "bleeding");
+    if ( !machine ) keys.push("vol");
   }
   if ( severity === "critical" ) keys.push("con");
   return keys;

@@ -109,8 +109,8 @@ function itemFields(item) {
       return [{ label: "SOL.Gear.quantity", value: source.quantity ?? 0 }];
     case "augmentation":
       return [{ label: "SOL.Augmentation.kind.label", value: choiceLabel(SOL.augmentationKinds, source.kind) }];
-    case "injury":
-      return [
+    case "injury": {
+      const rows = [
         { label: "SOL.Injury.location", value: choiceLabel(SOL.bodyLocations, source.location) },
         {
           label: "SOL.Injury.severity.label",
@@ -119,6 +119,17 @@ function itemFields(item) {
           tone: source.severity === "light" ? "warn" : (source.severity ? "alert" : "")
         }
       ];
+      // Décision 08/11/2026. Le champ stocké reste `bleeding`.
+      // L'indicateur dit Fuite. Rien n'est retiré.
+      const machine = item.actor?.type === "synthetic" || item.actor?.type === "drone";
+      if ( machine && source.bleeding === true ) {
+        rows.push({
+          label: "SOL.Injury.leak",
+          value: game.i18n.localize("SOL.Injury.leakHint")
+        });
+      }
+      return rows;
+    }
     case "sequel":
       return [{ label: "SOL.Sequel.category.label", value: choiceLabel(SOL.sequelCategories, source.category) }];
     case "shipModule":

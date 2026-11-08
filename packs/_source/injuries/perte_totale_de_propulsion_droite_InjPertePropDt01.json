@@ -5,7 +5,7 @@
   "type": "injury",
   "img": "icons/svg/blood.svg",
   "system": {
-    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Propulsion, critique : machine en vrille ou immobilisée.</p>\n<p>Les zones droite et gauche correspondent aux plages du LdR (11 à 25 et 26 à 40 ; 71 à 85 et 86 à 100). Un drone sans second bras ou propulseur : le meneur reporte le coup sur la zone existante [à compléter : règle à valider].</p>",
+    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Propulsion, critique : machine en vrille ou immobilisée.</p>\n<p>Les zones droite et gauche correspondent aux plages du LdR (11 à 25 et 26 à 40 ; 71 à 85 et 86 à 100). Si la machine n'a pas ce côté, le MJ choisit la zone existante la plus proche avant d'appliquer les dégâts. Pas de détection automatique. Décision 08/11/2026.</p>",
     "location": "rightLeg",
     "severity": "critical",
     "bleeding": false,
@@ -26,7 +26,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.9.5",
+    "systemVersion": "0.9.7",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

@@ -5,7 +5,7 @@
   "type": "injury",
   "img": "icons/svg/blood.svg",
   "system": {
-    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Châssis, critique : arrêt d'urgence ; risque d'explosion, mécanique (probabilité, dégâts, rayon) [à compléter].</p>",
+    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Châssis, critique : arrêt d'urgence. Un danger secondaire éventuel est au choix du MJ, selon l'énergie et la scène. Pas de jet d'explosion, pas de rayon, pas de dégâts chiffrés. Décision 08/11/2026.</p>",
     "location": "torso",
     "severity": "critical",
     "bleeding": false,
@@ -26,7 +26,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.9.5",
+    "systemVersion": "0.9.7",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"

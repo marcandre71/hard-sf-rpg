@@ -24,9 +24,13 @@ import { newInjuryEndsOrder } from "./initiative.mjs";
 import {
   cardReminders,
   consequenceKey,
+  damageFollowup,
+  isMachineActorType,
   numeric,
+  resolveAppliedZone,
   resolveStrike,
-  seuilFromCharacteristics
+  seuilFromCharacteristics,
+  shouldApplyBiologicalBleeding
 } from "./damage.mjs";
 import { performRoll } from "./chat.mjs";
 
@@ -203,7 +207,7 @@ function prepareTarget(actor, gross) {
   }
   // Seuil < 1 : pas de blessure, mais la brèche s'écrit quand même.
   const armors = actor.items.filter(item => item.type === "armor").map(readArmor);
-  return { actor, name, sb, armors, gross };
+  return { actor, name, sb, armors, gross, actorType: actor.type };
 }
 
 /**
@@ -286,7 +290,19 @@ async function askDamage(attack, targets) {
   const visorNote = attack.visor
     ? `<p>${escapeHtml(game.i18n.localize("SOL.Damage.visor"))}</p>`
     : "";
-  const zoneControl = `<p>${escapeHtml(game.i18n.localize("SOL.Damage.zone"))}
+  // Décision 08/11/2026 : liste seulement si toutes les cibles sont des machines.
+  const machines = targets.length > 0 && targets.every(target => isMachineActorType(target.actorType));
+  const options = Object.keys(SOL.bodyLocations).map(key => {
+    const selected = key === attack.location ? " selected" : "";
+    const label = escapeHtml(game.i18n.localize(SOL.bodyLocations[key]));
+    return `<option value="${key}"${selected}>${label}</option>`;
+  }).join("");
+  const zoneControl = machines
+    ? `<label>${escapeHtml(game.i18n.localize("SOL.Damage.zoneChoice"))}
+        <select name="zone">${options}</select></label>
+        <p>${escapeHtml(game.i18n.localize("SOL.Damage.zoneChoiceHint"))}</p>
+        ${visorNote}`
+    : `<p>${escapeHtml(game.i18n.localize("SOL.Damage.zone"))}
         <strong>${zoneLabel}</strong></p>
         ${visorNote}
         <input type="hidden" name="zone" value="${attack.location}">`;
@@ -301,7 +317,12 @@ async function askDamage(attack, targets) {
         action: "apply",
         label: game.i18n.localize("SOL.Damage.confirm"),
         default: true,
-        callback: (_event, button) => button.form?.elements?.zone?.value ?? attack.location
+        callback: (_event, button) => resolveAppliedZone({
+          actorTypes: targets.map(target => target.actorType),
+          rolledZone: attack.location,
+          chosen: button.form?.elements?.zone?.value,
+          cancelled: false
+        })
       },
       {
         action: "cancel",
@@ -314,10 +335,14 @@ async function askDamage(attack, targets) {
       const preview = root?.querySelector("[data-preview]");
       const form = root?.querySelector("form") ?? root;
       if ( !preview || !form ) return;
-      const zone = form.elements?.zone?.value;
-      if ( typeof zone === "string" && zone in SOL.bodyLocations ) {
-        preview.innerHTML = previewTable(zone, targets, attack.visor === true);
-      }
+      const paint = () => {
+        const zone = form.elements?.zone?.value;
+        if ( typeof zone === "string" && zone in SOL.bodyLocations ) {
+          preview.innerHTML = previewTable(zone, targets, attack.visor === true);
+        }
+      };
+      paint();
+      form.elements?.zone?.addEventListener?.("change", paint);
     }
   });
 
@@ -386,7 +411,8 @@ async function applyOne(target, zone, attack, source) {
       system
     }]);
     // Réf. LdR v0.2 §11. Pas d'automatisation de l'Endurance.
-    if ( strike.bleeding && !hasStatus(actor, BLEEDING) ) {
+    // Décision 08/11/2026 : une machine ne reçoit pas le statut Saignement.
+    if ( strike.bleeding && shouldApplyBiologicalBleeding(actor.type) && !hasStatus(actor, BLEEDING) ) {
       await actor.toggleStatusEffect(BLEEDING, { active: true });
     }
     // Réf. LdR v0.2 §7. La case est relue au passage de round.
@@ -409,13 +435,12 @@ async function applyOne(target, zone, attack, source) {
     }
   }
 
-  const followup = strike.severity === "serious"
-    ? "vol"
-    : strike.severity === "critical" ? "con" : null;
+  const followup = damageFollowup(strike.severity, actor.type);
   const reminders = cardReminders({
     severity: strike.severity,
     zone,
-    attackerCritical: attack.attackerCritical
+    attackerCritical: attack.attackerCritical,
+    machine: isMachineActorType(actor.type)
   }).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
 
   const content = await foundry.applications.handlebars.renderTemplate(CARD, {

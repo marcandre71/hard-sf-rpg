@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.9.7
+
+Branche `dev/0.9.7-machines`, depuis `main` (`8f53b38`). PR brouillon. Ne pas fusionner. La section 21 de TESTER.md sert à la séance de test de la v1.
+
+Décision 08/11/2026. Quatre rappels des blessures de machine. Aucun calcul d'autonomie, d'explosion ou de récupération. L'Esquive personnelle et les malus automatiques de blessure restent en attente : aucun code.
+
+- Fuite : le rappel de carte dit « Fuite ». Sur la fiche d'un synthétique ou d'un drone, la ligne dit « Fuite » quand le champ `bleeding` est vrai. Rien n'est retiré en Endurance ni en autonomie. Le statut biologique Saignement n'est pas posé sur ces deux types. Un personnage, un PNJ ou une créature garde le rappel Saignement et le statut.
+- Zone : le MJ choisit parmi les six zones avant d'appliquer, seulement si toutes les cibles sont des synthétiques ou des drones. Le défaut est la zone du tir. Annuler, ou une valeur hors des six clés, n'écrit rien. Un personnage, un PNJ ou une créature garde la zone du tir, même si le formulaire est modifié.
+- Châssis critique : le texte dit arrêt d'urgence. Le danger secondaire reste au MJ. Pas de jet d'explosion.
+- Châssis mortel : le texte dit épave. Les pièces restent au choix du MJ. Elles ne deviennent pas des pièces de vaisseau.
+- Les objets d'ancien lore (Mutuelle, Caisse Noire, Partants, talents +10) ne sont pas touchés. Avertissement narratif reporté au lot suivant.
+- DataModels, validation stricte et Foundry : non testés si le runtime est absent. Test Marc reporté à la v1.
+
 ## 0.9.6
 
 Branche `dev/0.9.6-lore`, depuis `main` (`b01e6f5`). PR brouillon. Ne pas fusionner. La section 20 de TESTER.md sert à la séance de test de la v1.

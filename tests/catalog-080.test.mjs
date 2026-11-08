@@ -1,5 +1,5 @@
 /**
- * Catalogue Machines. Le manifeste suit la version du système (0.9.6).
+ * Catalogue Machines. Le manifeste suit la version du système (0.9.7).
  * Le passage DataModel se fait si FOUNDRY_PATH est défini.
  * Décision Didier/Marc 31/10/2026. Réf. Équipement v0.3 §5.
  * Réf. Blessures et Séquelles v0.3 corrigée §3.
@@ -35,7 +35,7 @@ const sheet = readFileSync(new URL("../module/sheets/character-sheet.mjs", impor
 const actorSheet = readFileSync(new URL("../templates/actor/actor-sheet.hbs", import.meta.url), "utf8");
 const sol = readFileSync(new URL("../module/sol.mjs", import.meta.url), "utf8");
 
-assert.equal(system.version, "0.9.6");
+assert.equal(system.version, "0.9.7");
 assert.equal(sol.includes("// Choix technique : numéro croissant pour la mise à jour Foundry"), true);
 assert.equal(system.packs.some(pack => pack.name === "machines" && pack.type === "Actor"), true);
 
@@ -123,11 +123,16 @@ for (const [name, id, location, severity, bleeding, penalty, endOfOrder] of tabl
 }
 assert.equal(zones.size, 6);
 const machineText = table.map(row => byId[row[1]].system.description).join("\n");
-assert.equal(machineText.includes("[à compléter]"), true);
+assert.equal(machineText.includes("[à compléter]"), false);
+assert.equal(machineText.includes("Fuite (refroidissement ou batterie)."), true);
+assert.equal(machineText.includes("Pas de jet d'explosion"), true);
+assert.equal(machineText.includes("Elles ne deviennent pas des pièces de vaisseau."), true);
+assert.equal(machineText.includes("Pas de détection automatique."), true);
 
 const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
 assert.equal(tester.includes("## 19. 0.9.5 Machines"), true);
 assert.equal(tester.includes("En tant que MJ"), true);
+assert.equal(tester.includes("## 21. 0.9.7 Blessures des machines"), true);
 
 /**
  * @param {string} foundryRoot

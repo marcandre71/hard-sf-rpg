@@ -584,6 +584,8 @@
       "title": "Appliquer les dégâts",
       "target": "Cible",
       "zone": "Zone",
+      "zoneChoice": "Zone à appliquer",
+      "zoneChoiceHint": "Machine : choisissez une des six zones avant d'appliquer. Le défaut est la zone du tir. Annuler n'écrit rien.",
       "gross": "Dégâts bruts",
       "armour": "Armure",
       "net": "Dégâts nets",
@@ -621,6 +623,7 @@
         "slow": "Jambe, blessure grave : le mouvement est réduit de moitié. Rappel seulement, rien n'est automatisé.",
         "air": "Torse et réussite critique de l'attaquant : la réserve d'air peut être touchée. Rappel seulement, rien n'est automatisé.",
         "bleeding": "Saignement : −1 Endurance par tour jusqu'aux premiers soins. Ce n'est pas automatisé.",
+        "leak": "Fuite (refroidissement ou batterie). Rappel seulement : pas de perte d'Endurance, pas de compte d'autonomie. Le MJ choisit la suite.",
         "vol": "Test de Volonté pour continuer à agir.",
         "con": "Test de Constitution pour rester conscient."
       }
@@ -735,6 +738,8 @@
         "mortal": "Mortelle"
       },
       "bleeding": "Saignement",
+      "leak": "Fuite",
+      "leakHint": "Rappel seulement. Rien n'est retiré en Endurance ni en autonomie.",
       "penalty": "Pénalité",
       "treated": "Soignée",
       "endOfOrder": "Envoie en fin d'ordre",

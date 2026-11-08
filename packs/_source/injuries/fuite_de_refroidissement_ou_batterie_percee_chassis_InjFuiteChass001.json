@@ -5,7 +5,7 @@
   "type": "injury",
   "img": "icons/svg/blood.svg",
   "system": {
-    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Le saignement est représenté par une fuite (refroidissement, batterie) ; sa conversion en perte d'autonomie est [à compléter].</p>",
+    "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Fuite (refroidissement ou batterie). Rappel seulement : rien n'est retiré automatiquement, ni en autonomie ni en Endurance. Le MJ choisit la suite selon la machine. Décision 08/11/2026.</p>",
     "location": "torso",
     "severity": "serious",
     "bleeding": true,
@@ -26,7 +26,7 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "sol-nouvelle-ere",
-    "systemVersion": "0.9.5",
+    "systemVersion": "0.9.7",
     "createdTime": 0,
     "modifiedTime": 0,
     "lastModifiedBy": "SolNouvelleEre00"
