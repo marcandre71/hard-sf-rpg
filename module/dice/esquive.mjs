@@ -193,6 +193,19 @@ export function finishDodge(entry, userId, verdict) {
 }
 
 /**
+ * Rappel d'éligibilité, sur la carte, tant qu'une offre est ouverte.
+ * Le MJ passe une zone, une explosion, des rafales multiples ou un coup
+ * non perçu. Une arme cochée Rafale peut tirer au coup par coup.
+ * Décision Didier 08/11/2026.
+ *
+ * @param {Record<string, object>|null|undefined} entries
+ * @returns {boolean}
+ */
+export function dodgeOfferReminder(entries) {
+  return Object.values(entries ?? {}).some(entry => entry?.state === "pending");
+}
+
+/**
  * @param {Record<string, object>|null|undefined} entries
  * @returns {boolean}
  */

@@ -9,8 +9,8 @@ Décision Marc 08/11/2026. Esquive personnelle opposée. Réf. LdR v0.2 §2, §6
 - Après une attaque personnelle réussie, avant les dégâts, chaque défenseur qui a une RÉF peut esquiver. Le jet d'attaque n'est pas relancé. Un raté n'ouvre pas d'esquive.
 - Opposition : `compareOpposed`, score modifié, sans priorité au critique. Une seule réussite gagne. Deux réussites : DR, puis score. Égalité parfaite ou double échec : pas de touche. Si l'attaque l'emporte, les dégâts gardent son DR initial.
 - Une réaction par défenseur. Elle est dépensée quand le dé d'Esquive est vraiment lancé, même si l'esquive rate. Annuler la fenêtre ne dépense rien et laisse les dégâts bloqués. Le MJ peut passer : les dégâts continuent, la réaction reste. Elle revient au début du prochain tour de ce défenseur, pas à chaque round. Le même début de tour rejoué ne la rend pas. Hors combat suivi, un rappel dit au MJ de la noter : rien n'est automatisé.
-- Sonné garde la réaction. Une attaque non perçue, une explosion, une zone ou une rafale que la table ne traite pas comme un tir direct : le MJ passe. Aucune nouvelle règle de rafale ou de zone. Le champ Rafale du catalogue ne retire pas l'offre.
-- Créature, synthétique et drone n'ont pas de RÉF : pas de jet inventé, les dégâts ne sont pas bloqués. Une esquive n'annule que la touche de ce défenseur.
+- Sonné garde la réaction. Tant qu'une offre est ouverte, la carte d'attaque le dit : le MJ passe pour une zone, une explosion, des rafales multiples ou un coup non perçu. Une arme cochée Rafale peut tirer au coup par coup : ce coup reste esquivable. Aucune nouvelle règle de rafale ou de zone.
+- Sans la compétence, personnage et PNJ lancent sur la RÉF, comme les autres replis. Créature, synthétique et drone n'ont pas de RÉF : pas de jet, pas de dérivé COO, ADA ou score autonome. Le synthétique peut porter la compétence : la formule existante lirait une RÉF absente comme 0 plus la formation. Ce nombre n'ouvre pas l'esquive. Les dégâts ne sont pas bloqués. Une esquive n'annule que la touche de ce défenseur.
 - DataModels, validation stricte et Foundry : non exécutés, runtime absent. Ce n'est pas une validation Foundry.
 
 ## 0.9.7

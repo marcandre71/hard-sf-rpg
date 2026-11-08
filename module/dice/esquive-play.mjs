@@ -17,6 +17,7 @@ import { performRoll } from "./chat.mjs";
 import {
   attackDamageGate,
   blankReaction,
+  dodgeOfferReminder,
   canRollDodge,
   commitDodgeClaim,
   DODGE_SKILL,
@@ -106,6 +107,12 @@ function onChatCard(message, html) {
         void passDodge(message, uuid, event.currentTarget);
       }));
     }
+  }
+  if ( dodgeOfferReminder(map) ) {
+    const reminder = document.createElement("p");
+    reminder.className = "sol-damage-remind";
+    reminder.textContent = game.i18n.localize("SOL.Dodge.eligibility");
+    box.append(reminder);
   }
   const apply = root.querySelector("[data-action=sol-apply-damage]");
   if ( apply && !attackDamageGate(map) ) {

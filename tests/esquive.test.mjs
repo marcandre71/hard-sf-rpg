@@ -6,6 +6,7 @@
  */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { skillScore } from "../module/dice/skill-score.mjs";
 import { compareOpposed } from "../module/ships/combat.mjs";
 import {
   attackDamageGate,
@@ -16,6 +17,7 @@ import {
   commitDodgeClaim,
   defenderDamage,
   dodgeEntry,
+  dodgeOfferReminder,
   finishDodge,
   holdsDodge,
   keptAttackDamage,
@@ -207,11 +209,38 @@ check("réaction : prochain tour du défenseur, pas un tour rejoué, pas hors co
   assert.equal(attackDamageGate(added.map), false);
 });
 
+check("rappel d'offre sur la carte, rafale non bloquante", () => {
+  const pendingMap = openDodge([{ uuid: "Actor.a", name: "A", hasRef: true }]);
+  assert.equal(dodgeOfferReminder(pendingMap), true);
+  assert.equal(dodgeOfferReminder({ "Actor.d": dodgeEntry({ name: "Luciole", hasRef: false }) }), false);
+  assert.equal(dodgeOfferReminder({ "Actor.a": skipDodge(pending, true).entry }), false);
+  const lang = readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8");
+  assert.equal(lang.includes("rafales multiples"), true);
+  assert.equal(lang.includes("coup par coup"), true);
+  assert.equal(JSON.parse(lang).SOL.Dodge.eligibility.includes("Rafale"), true);
+});
+
+check("sans RÉF : la formule de compétence ne ouvre pas l'esquive", () => {
+  const rated = skillScore(
+    { coo: { value: 50 }, ada: { value: 60 } },
+    { characteristic: "ref", training: 40, trainingRequired: false }
+  );
+  assert.equal(rated.impossible, false);
+  assert.equal(rated.score, 40);
+  const entry = dodgeEntry({ uuid: "Actor.s", name: "Synth", hasRef: false });
+  assert.equal(entry.state, "no-ref");
+  assert.equal(defenderDamage(entry, { dr: 2 }).write, true);
+  assert.equal(dodgeOfferReminder({ "Actor.s": entry }), false);
+});
+
 check("TESTER §22 décrit les cas manuels", () => {
   const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
   assert.equal(tester.includes("## 22. 0.9.8 Esquive personnelle"), true);
   assert.equal(tester.includes("Passer l'esquive"), true);
-  assert.equal(tester.includes("Hors combat") || tester.includes("Sans combat démarré"), true);
+  assert.equal(tester.includes("Sans combat démarré"), true);
+  assert.equal(tester.includes("coup par coup"), true);
+  assert.equal(tester.includes("score autonome"), true);
+  assert.equal(tester.includes("lance quand même sur sa RÉF"), true);
 });
 
 console.log("esquive.test.mjs : ok");

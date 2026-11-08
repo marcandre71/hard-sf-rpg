@@ -455,7 +455,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` (la 
 
 ## 22. 0.9.8 Esquive personnelle
 
-Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-esquive`. Ne fusionnez pas. Les malus de blessure ne sont pas dans cette version. Il n'y a pas de bouton nouveau pour une explosion, une zone ou une rafale : si la table décide que le coup n'est pas un tir direct perçu, le MJ clique **Passer l'esquive**.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-esquive`. Ne fusionnez pas. Les malus de blessure ne sont pas dans cette version. Sans la compétence Esquive, un personnage ou un PNJ lance quand même sur sa RÉF. Une créature, un synthétique ou un drone n'a pas de RÉF : pas d'esquive, et ni la COO, ni l'ADA, ni le score autonome ne la remplacent. Un synthétique peut porter la compétence Esquive ; cela n'ouvre pas de jet.
 
 1. Prenez le ZIP :
 
@@ -464,7 +464,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-
    Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.8-esquive`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.8**.
 2. Démarrez un combat avec deux personnages. Le premier touche le second avec une arme de contact ou une arme à feu.
-   **Résultat attendu :** la carte propose **Esquiver** avant que **Appliquer les dégâts** écrive une blessure. Le bouton de dégâts dit que l'esquive n'est pas tranchée.
+   **Résultat attendu :** la carte propose **Esquiver** avant que **Appliquer les dégâts** écrive une blessure. Le bouton de dégâts dit que l'esquive n'est pas tranchée. La carte porte le rappel : le MJ passe l'offre pour une zone, une explosion, des rafales multiples ou une attaque non perçue. Une arme cochée **Rafale** peut tirer au coup par coup : ce coup reste esquivable. Ce n'est pas un bouton de plus.
 3. Cliquez **Esquiver**, puis annulez la fenêtre du jet.
    **Résultat attendu :** rien n'est dépensé. **Esquiver** est encore là. Aucune blessure n'est créée. Un second clic rapide n'ouvre pas deux dés.
 4. Relancez **Esquiver** et ratez-la. Notez le DR écrit sur la carte d'attaque.
@@ -478,7 +478,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-
 8. Sans combat démarré, touchez un personnage et esquivez.
    **Résultat attendu :** le jet a lieu. Une phrase dit que le MJ note la réaction. Le coup suivant propose encore **Esquiver** : le jeu ne la bloque pas tout seul.
 9. Touchez un drone ou un synthétique.
-   **Résultat attendu :** pas de bouton **Esquiver**. Les dégâts s'appliquent. La fiche machine ne gagne pas le statut **Saignement**.
+   **Résultat attendu :** pas de bouton **Esquiver**. Le texte dit qu'il n'a pas de RÉF. Les dégâts s'appliquent. La fiche machine ne gagne pas le statut **Saignement**. Ni la COO, ni l'ADA, ni le score autonome n'ouvrent l'esquive. Une compétence Esquive posée sur un synthétique non plus.
 10. Avec un joueur qui ne possède pas le défenseur, ouvrez la carte.
     **Résultat attendu :** il ne voit pas **Esquiver**. Le MJ le voit, ainsi que **Passer l'esquive**. Le bouton **Appliquer les dégâts** reste au MJ.
 11. Console (**F12**).
