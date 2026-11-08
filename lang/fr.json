@@ -644,7 +644,8 @@
       "denied": "Cette esquive n'est plus ouverte.",
       "missing": "Défenseur introuvable.",
       "recover": "Reprendre l'esquive bloquée",
-      "noActiveGm": "Pas de MJ actif : l'esquive et les dégâts ne sont pas écrits."
+      "noActiveGm": "Pas de MJ actif : l'esquive et les dégâts ne sont pas écrits.",
+      "queryFailed": "La demande au MJ actif n'a pas abouti. Rien n'est relancé : vérifiez la carte avant de recommencer."
     },
     "Skill": {
       "characteristic": "Caractéristique",

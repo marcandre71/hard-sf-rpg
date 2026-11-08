@@ -307,6 +307,23 @@ export function activeGmNow() {
 }
 
 /**
+ * Bouton de reprise : esquive en cours, ou verdict déjà écrit
+ * avec une réservation d'acteur encore là. Pas un nouveau jet.
+ *
+ * @param {object|null|undefined} entry
+ * @param {object|null|undefined} reaction
+ * @param {string} messageId
+ * @param {boolean} isGM
+ * @returns {boolean}
+ */
+export function recoverShown(entry, reaction, messageId, isGM) {
+  if ( isGM !== true ) return false;
+  if ( entry?.state === "rolling" ) return true;
+  const terminal = entry?.state === "failed" || entry?.state === "evaded";
+  return terminal && reaction?.reserved?.messageId === messageId;
+}
+
+/**
  * Une étape, puis l'appelant enregistre. Une panne laisse l'étape d'avant.
  *
  * @param {object} record
@@ -321,38 +338,63 @@ export function activeGmNow() {
  * @param {(record: object) => Promise<void>} save
  * @returns {Promise<object>}
  */
+function allowStep(writers) {
+  if ( typeof writers.guard === "function" && writers.guard() !== true ) {
+    throw new Error("not-active");
+  }
+}
+
 export async function runDamageSteps(record, writers, save) {
   let current = { ...(record ?? {}) };
   while ( current.done !== true ) {
     if ( writers.injury && !current.injuryId ) {
+      allowStep(writers);
       const found = typeof writers.findInjury === "function" ? await writers.findInjury() : null;
+      allowStep(writers);
       const injuryId = found || await writers.injury();
       if ( typeof injuryId !== "string" || !injuryId ) throw new Error("injury");
       current = { ...current, injuryId };
+      allowStep(writers);
+      await save(current);
+      continue;
+    }
+    if ( writers.status && current.statusDone !== true ) {
+      allowStep(writers);
+      await writers.status();
+      current = { ...current, statusDone: true };
+      allowStep(writers);
       await save(current);
       continue;
     }
     if ( writers.defer && current.injuryId && current.deferDone !== true ) {
+      allowStep(writers);
       await writers.defer(current.injuryId);
       current = { ...current, deferDone: true };
+      allowStep(writers);
       await save(current);
       continue;
     }
     if ( writers.breach && current.breachDone !== true ) {
+      allowStep(writers);
       await writers.breach();
       current = { ...current, breachDone: true };
+      allowStep(writers);
       await save(current);
       continue;
     }
     if ( writers.summary && !current.summaryId ) {
+      allowStep(writers);
       const found = typeof writers.findSummary === "function" ? await writers.findSummary() : null;
+      allowStep(writers);
       const summaryId = found || await writers.summary();
       if ( typeof summaryId !== "string" || !summaryId ) throw new Error("summary");
       current = { ...current, summaryId, done: true };
+      allowStep(writers);
       await save(current);
       break;
     }
     current = { ...current, done: true };
+    allowStep(writers);
     await save(current);
     break;
   }

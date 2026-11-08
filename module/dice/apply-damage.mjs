@@ -40,6 +40,7 @@ import {
 } from "./esquive.mjs";
 import { defenderFromActor } from "./esquive-targets.mjs";
 import {
+  activeGmNow,
   beginDamageOp,
   createSerialQueue,
   damageOpId,
@@ -136,10 +137,10 @@ export function registerDamage() {
   registerStatuses();
   Hooks.on("renderChatMessageHTML", onChatCard);
   globalThis.CONFIG ??= {};
-  CONFIG.queries ??= {};
+  const queries = globalThis.CONFIG.queries ??= {};
   const query = `${SYSTEM_ID}.damage`;
-  if ( !CONFIG.queries[query] ) {
-    CONFIG.queries[query] = (data, context) => executeDamage(data, context?.user?.id);
+  if ( !queries[query] ) {
+    queries[query] = (data, context) => executeDamage(data, context?.user?.id);
   }
 }
 
@@ -423,9 +424,11 @@ async function applyOne(target, zone, attack, source) {
   const writers = damageWriters(target, storedZone, attack, source, strike, plan);
   let entry = begun.entry;
   await runDamageSteps(entry.damageOp, writers, async next => {
+    if ( !activeGmNow() ) throw new Error("not-active");
     entry = { ...entry, damageOp: next, applied: next.done === true };
     const fresh = readDodgeMap(source);
     fresh[uuid] = entry;
+    if ( !activeGmNow() ) throw new Error("not-active");
     await source.setFlag(SYSTEM_ID, "dodge", fresh);
   });
 }
@@ -443,6 +446,7 @@ function damageWriters(target, zone, attack, source, strike, plan) {
   const { actor } = target;
   const visor = attack.visor === true && zone === "head";
   return {
+    guard: () => activeGmNow(),
     findInjury: plan ? async () => {
       const opId = damageOpId(source.id, actor.uuid);
       const found = actor.items?.find?.(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId
@@ -454,6 +458,7 @@ function damageWriters(target, zone, attack, source, strike, plan) {
       const existing = actor.items?.find?.(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId
         || item.flags?.[SYSTEM_ID]?.damageOp === opId);
       if ( existing?.id ) return existing.id;
+      if ( !activeGmNow() ) throw new Error("not-active");
       const key = consequenceKey(strike.severity, zone);
       const description = key
         ? `<p>${foundry.utils.escapeHTML(game.i18n.localize(`SOL.Damage.consequence.${key}`))}</p>`
@@ -464,16 +469,24 @@ function damageWriters(target, zone, attack, source, strike, plan) {
           zone: game.i18n.localize(SOL.bodyLocations[zone])
         }),
         description,
-        flags: { [SYSTEM_ID]: { damageOp: opId } }
+        flags: { [SYSTEM_ID]: { damageOp: opId } },
+        status: false
       });
       const id = created?.id;
       if ( typeof id !== "string" ) throw new Error("injury");
       return id;
     } : null,
+    status: plan?.statusId ? async () => {
+      if ( hasStatus(actor, plan.statusId) ) return;
+      if ( !activeGmNow() ) throw new Error("not-active");
+      await actor.toggleStatusEffect(plan.statusId, { active: true });
+    } : null,
     defer: plan?.system?.endOfOrder ? async injuryId => {
+      if ( !activeGmNow() ) throw new Error("not-active");
       await markInjuryDefer(actor, injuryId, true);
     } : null,
     breach: strike.breach ? async () => {
+      if ( !activeGmNow() ) throw new Error("not-active");
       const breached = new Set(strike.breaches.filter(item => item.breached).map(item => item.id));
       const updates = target.armors
         .filter(armor => breached.has(armor.id))
@@ -496,6 +509,7 @@ function damageWriters(target, zone, attack, source, strike, plan) {
       const list = Array.isArray(game.messages?.contents) ? game.messages.contents : [];
       const existing = list.find(item => item.getFlag?.(SYSTEM_ID, "damageOp") === opId);
       if ( existing?.id ) return existing.id;
+      if ( !activeGmNow() ) throw new Error("not-active");
       const followup = plan?.followup ?? null;
       const reminders = (plan?.reminders ?? []).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
       const content = await foundry.applications.handlebars.renderTemplate(CARD, {
@@ -670,7 +684,12 @@ async function applyDamage(message, button) {
       ui.notifications.warn(game.i18n.localize("SOL.Dodge.noActiveGm"));
       return;
     }
-    await gm.query(`${SYSTEM_ID}.damage`, payload);
+    try {
+      await gm.query(`${SYSTEM_ID}.damage`, payload, { timeout: 15000 });
+    } catch (error) {
+      console.error(error);
+      ui.notifications.warn(game.i18n.localize("SOL.Dodge.queryFailed"));
+    }
     return;
   }
   if ( route !== "write" ) return;

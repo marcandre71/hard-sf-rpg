@@ -176,7 +176,7 @@ export async function applyPlannedInjury(actor, plan, extra = {}) {
   };
   if ( extra.flags ) data.flags = extra.flags;
   const [created] = await actor.createEmbeddedDocuments("Item", [data]);
-  if ( plan.statusId ) await actor.toggleStatusEffect(plan.statusId, { active: true });
+  if ( plan.statusId && extra.status !== false ) await actor.toggleStatusEffect(plan.statusId, { active: true });
   return created ?? null;
 }
 

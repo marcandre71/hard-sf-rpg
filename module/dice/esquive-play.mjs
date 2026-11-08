@@ -24,7 +24,7 @@ import {
   reactionOnTurnStart,
   skipDodge
 } from "./esquive.mjs";
-import { activeGmNow, applyDodgeCommand, createSerialQueue, planDodgeWrites, provenSender } from "./gm-authority.mjs";
+import { activeGmNow, applyDodgeCommand, createSerialQueue, planDodgeWrites, provenSender, recoverShown } from "./gm-authority.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 const SOCKET = `system.${SYSTEM_ID}`;
@@ -88,7 +88,7 @@ function onChatCard(message, html) {
         void askDodge(message, uuid, "skip");
       }));
     }
-    if ( entry?.state === "rolling" && game.user.isGM === true ) {
+    if ( recoverShown(entry, reaction, message.id, game.user.isGM === true) ) {
       box.append(button("sol-dodge-recover", uuid, game.i18n.localize("SOL.Dodge.recover"), event => {
         void askDodge(message, uuid, "recover");
       }));
@@ -183,8 +183,14 @@ async function askDodge(message, uuid, action, extra = {}) {
     return;
   }
   // API v14 : le contexte { user } est celui de la session, pas un champ du message.
+  // Un délai échu n'annule pas ce que le MJ a déjà commencé, et on ne relance pas.
   // @see https://foundryvtt.com/api/v14/classes/foundry.documents.User.html#query
-  await gm.query(`${SYSTEM_ID}.dodge`, payload);
+  try {
+    await gm.query(`${SYSTEM_ID}.dodge`, payload, { timeout: 15000 });
+  } catch (error) {
+    console.error(error);
+    ui.notifications.warn(game.i18n.localize("SOL.Dodge.queryFailed"));
+  }
 }
 
 /**
@@ -484,9 +490,9 @@ export function registerEsquive() {
   Hooks.on("renderChatMessageHTML", onChatCard);
   Hooks.on("updateChatMessage", onUpdate);
   globalThis.CONFIG ??= {};
-  CONFIG.queries ??= {};
+  const queries = globalThis.CONFIG.queries ??= {};
   const query = `${SYSTEM_ID}.dodge`;
-  if ( !CONFIG.queries[query] ) {
-    CONFIG.queries[query] = (data, context) => executeDodge(data, context?.user?.id);
+  if ( !queries[query] ) {
+    queries[query] = (data, context) => executeDodge(data, context?.user?.id);
   }
 }
