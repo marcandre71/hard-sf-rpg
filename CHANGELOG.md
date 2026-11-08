@@ -1,5 +1,16 @@
 # Journal des versions
 
+## 0.9.6
+
+Branche `dev/0.9.6-lore`, depuis `main` (`b01e6f5`). PR brouillon. Ne pas fusionner. La section 20 de TESTER.md sert à la séance de test de la v1.
+
+Extraits publics de la Bible, contenu du 08/11/2026, §3, §6 et §7. Lore des journaux et du glossaire seulement. Aucune règle d'objet n'est changée.
+
+- Journal Factions : six pages. L'id `PgMutuelleCeint0` devient le Consortium de la Ceinture. Nouvelle page `PgDirectTharsis`. Page retirée : `PgPartantsLongs0`. Les autres ids de page sont gardés.
+- Glossaire : factions, parts de risque, Cérès, greffiers, double clé, Traité d'Asimov, principe Sereguine. La Mutuelle et les Partants ne sont plus des puissances principales de la liste.
+- Limites : plusieurs objets de jeu citent encore l'ancienne Mutuelle, la Caisse Noire ou les Partants. Leurs effets ne sont pas modifiés. Quatre `[à compléter]` des blessures de machine restent ceux de la 0.9.5.
+- DataModels, validation stricte et Foundry : non testés si le runtime est absent. Test Marc reporté à la v1.
+
 ## 0.9.5
 
 Branche `dev/0.8.0`, entrée dans `main` en avance rapide. Ancienne 0.8.0. Le manifeste dit 0.9.5 pour que Foundry la voie plus récente que la 0.9.4. Revue ciblée de `bf88162` : aucun défaut de code. Exécution réelle des DataModels, de la validation stricte et de Foundry : non testée, runtime absent. Test Marc reporté à la v1. La section 19 de TESTER.md sert à cette séance, avec le ZIP de `main`.

@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.5 : machines (ex-0.8.0). Passe après la 0.9.4.",
-  "version": "0.9.5",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.6 : lore public des factions et du glossaire.",
+  "version": "0.9.6",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

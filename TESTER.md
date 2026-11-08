@@ -414,3 +414,20 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`. Le 
    **Résultat attendu :** la fiche s'ouvre sans message d'erreur. **COO**, **ADA** et **Score autonome** sont présents. Ce sont les défauts du schéma, pas les chiffres de Luciole, de Crabe ou du TATI. Cliquez **COO** et lancez le dé : la fenêtre est celle d'une caractéristique.
 7. Console (**F12**), après ce jet.
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 20. 0.9.6 Lore public des factions et du glossaire
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.6-lore`.
+
+1. Prenez le ZIP :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.6-lore.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.6-lore`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.6**.
+2. Ouvrez le compendium **Univers et factions**, journal **Factions**.
+   **Résultat attendu :** six pages : Office de la Veille, Compact d'Hellas, Directoire de Tharsis, Consortium de la Ceinture, Kombinat Hélion, Collège de Valhalla. Il n'y a pas de page **Partants**. La page du Consortium dit qu'il est né de l'ancienne Mutuelle. La Veille parle encore du Traité de Genève de 1981. Les inspecteurs sont ceux de l'Office.
+3. Ouvrez le journal **Glossaire**. Cherchez **Consortium**, **Directoire**, **Traité d'Asimov** et **Double clé**.
+   **Résultat attendu :** ces entrées sont là. La Mutuelle n'est plus présentée comme une puissance principale. Les Partants ne le sont plus non plus. La Règle Sereguine distingue le principe de 1981 et le traité de 2078.
+4. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
