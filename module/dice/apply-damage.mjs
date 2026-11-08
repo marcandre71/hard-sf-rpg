@@ -494,6 +494,7 @@ function damageWriters(target, zone, attack, source, strike, plan) {
         .filter(item => item && item.system.sealState !== "breached")
         .map(item => ({ _id: item.id, "system.sealState": "breached" }));
       if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates, { solSealApply: true });
+      if ( !activeGmNow() ) throw new Error("not-active");
       if ( !hasStatus(actor, SUIT_BREACH) ) {
         await actor.toggleStatusEffect(SUIT_BREACH, { active: true });
       }
@@ -525,6 +526,7 @@ function damageWriters(target, zone, attack, source, strike, plan) {
         reminders,
         followupLabel: followup ? game.i18n.localize(`SOL.Damage.followup.${followup}`) : ""
       });
+      if ( !activeGmNow() ) throw new Error("not-active");
       const created = await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
         content,
