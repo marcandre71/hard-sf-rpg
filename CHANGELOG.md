@@ -7,7 +7,7 @@ Branche `dev/0.9.6-lore`, depuis `main` (`b01e6f5`). PR brouillon. Ne pas fusion
 Extraits publics de la Bible, contenu du 08/11/2026, §3, §6 et §7. Lore des journaux et du glossaire seulement. Aucune règle d'objet n'est changée.
 
 - Journal Factions : six pages. L'id `PgMutuelleCeint0` devient le Consortium de la Ceinture. Nouvelle page `PgDirectTharsis`. Page retirée : `PgPartantsLongs0`. Les autres ids de page sont gardés.
-- Glossaire : factions, parts de risque, Cérès, greffiers, double clé, Traité d'Asimov, principe Sereguine. La Mutuelle et les Partants ne sont plus des puissances principales de la liste.
+- Glossaire : factions, parts de risque, Cérès, greffiers, double clé, Traité d'Asimov, principe Sereguine. La Mutuelle et les Partants ne sont plus des puissances principales de la liste. La double clé reprend « charges nucléaires de déviation, sous double clé ». L'Entente de Vesta et la définition de sociétaire ne sont pas reprises : les extraits ne les étayent pas. Provenance : extraits publics et reformulations sourcées, Bible v0.6 §§3,6,7.
 - Limites : plusieurs objets de jeu citent encore l'ancienne Mutuelle, la Caisse Noire ou les Partants. Leurs effets ne sont pas modifiés. Quatre `[à compléter]` des blessures de machine restent ceux de la 0.9.5.
 - DataModels, validation stricte et Foundry : non testés si le runtime est absent. Test Marc reporté à la v1.
 
