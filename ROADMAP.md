@@ -26,7 +26,7 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
 
 Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et un `performRoll` factices ; une notification légère quand le verrou de tir refuse un double-clic. Réserves mineures de Relecteur sur la 0.9.4 (`84517bb`).
-- [ ] 0.9.6 — lore public des factions et du glossaire. Branche `dev/0.9.6-lore`. En préparation. Ne pas fusionner. Extraits publics du 08/11/2026. DataModels et Foundry non testés si le runtime est absent. Test Marc reporté à la v1.
+- [x] 0.9.6 — lore public actualisé, tests disponibles passés, runtime Foundry non exécuté. Test Marc reporté à la v1. Extraits publics du 08/11/2026.
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée. Pas commencée.
 
 Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 1.0.0.
