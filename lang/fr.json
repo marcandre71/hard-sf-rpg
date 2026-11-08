@@ -642,7 +642,9 @@
       "skipped": "Esquive de {name} passée. La réaction n'est pas dépensée.",
       "remind": "Hors combat suivi : le MJ note la réaction. Elle n'est pas remise toute seule au tour suivant.",
       "denied": "Cette esquive n'est plus ouverte.",
-      "missing": "Défenseur introuvable."
+      "missing": "Défenseur introuvable.",
+      "recover": "Reprendre l'esquive bloquée",
+      "noActiveGm": "Pas de MJ actif : l'esquive et les dégâts ne sont pas écrits."
     },
     "Skill": {
       "characteristic": "Caractéristique",

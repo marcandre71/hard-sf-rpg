@@ -18,6 +18,8 @@ import {
   defenderDamage,
   dodgeEntry,
   dodgeOfferReminder,
+  esquiveOffered,
+  esquiveScore,
   finishDodge,
   holdsDodge,
   keptAttackDamage,
@@ -220,17 +222,22 @@ check("rappel d'offre sur la carte, rafale non bloquante", () => {
   assert.equal(JSON.parse(lang).SOL.Dodge.eligibility.includes("Rafale"), true);
 });
 
-check("sans RÉF : la formule de compétence ne ouvre pas l'esquive", () => {
-  const rated = skillScore(
-    { coo: { value: 50 }, ada: { value: 60 } },
-    { characteristic: "ref", training: 40, trainingRequired: false }
-  );
-  assert.equal(rated.impossible, false);
-  assert.equal(rated.score, 40);
-  const entry = dodgeEntry({ uuid: "Actor.s", name: "Synth", hasRef: false });
-  assert.equal(entry.state, "no-ref");
-  assert.equal(defenderDamage(entry, { dr: 2 }).write, true);
-  assert.equal(dodgeOfferReminder({ "Actor.s": entry }), false);
+check("synthétique : compétence possédée, sinon pas d'offre", () => {
+  const skill = { characteristic: "ref", training: 40, trainingRequired: false };
+  const characteristics = { coo: { value: 50 }, ada: { value: 60 } };
+  assert.equal(skillScore(characteristics, skill).score, 40);
+  assert.equal(esquiveScore({ characteristics, skill }), 40);
+  assert.equal(esquiveScore({ characteristics, skill: null }), null);
+  const withSkill = dodgeEntry({ uuid: "Actor.s", name: "Synth", hasRef: false, hasEsquive: true });
+  const withoutSkill = dodgeEntry({ uuid: "Actor.s2", name: "Nu", hasRef: false, hasEsquive: false });
+  const creature = dodgeEntry({ uuid: "Actor.c", name: "Bête", hasRef: false });
+  const drone = dodgeEntry({ uuid: "Actor.d", name: "Luciole", hasRef: false, hasEsquive: false });
+  assert.equal(esquiveOffered({ hasRef: false, hasEsquive: true }), true);
+  assert.equal(withSkill.state, "pending");
+  assert.equal(withoutSkill.state, "no-ref");
+  assert.equal(creature.state, "no-ref");
+  assert.equal(drone.state, "no-ref");
+  assert.equal(defenderDamage(withoutSkill, { dr: 2 }).write, true);
 });
 
 check("TESTER §22 décrit les cas manuels", () => {

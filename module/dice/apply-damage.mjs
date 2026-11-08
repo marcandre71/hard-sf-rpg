@@ -35,11 +35,18 @@ import {
   attackDamageGate,
   attackFullyApplied,
   defenderDamage,
-  markDefenderApplied,
   mergeDodgeTargets,
   reopenDamage
 } from "./esquive.mjs";
 import { defenderFromActor } from "./esquive-targets.mjs";
+import {
+  beginDamageOp,
+  createSerialQueue,
+  damageOpId,
+  mutationRoute,
+  provenSender,
+  runDamageSteps
+} from "./gm-authority.mjs";
 import { performRoll } from "./chat.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
@@ -51,6 +58,8 @@ const BLEEDING = BIOLOGICAL_BLEEDING_STATUS;
 
 /** Messages déjà en cours : un double clic n'ouvre pas deux fenêtres. */
 const busy = new Set();
+const damageSerial = createSerialQueue();
+const SOCKET = `system.${SYSTEM_ID}`;
 
 /**
  * `name` est la clé i18n, pas le français. `init` tourne avant le
@@ -126,6 +135,11 @@ function followupAllowed(uuid) {
 export function registerDamage() {
   registerStatuses();
   Hooks.on("renderChatMessageHTML", onChatCard);
+  game.socket?.on(SOCKET, (payload, senderId) => {
+    if ( !payload || payload.type !== "sol-damage" ) return;
+    if ( game.user?.isActiveGM !== true ) return;
+    void executeDamage(payload, senderId);
+  });
 }
 
 /**
@@ -383,87 +397,180 @@ function hasStatus(actor, id) {
  */
 async function applyOne(target, zone, attack, source) {
   const { actor } = target;
-  const visor = attack.visor === true && zone === "head";
+  const uuid = actor.uuid;
+  const opId = damageOpId(source.id, uuid);
+  let dodge = readDodgeMap(source);
+  const begun = beginDamageOp(dodge[uuid], opId, zone);
+  if ( !begun.ok || !begun.entry ) return;
+  const storedZone = begun.entry.damageOp?.zone ?? zone;
+  const visor = attack.visor === true && storedZone === "head";
   const strike = resolveStrike({
     gross: target.gross,
     sb: target.sb,
     armors: target.armors,
-    zone,
+    zone: storedZone,
     visor
   });
-
   const plan = planTargetInjury({
     actorType: actor.type,
     alreadyBleeding: hasStatus(actor, BLEEDING),
-    zone,
+    zone: storedZone,
     strike,
     label: attack.label,
     attackerCritical: attack.attackerCritical
   });
-  if ( plan ) {
-    const key = consequenceKey(strike.severity, zone);
-    // Décision Marc 18/10/2026 : la case, pas la gravité seule.
-    // « Active pour le round 1 » reste décochée : cette blessure
-    // naît pendant le combat, le déplacement part tout de suite.
-    const description = key
-      ? `<p>${foundry.utils.escapeHTML(game.i18n.localize(`SOL.Damage.consequence.${key}`))}</p>`
-      : undefined;
-    const created = await applyPlannedInjury(actor, plan, {
-      name: game.i18n.format("SOL.Damage.injuryName", {
-        severity: game.i18n.localize(SOL.injurySeverities[strike.severity]),
-        zone: game.i18n.localize(SOL.bodyLocations[zone])
-      }),
-      description
-    });
-    // Réf. LdR v0.2 §7. La case est relue au passage de round.
-    // Décocher avant ce passage annule le déplacement de cette blessure.
-    // Le drapeau Sonné (`deferEnd`) n'est pas touché.
-    if ( plan.system.endOfOrder && created?.id ) await markInjuryDefer(actor, created.id, true);
-  }
-
-  if ( strike.breach ) {
-    const breached = new Set(strike.breaches.filter(entry => entry.breached).map(entry => entry.id));
-    const updates = target.armors
-      .filter(armor => breached.has(armor.id))
-      .map(armor => actor.items.get(armor.id))
-      .filter(item => item && item.system.sealState !== "breached")
-      .map(item => ({ _id: item.id, "system.sealState": "breached" }));
-    // solSealApply : le hook des joints ne repose pas le statut, une fois par couche.
-    if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates, { solSealApply: true });
-    if ( !hasStatus(actor, SUIT_BREACH) ) {
-      await actor.toggleStatusEffect(SUIT_BREACH, { active: true });
-    }
-  }
-
-  const followup = plan?.followup ?? null;
-  const reminders = (plan?.reminders ?? []).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
-
-  const content = await foundry.applications.handlebars.renderTemplate(CARD, {
-    name: actor.name,
-    zone: game.i18n.localize(SOL.bodyLocations[zone]),
-    net: strike.net,
-    severity: strike.severity
-      ? game.i18n.localize(SOL.injurySeverities[strike.severity])
-      : game.i18n.localize("SOL.Damage.none"),
-    breach: game.i18n.localize(strike.breach ? "SOL.Damage.yes" : "SOL.Damage.no"),
-    threshold: thresholdText(strike.breaches),
-    visor,
-    reminders,
-    followupLabel: followup ? game.i18n.localize(`SOL.Damage.followup.${followup}`) : ""
+  const writers = damageWriters(target, storedZone, attack, source, strike, plan);
+  let entry = begun.entry;
+  await runDamageSteps(entry.damageOp, writers, async next => {
+    entry = { ...entry, damageOp: next, applied: next.done === true };
+    const fresh = readDodgeMap(source);
+    fresh[uuid] = entry;
+    await source.setFlag(SYSTEM_ID, "dodge", fresh);
   });
+}
 
-  await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    content,
-    whisper: Array.from(source.whisper ?? []),
-    blind: source.blind === true,
-    flags: {
-      [SYSTEM_ID]: {
-        type: "damage",
-        actorUuid: actor.uuid,
-        characteristic: followup
+/**
+ * @param {object} target
+ * @param {string} zone
+ * @param {object} attack
+ * @param {ChatMessage} source
+ * @param {object} strike
+ * @param {object|null} plan
+ * @returns {object}
+ */
+function damageWriters(target, zone, attack, source, strike, plan) {
+  const { actor } = target;
+  const visor = attack.visor === true && zone === "head";
+  return {
+    injury: plan ? async () => {
+      const key = consequenceKey(strike.severity, zone);
+      const description = key
+        ? `<p>${foundry.utils.escapeHTML(game.i18n.localize(`SOL.Damage.consequence.${key}`))}</p>`
+        : undefined;
+      const created = await applyPlannedInjury(actor, plan, {
+        name: game.i18n.format("SOL.Damage.injuryName", {
+          severity: game.i18n.localize(SOL.injurySeverities[strike.severity]),
+          zone: game.i18n.localize(SOL.bodyLocations[zone])
+        }),
+        description
+      });
+      const id = created?.id;
+      if ( typeof id !== "string" ) throw new Error("injury");
+      return id;
+    } : null,
+    defer: plan?.system?.endOfOrder ? async injuryId => {
+      await markInjuryDefer(actor, injuryId, true);
+    } : null,
+    breach: strike.breach ? async () => {
+      const breached = new Set(strike.breaches.filter(item => item.breached).map(item => item.id));
+      const updates = target.armors
+        .filter(armor => breached.has(armor.id))
+        .map(armor => actor.items.get(armor.id))
+        .filter(item => item && item.system.sealState !== "breached")
+        .map(item => ({ _id: item.id, "system.sealState": "breached" }));
+      if ( updates.length ) await actor.updateEmbeddedDocuments("Item", updates, { solSealApply: true });
+      if ( !hasStatus(actor, SUIT_BREACH) ) {
+        await actor.toggleStatusEffect(SUIT_BREACH, { active: true });
+      }
+    } : null,
+    summary: async () => {
+      const followup = plan?.followup ?? null;
+      const reminders = (plan?.reminders ?? []).map(key => game.i18n.localize(`SOL.Damage.remind.${key}`));
+      const content = await foundry.applications.handlebars.renderTemplate(CARD, {
+        name: actor.name,
+        zone: game.i18n.localize(SOL.bodyLocations[zone]),
+        net: strike.net,
+        severity: strike.severity
+          ? game.i18n.localize(SOL.injurySeverities[strike.severity])
+          : game.i18n.localize("SOL.Damage.none"),
+        breach: game.i18n.localize(strike.breach ? "SOL.Damage.yes" : "SOL.Damage.no"),
+        threshold: thresholdText(strike.breaches),
+        visor,
+        reminders,
+        followupLabel: followup ? game.i18n.localize(`SOL.Damage.followup.${followup}`) : ""
+      });
+      const created = await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content,
+        whisper: Array.from(source.whisper ?? []),
+        blind: source.blind === true,
+        flags: {
+          [SYSTEM_ID]: {
+            type: "damage",
+            actorUuid: actor.uuid,
+            characteristic: followup,
+            damageOp: damageOpId(source.id, actor.uuid)
+          }
+        }
+      });
+      const id = created?.id;
+      if ( typeof id !== "string" ) throw new Error("summary");
+      return id;
+    }
+  };
+}
+
+/**
+ * Relit la carte après la confirmation. Seul le MJ actif écrit.
+ *
+ * @param {object} payload
+ * @param {string|undefined} senderId
+ * @returns {Promise<void>}
+ */
+async function executeDamage(payload, senderId) {
+  if ( game.user?.isActiveGM !== true ) return;
+  const proven = provenSender(senderId, payload);
+  const user = proven ? game.users?.get?.(proven) : null;
+  if ( !user || user.isGM !== true ) return;
+  const messageId = payload?.messageId;
+  if ( typeof messageId !== "string" ) return;
+  await damageSerial(`card:${messageId}`, async () => {
+    const message = game.messages?.get?.(messageId);
+    const attack = message ? readAttack(message) : null;
+    if ( !message || !attack ) return;
+    const actors = [];
+    for ( const uuid of payload.defenderUuids ?? [] ) {
+      if ( typeof uuid !== "string" ) continue;
+      const actor = await foundry.utils.fromUuid(uuid);
+      if ( actor ) actors.push(actor);
+    }
+    if ( !actors.length ) return;
+    let dodge = readDodgeMap(message);
+    if ( payload.reapply === true && message.getFlag(SYSTEM_ID, "applied") === true ) {
+      dodge = reopenDamage(dodge);
+    }
+    const offers = actors.map(actor => defenderFromActor(actor)).filter(Boolean);
+    const merged = mergeDodgeTargets(dodge, offers);
+    dodge = merged.map;
+    const zone = commitDamageZone(payload.zone, {
+      actorTypes: actors.map(actor => actor.type),
+      rolledZone: attack.location
+    });
+    if ( !zone || !attackDamageGate(dodge) ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Dodge.blocked"));
+      await message.setFlag(SYSTEM_ID, "dodge", dodge);
+      return;
+    }
+    await message.setFlag(SYSTEM_ID, "dodge", dodge);
+    const targets = [];
+    for ( const actor of actors ) {
+      const prepared = prepareTarget(actor, attack.gross);
+      if ( prepared ) targets.push(prepared);
+    }
+    for ( const target of targets ) {
+      const fresh = readDodgeMap(message);
+      const entry = fresh[target.actor.uuid];
+      const resume = entry?.damageOp && entry.damageOp.done !== true && entry.damageOp.injuryId;
+      if ( !resume && !defenderDamage(entry, attack).write ) continue;
+      try {
+        await applyOne(target, zone, attack, message);
+      } catch (error) {
+        console.error(error);
+        ui.notifications.error(game.i18n.format("SOL.Damage.failed", { name: target.name }));
       }
     }
+    const after = readDodgeMap(message);
+    if ( attackFullyApplied(after) ) await message.setFlag(SYSTEM_ID, "applied", true);
   });
 }
 
@@ -497,51 +604,49 @@ async function applyDamage(message, button) {
   }
   if ( !targets.length ) return;
 
+  const dodgeNow = readDodgeMap(message);
+  if ( !attackDamageGate(dodgeNow) ) {
+    ui.notifications.warn(game.i18n.localize("SOL.Dodge.blocked"));
+    return;
+  }
+  const writable = targets.filter(target => {
+    const entry = dodgeNow[target.actor.uuid];
+    if ( entry?.damageOp?.done === true || entry?.applied === true ) return false;
+    return !entry || defenderDamage(entry, attack).write;
+  });
+  if ( !writable.length ) return;
+  if ( message.getFlag(SYSTEM_ID, "applied") === true ) {
+    const again = await confirmReapply();
+    if ( !again ) return;
+  }
+  const zone = await askDamage(attack, writable);
+  if ( !zone ) return;
+  const payload = {
+    type: "sol-damage",
+    messageId: message.id,
+    zone,
+    defenderUuids: writable.map(target => target.actor.uuid),
+    reapply: message.getFlag(SYSTEM_ID, "applied") === true
+  };
+  const route = mutationRoute({
+    isActiveGM: game.user.isActiveGM === true,
+    senderId: game.user.id,
+    senderIsGM: true
+  });
+  if ( route === "relay" ) {
+    if ( !game.users?.activeGM || !game.socket?.emit ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Dodge.noActiveGm"));
+      return;
+    }
+    game.socket.emit(SOCKET, payload);
+    return;
+  }
+  if ( route !== "write" ) return;
   busy.add(message.id);
   button.disabled = true;
   try {
-    let dodge = readDodgeMap(message);
-    const offers = targets.map(target => defenderFromActor(target.actor)).filter(Boolean);
-    const merged = mergeDodgeTargets(dodge, offers);
-    dodge = merged.map;
-    if ( merged.changed ) await message.setFlag(SYSTEM_ID, "dodge", dodge);
-    // Décision Marc 08/11/2026 : rien n'est écrit tant qu'une esquive est ouverte.
-    if ( !attackDamageGate(dodge) ) {
-      ui.notifications.warn(game.i18n.localize("SOL.Dodge.blocked"));
-      return;
-    }
+    await executeDamage(payload, game.user.id);
     if ( message.getFlag(SYSTEM_ID, "applied") === true ) {
-      const again = await confirmReapply();
-      if ( !again ) return;
-      dodge = reopenDamage(readDodgeMap(message));
-      await message.setFlag(SYSTEM_ID, "dodge", dodge);
-    }
-    const writable = targets.filter(target => defenderDamage(dodge[target.actor.uuid], attack).write);
-    if ( !writable.length ) {
-      if ( attackFullyApplied(dodge) ) {
-        await message.setFlag(SYSTEM_ID, "applied", true);
-        button.textContent = game.i18n.localize("SOL.Damage.applied");
-      }
-      return;
-    }
-    const zone = await askDamage(attack, writable);
-    if ( !zone ) return;
-    let applied = false;
-    for ( const target of writable ) {
-      const uuid = target.actor.uuid;
-      if ( !defenderDamage(dodge[uuid], attack).write ) continue;
-      try {
-        await applyOne(target, zone, attack, message);
-        dodge[uuid] = markDefenderApplied(dodge[uuid]);
-        applied = true;
-      } catch (error) {
-        console.error(error);
-        ui.notifications.error(game.i18n.format("SOL.Damage.failed", { name: target.name }));
-      }
-    }
-    if ( applied ) await message.setFlag(SYSTEM_ID, "dodge", dodge);
-    if ( attackFullyApplied(dodge) ) {
-      await message.setFlag(SYSTEM_ID, "applied", true);
       button.textContent = game.i18n.localize("SOL.Damage.applied");
     }
   } finally {

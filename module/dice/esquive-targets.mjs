@@ -4,11 +4,31 @@
  * Décision Marc 08/11/2026.
  */
 
+import { findSkillByName, skillScore } from "./skill-score.mjs";
+import { DODGE_SKILL, esquiveScore } from "./esquive.mjs";
+
 const SYSTEM_ID = "sol-nouvelle-ere";
 
 /**
+ * Compétence Esquive réellement sur la fiche, score calculé exploitable.
+ * Décision Didier 08/11/2026.
+ *
  * @param {Actor|null|undefined} actor
- * @returns {{ uuid: string, name: string, hasRef: boolean, tracked: boolean, reactionSpent: boolean }|null}
+ * @returns {boolean}
+ */
+export function actorHasEsquive(actor) {
+  const skills = actor?.items?.filter?.(item => item.type === "skill") ?? [];
+  const found = findSkillByName(skills, DODGE_SKILL);
+  if ( !found ) return false;
+  return typeof esquiveScore({
+    characteristics: actor?.system?.characteristics,
+    skill: found.system ?? {}
+  }) === "number" && skillScore(actor?.system?.characteristics, found.system ?? {}).impossible !== true;
+}
+
+/**
+ * @param {Actor|null|undefined} actor
+ * @returns {{ uuid: string, name: string, hasRef: boolean, hasEsquive: boolean, tracked: boolean, reactionSpent: boolean }|null}
  */
 export function defenderFromActor(actor) {
   const uuid = actor?.uuid;
@@ -22,6 +42,7 @@ export function defenderFromActor(actor) {
     uuid,
     name: typeof actor.name === "string" ? actor.name : "",
     hasRef: typeof ref === "number",
+    hasEsquive: actorHasEsquive(actor),
     tracked,
     reactionSpent: tracked && reaction?.spent === true
   };

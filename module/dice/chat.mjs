@@ -114,6 +114,7 @@ function resultKey(critical, success) {
  * @param {object|null} [params.shipStrike] Tir de vaisseau qui touche : bouton du MJ, pas les dégâts de personnage.
  * @param {string|null} [params.messageMode] Clé de `CONFIG.ChatMessage.modes`.
  * @param {object|null} [params.messageOptions] Champs ajoutés à la carte (`whisper`, `blind`, …).
+ * @param {{ attackMessageId: string, defenderUuid: string }|null} [params.esquiveLink] Lien vers l'attaque, pour le MJ actif.
  * @returns {Promise<null|{ success: boolean, dr: number, de: number, critical: "success"|"failure"|null, die: number, target: number }>}
  */
 export async function performRoll({
@@ -130,7 +131,8 @@ export async function performRoll({
   rangeChoice = true,
   shipStrike = null,
   messageMode = null,
-  messageOptions = null
+  messageOptions = null,
+  esquiveLink = null
 }) {
   const statusModifier = statusSituation(actorStatusIds(actor));
   const picked = choice
@@ -255,21 +257,23 @@ export async function performRoll({
         // Décision Marc 08/11/2026. Raté : pas de réaction. Vaisseau : pas ici.
         ...(weapon && outcome.success && !shipHit
           ? { dodge: openDodge(defenderOffers()) }
-          : {})
+          : {}),
+        ...(esquiveLink ? { esquiveFor: esquiveLink } : {})
       }
     }
   }, { inplace: false });
   const mode = requestedMode({ messageMode, messageOptions });
   const alreadyHidden = Array.isArray(extra.whisper) || typeof extra.blind === "boolean";
   if ( mode || !alreadyHidden ) applyClientVisibility(messageData, mode);
-  await ChatMessage.create(messageData);
+  const created = await ChatMessage.create(messageData);
   return {
     success: outcome.success,
     dr: outcome.dr,
     de: outcome.de,
     critical: outcome.critical,
     die: outcome.die,
-    target: picked.target
+    target: picked.target,
+    messageId: created?.id ?? null
   };
 }
 

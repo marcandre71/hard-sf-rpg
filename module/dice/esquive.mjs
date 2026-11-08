@@ -10,6 +10,7 @@
  * Le score comparé est le score modifié du jet (la cible du D100).
  * Les dégâts gardent le DR du jet d'attaque, pas une marge d'opposition.
  */
+import { skillScore } from "./skill-score.mjs";
 import { compareOpposed } from "../ships/combat.mjs";
 
 /** Compétence du catalogue. Caractéristique RÉF. */
@@ -48,13 +49,43 @@ export function keptAttackDamage(attackDr, weaponDamage, verdict) {
 }
 
 /**
- * @param {{ uuid?: string, name?: string, hasRef?: boolean, tracked?: boolean, reactionSpent?: boolean }} defender
+ * Score d'Esquive déjà calculé par le système.
+ * Compétence possédée : `skillScore`, même si la RÉF manque (0 + formation).
+ * Sinon la RÉF, si le champ existe. Pas de COO, d'ADA, ni de score autonome.
+ * Décision Didier 08/11/2026.
+ *
+ * @param {{ characteristics?: object, skill?: object|null }} input
+ * @returns {number|null}
+ */
+export function esquiveScore({ characteristics, skill }) {
+  if ( skill ) {
+    const rated = skillScore(characteristics, skill);
+    if ( rated.impossible !== true && typeof rated.score === "number" ) return rated.score;
+  }
+  const ref = characteristics?.ref?.value;
+  if ( typeof ref === "number" ) return ref;
+  return null;
+}
+
+/**
+ * Offre : RÉF présente, ou compétence exploitable. Les deux absentes : pas d'offre.
+ * Décision Didier 08/11/2026.
+ *
+ * @param {{ hasRef?: boolean, hasEsquive?: boolean }} defender
+ * @returns {boolean}
+ */
+export function esquiveOffered(defender) {
+  if ( defender?.hasRef === true ) return true;
+  return defender?.hasEsquive === true;
+}
+
+/**
+ * @param {{ uuid?: string, name?: string, hasRef?: boolean, hasEsquive?: boolean, tracked?: boolean, reactionSpent?: boolean }} defender
  * @returns {object}
  */
 export function dodgeEntry(defender) {
   const name = typeof defender?.name === "string" ? defender.name : "";
-  // Pas de RÉF sur la fiche : pas de jet inventé. Le MJ n'est pas bloqué.
-  if ( defender?.hasRef !== true ) return { state: "no-ref", name, applied: false };
+  if ( !esquiveOffered(defender) ) return { state: "no-ref", name, applied: false };
   if ( defender?.tracked === true && defender?.reactionSpent === true ) {
     return { state: "unavailable", name, applied: false };
   }
@@ -250,7 +281,11 @@ export function reopenDamage(entries) {
   const map = {};
   for ( const [uuid, entry] of Object.entries(entries ?? {}) ) {
     if ( entry?.state === "evaded" ) map[uuid] = { ...entry };
-    else map[uuid] = { ...entry, applied: false };
+    else {
+      const next = { ...entry, applied: false };
+      delete next.damageOp;
+      map[uuid] = next;
+    }
   }
   return map;
 }
@@ -269,7 +304,7 @@ export function attackFullyApplied(entries) {
  * @returns {{ spent: boolean, spentNonce: null, turnNonce: number, lastStart: null }}
  */
 export function blankReaction() {
-  return { spent: false, spentNonce: null, turnNonce: 0, lastStart: null };
+  return { spent: false, spentNonce: null, turnNonce: 0, lastStart: null, reserved: null };
 }
 
 /**
@@ -325,7 +360,9 @@ export function reactionOnTurnStart(state, start) {
     return { state: current, cleared: false, replay: true };
   }
   const nonce = (Number.isFinite(current.turnNonce) ? current.turnNonce : 0) + 1;
-  const clear = current.spent === true && (current.spentNonce ?? 0) < nonce;
+  // Une réservation en cours n'est pas un nouveau tour : on ne rend pas la réaction.
+  const inFlight = current.reserved != null;
+  const clear = !inFlight && current.spent === true && (current.spentNonce ?? 0) < nonce;
   return {
     replay: false,
     cleared: clear,
@@ -337,7 +374,8 @@ export function reactionOnTurnStart(state, start) {
         combatantId: start.combatantId
       },
       spent: clear ? false : current.spent === true,
-      spentNonce: clear ? null : (current.spentNonce ?? null)
+      spentNonce: clear ? null : (current.spentNonce ?? null),
+      reserved: current.reserved ?? null
     }
   };
 }
