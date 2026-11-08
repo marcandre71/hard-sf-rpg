@@ -12,9 +12,9 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.9.7 sur `main`
+## État du système : version 0.9.8 sur `dev/0.9.8-esquive`
 
-La 0.9.7 remplace les quatre rappels ouverts des blessures de machine : fuite, zone choisie par le MJ, arrêt d'urgence, épave. Un groupe mixte garde la zone du tir : le report manuel se fait en ne sélectionnant que les machines. L'Esquive personnelle et les malus automatiques de blessure restent en attente. Les DataModels et Foundry ne sont pas exécutés sans runtime. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 21. La suite est dans [ROADMAP.md](ROADMAP.md).
+`main` contient la 0.9.7 (`8df43ae`). Cette branche ajoute l'esquive personnelle opposée : une réaction après une attaque réussie, avant les dégâts. PR brouillon. Ne pas fusionner. Relecture ciblée requise. Les malus automatiques de blessure restent en attente. Les DataModels et Foundry ne sont pas exécutés sans runtime. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 22. La suite est dans [ROADMAP.md](ROADMAP.md).
 
 Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Décision Marc 25/10/2026 : un tir qui touche a un bouton « Appliquer les dégâts » (MJ, une fois). Les dégâts sont la valeur de l'arme plus le DR. Décision Marc 30/10/2026 : la chaleur, Pousser, les réparations et le canon sont dans la 0.7.4. Marc testera l'ensemble à la v1.0.
 

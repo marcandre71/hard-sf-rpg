@@ -452,3 +452,34 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main` (la 
    **Résultat attendu :** la ligne de la fiche dit **Fuite**. L'Endurance du drone ne baisse pas toute seule. Le statut **Saignement** n'apparaît pas sur le drone.
 6. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 22. 0.9.8 Esquive personnelle
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-esquive`. Ne fusionnez pas. Les malus de blessure ne sont pas dans cette version. Il n'y a pas de bouton nouveau pour une explosion, une zone ou une rafale : si la table décide que le coup n'est pas un tir direct perçu, le MJ clique **Passer l'esquive**.
+
+1. Prenez le ZIP :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.9.8-esquive.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.8-esquive`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.8**.
+2. Démarrez un combat avec deux personnages. Le premier touche le second avec une arme de contact ou une arme à feu.
+   **Résultat attendu :** la carte propose **Esquiver** avant que **Appliquer les dégâts** écrive une blessure. Le bouton de dégâts dit que l'esquive n'est pas tranchée.
+3. Cliquez **Esquiver**, puis annulez la fenêtre du jet.
+   **Résultat attendu :** rien n'est dépensé. **Esquiver** est encore là. Aucune blessure n'est créée. Un second clic rapide n'ouvre pas deux dés.
+4. Relancez **Esquiver** et ratez-la. Notez le DR écrit sur la carte d'attaque.
+   **Résultat attendu :** la réaction est utilisée. Les dégâts, si vous les appliquez, utilisent ce DR-là, pas un autre chiffre. Le personnage touché a une blessure. Le statut **Sonné**, s'il est posé, n'empêche pas **Esquiver** sur un coup suivant une fois la réaction revenue.
+5. Au coup d'après, avant le tour du défenseur, touchez-le encore.
+   **Résultat attendu :** pas de bouton **Esquiver**. Le texte dit que la réaction est déjà utilisée. Les dégâts peuvent partir. Au début de son prochain tour, **Esquiver** revient. Changer de round sans que son tour recommence ne suffit pas.
+6. Nouveau coup. Le MJ clique **Passer l'esquive**.
+   **Résultat attendu :** les dégâts peuvent partir. Une esquive reste possible sur un coup plus tard : la réaction n'a pas été dépensée.
+7. Deux cibles sur le même tir réussi. L'une esquive et gagne. L'autre n'esquive pas, ou rate.
+   **Résultat attendu :** seule la seconde est blessée. L'esquive de la première n'efface pas l'autre touche.
+8. Sans combat démarré, touchez un personnage et esquivez.
+   **Résultat attendu :** le jet a lieu. Une phrase dit que le MJ note la réaction. Le coup suivant propose encore **Esquiver** : le jeu ne la bloque pas tout seul.
+9. Touchez un drone ou un synthétique.
+   **Résultat attendu :** pas de bouton **Esquiver**. Les dégâts s'appliquent. La fiche machine ne gagne pas le statut **Saignement**.
+10. Avec un joueur qui ne possède pas le défenseur, ouvrez la carte.
+    **Résultat attendu :** il ne voit pas **Esquiver**. Le MJ le voit, ainsi que **Passer l'esquive**. Le bouton **Appliquer les dégâts** reste au MJ.
+11. Console (**F12**).
+    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

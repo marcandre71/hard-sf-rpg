@@ -45,6 +45,7 @@
  */
 import { SOL } from "../config.mjs";
 import { performRoll } from "../dice/chat.mjs";
+import { refreshPersonalReaction, resetReactionsForCombat } from "../dice/esquive-play.mjs";
 import {
   canReposition,
   encodeInitiative,
@@ -711,7 +712,11 @@ export class SolCombat extends Combat {
    * @returns {Promise<Combat>}
    */
   async startCombat(options) {
-    if ( game.user.isActiveGM ) await placePrecombatStunned(this);
+    if ( game.user.isActiveGM ) {
+      // Avant super : le tour 1 enregistre la réaction vide, il ne l'efface pas.
+      await resetReactionsForCombat(this);
+      await placePrecombatStunned(this);
+    }
     return super.startCombat(options);
   }
 
@@ -753,6 +758,8 @@ export class SolCombat extends Combat {
   async _onStartTurn(combatant, context) {
     await super._onStartTurn(combatant, context);
     if ( !game.user.isActiveGM ) return;
+    // API v14 : un seul MJ désigné. Le même tour rejoué ne rend pas la réaction.
+    await refreshPersonalReaction(combatant, this);
     const entries = this.turns.map(combatant => ({
       id: combatant.id,
       surprised: actorHasStatus(combatant.actor, SURPRISED)

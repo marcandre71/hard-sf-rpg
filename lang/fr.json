@@ -628,6 +628,21 @@
         "con": "Test de Constitution pour rester conscient."
       }
     },
+    "Dodge": {
+      "roll": "Esquiver",
+      "skip": "Passer l'esquive",
+      "pending": "{name} : esquive possible. Annuler la fenêtre ne dépense pas la réaction.",
+      "rolling": "{name} : esquive en cours.",
+      "blocked": "Dégâts en attente : l'esquive n'est pas tranchée.",
+      "noRef": "{name} n'a pas de RÉF : pas de jet d'Esquive.",
+      "spent": "{name} : réaction déjà utilisée, jusqu'à son prochain tour.",
+      "evaded": "{name} esquive. Pas de touche.",
+      "failed": "{name} n'esquive pas. Les dégâts gardent le DR de l'attaque.",
+      "skipped": "Esquive de {name} passée. La réaction n'est pas dépensée.",
+      "remind": "Hors combat suivi : le MJ note la réaction. Elle n'est pas remise toute seule au tour suivant.",
+      "denied": "Cette esquive n'est plus ouverte.",
+      "missing": "Défenseur introuvable."
+    },
     "Skill": {
       "characteristic": "Caractéristique",
       "training": "Formation",

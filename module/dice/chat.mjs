@@ -11,6 +11,8 @@
  */
 import { SOL } from "../config.mjs";
 import { struckZone } from "./attack.mjs";
+import { openDodge } from "./esquive.mjs";
+import { defenderOffers } from "./esquive-targets.mjs";
 import { cappedModifier, formatModifier, resolveD100, rollModifier } from "./d100.mjs";
 import { askRoll } from "./roll-dialog.mjs";
 import { statusRollModifiers, statusSituation } from "./status-mods.mjs";
@@ -249,7 +251,11 @@ export async function performRoll({
         // Dégâts de l'arme + DR. L'étape d'application s'en sert tels quels.
         damage: card.damage,
         label,
-        shipStrike: shipHit
+        shipStrike: shipHit,
+        // Décision Marc 08/11/2026. Raté : pas de réaction. Vaisseau : pas ici.
+        ...(weapon && outcome.success && !shipHit
+          ? { dodge: openDodge(defenderOffers()) }
+          : {})
       }
     }
   }, { inplace: false });

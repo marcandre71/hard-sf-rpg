@@ -22,6 +22,7 @@ import { SkillData } from "./data/skill.mjs";
 import { WeaponData } from "./data/weapon.mjs";
 import { registerInitiative } from "./combat/initiative.mjs";
 import { registerDamage } from "./dice/apply-damage.mjs";
+import { registerEsquive } from "./dice/esquive-play.mjs";
 import { registerBreachCountdown } from "./dice/breach-countdown.mjs";
 import { registerSealJoints } from "./dice/seal-joints.mjs";
 import { registerEndurance } from "./dice/endurance.mjs";
@@ -35,7 +36,7 @@ import { registerShipPlay } from "./ships/actions.mjs";
 import { registerShipStrike } from "./ships/strike.mjs";
 
 // Choix technique : numéro croissant pour la mise à jour Foundry.
-// 0.9.5 Machines, 0.9.6 lore, 0.9.7 blessures des machines.
+// 0.9.5 Machines, 0.9.6 lore, 0.9.7 blessures des machines, 0.9.8 esquive.
 const SYSTEM_ID = "sol-nouvelle-ere";
 
 /**
@@ -171,6 +172,7 @@ function initializeSystem() {
   registerItemGuard();
   registerNpcReadyMigration(SYSTEM_ID);
   registerDamage();
+  registerEsquive();
   registerEndurance();
   registerBreachCountdown();
   registerSealJoints();

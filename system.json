@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.7 : blessures des machines (fuite, zone, châssis).",
-  "version": "0.9.7",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.8 : esquive personnelle opposée.",
+  "version": "0.9.8",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

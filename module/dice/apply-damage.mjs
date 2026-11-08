@@ -31,6 +31,15 @@ import {
   resolveStrike,
   seuilFromCharacteristics
 } from "./damage.mjs";
+import {
+  attackDamageGate,
+  attackFullyApplied,
+  defenderDamage,
+  markDefenderApplied,
+  mergeDodgeTargets,
+  reopenDamage
+} from "./esquive.mjs";
+import { defenderFromActor } from "./esquive-targets.mjs";
 import { performRoll } from "./chat.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
@@ -121,8 +130,14 @@ export function registerDamage() {
 
 /**
  * @param {ChatMessage} message
- * @returns {{ location: string, gross: number, attackerCritical: boolean, label: string }|null}
+ * @returns {Record<string, object>}
  */
+function readDodgeMap(message) {
+  const raw = message.getFlag(SYSTEM_ID, "dodge");
+  if ( !raw || typeof raw !== "object" ) return {};
+  return foundry.utils.deepClone(raw);
+}
+
 function readAttack(message) {
   const get = key => message.getFlag(SYSTEM_ID, key);
   const location = get("location");
@@ -485,23 +500,47 @@ async function applyDamage(message, button) {
   busy.add(message.id);
   button.disabled = true;
   try {
+    let dodge = readDodgeMap(message);
+    const offers = targets.map(target => defenderFromActor(target.actor)).filter(Boolean);
+    const merged = mergeDodgeTargets(dodge, offers);
+    dodge = merged.map;
+    if ( merged.changed ) await message.setFlag(SYSTEM_ID, "dodge", dodge);
+    // Décision Marc 08/11/2026 : rien n'est écrit tant qu'une esquive est ouverte.
+    if ( !attackDamageGate(dodge) ) {
+      ui.notifications.warn(game.i18n.localize("SOL.Dodge.blocked"));
+      return;
+    }
     if ( message.getFlag(SYSTEM_ID, "applied") === true ) {
       const again = await confirmReapply();
       if ( !again ) return;
+      dodge = reopenDamage(readDodgeMap(message));
+      await message.setFlag(SYSTEM_ID, "dodge", dodge);
     }
-    const zone = await askDamage(attack, targets);
+    const writable = targets.filter(target => defenderDamage(dodge[target.actor.uuid], attack).write);
+    if ( !writable.length ) {
+      if ( attackFullyApplied(dodge) ) {
+        await message.setFlag(SYSTEM_ID, "applied", true);
+        button.textContent = game.i18n.localize("SOL.Damage.applied");
+      }
+      return;
+    }
+    const zone = await askDamage(attack, writable);
     if ( !zone ) return;
     let applied = false;
-    for ( const target of targets ) {
+    for ( const target of writable ) {
+      const uuid = target.actor.uuid;
+      if ( !defenderDamage(dodge[uuid], attack).write ) continue;
       try {
         await applyOne(target, zone, attack, message);
+        dodge[uuid] = markDefenderApplied(dodge[uuid]);
         applied = true;
       } catch (error) {
         console.error(error);
         ui.notifications.error(game.i18n.format("SOL.Damage.failed", { name: target.name }));
       }
     }
-    if ( applied ) {
+    if ( applied ) await message.setFlag(SYSTEM_ID, "dodge", dodge);
+    if ( attackFullyApplied(dodge) ) {
       await message.setFlag(SYSTEM_ID, "applied", true);
       button.textContent = game.i18n.localize("SOL.Damage.applied");
     }

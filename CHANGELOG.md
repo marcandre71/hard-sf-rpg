@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.9.8
+
+Branche `dev/0.9.8-esquive`, depuis `main` (`8df43ae`). PR brouillon. Ne pas fusionner. Relecture ciblée demandée. La section 22 de TESTER.md sert à la séance de test de la v1.
+
+Décision Marc 08/11/2026. Esquive personnelle opposée. Réf. LdR v0.2 §2, §6, §7 et §11. Aucun malus de blessure. Aucun changement de lore ni de combat spatial. L'esquive de vaisseau (−10 par DR) n'est pas réutilisée.
+
+- Après une attaque personnelle réussie, avant les dégâts, chaque défenseur qui a une RÉF peut esquiver. Le jet d'attaque n'est pas relancé. Un raté n'ouvre pas d'esquive.
+- Opposition : `compareOpposed`, score modifié, sans priorité au critique. Une seule réussite gagne. Deux réussites : DR, puis score. Égalité parfaite ou double échec : pas de touche. Si l'attaque l'emporte, les dégâts gardent son DR initial.
+- Une réaction par défenseur. Elle est dépensée quand le dé d'Esquive est vraiment lancé, même si l'esquive rate. Annuler la fenêtre ne dépense rien et laisse les dégâts bloqués. Le MJ peut passer : les dégâts continuent, la réaction reste. Elle revient au début du prochain tour de ce défenseur, pas à chaque round. Le même début de tour rejoué ne la rend pas. Hors combat suivi, un rappel dit au MJ de la noter : rien n'est automatisé.
+- Sonné garde la réaction. Une attaque non perçue, une explosion, une zone ou une rafale que la table ne traite pas comme un tir direct : le MJ passe. Aucune nouvelle règle de rafale ou de zone. Le champ Rafale du catalogue ne retire pas l'offre.
+- Créature, synthétique et drone n'ont pas de RÉF : pas de jet inventé, les dégâts ne sont pas bloqués. Une esquive n'annule que la touche de ce défenseur.
+- DataModels, validation stricte et Foundry : non exécutés, runtime absent. Ce n'est pas une validation Foundry.
+
 ## 0.9.7
 
 Branche `dev/0.9.7-machines`, depuis `main` (`8f53b38`). PR brouillon. Ne pas fusionner. La section 21 de TESTER.md sert à la séance de test de la v1.
