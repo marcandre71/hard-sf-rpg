@@ -2,7 +2,7 @@
 
 ## 0.9.5
 
-Branche `dev/0.8.0`, depuis `main` (`6f19056`). Ancienne 0.8.0. Le manifeste dit 0.9.5 pour que Foundry la voie plus récente que la 0.9.4. PR brouillon vers `main`. Ne pas fusionner. La section 19 de TESTER.md sert à la séance de test de la v1.
+Branche `dev/0.8.0`, entrée dans `main` en avance rapide. Ancienne 0.8.0. Le manifeste dit 0.9.5 pour que Foundry la voie plus récente que la 0.9.4. Revue ciblée de `bf88162` : aucun défaut de code. Exécution réelle des DataModels, de la validation stricte et de Foundry : non testée, runtime absent. Test Marc reporté à la v1. La section 19 de TESTER.md sert à cette séance, avec le ZIP de `main`.
 
 Décision Didier/Marc 31/10/2026. Réf. Équipement v0.3 §5. Réf. Blessures et Séquelles v0.3 corrigée §3. Réf. LdR v0.2 §3. Décision Marc 18/10/2026 : Base des machines jusqu'à 100.
 
@@ -10,6 +10,7 @@ Décision Didier/Marc 31/10/2026. Réf. Équipement v0.3 §5. Réf. Blessures et
 - La fiche Drone a COO, ADA et le Score autonome. Chacun se lance comme une caractéristique. La migration ne les injecte pas dans un diff partiel. La protection vient des armures de la fiche. Coque de Luciole, Carapace de Crabe et Blindage alu-titane oléophobe sont dans Armures et vêtements, et embarqués sur le drone.
 - Blessures de machine : 24 objets du tableau, six zones. Les ids `InjLightMachine1`, `InjSeriousMach01`, `InjCritMach00001` et `InjMortalMach001`, déjà sur `main`, deviennent les quatre optiques. Les vingt autres ids sont nouveaux. Restent visibles : conversion de la fuite, explosion du châssis, pièces récupérables, report sur une zone absente.
 - L'Endurance calculée (CON/5, arrondi au supérieur) redonne 3, 9 et 13. Le Seuil redonne 1, 5 et 7. Les blessures de machine suivent la Blessure standard, test de CON sur critique compris. Rien de plus n'est codé.
+- Limites de données, non tranchées : la protection 3 du Crabe et la protection 4 du TATI sont posées sur les six zones. La masse des trois objets armure reste le défaut 0 du schéma. Les masses 2,5 kg, 45 kg et 350 kg sont dans le texte du drone. Quatre `[à compléter]` du tableau restent visibles : conversion de la fuite, explosion du châssis, pièces récupérables, report sur une zone absente.
 - Réserves de Relecteur sur la 0.9.4, notées, pas codées : un vrai test de `rollItem` avec un acteur et un `performRoll` factices ; une notification légère quand le verrou de tir refuse un double-clic.
 
 ## 0.9.4

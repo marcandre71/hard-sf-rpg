@@ -19,11 +19,11 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 - [x] 0.9.2 — atouts, augmentations, logiciels et substances. Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.9.3 — habillage SF des fiches (ancienne 0.8.1 / 0.10.0). Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.9.4 — blessures, journaux, vaisseaux PNJ, et une munition retirée à chaque tir. Relue par Relecteur, test Marc reporté à la v1.
+- [x] 0.9.5 Machines (ex-0.8.0) — fiches du drone, du synthétique, du véhicule et de la créature ; 24 blessures de machine. Luciole, Crabe et TATI. Masse du TATI : 350 kg. Revue ciblée positive. DataModels, validation stricte et Foundry non testés : runtime absent. Test Marc reporté à la v1. Décision Didier/Marc 31/10/2026.
 
 ## Ensuite
 
 - [ ] 0.7.5 — éventuelle, hors de l'ordre ci-dessous. Combat personnel : effet de l'Esquive, malus de blessure −10/−20. Règles en attente de Didier. Le malus de portée des personnages est dans la 0.9.0.
-- [ ] 0.9.5 Machines (ex-0.8.0) — fiches du drone, du synthétique, du véhicule et de la créature ; 24 blessures de machine. Luciole, Crabe et TATI. Masse du TATI : 350 kg. Branche `dev/0.8.0`. En relecture. Ne pas fusionner. Décision Didier/Marc 31/10/2026.
 
 Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et un `performRoll` factices ; une notification légère quand le verrou de tir refuse un double-clic. Réserves mineures de Relecteur sur la 0.9.4 (`84517bb`).
 - [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée.

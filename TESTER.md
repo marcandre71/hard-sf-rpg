@@ -392,17 +392,17 @@ Cette section est pour la séance de test de la v1. Le ZIP de `main` ne contient
 
 ## 19. 0.9.5 Machines (ex-0.8.0)
 
-Cette section est pour la séance de test de la v1. Prenez le ZIP de la branche `dev/0.8.0`. Le système affiché est **0.9.5**.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`. Le système affiché est **0.9.5**.
 
-1. Prenez le ZIP de `dev/0.8.0` :
+1. Prenez le ZIP de `main` :
 
-   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/dev/0.8.0.zip
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
-   Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.8.0`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.5**.
-2. Ouvrez le compendium **Machines**. Regardez aussi **Équipement** et **Armures et vêtements**.
-   **Résultat attendu :** **Luciole**, **Crabe** et **TATI** sont dans Machines. Ils ne sont pas dans Équipement. Les armures **Coque de Luciole**, **Carapace de Crabe** et **Blindage alu-titane oléophobe** sont dans Armures et vêtements.
-3. Ouvrez **TATI**, puis **Crabe**, puis **Luciole**.
+2. Ouvrez le compendium **Machines**. Pour jouer les fiches, importez-les dans le monde : glissez **Luciole**, **Crabe** et **TATI** depuis ce compendium vers l'onglet **Acteurs**. Ouvrez ensuite la copie du monde, pas seulement la fiche du compendium. Regardez aussi **Équipement** et **Armures et vêtements**.
+   **Résultat attendu :** **Luciole**, **Crabe** et **TATI** sont dans Machines, puis sur l'onglet Acteurs. Ils ne sont pas dans Équipement. Les armures **Coque de Luciole**, **Carapace de Crabe** et **Blindage alu-titane oléophobe** sont dans Armures et vêtements.
+3. Ouvrez les copies du monde de **TATI**, puis **Crabe**, puis **Luciole**.
    **Résultat attendu :** le type est **Drone**. La fiche a le même habillage sombre que le personnage. Elle montre **FOR**, **CON**, **COO**, **ADA**, **PER**, le **Score autonome** et le **Seuil**. Le TATI a FOR **75**, CON **65**, Score autonome **50**, Endurance **13**, Seuil **7**, masse **350 kg**. La Luciole a l'armure **Coque de Luciole** sur la fiche, **1** sur chaque zone, non pressurisée. Crabe et TATI parlent du sas. Luciole ne le dit pas.
    Sur le TATI, cliquez **Score autonome** et lancez le dé.
    **Résultat attendu :** la fenêtre est celle d'une caractéristique. Le message du chat est du même genre.
@@ -410,5 +410,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de la branche 
    **Résultat attendu :** la créature et le synthétique montrent FOR, CON, PER et le Seuil. Ils n'ont pas COO, ADA ni Score autonome. Le véhicule n'a pas ces caractéristiques. Sa catégorie est **Terrestre**.
 5. Ouvrez le compendium **Blessures**. Cherchez **Lentille étoilée (optiques)** et **Désintégration du châssis**.
    **Résultat attendu :** il y a **24** blessures de machine, sur tête, torse, deux bras et deux jambes. **Lentille étoilée (optiques)** est légère, tête, pénalité **−10**. **Fuite de refroidissement ou batterie percée (châssis)** parle d'une conversion **[à compléter]**. **Brèche du microréacteur ou de la pile (châssis)** parle d'une explosion **[à compléter]**. Il n'y a plus les quatre titres **Blessure de machine**.
-6. Console (**F12**).
+6. Micro-test v14, en tant que MJ. Prenez un drone créé avant la 0.9.5, qui n'avait que FOR, CON et PER. S'il n'y en a pas, créez un **Drone** vide, fermez-le, rouvrez-le.
+   **Résultat attendu :** la fiche s'ouvre sans message d'erreur. **COO**, **ADA** et **Score autonome** sont présents. Ce sont les défauts du schéma, pas les chiffres de Luciole, de Crabe ou du TATI. Cliquez **COO** et lancez le dé : la fenêtre est celle d'une caractéristique.
+7. Console (**F12**), après ce jet.
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
