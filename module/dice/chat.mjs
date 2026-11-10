@@ -15,6 +15,7 @@ import { openDodge } from "./esquive.mjs";
 import { defenderOffers } from "./esquive-targets.mjs";
 import { cappedModifier, formatModifier, resolveD100, rollModifier } from "./d100.mjs";
 import { askRoll } from "./roll-dialog.mjs";
+import { injuryMalusOptions } from "./injury-malus.mjs";
 import { statusRollModifiers, statusSituation } from "./status-mods.mjs";
 
 const CARD = "systems/sol-nouvelle-ere/templates/chat/roll-card.hbs";
@@ -144,7 +145,8 @@ export async function performRoll({
       statusModifier,
       free: suggested,
       shipPost,
-      rangeChoice
+      rangeChoice,
+      injuries: shipPost ? [] : actorInjuryMalus(actor)
     });
   if ( !picked ) return null;
 
@@ -334,6 +336,11 @@ function stampStatus(choice, score, statusModifier, shipPost = false) {
  * @param {Actor|null|undefined} actor
  * @returns {string[]}
  */
+function actorInjuryMalus(actor) {
+  const items = actor?.items?.filter?.(item => item.type === "injury") ?? [];
+  return injuryMalusOptions(items);
+}
+
 function actorStatusIds(actor) {
   if ( actor?.statuses && typeof actor.statuses[Symbol.iterator] === "function" ) {
     return [...actor.statuses];

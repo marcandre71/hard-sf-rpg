@@ -7,7 +7,8 @@
  */
 import { SOL } from "../config.mjs";
 import { AIM_MODIFIERS, attackSituation } from "./attack.mjs";
-import { cappedModifier, formatModifier, rollModifier } from "./d100.mjs";
+import { formatModifier } from "./d100.mjs";
+import { checkedInjuryIds, injuryMalusTotal, personalRollModifier } from "./injury-malus.mjs";
 
 /** Ordre du tableau LdR v0.2 §5. La clé `normal` est le défaut. */
 const DIFFICULTY_ORDER = ["veryEasy", "easy", "simple", "normal", "tricky", "hard", "veryHard", "extreme"];
@@ -44,7 +45,7 @@ function readAim(form) {
  * @param {boolean} [shipPost]
  * @returns {object}
  */
-function readForm(form, score, statusModifier = 0, shipPost = false) {
+function readForm(form, score, statusModifier = 0, shipPost = false, injuries = []) {
   const difficultyKey = form.elements.difficulty?.value || "normal";
   const cfg = SOL.difficulties[difficultyKey] ?? SOL.difficulties.normal;
   const raw = Number(form.elements.modifier?.value);
@@ -56,10 +57,17 @@ function readForm(form, score, statusModifier = 0, shipPost = false) {
   // Décision Marc 30/10/2026. Sans la liste, le malus de portée est 0.
   const hasRange = Boolean(form.elements.rangeBand);
   const situation = attackSituation(calledShot, aimActions, AIM_MODIFIERS, form.elements.rangeBand?.value);
-  const stacked = situation.situation + Number(statusModifier || 0);
-  const modifier = shipPost
-    ? rollModifier(cfg.modifier, free, stacked, { shipPost: true })
-    : cappedModifier(cfg.modifier, free, stacked);
+  const injury = shipPost
+    ? 0
+    : injuryMalusTotal(injuries, checkedInjuryIds(form.elements));
+  const modifier = personalRollModifier({
+    difficulty: cfg.modifier,
+    free,
+    situation: situation.situation,
+    status: statusModifier,
+    injury,
+    shipPost
+  });
   const aimPart = situation.aim.parts.find(part => part.id === "aim");
   return {
     difficultyKey,
@@ -89,11 +97,11 @@ function readForm(form, score, statusModifier = 0, shipPost = false) {
  * @param {boolean} [shipPost]
  * @returns {void}
  */
-function paintTotal(root, score, statusModifier = 0, shipPost = false) {
+function paintTotal(root, score, statusModifier = 0, shipPost = false, injuries = []) {
   const form = root.querySelector("form") ?? root;
   const out = form.querySelector("[data-total]");
   if ( !out || !form.elements?.difficulty ) return;
-  out.textContent = formatModifier(readForm(form, score, statusModifier, shipPost).modifier);
+  out.textContent = formatModifier(readForm(form, score, statusModifier, shipPost, injuries).modifier);
 }
 
 /**
@@ -110,9 +118,11 @@ export function rollChoice(score, difficultyKey = "normal", free = 0, { shipPost
   const key = difficultyKey in SOL.difficulties ? difficultyKey : "normal";
   const cfg = SOL.difficulties[key];
   const safeFree = Number.isFinite(free) ? Math.trunc(free) : 0;
-  const modifier = shipPost
-    ? rollModifier(cfg.modifier, safeFree, 0, { shipPost: true })
-    : cappedModifier(cfg.modifier, safeFree);
+  const modifier = personalRollModifier({
+    difficulty: cfg.modifier,
+    free: safeFree,
+    shipPost
+  });
   return {
     difficultyKey: key,
     difficultyLabel: game.i18n.localize(cfg.label),
@@ -167,6 +177,23 @@ function attackFields(showRange = false) {
  * @param {number} statusModifier
  * @returns {string}
  */
+function injuryFields(injuries) {
+  if ( !injuries?.length ) return "";
+  const escape = foundry.utils.escapeHTML;
+  const boxes = injuries.map(injury => {
+    const zoneKey = SOL.bodyLocations[injury.zone];
+    const zone = zoneKey ? game.i18n.localize(zoneKey) : (injury.zone || "");
+    const name = injury.name ? `${injury.name} — ` : "";
+    const text = `${name}${zone} (${formatModifier(injury.penalty)})`;
+    return `<label><input type="checkbox" name="injuryPenalty" value="${escape(injury.id)}">
+        ${escape(text)}</label>`;
+  }).join("");
+  return `<fieldset>
+      <legend>${escape(game.i18n.localize("SOL.Roll.injuries"))}</legend>
+      ${boxes}
+    </fieldset>`;
+}
+
 function statusNote(statusModifier) {
   if ( !statusModifier ) return "";
   const escape = foundry.utils.escapeHTML;
@@ -178,7 +205,7 @@ function statusNote(statusModifier) {
  * @param {{ title: string, score: number, attack?: boolean, statusModifier?: number, free?: number, shipPost?: boolean }} options
  * @returns {Promise<null|object>}
  */
-export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0, shipPost = false, rangeChoice = true }) {
+export async function askRoll({ title, score, attack = false, statusModifier = 0, free = 0, shipPost = false, rangeChoice = true, injuries = [] }) {
   const initialFree = Number.isFinite(Number(free)) ? Math.trunc(Number(free)) : 0;
   const escape = foundry.utils.escapeHTML;
   const options = DIFFICULTY_ORDER.map(key => {
@@ -199,6 +226,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         <input type="number" name="modifier" value="${initialFree}" step="1">
       </label>
       ${attack ? attackFields(!shipPost && rangeChoice !== false) : ""}
+      ${shipPost ? "" : injuryFields(injuries)}
       ${statusNote(statusModifier)}
       <p class="sol-roll-total">${escape(game.i18n.localize("SOL.Roll.total"))}
         <strong data-total>0</strong></p>
@@ -213,7 +241,7 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         action: "roll",
         label: game.i18n.localize("SOL.Roll.confirm"),
         default: true,
-        callback: (_event, button) => readForm(button.form, score, statusModifier, shipPost)
+        callback: (_event, button) => readForm(button.form, score, statusModifier, shipPost, shipPost ? [] : injuries)
       },
       {
         action: "cancel",
@@ -228,7 +256,10 @@ export async function askRoll({ title, score, attack = false, statusModifier = 0
         : (second?.element ?? first?.element ?? second);
       if ( root instanceof HTMLElement ) {
         const form = root.querySelector("form") ?? root;
-        const update = () => paintTotal(form, score, statusModifier, shipPost);
+        const update = () => paintTotal(form, score, statusModifier, shipPost, shipPost ? [] : injuries);
+        form.querySelectorAll("[name=injuryPenalty]").forEach(box => {
+          box.addEventListener("change", update);
+        });
         form.querySelector("[name=difficulty]")?.addEventListener("change", update);
         form.querySelector("[name=modifier]")?.addEventListener("input", update);
         form.querySelector("[name=calledShot]")?.addEventListener("change", update);

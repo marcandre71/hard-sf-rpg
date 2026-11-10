@@ -510,6 +510,7 @@
       "score": "Score",
       "difficulty": "Difficulté",
       "free": "Modificateur",
+      "injuries": "Blessures : cochez celles qui concernent cette action",
       "range": "Portée",
       "rangeBand": {
         "short": "Courte (0)",

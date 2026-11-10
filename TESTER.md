@@ -483,3 +483,24 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-
     **Résultat attendu :** il ne voit pas **Esquiver**. Le MJ le voit, ainsi que **Passer l'esquive**. Le bouton **Appliquer les dégâts** reste au MJ.
 11. Console (**F12**).
     **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 23. 0.9.9 Malus de blessure
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **0.9.9**. Le jeu ne devine pas la zone de l'action : les cases partent décochées. Toute blessure encore sur la fiche et dont le malus n'est pas 0 est listée. La case **Soignée** n'est pas lue.
+
+1. Sur un personnage, posez une blessure légère au bras droit (malus **−10**) et une blessure grave à la jambe gauche (malus **−20**). Lancez une compétence.
+   **Résultat attendu :** la fenêtre montre deux cases, décochées, avec la zone. Le total, difficulté normale et modificateur 0, est **0**.
+2. Cochez seulement le bras. Regardez le total, puis lancez.
+   **Résultat attendu :** le total passe à **−10**. La carte annonce un score visé de 10 de moins que le score de la compétence.
+3. Relancez et cochez les deux cases.
+   **Résultat attendu :** le total est **−30**.
+4. Posez aussi **Épuisé**, et cochez les deux blessures. La difficulté reste normale.
+   **Résultat attendu :** −20 d'Épuisé et −30 de blessures feraient −50. Le total affiché ne descend pas sous **−50**.
+5. Ajoutez une blessure critique. Elle a un malus **0**.
+   **Résultat attendu :** elle n'apparaît pas dans les cases.
+6. Sur un vaisseau, ouvrez un jet de poste (Pilote ou Artilleur) alors que le personnage du poste a ces blessures.
+   **Résultat attendu :** la fenêtre du poste n'a pas ces cases. Le total du poste ne change pas à cause d'elles.
+7. Esquivez avec les deux cases cochées. Notez le score visé de la carte d'esquive.
+   **Résultat attendu :** ce score visé inclut les **−30**. Le reste de l'esquive ne change pas.
+8. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
