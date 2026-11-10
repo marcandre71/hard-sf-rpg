@@ -7,7 +7,7 @@
   "system": {
     "characteristicModifiers": "ADA +15, FOR -5, CON -5",
     "gToleranceModifier": -2,
-    "trait": "Ignore la première pénalité de recul en apesanteur. Ne supporte pas durablement plus de 0,5 g.",
+    "trait": "Le test de recul en apesanteur est retiré. Ne supporte pas durablement plus de 0,5 g.",
     "description": "<p>0,03 à 0,5 g</p>"
   },
   "effects": [],

@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 0.9.9 : malus de blessure au jet personnel.",
-  "version": "0.9.9",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.0.0 : Blindage dans les dégâts, Rafale retirée, blessure soignée hors des cases.",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

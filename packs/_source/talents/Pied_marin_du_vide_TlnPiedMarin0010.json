@@ -5,11 +5,11 @@
   "type": "talent",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Atouts v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Ignore la première pénalité de recul en apesanteur (LdR §10, Glossaire).</p>",
+    "description": "<!-- Réf. Atouts v0.3 §2. Décision Marc 30/10/2026. Décision Marc/Didier 1.0.0 : le test de recul est retiré. -->\n<p>Le test de recul en apesanteur est retiré. Cet atout ne change aucun jet.</p>",
     "xpCost": 15,
     "domain": "space",
     "prerequisites": "ADA 45+ ou Manœuvre en apesanteur +20",
-    "effect": "<p>Ignore la première pénalité de recul en apesanteur (LdR §10, Glossaire).</p>"
+    "effect": "<p>Le test de recul en apesanteur est retiré. Cet atout ne change aucun jet.</p>"
   },
   "effects": [],
   "folder": null,

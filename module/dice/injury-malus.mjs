@@ -4,8 +4,9 @@
  * Réf. LdR v0.2 §7 : légère −10, grave −20, aux actions utilisant la zone.
  * Décision Didier 08/11/2026, délégation v1 de Marc.
  * Aucune notion de blessure « active » n'est lue dans le code.
- * Le champ `treated` existe et n'est pas consulté. La liste est
- * chaque blessure encore sur la fiche, dont le champ `penalty` n'est pas 0.
+ * Décision Marc/Didier 1.0.0 : une blessure marquée Soignée
+ * (`treated`) est exclue des cases. La liste est chaque autre
+ * blessure encore sur la fiche, dont le champ `penalty` n'est pas 0.
  * Critique et mortelle ont 0 : elles n'apparaissent pas.
  * Les cases partent décochées. Pas de détection de zone.
  * Un jet de poste de vaisseau ignore ces malus.
@@ -21,6 +22,7 @@ export function injuryMalusOptions(injuries) {
   const list = [];
   for ( const item of injuries ?? [] ) {
     if ( item?.type && item.type !== "injury" ) continue;
+    if ( item?.system?.treated === true || item?.treated === true ) continue;
     const raw = item?.system?.penalty ?? item?.penalty;
     const penalty = Number(raw);
     if ( !Number.isFinite(penalty) || Math.trunc(penalty) === 0 ) continue;

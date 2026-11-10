@@ -30,7 +30,7 @@ Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et u
 - [x] 0.9.7 — blessures des machines. Fuite narrative, zone choisie par le MJ avant application, arrêt d'urgence du châssis critique, épave du châssis mortel. Décision 08/11/2026. Contrôles ciblés passés, runtime Foundry non exécuté, test Marc à la v1.
 - [x] 0.9.8 — esquive personnelle opposée. Décision Marc 08/11/2026. Fusionnée dans `main` (`541f420`).
 - [x] 0.9.9 — malus de blessure personnels (jalon 0.7.5). Décision Didier, délégation v1 de Marc. Pas de Relecteur.
-- [ ] 1.0.0 — séance de test complète par Marc avec TESTER.md (toutes les sections), corrections, documentation alignée. Pas commencée.
+- [x] 1.0.0 — Rafale et test de recul en apesanteur retirés (les champs restent, aucun jet ne les lit). Blindage ajouté à la protection de coque dans les dégâts : hors service ou non renseigné = 0, dégradé = tous les points (règle déjà dans le code). Blessure Soignée hors des cases de malus. Chaleur 0.7.4 inchangée. Le +10 du commandant reste un Commandement réussi. Séance de test : TESTER.md section 24. Runtime Foundry non exécuté.
 
 Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0.
 

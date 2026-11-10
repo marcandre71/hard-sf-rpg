@@ -121,6 +121,46 @@ const plateOnly = resolveShipStrike(hull({
 check(plateOnly.state.sections.bow.armor === 0 && plateOnly.state.modules[0].integrity === 8, "la plaque absorbe, le module reste");
 check(plateOnly.logs.some(entry => entry.key === "SOL.Ship.crit.plateTorn"), "critique de plaque au passage à 0");
 
+const intactArmor = resolveShipStrike(hull({
+  sections: { bow: { armor: 8, integrity: 20 } },
+  modules: [{ id: "arm", name: "Blindage", section: "bow", category: "armor", armorPoints: 4, integrity: 6, integrityMax: 6 }]
+}), { sectionId: "bow", amount: 3 }, scripted([]));
+check(intactArmor.state.sections.bow.armor === 5 && intactArmor.state.sections.bow.integrity === 20, "blindage intact : 4 points s'ajoutent, la plaque stockée passe de 8 à 5");
+check(intactArmor.logs.length === 0, "blindage intact : pas de critique si la plaque reste");
+
+const intactSoak = resolveShipStrike(hull({
+  sections: { bow: { armor: 8, integrity: 20 } },
+  modules: [{ id: "arm", name: "Blindage", section: "bow", category: "armor", armorPoints: 4, integrity: 6, integrityMax: 6 }]
+}), { sectionId: "bow", amount: 10 }, scripted([1]));
+check(intactSoak.state.sections.bow.armor === 0 && intactSoak.state.sections.bow.integrity === 20, "blindage intact : 8+4 absorbent 10, l'intégrité ne bouge pas");
+check(intactSoak.logs.some(entry => entry.key === "SOL.Ship.crit.plateTorn"), "la plaque stockée à 0 lance encore le critique");
+
+const degradedArmor = resolveShipStrike(hull({
+  sections: { bow: { armor: 8, integrity: 20 } },
+  modules: [{ id: "arm", name: "Blindage", section: "bow", category: "armor", armorPoints: 4, integrity: 2, integrityMax: 4 }]
+}), { sectionId: "bow", amount: 3 }, scripted([]));
+check(degradedArmor.state.sections.bow.armor === 5, "blindage dégradé : la règle déjà écrite garde les 4 points");
+
+const outArmor = resolveShipStrike(hull({
+  sections: { bow: { armor: 8, integrity: 20 } },
+  modules: [{ id: "arm", name: "Blindage", section: "bow", category: "armor", armorPoints: 4, integrity: 0, integrityMax: 4 }]
+}), { sectionId: "bow", amount: 10 }, scripted([1]));
+check(outArmor.state.sections.bow.armor === 0 && outArmor.state.sections.bow.integrity === 18, "blindage hors service : 0 point, 2 dégâts passent à l'intégrité");
+
+const unsetArmor = resolveShipStrike(hull({
+  sections: { bow: { armor: 8, integrity: 20 } },
+  modules: [{ id: "arm", name: "Blindage", section: "bow", category: "armor", armorPoints: 4, integrity: 0, integrityMax: 0 }]
+}), { sectionId: "bow", amount: 3 }, scripted([]));
+check(unsetArmor.state.sections.bow.armor === 5, "blindage non renseigné : 0 point");
+
+const readArmor = hullFromDocument({}, [{
+  type: "shipModule",
+  id: "arm",
+  name: "Blindage",
+  system: { section: "bow", category: "armor", armorPoints: 4, integrity: { value: 6, max: 6 } }
+}]);
+check(readArmor.modules[0].armorPoints === 4, "la fiche relue garde les points de blindage");
+
 let threw = false;
 try {
   resolveShipStrike(hull({

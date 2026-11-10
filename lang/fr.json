@@ -633,7 +633,7 @@
       "roll": "Esquiver",
       "skip": "Passer l'esquive",
       "pending": "{name} : esquive possible. Annuler la fenêtre ne dépense pas la réaction.",
-      "eligibility": "Rappel : le MJ décide si ce coup s'esquive. Passez l'offre pour une zone, une explosion, des rafales multiples ou une attaque non perçue. Une arme cochée Rafale peut tirer au coup par coup : ce coup reste esquivable.",
+      "eligibility": "Rappel : le MJ décide si ce coup s'esquive. Passez l'offre pour une zone, une explosion ou une attaque non perçue.",
       "rolling": "{name} : esquive en cours.",
       "blocked": "Dégâts en attente : l'esquive n'est pas tranchée.",
       "noRef": "{name} n'a pas de RÉF : pas de jet d'Esquive.",

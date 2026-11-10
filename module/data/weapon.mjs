@@ -37,6 +37,8 @@ export class WeaponData extends BaseItemData {
       // La migration ne pose ce champ que sur une fiche complète.
       // @see https://foundryvtt.com/api/v14/classes/foundry.data.fields.BooleanField.html
       melee: boolField("SOL.Weapon.melee", false),
+      // Décision Marc/Didier 1.0.0 : le champ reste, aucun jet ne le lit.
+      // Le test de recul en apesanteur est retiré.
       recoil: boolField("SOL.Weapon.recoil", false),
       ammo: valueMaxField("SOL.Weapon.ammo"),
       ammoType: stringField("SOL.Weapon.ammoType.label", {
@@ -44,6 +46,7 @@ export class WeaponData extends BaseItemData {
         blank: false,
         choices: SOL.ammoTypes
       }),
+      // Décision Marc/Didier 1.0.0 : le champ reste, aucun jet ne le lit.
       burst: boolField("SOL.Weapon.burst", false),
       hullSafe: boolField("SOL.Weapon.hullSafe", true),
       // Entier ou décimal : choix provisoire, à valider par Marc. Masse et encombrement décimaux.

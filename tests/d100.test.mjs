@@ -293,6 +293,11 @@ check("portée du jet d'attaque", () => {
   const kept = fullWeapon({ skill: "Corps-à-corps", melee: false });
   migrateWeaponContact(kept);
   assert.equal(kept.melee, false);
+  const burst = fullWeapon({ skill: "Armes de poing", burst: true, recoil: true });
+  migrateWeaponContact(burst);
+  assert.equal(burst.melee, false);
+  assert.equal(burst.burst, true);
+  assert.equal(burst.recoil, true);
   // Foundry écrit false dans _source : le repli ne s'applique plus.
   // Sans la clé, Corps-à-corps masque encore le choix.
   assert.equal(showsAttackRange({

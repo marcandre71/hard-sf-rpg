@@ -69,6 +69,8 @@ export function attackRangePenalty(band) {
  * Clés d'une fiche d'arme complète. Un diff qui n'en a qu'une partie
  * n'est pas une fiche : on n'y ajoute pas `melee`.
  * Décision Marc 31/10/2026.
+ * `recoil` et `burst` restent dans la liste pour reconnaître une fiche
+ * complète. Décision Marc/Didier 1.0.0 : aucun jet ne les lit.
  *
  * @type {string[]}
  */

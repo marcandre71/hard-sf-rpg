@@ -5,7 +5,7 @@
   "type": "gear",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Armes v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Se fixe sur le canon d'une arme de poing ou d'épaule ; annule le recul en apesanteur pour les tirs au coup par coup (12 tirs par cartouche d'azote). Encombrement : [à compléter].</p>",
+    "description": "<!-- Réf. Armes v0.3 §7. Décision Marc 30/10/2026. Décision Marc/Didier 1.0.0 : le test de recul est retiré. -->\n<p>Le test de recul en apesanteur est retiré. Cet objet ne change aucun jet. Encombrement : [à compléter].</p>",
     "mass": 0.3,
     "enc": 0,
     "quantity": 1,

@@ -8,6 +8,7 @@
  */
 
 import { compareOpposed } from "./combat.mjs";
+import { armorBonus } from "./hull.mjs";
 import { shipWeaponKind, weaponClass } from "./reactor.mjs";
 
 /** Dégâts d'un missile à l'impact : 20 + DR du lancement. Réf. Vaisseaux v0.1 §4. */
@@ -68,9 +69,9 @@ export function sectionFromInverted(inverted, fleeing) {
  * Plaque, puis module, puis section. Le surplus est perdu.
  * `null` : cette couche n'existe pas (radiateurs : pas de plaque,
  * pas d'intégrité de section). Une couche déjà à 0 ne « passe » pas à 0.
- * Décision Marc 26/10/2026 : seule la plaque de la section est ce pool.
- * Les points des modules Blindage restent un bonus affiché.
- * Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+ * Le nombre `plate` est le pool de ce coup. L'appelant y ajoute
+ * le Blindage, puis ne réécrit que la plaque stockée.
+ * Décision Marc/Didier 1.0.0. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
  *
  * @param {{ plate?: number|null, module?: number|null, section?: number|null, amount?: unknown }} input
  * @returns {{ plate: number|null, module: number|null, section: number|null, plateZeroed: boolean, moduleZeroed: boolean, sectionZeroed: boolean, lost: number, spent: { plate: number, module: number, section: number } }}
@@ -194,10 +195,31 @@ function cloneHull(state) {
 }
 
 /**
+ * Forme lue par `armorBonus` : intégrité en objet `{ value, max }`.
+ *
+ * @param {HullModule[]|null|undefined} modules
+ * @returns {Array<{ category?: string, section?: string, armorPoints?: unknown, condition?: string, integrity: { value?: unknown, max?: unknown } }>}
+ */
+function armorModules(modules) {
+  return (modules ?? []).map(module => ({
+    category: module.category,
+    section: module.section,
+    armorPoints: module.armorPoints,
+    condition: module.condition,
+    integrity: module.integrity && typeof module.integrity === "object"
+      ? module.integrity
+      : { value: module.integrity, max: module.integrityMax }
+  }));
+}
+
+/**
  * Applique les dégâts puis les critiques qui passent à 0.
  * `dice.d6` et `dice.d10` renvoient 1–6 et 1–10. `dice.pick` choisit un index.
- * La plaque lue ici est celle de la section, pas le bonus des modules.
- * Décision Marc 26/10/2026. Décision Marc 25/10/2026. Réf. Vaisseaux v0.1 §5.
+ * La plaque stockée plus les points de Blindage forment le pool.
+ * Ces points ne sont pas écrits dans la plaque.
+ * Hors service ou non renseigné : 0. Dégradé : tous les points
+ * (Décision Marc 21/10/2026, déjà dans `armorBonus`).
+ * Décision Marc/Didier 1.0.0. Réf. Vaisseaux v0.1 §5.
  *
  * @param {HullState} state
  * @param {{ sectionId: string, moduleId?: string|null, amount: number }} strike
@@ -211,23 +233,25 @@ export function resolveShipStrike(state, strike, dice) {
   const sectionId = strike?.sectionId;
   const section = next.sections[sectionId];
   if ( !section ) return { state: next, logs, spent: { plate: 0, module: 0, section: 0, lost: whole(strike?.amount) } };
-  // Décision Marc 26/10/2026 : la plaque de la section seule. Pas le bonus Blindage.
   const hasPlate = sectionId !== "radiators";
+  const storedPlate = hasPlate ? pool(section.armor) : null;
+  const bonus = hasPlate ? armorBonus(armorModules(next.modules), sectionId) : 0;
   const module = strike?.moduleId
     ? next.modules.find(entry => entry.id === strike.moduleId && entry.section === sectionId) ?? null
     : null;
   const applied = applyHullDamage({
-    plate: hasPlate ? section.armor : null,
+    plate: storedPlate === null ? null : storedPlate + bonus,
     module: module ? module.integrity : null,
     section: hasPlate ? section.integrity : null,
     amount: strike?.amount
   });
-  if ( hasPlate && applied.plate !== null ) section.armor = applied.plate;
+  if ( hasPlate && applied.plate !== null ) section.armor = Math.max(0, applied.plate - bonus);
   if ( module && applied.module !== null ) module.integrity = applied.module;
   if ( hasPlate && applied.section !== null ) section.integrity = applied.section;
   /** @type {Set<string>} */
   const moduleCritted = new Set();
-  if ( applied.plateZeroed ) plateCrit(next, sectionId, logs, dice, moduleCritted);
+  const plateZeroed = storedPlate !== null && storedPlate > 0 && section.armor === 0;
+  if ( plateZeroed ) plateCrit(next, sectionId, logs, dice, moduleCritted);
   if ( applied.moduleZeroed && module ) moduleCrit(next, section, module, logs, dice, moduleCritted, hasPlate);
   if ( applied.sectionZeroed ) sectionCrit(next, sectionId, section, logs, dice, moduleCritted);
   return {
@@ -668,7 +692,8 @@ export function hullFromDocument(source, items) {
         section: system.section,
         category: system.category,
         integrity: system.integrity?.value,
-        integrityMax: system.integrity?.max
+        integrityMax: system.integrity?.max,
+        armorPoints: system.armorPoints
       });
     }
   }

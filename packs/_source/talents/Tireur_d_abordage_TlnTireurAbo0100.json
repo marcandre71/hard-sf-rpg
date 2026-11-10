@@ -5,11 +5,11 @@
   "type": "talent",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Atouts v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En apesanteur, +10 au test de Manœuvre en apesanteur contre le recul (le test en rafale passe de −20 à −10).</p>",
+    "description": "<!-- Réf. Atouts v0.3 §5. Décision Marc 30/10/2026. Décision Marc/Didier 1.0.0 : ces tests sont retirés. -->\n<p>Le test de recul en apesanteur et le test en rafale sont retirés. Cet atout ne change aucun jet.</p>",
     "xpCost": 15,
     "domain": "combat",
     "prerequisites": "Armes de poing +20 ou Armes d'épaule +20",
-    "effect": "<p>En apesanteur, +10 au test de Manœuvre en apesanteur contre le recul (le test en rafale passe de −20 à −10).</p>"
+    "effect": "<p>Le test de recul en apesanteur et le test en rafale sont retirés. Cet atout ne change aucun jet.</p>"
   },
   "effects": [],
   "folder": null,

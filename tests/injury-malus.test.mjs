@@ -31,7 +31,8 @@ const sheet = [
 
 check("liste : malus non nul, critique et mortelle absentes", () => {
   const options = injuryMalusOptions(sheet);
-  assert.deepEqual(options.map(item => item.id), ["legere", "grave", "soignee"]);
+  assert.deepEqual(options.map(item => item.id), ["legere", "grave"]);
+  assert.equal(options.some(item => item.id === "soignee"), false);
   assert.equal(options.some(item => item.penalty === 0), false);
 });
 
@@ -78,6 +79,7 @@ check("plafond ±50 avec Épuisé, vaisseau sans blessure", () => {
 check("TESTER §23", () => {
   const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
   assert.equal(tester.includes("## 23. 0.9.9 Malus de blessure"), true);
+  assert.equal(tester.includes("## 24. 1.0.0 Blindage, Soignée, Rafale"), true);
   const lang = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8"));
   assert.equal(typeof lang.SOL.Roll.injuries, "string");
 });

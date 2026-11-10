@@ -211,15 +211,17 @@ check("réaction : prochain tour du défenseur, pas un tour rejoué, pas hors co
   assert.equal(attackDamageGate(added.map), false);
 });
 
-check("rappel d'offre sur la carte, rafale non bloquante", () => {
+check("rappel d'offre sur la carte, zone et explosion", () => {
   const pendingMap = openDodge([{ uuid: "Actor.a", name: "A", hasRef: true }]);
   assert.equal(dodgeOfferReminder(pendingMap), true);
   assert.equal(dodgeOfferReminder({ "Actor.d": dodgeEntry({ name: "Luciole", hasRef: false }) }), false);
   assert.equal(dodgeOfferReminder({ "Actor.a": skipDodge(pending, true).entry }), false);
-  const lang = readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8");
-  assert.equal(lang.includes("rafales multiples"), true);
-  assert.equal(lang.includes("coup par coup"), true);
-  assert.equal(JSON.parse(lang).SOL.Dodge.eligibility.includes("Rafale"), true);
+  const eligibility = JSON.parse(readFileSync(new URL("../lang/fr.json", import.meta.url), "utf8")).SOL.Dodge.eligibility;
+  assert.equal(eligibility.includes("zone"), true);
+  assert.equal(eligibility.includes("explosion"), true);
+  assert.equal(eligibility.includes("non perçue"), true);
+  assert.equal(eligibility.includes("rafales"), false);
+  assert.equal(eligibility.includes("Rafale"), false);
 });
 
 check("synthétique : compétence possédée, sinon pas d'offre", () => {
@@ -255,7 +257,7 @@ check("TESTER §22 décrit les cas manuels", () => {
   assert.equal(tester.includes("## 22. 0.9.8 Esquive personnelle"), true);
   assert.equal(tester.includes("Passer l'esquive"), true);
   assert.equal(tester.includes("Sans combat démarré"), true);
-  assert.equal(tester.includes("coup par coup"), true);
+  assert.equal(tester.includes("ne parle plus de rafales"), true);
   assert.equal(tester.includes("score autonome"), true);
   assert.equal(tester.includes("lance quand même sur sa RÉF"), true);
 });

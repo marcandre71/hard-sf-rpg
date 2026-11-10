@@ -312,7 +312,7 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 2. Ouvrez les compendiums **Atouts**, **Augmentations**, **Logiciels** et **Substances**.
    **Résultat attendu :** **25** atouts, **14** augmentations, **15** logiciels, **15** substances. Il n'y a pas de seconde entrée pour **Pied marin du vide**.
 3. Ouvrez **Pied marin du vide**.
-   **Résultat attendu :** coût en XP **15**, domaine **Espace**, prérequis **ADA 45+ ou Manœuvre en apesanteur +20**. L'effet est du texte. Rien ne change tout seul un jet de recul.
+   **Résultat attendu :** coût en XP **15**, domaine **Espace**, prérequis **ADA 45+ ou Manœuvre en apesanteur +20**. L'effet dit que le test de recul en apesanteur est retiré. Rien ne change un jet.
 4. Ouvrez **Thérapie de réparation de l'ADN « Protocole Valhalla »**.
    **Résultat attendu :** genre **Thérapie**, coût **0**. Légalité : Terre **Réglementée**, Mars **Légale**, Ailleurs **Légale (rare et chère dans la Ceinture)**. La description dit que le coût est **[à compléter]**.
 5. Ouvrez **Greffier d'éphémérides « Kepler-V »**.
@@ -464,7 +464,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-
    Le dossier décompressé s'appelle `hard-sf-rpg-dev-0.9.8-esquive`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.8**.
 2. Démarrez un combat avec deux personnages. Le premier touche le second avec une arme de contact ou une arme à feu.
-   **Résultat attendu :** la carte propose **Esquiver** avant que **Appliquer les dégâts** écrive une blessure. Le bouton de dégâts dit que l'esquive n'est pas tranchée. La carte porte le rappel : le MJ passe l'offre pour une zone, une explosion, des rafales multiples ou une attaque non perçue. Une arme cochée **Rafale** peut tirer au coup par coup : ce coup reste esquivable. Ce n'est pas un bouton de plus.
+   **Résultat attendu :** la carte propose **Esquiver** avant que **Appliquer les dégâts** écrive une blessure. Le bouton de dégâts dit que l'esquive n'est pas tranchée. La carte porte le rappel : le MJ passe l'offre pour une zone, une explosion ou une attaque non perçue. Il ne parle plus de rafales. Ce n'est pas un bouton de plus.
 3. Cliquez **Esquiver**, puis annulez la fenêtre du jet.
    **Résultat attendu :** rien n'est dépensé. **Esquiver** est encore là. Aucune blessure n'est créée. Un second clic rapide n'ouvre pas deux dés.
 4. Relancez **Esquiver** et ratez-la. Notez le DR écrit sur la carte d'attaque.
@@ -486,7 +486,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `dev/0.9.8-
 
 ## 23. 0.9.9 Malus de blessure
 
-Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **0.9.9**. Le jeu ne devine pas la zone de l'action : les cases partent décochées. Toute blessure encore sur la fiche et dont le malus n'est pas 0 est listée. La case **Soignée** n'est pas lue.
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`. Le jeu ne devine pas la zone de l'action : les cases partent décochées. Toute blessure encore sur la fiche, non marquée Soignée, et dont le malus n'est pas 0 est listée. Une blessure **Soignée** n'apparaît pas : voir la section 24.
 
 1. Sur un personnage, posez une blessure légère au bras droit (malus **−10**) et une blessure grave à la jambe gauche (malus **−20**). Lancez une compétence.
    **Résultat attendu :** la fenêtre montre deux cases, décochées, avec la zone. Le total, difficulté normale et modificateur 0, est **0**.
@@ -502,5 +502,30 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
    **Résultat attendu :** la fenêtre du poste n'a pas ces cases. Le total du poste ne change pas à cause d'elles.
 7. Esquivez avec les deux cases cochées. Notez le score visé de la carte d'esquive.
    **Résultat attendu :** ce score visé inclut les **−30**. Le reste de l'esquive ne change pas.
+8. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 24. 1.0.0 Blindage, Soignée, Rafale
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, version **1.0.0**. La chaleur du réacteur reste celle de la 0.7.4 : à partir de 7, **−10** à tous les jets de poste. Les valeurs provisoires ne changent pas.
+
+1. Prenez le ZIP :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.0**.
+2. Sur un vaisseau, mettez la plaque de la proue à **8**. Ajoutez un module de catégorie **Blindage** sur la proue, **4** points de blindage, Intégrité **6 / 6**. Appliquez **3** dégâts à cette section, sans viser le module.
+   **Résultat attendu :** la plaque stockée passe à **5**. L'intégrité de la section ne baisse pas. Les 4 points ne sont pas recopiés dans la case de plaque : au coup suivant, ils s'ajoutent encore.
+3. Même plaque **8**, même module à **4** points, Intégrité **2 / 4** (dégradé). Appliquez **3** dégâts.
+   **Résultat attendu :** la plaque passe encore à **5**. Un module dégradé garde tous ses points. C'est la règle déjà écrite pour le Blindage. Hors service n'est pas ce cas.
+4. Même plaque **8**, Intégrité du module **0 / 4** (hors service), toujours **4** points. Appliquez **10** dégâts.
+   **Résultat attendu :** la plaque passe à **0** et l'intégrité de la section baisse de **2**. Les points du module hors service n'ajoutent rien. Un module dont le maximum d'intégrité est **0** (non renseigné) n'ajoute rien non plus.
+5. Sur un personnage, posez une blessure légère (malus **−10**) et cochez **Soignée** sur cette blessure. Posez une autre blessure légère, sans cocher Soignée. Lancez une compétence.
+   **Résultat attendu :** seule la blessure non soignée est dans les cases. La blessure Soignée n'y est pas, même si son malus n'est pas 0.
+6. Ouvrez une arme qui a encore la case **Rafale** ou **Recul**. Ouvrez les atouts **Pied marin du vide** et **Tireur d'abordage**. Touchez un personnage pour ouvrir une carte d'esquive.
+   **Résultat attendu :** les cases peuvent rester cochées. Aucun jet ne change à cause d'elles. Les deux atouts disent que le test est retiré. Le rappel de la carte parle d'une zone, d'une explosion ou d'une attaque non perçue. Il ne parle pas de rafales multiples, ni d'une arme cochée Rafale.
+7. En combat de vaisseaux, au poste Commandant, lancez **Commandement** et choisissez l'Artilleur. Réussissez le jet, puis lancez le poste Artilleur.
+   **Résultat attendu :** le jet d'Artilleur propose **+10**. Refaites un Commandement raté vers le Pilote : le jet du Pilote ne gagne pas ce +10.
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

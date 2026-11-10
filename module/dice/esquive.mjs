@@ -226,9 +226,9 @@ export function finishDodge(entry, userId, verdict) {
 
 /**
  * Rappel d'éligibilité, sur la carte, tant qu'une offre est ouverte.
- * Le MJ passe une zone, une explosion, des rafales multiples ou un coup
- * non perçu. Une arme cochée Rafale peut tirer au coup par coup.
- * Décision Didier 08/11/2026.
+ * Le MJ passe une zone, une explosion ou un coup non perçu.
+ * Décision Didier 08/11/2026. La Rafale ne change plus ce rappel
+ * (Décision Marc/Didier 1.0.0).
  *
  * @param {Record<string, object>|null|undefined} entries
  * @returns {boolean}

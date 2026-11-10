@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 1.0.0
+
+Branche `cursor/v1-1-0-13b2`, depuis `main` (`4d04917`). Décision Marc, relayée par Didier.
+
+- La Rafale et le test de recul en apesanteur ne changent plus aucun jet. Les champs `burst` et `recoil` restent sur les armes, pour ne pas casser les fiches. Le rappel d'esquive garde la zone, l'explosion et l'attaque non perçue.
+- Le Blindage s'ajoute à la plaque pour le calcul des dégâts de vaisseau. Il n'est pas recopié dans la plaque stockée. Hors service ou non renseigné : 0. Dégradé : tous les points, règle déjà dans le code (Décision Marc 21/10/2026).
+- Une blessure marquée Soignée n'entre pas dans les cases de malus.
+- Le +10 du commandant était déjà un test de Commandement réussi. Rien n'est changé de ce côté. La chaleur reste celle de la 0.7.4.
+- Runtime Foundry non exécuté.
+
 ## 0.9.8
 
 Branche `dev/0.9.8-esquive`, depuis `main` (`8df43ae`). PR brouillon. Ne pas fusionner. Relecture ciblée demandée. La section 22 de TESTER.md sert à la séance de test de la v1.
