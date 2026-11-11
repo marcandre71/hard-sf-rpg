@@ -10,13 +10,15 @@
  * @see https://foundryvtt.com/api/v14/classes/foundry.helpers.ClientSettings.html#register
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.Scene.html#activate
  */
+import { CAST_SETTING, SHEET_FLAG, SHEET_VERSION } from "./test-cast.mjs";
 import {
   CREATED_SETTING,
   JOURNAL_NAME,
   RECREATE_SETTING,
   SCENE_NAME,
   SYSTEM_ID,
-  runTestScene
+  runTestScene,
+  upgradeTestCast
 } from "./test-scene.mjs";
 
 /**
@@ -24,6 +26,12 @@ import {
  * @returns {void}
  */
 export function registerTestScene(systemId) {
+  game.settings.register(systemId, CAST_SETTING, {
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
   game.settings.register(systemId, CREATED_SETTING, {
     scope: "world",
     config: false,
@@ -53,9 +61,14 @@ export function registerTestScene(systemId) {
  */
 async function createTestSceneOnce(systemId) {
   try {
+    const active = game.user?.isActiveGM === true;
+    if ( active ) {
+      const version = Number(game.settings.get(systemId, CAST_SETTING) ?? 0);
+      const upgraded = await upgradeTestCast(foundryApi(), { isActiveGM: true, version });
+      if ( upgraded.status === "done" ) await game.settings.set(systemId, CAST_SETTING, SHEET_VERSION);
+    }
     const created = game.settings.get(systemId, CREATED_SETTING) === true;
     const force = game.settings.get(systemId, RECREATE_SETTING) === true;
-    const active = game.user?.isActiveGM === true;
     const result = await runTestScene(foundryApi(), {
       isActiveGM: active,
       created: force ? false : created,
@@ -150,6 +163,17 @@ function foundryApi() {
     async addItems(actor, items) {
       if ( !items.length ) return;
       await actor.document.createEmbeddedDocuments("Item", items);
+    },
+    async updateSystem(actor, system) {
+      await actor.document.update({ system });
+    },
+    async setSheetMark(actor, mark) {
+      await actor.document.setFlag(SYSTEM_ID, SHEET_FLAG, mark);
+      actor.flags = actor.document.flags;
+    },
+    async setTraining(actor, name, training) {
+      const item = actor.document.items.find(entry => entry.name === name);
+      if ( item ) await item.update({ "system.training": training });
     },
     async deleteScene(id) {
       await Scene.implementation.deleteDocuments([id]);

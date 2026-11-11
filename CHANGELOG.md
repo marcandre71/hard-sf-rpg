@@ -1,5 +1,16 @@
 # Journal des versions
 
+## 1.0.2
+
+Branche `cursor/fiches-essai-102-13b2`, depuis `main` (`96886ae`). Décision Didier, délégation v1 de Marc, 11/11/2026. Pas de Relecteur.
+
+- Humain d'essai : création au total de 130 points, plafond 60 avant origine, origine Terre, milieu Enfant de la Veille, profession Garde ou soldat. Cinq compétences, formations cumulées.
+- Adversaire d'essai : bases 35, valeur moyenne choisie, origine Terre, tir à +20.
+- Synthétique d'essai : FOR, CON et PER à 40, valeur moyenne choisie. Esquive à +20, score 20 sans RÉF.
+- Une fiche d'essai déjà modifiée n'est pas réécrite. La passe n'a lieu qu'une fois, chez le MJ actif.
+- La dose de départ et la tolérance aux g modifiée par l'origine ne sont pas des champs : elles ne sont pas stockées.
+- Runtime Foundry non exécuté.
+
 ## 1.0.1
 
 Branche `cursor/scene-test-101-13b2`, depuis `main` (`c84adcc`). Décision Marc, relayée par Didier, 11/11/2026. Pas de Relecteur.

@@ -7,11 +7,18 @@
  * Crabe, Petite Fortune et le Patrouilleur viennent des compendiums
  * Acteurs. L'arme et l'armure viennent des compendiums Objets.
  * Un compendium absent ne plante pas : la fiche minimale est créée,
- * ou l'objet n'est pas ajouté.
+ * ou l'objet d'équipement n'est pas ajouté.
  *
- * Aucun chiffre de règle n'est écrit ici. La formation d'Esquive reste
- * celle du compendium.
+ * Les trois personnages sont préremplis (`test-cast.mjs`).
+ * Une fiche d'essai déjà modifiée n'est pas réécrite.
  */
+
+import {
+  SHEET_FLAG,
+  SHEET_VERSION,
+  castProfile,
+  isPristineTestActor
+} from "./test-cast.mjs";
 
 export const SYSTEM_ID = "sol-nouvelle-ere";
 
@@ -222,25 +229,52 @@ export function worldActorData(source, spec) {
   data.type = spec.type;
   const prior = data.flags?.[SYSTEM_ID] ?? {};
   data.flags = { ...(data.flags ?? {}), [SYSTEM_ID]: { ...prior, [ROLE_FLAG]: spec.role } };
+  const profile = castProfile(spec.role);
+  if ( profile ) {
+    data.system = profile.system;
+    data.flags[SYSTEM_ID][SHEET_FLAG] = SHEET_VERSION;
+  }
   return data;
 }
 
 /**
  * @param {object} source
- * @param {boolean} equipped
+ * @param {{ equipped?: boolean, training?: number }} [extra]
  * @returns {object}
  */
-export function worldItemData(source, equipped) {
+export function worldItemData(source, extra = {}) {
   const data = structuredClone(source);
   delete data._id;
   delete data._key;
   delete data.folder;
   delete data.ownership;
   delete data._stats;
-  if ( equipped && data.system && typeof data.system === "object" ) {
-    data.system = { ...data.system, equipped: true };
+  if ( data.system && typeof data.system === "object" ) {
+    data.system = { ...data.system };
+    if ( extra.equipped === true ) data.system.equipped = true;
+    if ( typeof extra.training === "number" ) data.system.training = extra.training;
   }
   return data;
+}
+
+/**
+ * @param {object} api
+ * @param {{ pack: string, name: string, equipped?: boolean, training?: number, fallback?: { type: string, system?: object } }} request
+ * @returns {Promise<object|null>}
+ */
+async function resolveItem(api, request) {
+  const source = await api.readDocument(request.pack, request.name);
+  if ( source ) return worldItemData(source, request);
+  if ( request.fallback ) {
+    await api.notify("warn", "itemFallback", { pack: request.pack, name: request.name });
+    return {
+      name: request.name,
+      type: request.fallback.type,
+      system: { ...(request.fallback.system ?? {}) }
+    };
+  }
+  await api.notify("warn", "missingItem", { pack: request.pack, name: request.name });
+  return null;
 }
 
 /**
@@ -354,16 +388,14 @@ export async function runTestScene(api, options) {
         await api.setRole(actor, spec.role);
       }
       const have = new Set((actor.items ?? []).map(item => item.name));
+      const profile = castProfile(spec.role);
+      const requests = reused ? spec.items : [...spec.items, ...(profile?.items ?? [])];
       /** @type {object[]} */
       const toAdd = [];
-      for ( const item of spec.items ) {
+      for ( const item of requests ) {
         if ( have.has(item.name) ) continue;
-        const source = await api.readDocument(item.pack, item.name);
-        if ( !source ) {
-          await api.notify("warn", "missingItem", { pack: item.pack, name: item.name });
-          continue;
-        }
-        toAdd.push(worldItemData(source, item.equipped === true));
+        const resolved = await resolveItem(api, item);
+        if ( resolved ) toAdd.push(resolved);
       }
       if ( toAdd.length ) await api.addItems(actor, toAdd);
       origins.push({
@@ -392,6 +424,62 @@ export async function runTestScene(api, options) {
     await api.activateScene(scene);
     await api.notify("info", "done", {});
     return { status: "done", origins, sceneId: scene?.id };
+  } catch (error) {
+    await api.notify("error", "failed", {});
+    return { status: "failed", reason: error instanceof Error ? error.message : String(error) };
+  }
+}
+
+/**
+ * Passe unique sur les acteurs d'essai déjà là.
+ * Un joueur ne fait rien. Une fiche modifiée est marquée et laissée.
+ *
+ * @param {object} api
+ * @param {{ isActiveGM?: boolean, version?: number }} options
+ * @returns {Promise<{ status: string, reason?: string, results?: object[] }>}
+ */
+export async function upgradeTestCast(api, options) {
+  if ( options?.isActiveGM !== true ) return { status: "skipped", reason: "not-active" };
+  if ( Number(options?.version ?? 0) >= SHEET_VERSION ) return { status: "skipped", reason: "already" };
+  /** @type {object[]} */
+  const results = [];
+  try {
+    const actors = await api.actors();
+    for ( const spec of TEST_CAST ) {
+      const profile = castProfile(spec.role);
+      if ( !profile ) continue;
+      const actor = findTestActor(actors, spec);
+      if ( !actor ) continue;
+      const mark = flagValue(actor, SHEET_FLAG);
+      if ( mark === SHEET_VERSION || mark === "user" ) {
+        results.push({ role: spec.role, action: "keep" });
+        continue;
+      }
+      if ( !isPristineTestActor(actor, spec.role) ) {
+        await api.setSheetMark(actor, "user");
+        await api.notify("warn", "kept", { name: actor.name });
+        results.push({ role: spec.role, action: "skip" });
+        continue;
+      }
+      await api.updateSystem(actor, profile.system);
+      /** @type {object[]} */
+      const toAdd = [];
+      for ( const item of profile.items ) {
+        const existing = (actor.items ?? []).find(entry => entry.name === item.name);
+        if ( existing ) {
+          if ( typeof item.training === "number" && Number(existing.system?.training ?? 0) !== item.training ) {
+            await api.setTraining(actor, item.name, item.training);
+          }
+          continue;
+        }
+        const resolved = await resolveItem(api, item);
+        if ( resolved ) toAdd.push(resolved);
+      }
+      if ( toAdd.length ) await api.addItems(actor, toAdd);
+      await api.setSheetMark(actor, SHEET_VERSION);
+      results.push({ role: spec.role, action: "fill" });
+    }
+    return { status: "done", results };
   } catch (error) {
     await api.notify("error", "failed", {});
     return { status: "failed", reason: error instanceof Error ? error.message : String(error) };

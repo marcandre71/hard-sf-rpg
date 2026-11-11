@@ -532,18 +532,22 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, ver
 
 ## 25. 1.0.1 Scène de test
 
-Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, version **1.0.1**. Ouvrez le monde en **MJ**. Un joueur ne crée pas cette scène.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, version **1.0.2**. Ouvrez le monde en **MJ**. Un joueur ne crée pas cette scène.
 
 1. Prenez le ZIP :
 
    https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
    Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
-   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.1**.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.2**.
 2. Créez un monde vide, ou ouvrez-en un, connecté comme MJ. Attendez la fin du chargement.
    **Résultat attendu :** la scène active s'appelle **Scène de test**. Le fond est une couleur unie, avec une grille. Il n'y a pas d'image téléchargée. Six pions sont posés : **Humain d'essai**, **Synthétique d'essai**, **Adversaire d'essai**, **Crabe**, **Petite Fortune**, **Patrouilleur de la Veille**.
 3. Ouvrez les fiches.
-   **Résultat attendu :** l'humain porte le **Pistolet de bord 9 mm basse vélocité** (munitions **15 / 15**) et la **Combinaison souple « Peau de quart »**. L'adversaire porte le même pistolet. Le synthétique a la compétence **Esquive** sur sa fiche. Crabe, Petite Fortune et le Patrouilleur sont ceux des compendiums **Machines** et **Vaisseaux**. Les trois personnes n'existent pas dans un compendium d'acteurs : leurs caractéristiques restent les défauts de la fiche. La formation d'Esquive reste celle du compendium.
+   **Résultat attendu :** l'humain porte le **Pistolet de bord 9 mm basse vélocité** (munitions **15 / 15**), la **Combinaison souple « Peau de quart »**, l'origine **Terre**, le milieu **Enfant de la Veille** et la profession **Garde ou soldat**. Ses bases, avant l'origine, sont FOR 50, CON 45, COO 50, RÉF 45, ADA 25, PER 35, INT 40, VOL 25, PRÉ 40. Avec Terre : FOR 55, CON 55, ADA 15, le reste inchangé. Formations : Armes de poing 30, Esquive 30, Corps-à-corps 20, Commandement 20, Opérations de bord 20. Le seuil affiché est 6, l'Endurance maximale 11. Ces deux chiffres ne sont pas des cases à remplir.
+   L'adversaire a aussi l'origine **Terre**. Ses bases sont toutes à **35** (valeur moyenne choisie, un peu sous l'humain). Avec Terre : FOR 40, CON 45, ADA 25. Armes de poing est à **20**.
+   Le synthétique a FOR, CON et PER à **40** (valeur moyenne choisie). Il n'a pas d'origine : le code n'en met pas sur ce type. Esquive est à **20**. Sans RÉF, le score d'Esquive affiché au jet est **20**.
+   Crabe, Petite Fortune et le Patrouilleur viennent des compendiums **Machines** et **Vaisseaux**.
+   Si vous aviez déjà changé une de ces trois fiches avant cette version, elle reste comme vous l'avez laissée, et un avertissement le dit une fois.
 4. Ouvrez le journal **Lisez-moi test**.
    **Résultat attendu :** il renvoie au dépôt et au guide TESTER, avec les sections 21 à 25.
 5. Rechargez la page (F5), toujours en MJ.

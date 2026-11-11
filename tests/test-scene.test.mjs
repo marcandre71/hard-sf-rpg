@@ -68,6 +68,7 @@ function world(seed = {}) {
         name: data.name,
         type: data.type,
         flags: data.flags,
+        system: data.system,
         items: (data.items ?? []).map(item => ({ name: item.name, type: item.type }))
       };
       state.actors.push(actor);
@@ -145,6 +146,9 @@ const first = await (async () => {
   assert.equal(state.journals[0].name, "Lisez-moi test");
   assert.equal(state.journals[0].html.includes("https://github.com/marcandre71/hard-sf-rpg"), true);
   const human = state.actors.find(actor => actor.name === "Humain d'essai");
+  assert.equal(human.system.characteristics.for.base, 50);
+  assert.equal(human.system.characteristics.for.origin, 5);
+  assert.equal(human.system.characteristics.ada.origin, -10);
   assert.equal(human.items.some(item => item.name.includes("Pistolet") && item.equipped === true), true);
   assert.equal(human.items.some(item => item.name.includes("Peau de quart")), true);
   const synthetic = state.actors.find(actor => actor.name === "Synthétique d'essai");
@@ -216,8 +220,9 @@ const first = await (async () => {
   assert.equal(state.actors.length, 6);
   assert.equal(result.origins.every(entry => entry.source === "fallback"), true);
   assert.equal(state.notes.some(note => note.key === "missingPack" && note.data.pack === "machines"), true);
-  assert.equal(state.notes.some(note => note.key === "missingItem" && note.data.name === "Esquive"), true);
-  assert.equal(state.actors.find(actor => actor.name === "Synthétique d'essai").items.length, 0);
+  assert.equal(state.notes.some(note => note.key === "itemFallback" && note.data.name === "Esquive"), true);
+  const synthetic = state.actors.find(actor => actor.name === "Synthétique d'essai");
+  assert.equal(synthetic.items.some(item => item.name === "Esquive"), true);
 }
 
 {
@@ -249,7 +254,7 @@ const first = await (async () => {
 {
   const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
   assert.equal(tester.includes("## 25. 1.0.1 Scène de test"), true);
-  for ( const key of ["recreate", "recreateHint", "done", "failed", "missingPack", "missingItem", "journal"] ) {
+  for ( const key of ["recreate", "recreateHint", "done", "failed", "missingPack", "missingItem", "itemFallback", "kept", "journal"] ) {
     assert.equal(typeof fr.SOL.TestScene[key], "string", key);
   }
   assert.equal(fr.SOL.TestScene.journal.includes("TESTER.md#22-098-esquive-personnelle"), true);
