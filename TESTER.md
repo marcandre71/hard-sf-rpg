@@ -529,3 +529,26 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, ver
    **Résultat attendu :** le jet d'Artilleur propose **+10**. Refaites un Commandement raté vers le Pilote : le jet du Pilote ne gagne pas ce +10.
 8. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 25. 1.0.1 Scène de test
+
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, version **1.0.1**. Ouvrez le monde en **MJ**. Un joueur ne crée pas cette scène.
+
+1. Prenez le ZIP :
+
+   https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
+
+   Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.1**.
+2. Créez un monde vide, ou ouvrez-en un, connecté comme MJ. Attendez la fin du chargement.
+   **Résultat attendu :** la scène active s'appelle **Scène de test**. Le fond est une couleur unie, avec une grille. Il n'y a pas d'image téléchargée. Six pions sont posés : **Humain d'essai**, **Synthétique d'essai**, **Adversaire d'essai**, **Crabe**, **Petite Fortune**, **Patrouilleur de la Veille**.
+3. Ouvrez les fiches.
+   **Résultat attendu :** l'humain porte le **Pistolet de bord 9 mm basse vélocité** (munitions **15 / 15**) et la **Combinaison souple « Peau de quart »**. L'adversaire porte le même pistolet. Le synthétique a la compétence **Esquive** sur sa fiche. Crabe, Petite Fortune et le Patrouilleur sont ceux des compendiums **Machines** et **Vaisseaux**. Les trois personnes n'existent pas dans un compendium d'acteurs : leurs caractéristiques restent les défauts de la fiche. La formation d'Esquive reste celle du compendium.
+4. Ouvrez le journal **Lisez-moi test**.
+   **Résultat attendu :** il renvoie au dépôt et au guide TESTER, avec les sections 21 à 25.
+5. Rechargez la page (F5), toujours en MJ.
+   **Résultat attendu :** il n'y a toujours qu'une scène **Scène de test**, et un seul acteur de chaque nom.
+6. Ouvrez **Configurer les paramètres** (l'icône engrenage de la barre de gauche). Dans les réglages du système, cochez **Recréer la scène de test**, puis enregistrez.
+   **Résultat attendu :** la scène est de nouveau active, avec les six pions. Les acteurs n'ont pas été dupliqués. La case se décoche. Un second pistolet n'apparaît pas sur l'humain.
+7. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

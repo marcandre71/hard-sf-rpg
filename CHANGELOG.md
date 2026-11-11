@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 1.0.1
+
+Branche `cursor/scene-test-101-13b2`, depuis `main` (`c84adcc`). Décision Marc, relayée par Didier, 11/11/2026. Pas de Relecteur.
+
+- Au premier `ready`, le MJ actif crée la scène « Scène de test » et l'active. Un réglage de monde mémorise que c'est fait. Un joueur ne crée rien.
+- La case « Recréer la scène de test », dans les réglages du système, remplace la scène. Les acteurs du même nom, ou déjà marqués, sont réutilisés.
+- Crabe, Petite Fortune et le Patrouilleur viennent des compendiums. L'humain, le synthétique et l'adversaire n'ont pas de compendium d'acteurs : fiches minimales, défauts du schéma. Esquive, le pistolet et la combinaison souple viennent des compendiums d'objets. Un compendium absent ne plante pas.
+- Journal « Lisez-moi test », avec le lien du dépôt et les sections du guide. Fond uni et grille, aucun asset externe.
+- Runtime Foundry non exécuté.
+
 ## 1.0.0
 
 Branche `cursor/v1-1-0-13b2`, depuis `main` (`4d04917`). Décision Marc, relayée par Didier.

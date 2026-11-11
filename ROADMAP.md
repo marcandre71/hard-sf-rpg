@@ -31,7 +31,8 @@ Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et u
 - [x] 0.9.8 — esquive personnelle opposée. Décision Marc 08/11/2026. Fusionnée dans `main` (`541f420`).
 - [x] 0.9.9 — malus de blessure personnels (jalon 0.7.5). Décision Didier, délégation v1 de Marc. Pas de Relecteur.
 - [x] 1.0.0 — Rafale et test de recul en apesanteur retirés (les champs restent, aucun jet ne les lit). Blindage ajouté à la protection de coque dans les dégâts : hors service ou non renseigné = 0, dégradé = tous les points (règle déjà dans le code). Blessure Soignée hors des cases de malus. Chaleur 0.7.4 inchangée. Le +10 du commandant reste un Commandement réussi. Séance de test : TESTER.md section 24. Runtime Foundry non exécuté.
+- [x] 1.0.1 — scène de test au premier chargement du MJ actif, une seule fois. Case « Recréer la scène de test ». Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 25.
 
-Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0.
+Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0, 1.0.1.
 
 Décision Didier/Marc 31/10/2026 : un maximum de munitions à 0 veut dire sans chargeur. Le tir passe et rien n'est retiré. Un 0 avec un maximum supérieur à 0 refuse le tir. Un non-propriétaire ne tire pas une arme à chargeur, sans relais au MJ. Le patrouilleur accélère à 50 milli-g, poussée 113 kN pour 230 t. Le cargo accélère à 0,05 milli-g, type plasma. Delta-v, masse de réaction, durée et accélération à vide restent provisoires. La fragilité cellulaire est à 150 mSv. Les séquelles de radiation sont une liste, en texte seulement.

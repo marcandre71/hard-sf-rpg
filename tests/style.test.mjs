@@ -12,7 +12,7 @@ const actorSheet = readFileSync(new URL("../templates/actor/actor-sheet.hbs", im
 const portrait = readFileSync(new URL("../module/sheets/portrait.mjs", import.meta.url), "utf8");
 const principal = readFileSync(new URL("../templates/actor/tab-principal.hbs", import.meta.url), "utf8");
 
-assert.equal(system.version, "1.0.0");
+assert.equal(system.version, "1.0.1");
 assert.equal(system.styles.includes("styles/sol.css"), true);
 assert.equal("fonts" in system, false, "le manifeste v14 n'a pas de clé fonts");
 

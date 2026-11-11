@@ -28,6 +28,7 @@ import { registerSealJoints } from "./dice/seal-joints.mjs";
 import { registerEndurance } from "./dice/endurance.mjs";
 import { registerItemGuard } from "./guards.mjs";
 import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
+import { registerTestScene } from "./test-scene-foundry.mjs";
 import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
@@ -36,7 +37,7 @@ import { registerShipPlay } from "./ships/actions.mjs";
 import { registerShipStrike } from "./ships/strike.mjs";
 
 // Choix technique : numéro croissant pour la mise à jour Foundry.
-// 0.9.5 Machines, 0.9.6 lore, 0.9.7 blessures des machines, 0.9.8 esquive.
+// 0.9.5 Machines, 0.9.6 lore, 0.9.7 blessures des machines, 0.9.8 esquive, 1.0.1 scène de test.
 const SYSTEM_ID = "sol-nouvelle-ere";
 
 /**
@@ -171,6 +172,7 @@ function initializeSystem() {
 
   registerItemGuard();
   registerNpcReadyMigration(SYSTEM_ID);
+  registerTestScene(SYSTEM_ID);
   registerDamage();
   registerEsquive();
   registerEndurance();

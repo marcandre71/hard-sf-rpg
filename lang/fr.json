@@ -31,6 +31,15 @@
       "done": "Biographie enregistrée pour {count} PNJ.",
       "failed": "La migration des biographies de PNJ a échoué. Elle sera retentée au prochain chargement."
     },
+    "TestScene": {
+      "recreate": "Recréer la scène de test",
+      "recreateHint": "Cochez, puis enregistrez les réglages. Le MJ actif remplace la scène. Un acteur du même nom, ou déjà marqué, est réutilisé.",
+      "done": "Scène de test prête.",
+      "failed": "La scène de test n'a pas pu être créée. Elle sera retentée au prochain chargement.",
+      "missingPack": "Compendium {pack} absent : {name} est créé au minimum, sans les données du compendium.",
+      "missingItem": "Objet « {name} » absent du compendium {pack} : il n'est pas ajouté.",
+      "journal": "<p>Cette scène sert à la séance de test. Le système la crée une fois, chez le MJ actif.</p><p>Dépôt : <a href=\"https://github.com/marcandre71/hard-sf-rpg\">github.com/marcandre71/hard-sf-rpg</a>.</p><p>Guide : <a href=\"https://github.com/marcandre71/hard-sf-rpg/blob/main/TESTER.md\">TESTER.md</a>.</p><ul><li><a href=\"https://github.com/marcandre71/hard-sf-rpg/blob/main/TESTER.md#21-097-blessures-des-machines\">21. Blessures des machines</a></li><li><a href=\"https://github.com/marcandre71/hard-sf-rpg/blob/main/TESTER.md#22-098-esquive-personnelle\">22. Esquive personnelle</a></li><li><a href=\"https://github.com/marcandre71/hard-sf-rpg/blob/main/TESTER.md#23-099-malus-de-blessure\">23. Malus de blessure</a></li><li><a href=\"https://github.com/marcandre71/hard-sf-rpg/blob/main/TESTER.md#24-100-blindage-soignée-rafale\">24. Blindage, Soignée, Rafale</a></li><li><a href=\"https://github.com/marcandre71/hard-sf-rpg/blob/main/TESTER.md#25-101-scène-de-test\">25. Scène de test</a></li></ul><p>Les autres sections sont dans le même guide. L'humain et l'adversaire gardent les défauts de la fiche. Le synthétique reçoit la compétence Esquive du compendium, avec sa formation d'origine. Aucun chiffre de règle n'est ajouté.</p>"
+    },
     "Sheet": {
       "Actor": "Feuille d'acteur (Sol, Nouvelle Ère)",
       "Item": "Feuille d'objet (Sol, Nouvelle Ère)",
