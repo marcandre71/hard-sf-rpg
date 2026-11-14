@@ -170,7 +170,7 @@ const states = JSON.parse(readFileSync(new URL("../packs/_source/states/Etats_Et
 assert.equal(states.img, `${ICON}/items/state.svg`);
 assert.equal(states.name, "États");
 
-assert.equal(system.version, "1.1.5");
+assert.equal(system.version, "1.1.6");
 assert.equal(sol.includes("registerTypeIcons"), true);
 assert.equal(tester.includes("## 31. 1.1.4 icônes et boutons d'en-tête"), true);
 assert.equal(tester.includes("## 32. 1.1.5 icônes Blessure et Vaisseau"), true);

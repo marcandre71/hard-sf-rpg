@@ -42,7 +42,7 @@
       "_key": "!journal.pages!JrFactionsV01So0.PgCompactHellas0"
     },
     {
-      "_id": "PgDirectTharsis",
+      "_id": "PgDirectTharsis1",
       "name": "Le Directoire de Tharsis",
       "type": "text",
       "sort": 250000,
@@ -58,7 +58,7 @@
       "ownership": {
         "default": -1
       },
-      "_key": "!journal.pages!JrFactionsV01So0.PgDirectTharsis"
+      "_key": "!journal.pages!JrFactionsV01So0.PgDirectTharsis1"
     },
     {
       "_id": "PgMutuelleCeint0",

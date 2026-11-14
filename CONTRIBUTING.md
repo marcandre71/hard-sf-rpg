@@ -1,7 +1,7 @@
 # Contribuer à Sol, Nouvelle Ère
 
 Guide pour les agents IA et les développeurs qui poursuivent ce système FoundryVTT.
-La branche `dev/0.9.4` porte les blessures, les journaux et les vaisseaux PNJ. Elle passe après l'habillage, déjà dans `main` (`20be91c`). C'est une PR brouillon vers `main`. Ne pas la fusionner. Ne pas la finir maintenant. `main` contient aussi la 0.9.2 revue (`8db71c4`). Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une version est validée par la relecture de Relecteur Foundry puis l'accord de Didier. Didier a donné l'accord permanent de Marc pour fusionner chaque version relue. La 0.7.2 (combat spatial dans le Combat Tracker) est testée par Marc le 25/10/2026, avec le correctif delta-v 0.7.2.1. La 0.7.0 (fiche Vaisseau) et la 0.7.1 (première fenêtre de combat, remplacée) sont derrière. La 0.6.3 (fin d'ordre, Rustine sur Survie, joints, section États) est sur `main`, de même que le compte à rebours (0.6.2), l'armure par zone (0.6.0) et l'initiative glissante (0.5.10–0.5.11). Le Seuil de blessure est `ceil((FOR + CON) / 20)`. Pas d'automatisation des origines. Les effets d'équipage d'un critique de vaisseau sont annoncés dans le chat : le MJ les applique avec les règles de blessures. La suite est dans [ROADMAP.md](ROADMAP.md).
+`main` est en 1.1.6. Lisez d'abord [AGENTS.md](AGENTS.md) : il résume les règles en vigueur et fait foi en cas de contradiction. Les sections ci-dessous gardent l'historique technique version par version.
 
 ## Petites étapes jouables, validées par Marc
 
@@ -16,11 +16,13 @@ Une étape est acceptable quand :
 
 Tant que Marc n'a pas validé l'étape, on ne commence pas la suivante. En cas de doute sur une règle, on lui demande plutôt que d'inventer.
 
-Hors périmètre (ne pas les ajouter) : tolérance aux g et Sang-froid comme champs (les formules `ceil` sont dans `derived.mjs`, pas affichées), encombrement, mouvement, usure de perforation, mousses expansives (le registre `SOL.sealMethods` est le point d'entrée), compteurs de dose, automation des origines, perte d'Endurance du saignement. L'Endurance actuelle est un nombre (Personnage, PNJ, créature, synthétique, drone), pas `{ value, max }`. Décision Marc 19/10/2026 : le LdR v0.2 §15 écrit `{ value, max }` ; on garde un seul nombre, le maximum `ceil(CON/5)` est calculé. Une valeur absente (null) est écrite au maximum par le MJ actif (`fillEndurance`), jamais dans `migrateData`. Un 0 stocké reste 0. Active Effects du système : « Combinaison percée », « Saignement », « Sonné », « Surpris », « Épuisé ». Inconscient et Mort réutilisent les statuts cœur `unconscious` et `dead`. Sur le Personnage et le PNJ, le Seuil n'est pas une colonne : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
+Depuis le 30/10/2026, la relecture des changements majeurs est celle du §11 d'[AGENTS.md](AGENTS.md) : Relecteur Foundry, accord de Didier, test de Marc reporté à la v1.
+
+Hors périmètre (ne pas les ajouter) : Sang-froid comme champ d'acteur (la formule `ceil(VOL/5)` est dans `derived.mjs`, elle n'est pas stockée ni affichée), encombrement, mouvement, usure de perforation, mousses expansives (le registre `SOL.sealMethods` est le point d'entrée), compteurs de dose, automation des origines, perte d'Endurance du saignement. La tolérance aux g est calculée depuis la 1.0.3 (`ceil(CON actuelle / 20)` plus le modificateur d'origine) et affichée sur la fiche. Ce n'est pas un champ stocké de l'acteur. L'Endurance actuelle est un nombre (Personnage, PNJ, créature, synthétique, drone), pas `{ value, max }`. Décision Marc 19/10/2026 : le LdR v0.2 §15 écrit `{ value, max }` ; on garde un seul nombre, le maximum `ceil(CON/5)` est calculé. Une valeur absente (null) est écrite au maximum par le MJ actif (`fillEndurance`), jamais dans `migrateData`. Un 0 stocké reste 0. Active Effects du système : « Combinaison percée », « Saignement », « Sonné », « Surpris », « Épuisé ». Inconscient et Mort réutilisent les statuts cœur `unconscious` et `dead`. Sur le Personnage et le PNJ, le Seuil n'est pas une colonne : il est calculé à l'application des dégâts. Décision Marc 18/10/2026 : la valeur dérivée Initiative (RÉF/10) est retirée, elle ne sera pas ajoutée. Vice et Lueur n'existent pas : ne pas les réintroduire.
 
 ## Où sont les règles du jeu
 
-Les règles ne sont **pas dans ce dépôt**, sauf un brouillon copié tel quel pour les agents : `docs/regles-vaisseaux-v0.1.md` (Règles des vaisseaux v0.1, 21/10/2026, chiffres provisoires). Le Livre de règles v0.2 et la Fiche de personnage v0.2 restent dans des **Google Docs dont Marc est propriétaire**.
+Les règles ne sont **pas dans ce dépôt**, sauf un brouillon copié tel quel pour les agents : `docs/regles-vaisseaux-v0.1.md` (Règles des vaisseaux v0.1, 21/10/2026, chiffres provisoires). Le Livre de règles v0.3 et la Fiche de personnage v0.2 restent dans des **Google Docs dont Marc est propriétaire**.
 Ne pas créer une version parallèle, et ne pas deviner une formule absente du code, du brouillon, ou d'une consigne de Marc. Dans le code vaisseau, citer `// Réf. Vaisseaux v0.1 §x`. Une décision écrite de Marc se cite `// Décision Marc 21/10/2026`. Un point non couvert se marque `// À confirmer par Marc`.
 
 Quand un champ est marqué « non défini » ou « à préciser » dans le code, c'est volontaire : les docs donnent le nom, pas le type. Ne pas le « compléter » sans une décision de Marc.
@@ -28,7 +30,7 @@ Quand un champ est marqué « non défini » ou « à préciser » dans le code,
 ## Arborescence
 
 ```
-system.json                         Manifeste : id, version 0.7.2.1 sur cette branche, compatibilité 14,
+system.json                         Manifeste : id, version : voir `system.json`, compatibilité 14,
                                     esmodules, styles, langues fr et en (en → lang/fr.json),
                                     documentTypes avec htmlFields, packs et packFolders.
 module/sol.mjs                      Point d'entrée. Hook init : CONFIG.SOL, dataModels,
@@ -259,12 +261,7 @@ node --check tests/initiative.test.mjs
 node --check tests/ship.test.mjs
 node --check tests/space.test.mjs
 node --input-type=module -e 'import {readFileSync} from "node:fs"; for (const f of ["system.json","lang/fr.json"]) JSON.parse(readFileSync(f, "utf8"));'
-node tests/d100.test.mjs
-node tests/damage.test.mjs
-node tests/initiative.test.mjs
-node tests/ship.test.mjs
-node tests/space.test.mjs
-node tests/models.test.mjs
+for t in tests/*.test.mjs; do node "$t" || echo "ÉCHEC $t"; done
 ```
 
 `tests/models.test.mjs` instancie un document de chacun des 21 types et valide les défauts (`validate()` doit renvoyer `true`), avec un faux `game.i18n.localize` qui utilise `this` (le piège de la méthode détachée). Foundry n'est pas dans ce dépôt et on ne le télécharge pas : sans la variable `FOUNDRY_PATH` (dossier d'installation FoundryVTT), le script s'arrête tout de suite, code 0. Si `FOUNDRY_PATH` est défini mais que le code commun ne se charge pas, le script s'arrête avec le code 1. Exemple : `FOUNDRY_PATH=/chemin/vers/FoundryVTT node tests/models.test.mjs`.

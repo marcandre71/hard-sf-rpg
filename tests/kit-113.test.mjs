@@ -115,7 +115,7 @@ assert.equal(lang.includes("Kit MJ non détecté."), true);
 const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
 assert.equal(tester.includes("## 30. 1.1.3 détection du kit MJ"), true);
 const system = JSON.parse(readFileSync(new URL("../system.json", import.meta.url), "utf8"));
-assert.equal(system.version, "1.1.5");
+assert.equal(system.version, "1.1.6");
 assert.equal(system.packs.some(pack => pack.name.includes("sol-kit-mj")), false);
 
 console.log("kit-113.test.mjs : ok");

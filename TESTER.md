@@ -1,15 +1,7 @@
-# Tester le système « Sol, Nouvelle Ère » (0.9.4)
+# Tester le système « Sol, Nouvelle Ère »
 
 Pour Marc, sans connaissances techniques.
-Les sections 1 à 10 correspondent à la **0.7.0**, déjà sur `main`.
-La section 11 est la **0.7.2**, plus le correctif **0.7.2.1** (delta-v visible), déjà sur `main`.
-La section 12 est la **0.7.3** (dégâts, critiques, missiles), déjà sur `main`. Prenez le ZIP de `main`.
-La section 13 est la **0.7.4** (chaleur, Pousser, réparations, canon). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
-La section 14 est la **0.9.0** (armes, armures, portée). Elle sert à la séance de test de la v1, avec le ZIP de `main`. Dans les fenêtres de tir des sections 1 à 5, la portée est **Courte (0)** par défaut : les totaux annoncés ne changent pas.
-La section 15 est la **0.9.1** (équipement, modules, armures fusionnées). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
-La section 16 est la **0.9.2** (atouts, augmentations, logiciels, substances). Elle sert à la séance de test de la v1, avec le ZIP de `main`.
-La section 17 est la **0.9.4** (blessures, journaux, vaisseaux PNJ). Elle passe après l'habillage. Le ZIP de `main` ne la contient pas. L'étape 1 donne le ZIP de `dev/0.9.4`. Ne pas la fusionner. Ne pas la finir maintenant.
-La section 18 est la **0.9.3** (habillage des fiches). Elle est dans `main`. La séance de test reste cette section.
+Chaque section porte son numéro de version. La dernière est le §33 (1.1.6). Prenez le ZIP de `main`. Runtime Foundry non exécuté par les agents. Agents IA : lisez d'abord [AGENTS.md](AGENTS.md).
 
 Les sections 1 à 9 sont les essais de la 0.6.3, toujours valables ici. La section 10 est la fiche Vaisseau. La section 11 est le combat spatial simplifié.
 
@@ -660,4 +652,17 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
 4. Posez le statut **Saignement** sur un pion, et ouvrez **Kit — Prétirés**.
    **Résultat attendu :** le statut de jeton garde l'icône du cœur. Les six portraits sont inchangés.
 5. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 33. 1.1.6 guide des agents et identifiant du talent
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.6**.
+
+1. Dans le dossier du système, ouvrez **AGENTS.md**.
+   **Résultat attendu :** le fichier est à la racine, à côté de `system.json`.
+2. Ouvrez le compendium **Atouts**. Cherchez **Miracle de la clé de 12**. Glissez-le sur une fiche de personnage.
+   **Résultat attendu :** l'atout est visible et s'ajoute à la fiche. Pas de message d'erreur.
+3. Cochez **Importer le kit (joueurs)**, ou glissez **Anouk Sall** depuis **Kit — Prétirés**.
+   **Résultat attendu :** le prétiré arrive avec son portrait, comme en 1.1.2. Rien n'est dupliqué si vous recommencez.
+4. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

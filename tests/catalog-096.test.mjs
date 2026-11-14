@@ -12,7 +12,7 @@ const factions = docs.find(entry => entry.name === "Factions");
 const glossary = docs.find(entry => entry.name === "Glossaire");
 const system = JSON.parse(readFileSync(new URL("../system.json", import.meta.url), "utf8"));
 
-assert.equal(system.version, "1.1.5");
+assert.equal(system.version, "1.1.6");
 assert.equal(factions.pages.length, 6);
 const names = factions.pages.map(page => page.name);
 assert.deepEqual(names, [
@@ -26,7 +26,8 @@ assert.deepEqual(names, [
 const ids = factions.pages.map(page => page._id);
 assert.equal(ids.includes("PgPartantsLongs0"), false);
 assert.equal(ids.includes("PgMutuelleCeint0"), true);
-assert.equal(ids.includes("PgDirectTharsis"), true);
+assert.equal(ids.includes("PgDirectTharsis1"), true);
+assert.equal(ids.includes("PgDirectTharsis"), false);
 assert.equal(factions.pages.find(page => page._id === "PgMutuelleCeint0").name, "Le Consortium de la Ceinture");
 const joined = factions.pages.map(page => page.text.content).join("\n");
 assert.equal(joined.includes("Traité de Genève de 1981"), true);

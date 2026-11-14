@@ -1,5 +1,11 @@
 # Journal des versions
 
+## 1.1.6
+
+Guide des agents et identifiants de compendium. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 33.
+
+`AGENTS.md` est à la racine. Les en-têtes de README, CONTRIBUTING et TESTER renvoient à ce guide. Le talent « Miracle de la clé de 12 » passe de `TlnCleDe12_00010` à `TlnCleDe12000010` (le souligné n'est pas admis). La page « Le Directoire de Tharsis » passe de `PgDirectTharsis` (15 caractères) à `PgDirectTharsis1`. Un monde qui avait déjà importé ce talent garde l'ancien document : ce n'est pas une migration. `tests/ids-116.test.mjs` vérifie que chaque `_id` des sources de packs fait 16 caractères alphanumériques.
+
 ## 1.1.5
 
 Icônes Blessure et Vaisseau. Décision de Marc. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 32.
@@ -116,7 +122,7 @@ Branche `dev/0.9.6-lore`, depuis `main` (`b01e6f5`). PR brouillon. Ne pas fusion
 
 Extraits publics de la Bible, contenu du 08/11/2026, §3, §6 et §7. Lore des journaux et du glossaire seulement. Aucune règle d'objet n'est changée.
 
-- Journal Factions : six pages. L'id `PgMutuelleCeint0` devient le Consortium de la Ceinture. Nouvelle page `PgDirectTharsis`. Page retirée : `PgPartantsLongs0`. Les autres ids de page sont gardés.
+- Journal Factions : six pages. L'id `PgMutuelleCeint0` devient le Consortium de la Ceinture. Nouvelle page `PgDirectTharsis`, renommée `PgDirectTharsis1` en 1.1.6. Page retirée : `PgPartantsLongs0`. Les autres ids de page sont gardés.
 - Glossaire : factions, parts de risque, Cérès, greffiers, double clé, Traité d'Asimov, principe Sereguine. La Mutuelle et les Partants ne sont plus des puissances principales de la liste. La double clé reprend « charges nucléaires de déviation, sous double clé ». L'Entente de Vesta et la définition de sociétaire ne sont pas reprises : les extraits ne les étayent pas. Provenance : extraits publics et reformulations sourcées, Bible v0.6 §§3,6,7.
 - Limites : plusieurs objets de jeu citent encore l'ancienne Mutuelle, la Caisse Noire ou les Partants. Leurs effets ne sont pas modifiés. Quatre `[à compléter]` des blessures de machine restent ceux de la 0.9.5.
 - DataModels, validation stricte et Foundry : non testés si le runtime est absent. Test Marc reporté à la v1.

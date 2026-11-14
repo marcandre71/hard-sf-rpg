@@ -12,21 +12,19 @@ et par neuf **caractéristiques notées sur 100** : Force (FOR), Constitution (C
 Adaptation spatiale (ADA), Perception (PER), Intellect (INT), Volonté (VOL), Présence (PRÉ).
 Un test se résout au D100 : réussite si le résultat est inférieur ou égal au score.
 
-## État du système : version 0.9.8 sur `dev/0.9.8-esquive`
+## État du système
 
-`main` contient la 0.9.7 (`8df43ae`). Cette branche ajoute l'esquive personnelle opposée : une réaction après une attaque réussie, avant les dégâts. PR brouillon. Ne pas fusionner. Relecture ciblée requise. Les malus automatiques de blessure restent en attente. Les DataModels et Foundry ne sont pas exécutés sans runtime. La séance de test de Marc est reportée à la v1 : [TESTER.md](TESTER.md), section 22. La suite est dans [ROADMAP.md](ROADMAP.md).
+`main` est en **1.1.6**. Le détail des versions est dans [CHANGELOG.md](CHANGELOG.md), la suite dans [ROADMAP.md](ROADMAP.md), et la séance de test de Marc dans [TESTER.md](TESTER.md), sections 1 à 33. Runtime Foundry non exécuté par les agents. La partie meneur du kit de démarrage est dans un module privé séparé (`sol-kit-mj`), non inclus ici. Agents IA : lisez d'abord [AGENTS.md](AGENTS.md).
 
-Décision Marc 23/10/2026 : les vaisseaux sont dans le Combat Tracker. L'initiative est un jet d'Opérations de bord, classé comme les personnages. Sur le tour, l'équipage utilise les boutons des postes. Au round suivant, les bonus partent et le verrouillage reste. Le delta-v se corrige à la main, au dixième. La portée est un champ de la fiche : une manœuvre gagnée met à jour les deux vaisseaux. Décision Marc 25/10/2026 : les jets de poste ne sont pas plafonnés à ±50. Les jets des personnages, hors postes, gardent ce plafond. Décision Marc 25/10/2026 : un tir qui touche a un bouton « Appliquer les dégâts » (MJ, une fois). Les dégâts sont la valeur de l'arme plus le DR. Décision Marc 30/10/2026 : la chaleur, Pousser, les réparations et le canon sont dans la 0.7.4. Marc testera l'ensemble à la v1.0.
+## Historique
 
-La 0.7.1 (fenêtre Combat spatial, poussée automatique, delta-v exact à 3 décimales) a servi de premier essai. Cette version la retire.
-
-## 0.7.0
+### 0.7.0
 
 Marc a validé la 0.6.3, puis la 0.7.0. La 0.7.1 est ensuite entrée dans `main`.
 
 Décision Marc 21/10/2026. Une seule fiche pour les vaisseaux et les objets fixes : type (liste du brouillon, groupée, plus Autre), catégorie (atmosphérique, vide, objet fixe), identité, masse, propulsion, réserves, chaleur du réacteur (0 à 10), pièces de rechange, cinq sections, modules, sept postes, notes. Pas de carte vectorielle. Le brouillon copié pour les agents est `docs/regles-vaisseaux-v0.1.md` (chiffres provisoires). Le compendium Vaisseaux contient la Petite Fortune ; le compendium Modules de vaisseau contient ses modules et trois repères d'armes.
 
-## État précédent : version 0.6.3
+### État précédent : version 0.6.3
 
 On avance pas à pas (« ne pas brûler les étapes »). L'étape 4 (jets de dés) est validée. Cette étape applique les dégâts d'une attaque réussie : le MJ confirme, une blessure est créée, une combinaison pressurisée peut être percée. L'initiative est un test de Vigilance, conservé d'un round à l'autre. Des compendiums sont déclarés. L'interface est en français.
 
@@ -64,13 +62,14 @@ Le dossier du système doit **obligatoirement** s'appeler `sol-nouvelle-ere` (le
      (`hard-sf-rpg-main`) en `sol-nouvelle-ere` et copiez-le dans `Data/systems/`.
 3. Vérifiez que le fichier `Data/systems/sol-nouvelle-ere/system.json` existe bien (pas de dossier en double du type
    `sol-nouvelle-ere/hard-sf-rpg-main/system.json`).
-4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*. Sur `main`, la version affichée est **0.7.2**. Cette branche affiche **0.7.2.1**.
+4. Redémarrez Foundry : « Sol, Nouvelle Ère » apparaît dans l'onglet *Systèmes de jeu*. La version affichée est celle de `system.json` (1.1.6 au 14/11/2026).
 
 Armures déjà présentes dans un monde ou sur une fiche avant la 0.6.0 (ex. Ilka, 6/6/6/6) : après migration elles n'ont pas de seuil de brèche (null) et ne percent plus jamais. Supprime-les et reglisse-les depuis le compendium Armures et vêtements.
 
 Pour tester pas à pas, voir [TESTER.md](TESTER.md).
 La suite des versions : [ROADMAP.md](ROADMAP.md).
 Conventions et guide pour les agents et développeurs : [CONTRIBUTING.md](CONTRIBUTING.md).
+Agents IA : [AGENTS.md](AGENTS.md).
 
 ## Structure
 
@@ -79,6 +78,8 @@ system.json                         manifeste (types, htmlFields, langues fr et 
 module/sol.mjs                      point d'entrée (hook « init »)
 module/config.mjs                   caractéristiques, choix, difficultés, objets autorisés
 module/guards.mjs                   refus des objets interdits (preCreateItem)
+module/icons.mjs                    icône par type à la création
+module/kit-import.mjs               import du kit joueurs et détection du module privé
 module/dice/                        jet D100, dégâts, classement d'initiative (règles pures)
 module/combat/                      initiative dans le Combat Tracker
 packs/                              compendiums (JSON dans _source, LevelDB construit)
@@ -91,6 +92,8 @@ module/ships/                       modules, migrations, combat dans le tracker,
 templates/                          gabarits Handlebars
 lang/fr.json                        tous les libellés français
 styles/sol.css                      mise en forme minimale
+fonts/                              polices embarquées (OFL)
+assets/                             icônes, portraits et plans du kit
 ```
 
 Les caractéristiques, leurs bornes et les listes de choix sont déclarées à un seul endroit (`module/config.mjs`).
