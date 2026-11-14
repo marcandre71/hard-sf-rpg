@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.1.4 : icônes des types et boutons d'en-tête.",
-  "version": "1.1.4",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.1.5 : icônes Blessure et Vaisseau.",
+  "version": "1.1.5",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

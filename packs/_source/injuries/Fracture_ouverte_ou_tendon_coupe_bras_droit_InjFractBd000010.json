@@ -3,7 +3,7 @@
   "_key": "!items!InjFractBd000010",
   "name": "Fracture ouverte ou tendon coupé (bras droit)",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Grave (SB à 2 SB − 1) : −20, saignement (1 Endurance par tour jusqu'aux premiers secours), test de VOL pour continuer à agir ; renvoi en fin d'ordre au tour suivant.</p>\n<p>Bras, grave : l'objet tenu est lâché (il dérive en apesanteur), bras inutilisable pendant la guérison.</p>",
     "location": "rightArm",

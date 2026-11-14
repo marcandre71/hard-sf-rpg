@@ -646,3 +646,18 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
    **Résultat attendu :** Joachim, Kesi, Inès, Tariq, Anouk et Bosco ont toujours leur portrait (`assets/portraits/`). Le jeton utilise la même image. Leurs objets qui étaient un sac gris ont maintenant l'icône de leur type.
 6. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 32. 1.1.5 icônes Blessure et Vaisseau
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.5**. Pas de migration : une blessure ou un vaisseau déjà dans un monde garde son image. Il faut réimporter, ou créer à neuf.
+
+1. Ouvrez le compendium **Blessures**.
+   **Résultat attendu :** les 52 entrées ont l'icône Blessure du système, plus la goutte de sang grise du cœur.
+2. Ouvrez le compendium **Vaisseaux**.
+   **Résultat attendu :** Petite Fortune, le cargo et le patrouilleur de la Veille ont l'icône Vaisseau du système. Leur jeton, s'il n'avait pas d'image, n'en gagne pas une toute seule dans le compendium.
+3. Créez une blessure, puis un vaisseau.
+   **Résultat attendu :** l'image de départ est l'icône du type. Si vous choisissez une autre image avant de valider, elle est gardée.
+4. Posez le statut **Saignement** sur un pion, et ouvrez **Kit — Prétirés**.
+   **Résultat attendu :** le statut de jeton garde l'icône du cœur. Les six portraits sont inchangés.
+5. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

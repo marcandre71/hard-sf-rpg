@@ -3,7 +3,7 @@
   "_key": "!items!InjBassinJg00010",
   "name": "Hémorragie pelvienne massive (jambe gauche)",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Mortelle (3 SB et plus) : mort immédiate ou en quelques tours, selon la zone.</p>\n<p>Jambe, mortelle : mort en 2 tours.</p>",
     "location": "leftLeg",

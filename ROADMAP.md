@@ -39,7 +39,8 @@ Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et u
 - [x] 1.1.2 — portraits des six prétirés du kit. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 29.
 - [x] 1.1.3 — le bouton du kit détecte le module privé, sans en embarquer le contenu. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 30.
 - [x] 1.1.4 — icônes des types et boutons d'en-tête des fiches. Pas de migration des mondes. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 31.
+- [x] 1.1.5 — icônes Blessure et Vaisseau à la place des fichiers du cœur. Pas de migration des mondes. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 32.
 
-Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0 à 1.0.3, puis 1.1.0, 1.1.1, 1.1.2, 1.1.3 et 1.1.4.
+Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0 à 1.0.3, puis 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4 et 1.1.5.
 
 Décision Didier/Marc 31/10/2026 : un maximum de munitions à 0 veut dire sans chargeur. Le tir passe et rien n'est retiré. Un 0 avec un maximum supérieur à 0 refuse le tir. Un non-propriétaire ne tire pas une arme à chargeur, sans relais au MJ. Le patrouilleur accélère à 50 milli-g, poussée 113 kN pour 230 t. Le cargo accélère à 0,05 milli-g, type plasma. Delta-v, masse de réaction, durée et accélération à vide restent provisoires. La fragilité cellulaire est à 150 mSv. Les séquelles de radiation sont une liste, en texte seulement.

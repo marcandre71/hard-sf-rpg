@@ -1,5 +1,11 @@
 # Journal des versions
 
+## 1.1.5
+
+Icônes Blessure et Vaisseau. Décision de Marc. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 32.
+
+Les 52 blessures du compendium qui portaient `icons/svg/blood.svg` reçoivent `assets/icons/items/injury.svg`. Les 3 vaisseaux qui portaient `icons/svg/ship.svg` reçoivent `assets/icons/actors/ship.svg`. Aucun de ces vaisseaux n'avait de texture de jeton à cette adresse : rien n'est ajouté. À la création, ces deux fichiers du cœur sont des images par défaut, seulement pour leur type. Une goutte de sang sur une arme, ou `ship.svg` sur un module, reste. Les statuts de jeton (Saignement, et les autres) ne changent pas. Les portraits non plus. Pas de migration des mondes déjà remplis.
+
 ## 1.1.4
 
 Icônes des types, et boutons d'en-tête des fiches. Décision de Marc. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 31.

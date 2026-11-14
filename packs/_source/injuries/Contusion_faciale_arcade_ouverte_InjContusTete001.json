@@ -3,7 +3,7 @@
   "_key": "!items!InjContusTete001",
   "name": "Contusion faciale, arcade ouverte",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Légère (moins de SB) : −10 aux actions utilisant la zone, jusqu'aux soins.</p>\n<p>Tête, légère : −10 en PER et aux actions sociales.</p>",
     "location": "head",

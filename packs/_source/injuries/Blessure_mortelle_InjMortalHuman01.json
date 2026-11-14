@@ -3,7 +3,7 @@
   "_key": "!items!InjMortalHuman01",
   "name": "Blessure mortelle",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<p>À partir de 3 SB : blessure mortelle (mort immédiate ou en quelques tours, selon la zone). Réf. LdR v0.2 §7.</p>",
     "severity": "mortal",

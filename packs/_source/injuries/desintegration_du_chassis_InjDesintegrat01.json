@@ -3,7 +3,7 @@
   "_key": "!items!InjDesintegrat01",
   "name": "Désintégration du châssis",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Châssis, mortelle : épave irrécupérable. Les pièces récupérables sont au choix du MJ. Elles ne deviennent pas des pièces de vaisseau. Décision 08/11/2026.</p>",
     "location": "torso",

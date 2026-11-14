@@ -3,7 +3,7 @@
   "_key": "!items!InjLightMachine1",
   "name": "Lentille étoilée (optiques)",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>",
     "location": "head",

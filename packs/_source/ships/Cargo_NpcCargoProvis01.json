@@ -3,7 +3,7 @@
   "_key": "!actors!NpcCargoProvis01",
   "name": "Cargo",
   "type": "ship",
-  "img": "icons/svg/ship.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/actors/ship.svg",
   "system": {
     "shipType": "slowPlasmaFreighter",
     "shipTypeOther": "",

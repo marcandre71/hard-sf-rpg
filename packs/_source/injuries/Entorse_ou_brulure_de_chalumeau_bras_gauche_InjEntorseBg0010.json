@@ -3,7 +3,7 @@
   "_key": "!items!InjEntorseBg0010",
   "name": "Entorse ou brûlure de chalumeau (bras gauche)",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Légère (moins de SB) : −10 aux actions utilisant la zone, jusqu'aux soins.</p>",
     "location": "leftArm",

@@ -78,17 +78,23 @@ assert.equal(isReplaceableImg(""), true);
 assert.equal(isReplaceableImg(BAG), true);
 assert.equal(isReplaceableImg(MAN), true);
 assert.equal(isReplaceableImg("icons/svg/blood.svg"), false);
+assert.equal(isReplaceableImg("icons/svg/blood.svg", "Item", "injury"), true);
+assert.equal(isReplaceableImg("icons/svg/blood.svg", "Item", "weapon"), false);
 assert.equal(isReplaceableImg("icons/svg/ship.svg"), false);
+assert.equal(isReplaceableImg("icons/svg/ship.svg", "Actor", "ship"), true);
+assert.equal(isReplaceableImg("icons/svg/ship.svg", "Item", "shipModule"), false);
 assert.equal(isReplaceableImg(`${ICON}/actors/character.svg`), false);
 assert.equal(isReplaceableImg("systems/sol-nouvelle-ere/assets/portraits/anouk.webp"), false);
 
 assert.equal(defaultImgFor("Item", "weapon", BAG), `${ICON}/items/weapon.svg`);
 assert.equal(defaultImgFor("Item", "weapon", ""), `${ICON}/items/weapon.svg`);
 assert.equal(defaultImgFor("Item", "weapon", undefined), `${ICON}/items/weapon.svg`);
-assert.equal(defaultImgFor("Item", "injury", "icons/svg/blood.svg"), null);
+assert.equal(defaultImgFor("Item", "injury", "icons/svg/blood.svg"), `${ICON}/items/injury.svg`);
+assert.equal(defaultImgFor("Item", "weapon", "icons/svg/blood.svg"), null);
 assert.equal(defaultImgFor("Item", "shipModule", "icons/svg/ship.svg"), null);
+assert.equal(defaultImgFor("Actor", "drone", "icons/svg/ship.svg"), null);
 assert.equal(defaultImgFor("Actor", "drone", MAN), `${ICON}/actors/drone.svg`);
-assert.equal(defaultImgFor("Actor", "ship", "icons/svg/ship.svg"), null);
+assert.equal(defaultImgFor("Actor", "ship", "icons/svg/ship.svg"), `${ICON}/actors/ship.svg`);
 assert.equal(defaultImgFor("Actor", "character", "systems/sol-nouvelle-ere/assets/portraits/anouk.webp"), null);
 assert.equal(defaultImgFor("Item", "inconnu", BAG), null);
 
@@ -120,8 +126,17 @@ const token = artworkSourceUpdate("Actor", "npc", {}, {
 });
 assert.equal(token.img, `${ICON}/actors/npc.svg`);
 assert.equal(token.prototypeToken.texture.src, `${ICON}/actors/npc.svg`);
-const shipKept = artworkSourceUpdate("Actor", "ship", { img: "icons/svg/ship.svg" }, { img: "icons/svg/ship.svg" });
-assert.equal(shipKept, null);
+const shipReplaced = artworkSourceUpdate("Actor", "ship", {
+  img: "icons/svg/ship.svg",
+  prototypeToken: { texture: { src: "icons/svg/ship.svg" } }
+}, {
+  img: "icons/svg/ship.svg",
+  prototypeToken: { texture: { src: "icons/svg/ship.svg" } }
+});
+assert.equal(shipReplaced.img, `${ICON}/actors/ship.svg`);
+assert.equal(shipReplaced.prototypeToken.texture.src, `${ICON}/actors/ship.svg`);
+const otherShip = artworkSourceUpdate("Actor", "drone", { img: "icons/svg/ship.svg" }, { img: "icons/svg/ship.svg" });
+assert.equal(otherShip, null);
 
 const itemTypes = ["skill", "talent", "origin", "background", "profession", "weapon", "armor", "gear", "augmentation", "substance", "injury", "sequel", "software", "shipModule"];
 const actorTypes = ["character", "npc", "creature", "synthetic", "drone", "vehicle", "ship"];
@@ -147,17 +162,18 @@ for ( const pack of readdirSync(root, { withFileTypes: true }).filter(entry => e
 }
 assert.equal(bags, 0, "sac Foundry encore dans un pack");
 assert.equal(mysteryActors, 0, "visage mystère encore sur un acteur");
-assert.equal(blood, 52, "les blessures en goutte de sang restent");
-assert.equal(ships, 3, "les vaisseaux en icône ship.svg restent");
+assert.equal(blood, 0, "blessure encore en goutte de sang");
+assert.equal(ships, 0, "vaisseau encore en icône ship.svg du cœur");
 assert.equal(portraits, 12, "six portraits, fiche et jeton");
 
 const states = JSON.parse(readFileSync(new URL("../packs/_source/states/Etats_EtatsLdRv02SolNE.json", import.meta.url), "utf8"));
 assert.equal(states.img, `${ICON}/items/state.svg`);
 assert.equal(states.name, "États");
 
-assert.equal(system.version, "1.1.4");
+assert.equal(system.version, "1.1.5");
 assert.equal(sol.includes("registerTypeIcons"), true);
 assert.equal(tester.includes("## 31. 1.1.4 icônes et boutons d'en-tête"), true);
+assert.equal(tester.includes("## 32. 1.1.5 icônes Blessure et Vaisseau"), true);
 
 console.log("icons-114.test.mjs : ok");
 
@@ -174,7 +190,7 @@ function walk(node) {
   const token = node.prototypeToken?.texture?.src;
   if ( img === BAG ) bags += 1;
   if ( itemTypes.includes(node.type) && img === "icons/svg/blood.svg" ) blood += 1;
-  if ( node.type === "ship" && img === "icons/svg/ship.svg" ) ships += 1;
+  if ( node.type === "ship" && (img === "icons/svg/ship.svg" || token === "icons/svg/ship.svg") ) ships += 1;
   if ( actorTypes.includes(node.type) && (img === MAN || token === MAN) ) mysteryActors += 1;
   if ( typeof img === "string" && img.includes("/assets/portraits/") ) portraits += 1;
   if ( typeof token === "string" && token.includes("/assets/portraits/") ) portraits += 1;

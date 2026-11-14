@@ -3,7 +3,7 @@
   "_key": "!items!InjLightHuman001",
   "name": "Blessure légère",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<p>Inférieurs au Seuil de blessure : blessure légère (−10 aux actions utilisant la zone, jusqu'aux soins). Réf. LdR v0.2 §7.</p>",
     "severity": "light",

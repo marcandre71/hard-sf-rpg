@@ -7,9 +7,12 @@
  * pas l'image. `typeIcons` du CONFIG est un glyphe d'interface, pas un
  * fichier.
  *
- * On ne remplace une image que si elle est absente ou si c'est l'icône
+ * On ne remplace une image que si elle est absente ou si c'est une icône
  * par défaut du cœur : `icons/svg/item-bag.svg` ou
- * `icons/svg/mystery-man.svg`. Un portrait ou un fichier choisi reste.
+ * `icons/svg/mystery-man.svg`. En plus, seulement pour leur type :
+ * `icons/svg/blood.svg` sur une blessure, `icons/svg/ship.svg` sur un
+ * vaisseau. Un portrait ou un fichier choisi reste. Les statuts de
+ * jeton ne passent pas ici.
  *
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.BaseItem.html#getDefaultArtwork
  * @see https://foundryvtt.com/api/v14/classes/foundry.documents.BaseActor.html#getDefaultArtwork
@@ -19,18 +22,32 @@ import { SOL } from "./config.mjs";
 
 const SYSTEM_ID = "sol-nouvelle-ere";
 
-/** Icônes posées par le cœur quand on ne choisit rien. */
+/** Icônes posées par le cœur quand on ne choisit rien, pour tout type. */
 export const FOUNDRY_DEFAULT_IMGS = Object.freeze([
   "icons/svg/item-bag.svg",
   "icons/svg/mystery-man.svg"
 ]);
 
 /**
+ * Icônes du cœur liées à un seul type. Ailleurs, on les laisse.
+ * La goutte de sang des statuts de jeton n'est pas une image d'objet.
+ */
+export const TYPE_DEFAULT_IMGS = Object.freeze({
+  injury: "icons/svg/blood.svg",
+  ship: "icons/svg/ship.svg"
+});
+
+/**
  * @param {string|null|undefined} img
+ * @param {"Item"|"Actor"|undefined} [kind]
+ * @param {string|null|undefined} [type]
  * @returns {boolean}
  */
-export function isReplaceableImg(img) {
-  return img == null || img === "" || FOUNDRY_DEFAULT_IMGS.includes(img);
+export function isReplaceableImg(img, kind, type) {
+  if ( img == null || img === "" || FOUNDRY_DEFAULT_IMGS.includes(img) ) return true;
+  if ( kind === "Item" && type === "injury" && img === TYPE_DEFAULT_IMGS.injury ) return true;
+  if ( kind === "Actor" && type === "ship" && img === TYPE_DEFAULT_IMGS.ship ) return true;
+  return false;
 }
 
 /**
@@ -60,7 +77,7 @@ export function typeIconPath(kind, type) {
  * @returns {string|null}
  */
 export function defaultImgFor(kind, type, img) {
-  if ( !isReplaceableImg(img) ) return null;
+  if ( !isReplaceableImg(img, kind, type) ) return null;
   return typeIconPath(kind, type);
 }
 
@@ -70,8 +87,8 @@ export function defaultImgFor(kind, type, img) {
  * Une image demandée qui n'est pas une icône du cœur est reposée si
  * `super` l'a remplacée.
  *
- * Pour un acteur, le jeton suit la même règle, seulement si sa texture
- * est absente ou `mystery-man`.
+ * Pour un acteur, le jeton suit la même règle : absent, visage mystère,
+ * ou, pour un vaisseau, `icons/svg/ship.svg`.
  *
  * @param {"Item"|"Actor"} kind
  * @param {string|null|undefined} type
@@ -93,7 +110,7 @@ export function artworkSourceUpdate(kind, type, data, document) {
     const currentToken = document?.prototypeToken?.texture?.src;
     const basisToken = requestedToken !== undefined ? requestedToken : currentToken;
     // Pas de jeton du tout : on n'en invente un que si l'image d'acteur
-    // elle-même est remplacée. Un `ship.svg` déjà choisi reste seul.
+    // elle-même est remplacée. Une image choisie, qui n'est pas un défaut, reste seule.
     if ( basisToken !== undefined ) {
       const nextToken = defaultImgFor("Actor", type, basisToken);
       if ( nextToken ) update.prototypeToken = { texture: { src: nextToken } };
@@ -109,7 +126,7 @@ export function artworkSourceUpdate(kind, type, data, document) {
 
 /**
  * Classe de document : `getDefaultArtwork` (candidat du cœur) et
- * `_preCreate` (ne remplace que le sac ou le visage mystère).
+ * `_preCreate` (ne remplace que les icônes par défaut du cœur).
  *
  * @returns {void}
  */

@@ -3,7 +3,7 @@
   "_key": "!items!InjPertePropDt01",
   "name": "Perte totale de propulsion (droite)",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<!-- Réf. Blessures et Séquelles v0.3 corrigée §3, Décision Marc 31/10/2026 -->\n<p>Réparation par Mécanique ou Électronique au lieu de Premiers secours ou Médecine.</p>\n<p>Propulsion, critique : machine en vrille ou immobilisée.</p>\n<p>Les zones droite et gauche correspondent aux plages du LdR (11 à 25 et 26 à 40 ; 71 à 85 et 86 à 100). Si la machine n'a pas ce côté, le MJ choisit la zone existante la plus proche avant d'appliquer les dégâts. Pas de détection automatique. Décision 08/11/2026.</p>",
     "location": "rightLeg",

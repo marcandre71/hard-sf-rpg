@@ -3,7 +3,7 @@
   "_key": "!items!InjCritHuman0001",
   "name": "Blessure critique",
   "type": "injury",
-  "img": "icons/svg/blood.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/injury.svg",
   "system": {
     "description": "<p>De 2 SB à 3 SB − 1 : blessure critique (zone hors d'usage, test de CON pour rester conscient ; à la tête ou au torse, risque de mort sans soins en quelques minutes). Réf. LdR v0.2 §7.</p>",
     "severity": "critical",
