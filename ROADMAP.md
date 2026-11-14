@@ -19,7 +19,7 @@ Décision Marc 30/10/2026 : Marc testera la v1.0 complète. D'ici là, une versi
 - [x] 0.9.2 — atouts, augmentations, logiciels et substances. Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.9.3 — habillage SF des fiches (ancienne 0.8.1 / 0.10.0). Relue par Relecteur, test Marc reporté à la v1.
 - [x] 0.9.4 — blessures, journaux, vaisseaux PNJ, et une munition retirée à chaque tir. Relue par Relecteur, test Marc reporté à la v1.
-- [x] 0.9.5 Machines (ex-0.8.0) — fiches du drone, du synthétique, du véhicule et de la créature ; 24 blessures de machine. Luciole, Crabe et TATI. Masse du TATI : 350 kg. Revue ciblée positive. DataModels, validation stricte et Foundry non testés : runtime absent. Test Marc reporté à la v1. Décision Didier/Marc 31/10/2026.
+- [x] 0.9.5 Machines (ex-0.8.0) — fiches du drone, du synthétique, du véhicule et de la créature ; 24 blessures de machine. Luciole et Crabe. Revue ciblée positive. DataModels, validation stricte et Foundry non testés : runtime absent. Test Marc reporté à la v1. Décision Didier/Marc 31/10/2026.
 
 ## Ensuite
 
@@ -35,7 +35,8 @@ Noté pour plus tard, pas codé : un vrai test de `rollItem` avec un acteur et u
 - [x] 1.0.2 — les trois personnages d'essai sont préremplis. Une fiche déjà modifiée n'est pas réécrite. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 25.
 - [x] 1.0.3 — tolérance aux g = CON actuelle / 20, arrondi au supérieur, plus le modificateur d'origine. Dose de départ 50 à 500, ajoutée une fois à la dose aiguë. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 26.
 - [x] 1.1.0 — kit de démarrage, seulement ce que les joueurs peuvent voir : prétirés, plans joueurs, introduction, guide du joueur, fiches de référence, aides. Pas de livret, pas de guide du meneur, pas de PNJ d'intrigue. Pas de Relecteur : le lot ne touche ni aux DataModels, ni aux jets, ni au combat. Runtime Foundry non exécuté. Séance : TESTER.md section 27.
+- [x] 1.1.1 — drone obsolète retiré des catalogues. Luciole et Crabe restent. Pas de migration des mondes déjà remplis. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 28.
 
-Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0 à 1.0.3, puis 1.1.0.
+Décision Marc 31/10/2026, puis 08/11/2026 : l'ordre est 0.9.2, 0.9.3 habillage, 0.9.4, 0.9.5 Machines (ex-0.8.0), 0.9.6 lore public, 0.9.7 blessures des machines, 0.9.8 esquive, 0.9.9 malus de blessure (jalon 0.7.5), 1.0.0 à 1.0.3, puis 1.1.0 et 1.1.1.
 
 Décision Didier/Marc 31/10/2026 : un maximum de munitions à 0 veut dire sans chargeur. Le tir passe et rien n'est retiré. Un 0 avec un maximum supérieur à 0 refuse le tir. Un non-propriétaire ne tire pas une arme à chargeur, sans relais au MJ. Le patrouilleur accélère à 50 milli-g, poussée 113 kN pour 230 t. Le cargo accélère à 0,05 milli-g, type plasma. Delta-v, masse de réaction, durée et accélération à vide restent provisoires. La fragilité cellulaire est à 150 mSv. Les séquelles de radiation sont une liste, en texte seulement.

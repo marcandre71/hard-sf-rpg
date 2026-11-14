@@ -4,14 +4,14 @@
   "type": "shipModule",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
+    "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones Crabe.</p>",
     "category": "other",
     "section": "starboard",
     "integrity": {
       "value": 4,
       "max": 4
     },
-    "effects": "<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones (TATI ou Crabe).</p>",
+    "effects": "<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones Crabe.</p>",
     "mass": 2,
     "weapon": {
       "damage": 0,

@@ -350,7 +350,7 @@ try {
       if ( "autonomousScore" in cleanedDiff ) {
         throw new Error("DroneData : un nettoyage partiel a injecté le score autonome");
       }
-      const tati = new DroneData({
+      const heavy = new DroneData({
         characteristics: {
           for: { base: 75, origin: 0, advance: 0, temp: 0 },
           con: { base: 65, origin: 0, advance: 0, temp: 0 }
@@ -358,15 +358,15 @@ try {
         autonomousScore: 50,
         endurance: 13
       });
-      tati.prepareDerivedData();
-      if ( tati.validate({ strict: true }) !== true ) {
-        throw new Error("DroneData : TATI FOR 75 et CON 65 refusé");
+      heavy.prepareDerivedData();
+      if ( heavy.validate({ strict: true }) !== true ) {
+        throw new Error("DroneData : FOR 75 et CON 65 refusé");
       }
-      if ( tati.characteristics.for.value !== 75 || tati.characteristics.con.value !== 65 ) {
-        throw new Error("DroneData : actuelles du TATI");
+      if ( heavy.characteristics.for.value !== 75 || heavy.characteristics.con.value !== 65 ) {
+        throw new Error("DroneData : actuelles FOR 75 et CON 65");
       }
-      if ( seuilFromCharacteristics(tati.characteristics) !== 7 ) {
-        throw new Error("DroneData : SB du TATI");
+      if ( seuilFromCharacteristics(heavy.characteristics) !== 7 ) {
+        throw new Error("DroneData : SB de FOR 75 et CON 65");
       }
     }
   }

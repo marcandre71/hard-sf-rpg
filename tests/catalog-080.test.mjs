@@ -1,5 +1,5 @@
 /**
- * Catalogue Machines. Le manifeste suit la version du système (1.1.0).
+ * Catalogue Machines. Le manifeste suit la version du système (1.1.1).
  * Le passage DataModel se fait si FOUNDRY_PATH est défini.
  * Décision Didier/Marc 31/10/2026. Réf. Équipement v0.3 §5.
  * Réf. Blessures et Séquelles v0.3 corrigée §3.
@@ -35,16 +35,17 @@ const sheet = readFileSync(new URL("../module/sheets/character-sheet.mjs", impor
 const actorSheet = readFileSync(new URL("../templates/actor/actor-sheet.hbs", import.meta.url), "utf8");
 const sol = readFileSync(new URL("../module/sol.mjs", import.meta.url), "utf8");
 
-assert.equal(system.version, "1.1.0");
+assert.equal(system.version, "1.1.1");
 assert.equal(sol.includes("// Choix technique : numéro croissant pour la mise à jour Foundry"), true);
 assert.equal(system.packs.some(pack => pack.name === "machines" && pack.type === "Actor"), true);
 
 const expected = {
   Luciole: { for: 5, con: 15, per: 50, coo: 50, ada: 60, score: 35, endurance: 3, armor: "Coque de Luciole", rating: 1, sb: 1 },
-  Crabe: { for: 45, con: 45, per: 40, coo: 45, ada: 55, score: 40, endurance: 9, armor: "Carapace de Crabe", rating: 3, sb: 5 },
-  TATI: { for: 75, con: 65, per: 60, coo: 55, ada: 50, score: 50, endurance: 13, armor: "Blindage alu-titane oléophobe", rating: 4, sb: 7 }
+  Crabe: { for: 45, con: 45, per: 40, coo: 45, ada: 55, score: 40, endurance: 9, armor: "Carapace de Crabe", rating: 3, sb: 5 }
 };
-assert.equal(machines.length, 3);
+assert.equal(machines.length, 2);
+assert.equal(machines.some(entry => entry.name === "TATI" || entry._id === "DroneTati0000001"), false);
+assert.equal(armors.some(entry => entry._id === "ArmTatiBlind0001"), false);
 for (const drone of machines) {
   const row = expected[drone.name];
   assert.equal(drone.type, "drone", drone.name);
@@ -65,9 +66,10 @@ for (const drone of machines) {
   assert.equal(packArmor.name, row.armor, drone.name);
 }
 assert.equal(machines.find(entry => entry.name === "Luciole").items[0].system.pressurized, false);
-assert.equal(machines.find(entry => entry.name === "Luciole").system.description.includes("TATI ou Crabe"), false);
-assert.equal(machines.find(entry => entry.name === "TATI").system.description.includes("350 kg"), true);
-assert.equal(gear.some(entry => ["Luciole", "Crabe", "TATI"].includes(entry.name)), false);
+assert.equal(machines.find(entry => entry.name === "Luciole").system.description.includes("TATI"), false);
+assert.equal(machines.find(entry => entry.name === "Crabe")._id, "DroneCrabe000001");
+assert.equal(machines.find(entry => entry.name === "Luciole").items[0].name, "Coque de Luciole");
+assert.equal(gear.some(entry => ["Luciole", "Crabe"].includes(entry.name)), false);
 assert.equal(characteristicFieldsFor("npc").base.max, 100);
 assert.equal(seuilBlessure(75, 65), 7);
 

@@ -139,7 +139,7 @@ export class SyntheticData extends ForConActorData {}
  *
  * @extends foundry.abstract.TypeDataModel
  */
-// Décision Didier/Marc 31/10/2026 : masse du TATI, 350 kg.
+// La masse d'un drone reste dans son texte. Ce n'est pas un champ.
 export class DroneData extends foundry.abstract.TypeDataModel {
   /** @override */
   static defineSchema() {

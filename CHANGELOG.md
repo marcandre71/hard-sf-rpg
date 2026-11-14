@@ -1,5 +1,11 @@
 # Journal des versions
 
+## 1.1.1
+
+Drone TATI retiré.
+
+Décision de Marc. L'acteur `DroneTati0000001` et le blindage `ArmTatiBlind0001` ne sont plus dans les catalogues. Luciole et Crabe restent, avec les mêmes chiffres. Les phrases de sas et de symbiose ne le nomment plus. Aucune migration : une copie déjà dans un monde n'est ni effacée ni modifiée.
+
 ## 1.1.0
 
 Branche `cursor/kit-joueur-110-13b2`, depuis `main` (`1b3559c`). Pas de Relecteur : aucun changement de DataModel, de jet ou de combat.

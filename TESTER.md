@@ -280,7 +280,7 @@ Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle
 1. Le système vient du ZIP de `main` (lien ci-dessus).
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.1**.
 2. Ouvrez les compendiums **Équipement** et **Modules de vaisseau**.
-   **Résultat attendu :** **Équipement** contient la **Rustine** et les objets du catalogue, plus les cinq accessoires déjà là (buse, dragonne, essuie-visière, manchons, phares). Il n'y a pas de **Luciole**, de **Crabe** ni de **TATI**. **Modules de vaisseau** n'a qu'une entrée pour chaque module fondu : **Laser de forage (outil civil)**, **Laser de défense (tourelle)**, **Casier lance-missiles (4 missiles)**, **Antenne radio et laser de communication**, **Capteurs civils (radar, lidar, infrarouge)**, **Moteur nucléaire thermique à l'eau (standard Mutuelle)**, **Panneaux radiateurs repliables (~50 m², prospecteur)**, **Cœur à fission bimodal (avec bouclier d'ombre)**, **Réservoir d'eau de masse de réaction (75 t)** (deux fois : bâbord et tribord, pas une troisième), **Sas d'EVA, treuil et baie de drones**, **Sondes et foreuses d'astéroïdes (6)**, **Soute à minerai ou conteneurs (20 t)**. Il n'y a pas de seconde **Combinaison renforcée de chantier**, ni de seconde **Combinaison souple de travail**, ni de seconde **Armure de pont (assaut et abordage)**.
+   **Résultat attendu :** **Équipement** contient la **Rustine** et les objets du catalogue, plus les cinq accessoires déjà là (buse, dragonne, essuie-visière, manchons, phares). Il n'y a pas de **Luciole** ni de **Crabe**. **Modules de vaisseau** n'a qu'une entrée pour chaque module fondu : **Laser de forage (outil civil)**, **Laser de défense (tourelle)**, **Casier lance-missiles (4 missiles)**, **Antenne radio et laser de communication**, **Capteurs civils (radar, lidar, infrarouge)**, **Moteur nucléaire thermique à l'eau (standard Mutuelle)**, **Panneaux radiateurs repliables (~50 m², prospecteur)**, **Cœur à fission bimodal (avec bouclier d'ombre)**, **Réservoir d'eau de masse de réaction (75 t)** (deux fois : bâbord et tribord, pas une troisième), **Sas d'EVA, treuil et baie de drones**, **Sondes et foreuses d'astéroïdes (6)**, **Soute à minerai ou conteneurs (20 t)**. Il n'y a pas de seconde **Combinaison renforcée de chantier**, ni de seconde **Combinaison souple de travail**, ni de seconde **Armure de pont (assaut et abordage)**.
 3. Ouvrez la **Rustine**.
    **Résultat attendu :** quantité **3**, masse **0,2** kg. Le nom est exactement **Rustine**.
 4. Importez la **Petite Fortune** du compendium **Vaisseaux** si elle est absente du monde. Onglet **Sections & modules**, la plaque de **proue** est **8 / 8**.
@@ -400,18 +400,18 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`. Le 
 
    Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
    **Résultat attendu :** l'onglet Systèmes de jeu affiche **0.9.5**.
-2. Ouvrez le compendium **Machines**. Pour jouer les fiches, importez-les dans le monde : glissez **Luciole**, **Crabe** et **TATI** depuis ce compendium vers l'onglet **Acteurs**. Ouvrez ensuite la copie du monde, pas seulement la fiche du compendium. Regardez aussi **Équipement** et **Armures et vêtements**.
-   **Résultat attendu :** **Luciole**, **Crabe** et **TATI** sont dans Machines, puis sur l'onglet Acteurs. Ils ne sont pas dans Équipement. Les armures **Coque de Luciole**, **Carapace de Crabe** et **Blindage alu-titane oléophobe** sont dans Armures et vêtements.
-3. Ouvrez les copies du monde de **TATI**, puis **Crabe**, puis **Luciole**.
-   **Résultat attendu :** le type est **Drone**. La fiche a le même habillage sombre que le personnage. Elle montre **FOR**, **CON**, **COO**, **ADA**, **PER**, le **Score autonome** et le **Seuil**. Le TATI a FOR **75**, CON **65**, Score autonome **50**, Endurance **13**, Seuil **7**, masse **350 kg**. La Luciole a l'armure **Coque de Luciole** sur la fiche, **1** sur chaque zone, non pressurisée. Crabe et TATI parlent du sas. Luciole ne le dit pas.
-   Sur le TATI, cliquez **Score autonome** et lancez le dé.
+2. Ouvrez le compendium **Machines**. Pour jouer les fiches, importez-les dans le monde : glissez **Luciole** et **Crabe** depuis ce compendium vers l'onglet **Acteurs**. Ouvrez ensuite la copie du monde, pas seulement la fiche du compendium. Regardez aussi **Équipement** et **Armures et vêtements**.
+   **Résultat attendu :** **Luciole** et **Crabe** sont dans Machines, puis sur l'onglet Acteurs. Ils ne sont pas dans Équipement. Les armures **Coque de Luciole** et **Carapace de Crabe** sont dans Armures et vêtements.
+3. Ouvrez les copies du monde de **Crabe**, puis **Luciole**.
+   **Résultat attendu :** le type est **Drone**. La fiche a le même habillage sombre que le personnage. Elle montre **FOR**, **CON**, **COO**, **ADA**, **PER**, le **Score autonome** et le **Seuil**. Le Crabe a FOR **45**, CON **45**, Score autonome **40**, Endurance **9**, Seuil **5**, masse **45 kg**. La Luciole a l'armure **Coque de Luciole** sur la fiche, **1** sur chaque zone, non pressurisée. Le Crabe parle du sas. Luciole ne le dit pas.
+   Sur le Crabe, cliquez **Score autonome** et lancez le dé.
    **Résultat attendu :** la fenêtre est celle d'une caractéristique. Le message du chat est du même genre.
 4. En tant que MJ, dans le monde, créez une **Créature**, un **Synthétique** et un **Véhicule**.
    **Résultat attendu :** la créature et le synthétique montrent FOR, CON, PER et le Seuil. Ils n'ont pas COO, ADA ni Score autonome. Le véhicule n'a pas ces caractéristiques. Sa catégorie est **Terrestre**.
 5. Ouvrez le compendium **Blessures**. Cherchez **Lentille étoilée (optiques)** et **Désintégration du châssis**.
    **Résultat attendu :** il y a **24** blessures de machine, sur tête, torse, deux bras et deux jambes. **Lentille étoilée (optiques)** est légère, tête, pénalité **−10**. **Fuite de refroidissement ou batterie percée (châssis)** parle d'une conversion **[à compléter]**. **Brèche du microréacteur ou de la pile (châssis)** parle d'une explosion **[à compléter]**. Il n'y a plus les quatre titres **Blessure de machine**.
 6. Micro-test v14, en tant que MJ. Prenez un drone créé avant la 0.9.5, qui n'avait que FOR, CON et PER. S'il n'y en a pas, créez un **Drone** vide, fermez-le, rouvrez-le.
-   **Résultat attendu :** la fiche s'ouvre sans message d'erreur. **COO**, **ADA** et **Score autonome** sont présents. Ce sont les défauts du schéma, pas les chiffres de Luciole, de Crabe ou du TATI. Cliquez **COO** et lancez le dé : la fenêtre est celle d'une caractéristique.
+   **Résultat attendu :** la fiche s'ouvre sans message d'erreur. **COO**, **ADA** et **Score autonome** sont présents. Ce sont les défauts du schéma, pas les chiffres de Luciole ou du Crabe. Cliquez **COO** et lancez le dé : la fenêtre est celle d'une caractéristique.
 7. Console (**F12**), après ce jet.
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
 
@@ -578,7 +578,7 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
 
 ## 27. 1.1.0 Kit joueurs
 
-Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.0**. Le kit public ne contient que ce que les joueurs peuvent lire. Il n'y a pas le livret, pas le guide du meneur, pas les plans marqués MJ, pas les PNJ de l'aventure.
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`. Le kit public ne contient que ce que les joueurs peuvent lire. Il n'y a pas le livret, pas le guide du meneur, pas les plans marqués MJ, pas les PNJ de l'aventure.
 
 1. Dans les compendiums, ouvrez le dossier **Kit**.
    **Résultat attendu :** trois compendiums : **Kit — Prétirés**, **Kit — Plans**, **Kit — Pour les joueurs**. Pas de compendium de PNJ du kit.
@@ -591,4 +591,15 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
 5. En MJ, **Configurer les paramètres**, cochez **Importer le kit (joueurs)**, enregistrez.
    **Résultat attendu :** les acteurs, les scènes et les journaux apparaissent dans le monde, dans des dossiers Kit. Cochez une seconde fois : rien n'est dupliqué. La case se décoche.
 6. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 28. 1.1.1 Drone retiré
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.1**. Décision de Marc : un drone du catalogue Machines est obsolète et n'est plus livré. Luciole et Crabe restent. Le jeu ne supprime pas une copie déjà présente dans un monde.
+
+1. Ouvrez le compendium **Machines** et **Armures et vêtements**.
+   **Résultat attendu :** Machines contient **Luciole** et **Crabe**, rien d'autre. Il n'y a pas de blindage alu-titane oléophobe. Le Crabe a toujours FOR **45**, CON **45**, l'armure **Carapace de Crabe**. La Luciole a toujours l'armure **Coque de Luciole**.
+2. Si un monde contenait déjà ce drone, ouvrez l'onglet **Acteurs**.
+   **Résultat attendu :** la copie déjà importée est encore là. Le système ne l'efface pas et ne la modifie pas. Vous pouvez la supprimer à la main si vous n'en voulez plus.
+3. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
