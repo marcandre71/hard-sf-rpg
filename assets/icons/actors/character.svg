@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img">
+  <title>Personnage</title>
+  <rect width="512" height="512" fill="#0c1117"/>
+  <path d="M20 64 L64 20 H448 L492 64 V448 L448 492 H64 L20 448 Z" fill="#141c24" stroke="#4cc4dc" stroke-width="14" stroke-linejoin="miter" stroke-miterlimit="2"/>
+  <g fill="none" stroke="#2ad4c8" stroke-width="12" stroke-linecap="square">
+    <path d="M76 116 V80 H112"/>
+    <path d="M400 80 H436 V116"/>
+    <path d="M436 396 V432 H400"/>
+    <path d="M112 432 H76 V396"/>
+  </g>
+  <circle cx="256" cy="168" r="72" fill="none" stroke="#4cc4dc" stroke-width="18"/>
+  <g fill="none" stroke="#4cc4dc" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 396 L196 264 H316 L384 396"/>
+  </g>
+  <rect x="208" y="150" width="36" height="28" rx="8" fill="#2ad4c8"/>
+  <rect x="268" y="150" width="36" height="28" rx="8" fill="#2ad4c8"/>
+  <path d="M256 308 L276 328 L256 348 L236 328 Z" fill="#2ad4c8"/>
+</svg>

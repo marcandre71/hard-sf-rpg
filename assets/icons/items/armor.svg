@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img">
+  <title>Armure/Vêtement</title>
+  <rect width="512" height="512" fill="#0c1117"/>
+  <path d="M20 64 L64 20 H448 L492 64 V448 L448 492 H64 L20 448 Z" fill="#141c24" stroke="#4cc4dc" stroke-width="14" stroke-linejoin="miter" stroke-miterlimit="2"/>
+  <g fill="none" stroke="#2ad4c8" stroke-width="12" stroke-linecap="square">
+    <path d="M76 116 V80 H112"/>
+    <path d="M400 80 H436 V116"/>
+    <path d="M436 396 V432 H400"/>
+    <path d="M112 432 H76 V396"/>
+  </g>
+  <g fill="none" stroke="#4cc4dc" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M168 214 H344 V392 H168 Z"/>
+    <path d="M112 196 H176 V268 H112 Z"/>
+    <path d="M336 196 H400 V268 H336 Z"/>
+  </g>
+  <g fill="none" stroke="#2ad4c8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M200 214 Q256 164 312 214"/>
+    <path d="M184 318 H328"/>
+  </g>
+</svg>

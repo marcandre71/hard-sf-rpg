@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img">
+  <title>Créature</title>
+  <rect width="512" height="512" fill="#0c1117"/>
+  <path d="M20 64 L64 20 H448 L492 64 V448 L448 492 H64 L20 448 Z" fill="#141c24" stroke="#4cc4dc" stroke-width="14" stroke-linejoin="miter" stroke-miterlimit="2"/>
+  <g fill="none" stroke="#2ad4c8" stroke-width="12" stroke-linecap="square">
+    <path d="M76 116 V80 H112"/>
+    <path d="M400 80 H436 V116"/>
+    <path d="M436 396 V432 H400"/>
+    <path d="M112 432 H76 V396"/>
+  </g>
+  <ellipse cx="236" cy="236" rx="108" ry="58" fill="none" stroke="#4cc4dc" stroke-width="18"/>
+  <circle cx="358" cy="214" r="42" fill="none" stroke="#4cc4dc" stroke-width="18"/>
+  <g fill="none" stroke="#4cc4dc" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M176 286 V392"/>
+    <path d="M156 392 H200"/>
+    <path d="M226 290 V408"/>
+    <path d="M206 408 H250"/>
+    <path d="M286 286 V408"/>
+    <path d="M266 408 H310"/>
+    <path d="M330 270 V384"/>
+    <path d="M310 384 H354"/>
+  </g>
+  <g fill="none" stroke="#2ad4c8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M140 214 L104 184"/>
+    <path d="M136 258 L100 292"/>
+  </g>
+  <circle cx="374" cy="204" r="10" fill="#2ad4c8"/>
+</svg>
