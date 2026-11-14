@@ -3,7 +3,7 @@
   "_key": "!items!SubTorpeurMed010",
   "name": "Solution d'induction de torpeur médicale",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Hypothermie contrôlée pour plusieurs semaines de transit ; consommation d'air et de vivres divisée par 5. Requiert un test de Médecine ou un greffier médical.</p>\n<p>Effets secondaires : Réveil d'urgence sans procédure, état Choqué pendant 24 h.</p>",
     "category": "torpor",

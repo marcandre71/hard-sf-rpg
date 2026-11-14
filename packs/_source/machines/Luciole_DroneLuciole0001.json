@@ -3,7 +3,7 @@
   "_key": "!actors!DroneLuciole0001",
   "name": "Luciole",
   "type": "drone",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/actors/drone.svg",
   "system": {
     "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026. Réf. Atouts v0.3 §3. -->\n<p>Drone. Pas une coquille d'équipement. Décision Marc 31/10/2026.</p>\n<p>FOR 5, CON 15, PER 50, COO 50, ADA 60. Score autonome 35. Endurance 3. Seuil 1.</p>\n<p>Pas d'arme. Autonomie 4 h. Masse 2,5 kg.</p>\n<p>+10 en Fouille ou Vigilance dans les conduits étroits ou hors coque. Texte seulement.</p>\n<p>Un atout Symbiose drone peut lui ordonner une action simple en dépensant une réaction. Réf. Atouts v0.3 §3.</p>",
     "notes": "",
@@ -48,7 +48,7 @@
       "_key": "!actors.items!DroneLuciole0001.ArmLucioleCoque1",
       "name": "Coque de Luciole",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §5. Décision Didier/Marc 31/10/2026 -->\n<p>1 sur toutes les zones. Non pressurisée.</p>",
         "protection": {

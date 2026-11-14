@@ -3,7 +3,7 @@
   "_key": "!items!ModGouttelettes1",
   "name": "Radiateur à rideau de gouttelettes métalliques (Veille, militaire)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Jet d'étain liquide récupéré par champ magnétique : les projectiles cinétiques traversent le nuage sans briser de panneau (−10 aux tirs de canon électromagnétique visant les radiateurs).</p>",
     "category": "radiators",

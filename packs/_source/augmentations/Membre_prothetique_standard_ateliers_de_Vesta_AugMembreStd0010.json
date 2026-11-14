@@ -3,7 +3,7 @@
   "_key": "!items!AugMembreStd0010",
   "name": "Membre prothétique standard (ateliers de Vesta)",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Remplace un bras ou une jambe perdus, sans bonus ni malus aux caractéristiques ; la main ou le pied peut se verrouiller magnétiquement pour s'ancrer sur une coque métallique.</p>\n<p>Effets secondaires : Aspect mécanique visible ; entretien mensuel (test simple de Mécanique).</p>\n<p>Coût : [à compléter].</p>",
     "kind": "prosthesis",

@@ -3,7 +3,7 @@
   "_key": "!items!ArmVesteQuart001",
   "name": "Veste de quart en aramide",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Blouson de travail ignifugé qui protège des éclats métalliques, des projections de vapeur et des lames en station.</p>",
     "protection": {

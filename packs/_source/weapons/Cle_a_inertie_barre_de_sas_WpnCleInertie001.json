@@ -3,7 +3,7 @@
   "_key": "!items!WpnCleInertie001",
   "name": "Clé à inertie, barre de sas",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Outil lourd sans rebond utilisé en sortie extravéhiculaire ; +10 aux tests de FOR pour forcer une trappe grippée.</p>",
     "skill": "Corps-à-corps",

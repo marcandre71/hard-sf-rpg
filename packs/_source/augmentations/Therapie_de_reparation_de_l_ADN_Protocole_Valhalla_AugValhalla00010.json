@@ -3,7 +3,7 @@
   "_key": "!items!AugValhalla00010",
   "name": "Thérapie de réparation de l'ADN « Protocole Valhalla »",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Toute dose aiguë ou cumulée reçue est multipliée par 0,7 (arrondi au supérieur), soit environ 30 % de tolérance en plus.</p>\n<p>Effets secondaires : Deux semaines de fièvre et de fatigue après l'injection initiale ; très recherchée par les ingénieurs de fournaise.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "therapy",

@@ -3,7 +3,7 @@
   "_key": "!items!IgQHgsKI4sI1tmSM",
   "name": "Persuasion",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>convaincre, inspirer, séduire.</p>",
     "characteristic": "pre",

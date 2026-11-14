@@ -3,7 +3,7 @@
   "_key": "!items!SqlFibrosePul010",
   "name": "Fibrose pulmonaire radique",
   "type": "sequel",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/sequel.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §4. Décision Marc 30/10/2026. Décision Didier/Marc 31/10/2026 -->\n<p>Pas de dé. C'est une liste : le MJ choisit la séquelle selon la dose et la situation.</p>\n<p>Endurance maximale −1 (minimum 1). Traitement : poumons de culture.</p>",
     "category": "radiation",

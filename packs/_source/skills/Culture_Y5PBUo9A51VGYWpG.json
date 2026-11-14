@@ -3,7 +3,7 @@
   "_key": "!items!Y5PBUo9A51VGYWpG",
   "name": "Culture",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>une seule compétence, avec un champ libre pour la spécificité du personnage (origine, bloc, communauté, milieu…), sans liste fermée.</p>",
     "characteristic": "int",

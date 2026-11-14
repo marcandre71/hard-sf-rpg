@@ -3,7 +3,7 @@
   "_key": "!items!8ImyyxhoOgzuQ0g3",
   "name": "Armement de bord",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>utiliser les armes d'un vaisseau. Les règles détaillées figureront dans le futur livre de combat spatial.</p>",
     "characteristic": "per",

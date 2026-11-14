@@ -2,7 +2,7 @@
   "_id": "ModExLaserDef001",
   "name": "Laser de défense (tourelle)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Masse du catalogue : 3 t. -->\n<p>Aussi sur un flanc. Précis contre radiateurs et capteurs ; peut tirer sur un missile en approche (une attaque normale ; un missile touché est détruit). Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",

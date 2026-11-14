@@ -3,7 +3,7 @@
   "_key": "!items!FnepTsXRNCGbvcPJ",
   "name": "Ceinture (Cérès, Vesta, petits habitats)",
   "type": "origin",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
   "system": {
     "characteristicModifiers": "ADA +15, FOR -5, CON -5",
     "gToleranceModifier": -2,

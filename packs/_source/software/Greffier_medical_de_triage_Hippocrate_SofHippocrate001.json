@@ -3,7 +3,7 @@
   "_key": "!items!SofHippocrate001",
   "name": "Greffier médical de triage « Hippocrate »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi en infirmerie. +10 d'Aide en Premiers secours et en diagnostic ; gère seul la surveillance des caissons de torpeur et le suivi des doses (mSv). Guide pas à pas un non-médecin en urgence, mais ne pratique aucun acte chirurgical sans opérateur humain formé.</p>",
     "category": "greffier",

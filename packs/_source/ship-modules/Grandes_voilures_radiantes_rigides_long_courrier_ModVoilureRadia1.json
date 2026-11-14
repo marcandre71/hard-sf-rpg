@@ -3,7 +3,7 @@
   "_key": "!items!ModVoilureRadia1",
   "name": "Grandes voilures radiantes rigides (long-courrier, station)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Ailes incandescentes (800 à 1 200 K) évacuant 1 à 3 GW, environ 100 m de côté par gigawatt (Bible §7) ; fixes, impossibles à replier en combat. Masse : [à compléter] (dizaines à centaines de tonnes).</p>",
     "category": "radiators",

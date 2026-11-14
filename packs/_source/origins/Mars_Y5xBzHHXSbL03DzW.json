@@ -3,7 +3,7 @@
   "_key": "!items!Y5xBzHHXSbL03DzW",
   "name": "Mars",
   "type": "origin",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
   "system": {
     "characteristicModifiers": "CON +5, VOL +5, FOR -5",
     "gToleranceModifier": -1,

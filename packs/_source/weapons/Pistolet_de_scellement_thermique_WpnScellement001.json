@@ -3,7 +3,7 @@
   "_key": "!items!WpnScellement001",
   "name": "Pistolet de scellement thermique",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Contact à 4 m, 10 doses de résine. Projette de la mousse polymère brûlante ; un tir visé à la visière (−40) aveugle la cible jusqu'à nettoyage au couteau (1 action).</p>",
     "skill": "Armes de poing",

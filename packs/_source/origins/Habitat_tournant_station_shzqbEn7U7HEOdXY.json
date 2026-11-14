@@ -3,7 +3,7 @@
   "_key": "!items!shzqbEn7U7HEOdXY",
   "name": "Habitat tournant (station)",
   "type": "origin",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
   "system": {
     "characteristicModifiers": "ADA +10, PER +5, FOR -5, CON -5",
     "gToleranceModifier": -1,

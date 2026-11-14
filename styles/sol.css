@@ -568,14 +568,67 @@
   border: 1px solid var(--sol-line);
 }
 
-.sol-nouvelle-ere.actor button,
-.sol-nouvelle-ere.item button {
+/* Les boutons d'en-tête Foundry sont le bouton lui-même
+   (`header-control fa-solid fa-xmark`, glyphe en ::before).
+   Cette font-family, plus spécifique que `.fa-solid`, vidait le glyphe :
+   carré vide. On l'écarte des classes Font Awesome.
+   Les journaux et la fenêtre Compendiums n'ont pas .actor ni .item :
+   cette règle ne les touche pas. Une fiche ouverte depuis un compendium
+   a ces classes, donc elle est couverte. */
+.sol-nouvelle-ere.actor button:not(.header-control):not(.fa):not(.fas):not(.fa-solid):not([class*="fa-"]),
+.sol-nouvelle-ere.item button:not(.header-control):not(.fa):not(.fas):not(.fa-solid):not([class*="fa-"]) {
   font-family: var(--sol-f-label);
   font-size: 12px;
   letter-spacing: 0.06em;
   color: var(--sol-text);
   background: #101820;
   border: 1px solid var(--sol-line);
+}
+
+.sol-nouvelle-ere.actor .fa,
+.sol-nouvelle-ere.actor .fas,
+.sol-nouvelle-ere.actor .fa-solid,
+.sol-nouvelle-ere.actor [class*="fa-"],
+.sol-nouvelle-ere.item .fa,
+.sol-nouvelle-ere.item .fas,
+.sol-nouvelle-ere.item .fa-solid,
+.sol-nouvelle-ere.item [class*="fa-"] {
+  font-family: var(--font-awesome);
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+.sol-nouvelle-ere.actor .fas,
+.sol-nouvelle-ere.actor .fa-solid,
+.sol-nouvelle-ere.item .fas,
+.sol-nouvelle-ere.item .fa-solid {
+  font-weight: 900;
+}
+
+.sol-nouvelle-ere.actor .window-header .header-control,
+.sol-nouvelle-ere.item .window-header .header-control {
+  font-family: var(--font-awesome);
+  font-weight: 900;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: 0;
+  color: var(--sol-accent);
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sol-nouvelle-ere.actor .window-header .header-control:hover,
+.sol-nouvelle-ere.item .window-header .header-control:hover,
+.sol-nouvelle-ere.actor .window-header .header-control:focus-visible,
+.sol-nouvelle-ere.item .window-header .header-control:focus-visible {
+  color: #f4fdff;
+  background: rgba(76, 196, 220, 0.22);
 }
 
 .sol-nouvelle-ere.actor nav.tabs {

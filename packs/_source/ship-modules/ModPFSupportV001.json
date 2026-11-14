@@ -2,7 +2,7 @@
   "_id": "ModPFSupportV001",
   "name": "Support vital et abri anti-éruption entouré d'eau",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
     "category": "lifeSupport",

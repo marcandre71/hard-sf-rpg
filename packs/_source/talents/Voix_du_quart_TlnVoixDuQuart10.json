@@ -3,7 +3,7 @@
   "_key": "!items!TlnVoixDuQuart10",
   "name": "Voix du quart",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Au poste de Commandant en combat spatial, le +10 d'une réussite de Commandement peut profiter à deux postes différents pendant le même tour.</p>",
     "xpCost": 15,

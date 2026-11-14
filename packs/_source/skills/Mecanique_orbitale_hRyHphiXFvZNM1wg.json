@@ -3,7 +3,7 @@
   "_key": "!items!hRyHphiXFvZNM1wg",
   "name": "Mécanique orbitale",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>calcul de trajectoires, fenêtres de lancement, rendez-vous, gestion du delta-v.</p>",
     "characteristic": "int",

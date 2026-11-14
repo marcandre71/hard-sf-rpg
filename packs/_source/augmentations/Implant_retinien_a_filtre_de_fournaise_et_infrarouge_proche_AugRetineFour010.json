@@ -3,7 +3,7 @@
   "_key": "!items!AugRetineFour010",
   "name": "Implant rétinien à filtre de fournaise et infrarouge proche",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Remplace un œil endommagé ; protège de l'éblouissement (soudure, flash laser) et donne +10 en Vigilance ou Fouille pour repérer un point chaud ou une fuite thermique à courte portée.</p>\n<p>Effets secondaires : Couleurs artificielles ; sensible aux impulsions électromagnétiques proches.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "prosthesis",

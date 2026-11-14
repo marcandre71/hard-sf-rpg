@@ -3,7 +3,7 @@
   "_key": "!items!jynVtpmIPB5bc13b",
   "name": "Médecine : médecine de l'espace et des radiations (dont la torpeur médicale)",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>soigner et traiter. Spécialités : diagnostic et médecine générale ; chirurgie (impossible sans formation) ; médecine de l'espace et des radiations (dont la torpeur médicale).</p>",
     "characteristic": "int",

@@ -3,7 +3,7 @@
   "_key": "!items!SofKeplerV000010",
   "name": "Greffier d'éphémérides « Kepler-V »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur tablette. +10 d'Aide au Navigateur pour calculer un transfert ou une manœuvre ; divise par deux le temps de calcul hors combat. Indispensable aux petits équipages. Refuse par construction de calculer une trajectoire d'impact contre une planète ou un habitat (Règle Sereguine : déviation de masse).</p>",
     "category": "greffier",

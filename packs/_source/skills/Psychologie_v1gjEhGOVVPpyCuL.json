@@ -3,7 +3,7 @@
   "_key": "!items!v1gjEhGOVVPpyCuL",
   "name": "Psychologie",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>comprendre les émotions et intentions d'autrui.</p>",
     "characteristic": "per",

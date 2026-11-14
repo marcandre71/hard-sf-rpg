@@ -3,7 +3,7 @@
   "_key": "!items!YwlZaH7TVsbecCVe",
   "name": "Langues",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
     "characteristic": "int",

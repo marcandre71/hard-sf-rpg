@@ -3,7 +3,7 @@
   "_key": "!items!SofAccosteur0010",
   "name": "Pilote-greffier d'amarrage « Accosteur »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur navette. Exécute les rendez-vous orbitaux de routine et l'approche aux instruments dans la brume (Titan, Vénus) ; +10 à l'amarrage. Inutilisable pour les actions Esquiver ou Changer de portée en combat spatial.</p>",
     "category": "greffier",

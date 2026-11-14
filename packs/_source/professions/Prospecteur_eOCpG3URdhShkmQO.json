@@ -3,7 +3,7 @@
   "_key": "!items!eOCpG3URdhShkmQO",
   "name": "Prospecteur",
   "type": "profession",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
   "system": {
     "careerSkills": "Sciences physiques, Sortie extravéhiculaire, Pilotage, Commerce, Robotique et télépilotage, Mécanique, Survie, Négociation",
     "description": "<p>3 à +20, 5 à +10</p>"

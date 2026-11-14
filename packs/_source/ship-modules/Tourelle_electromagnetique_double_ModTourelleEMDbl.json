@@ -3,7 +3,7 @@
   "_key": "!items!ModTourelleEMDbl",
   "name": "Tourelle électromagnétique double",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. Armement lourd d'escorteur. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",

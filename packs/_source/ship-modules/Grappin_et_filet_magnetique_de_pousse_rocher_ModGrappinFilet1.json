@@ -3,7 +3,7 @@
   "_key": "!items!ModGrappinFilet1",
   "name": "Grappin et filet magnétique de pousse-rocher",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Ancre le vaisseau sur un petit astéroïde ou un vaisseau en perdition pour le remorquer ; licence de la Veille requise pour déplacer une masse.</p>",
     "category": "other",

@@ -3,7 +3,7 @@
   "_key": "!items!SubDortoir000010",
   "name": "Charge sédative « Dortoir » (pour fléchettes)",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Si au moins 1 dégât traverse l'armure, la cible doit réussir un test de CON (−10) ou tomber Inconsciente pour 1D10 × 5 minutes. Délai d'action avant l'inconscience (la v0.2 indiquait Sonnée au 1er tour, Inconsciente au 2e, ce qui est trop rapide pour un sédatif réaliste) : [à compléter].</p>\n<p>Effets secondaires : Aucun effet si l'armure absorbe tous les dégâts du tir.</p>",
     "category": "toxin",

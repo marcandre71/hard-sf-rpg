@@ -3,7 +3,7 @@
   "_key": "!items!TlnLutteur3D0010",
   "name": "Lutteur en trois dimensions",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En lutte en apesanteur (moyenne de FOR et d'ADA), s'il remporte le test opposé, peut à la fois s'ancrer sur un appui et projeter son adversaire En vol (cible prévisible : +10 pour la toucher).</p>",
     "xpCost": 15,

@@ -82,7 +82,7 @@
     {
       "name": "Mars",
       "type": "origin",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
       "system": {
         "characteristicModifiers": "CON +5, VOL +5, FOR -5",
         "gToleranceModifier": -1,
@@ -97,7 +97,7 @@
     {
       "name": "Ouvrier sous contrat",
       "type": "background",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
       "system": {
         "skillBonuses": "Mécanique, Systèmes de survie, Corps-à-corps",
         "link": "un contrat pas encore remboursé",
@@ -111,7 +111,7 @@
     {
       "name": "Ingénieur",
       "type": "profession",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
       "system": {
         "careerSkills": "Mécanique, Électronique, Réacteurs et propulsion, Systèmes de survie, Sortie extravéhiculaire, Informatique, Robotique et télépilotage, Fouille",
         "description": "<p>3 à +20, 5 à +10</p>"
@@ -124,7 +124,7 @@
     {
       "name": "Armes de poing",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
         "characteristic": "coo",
@@ -142,7 +142,7 @@
     {
       "name": "Corps-à-corps",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>lutte, armes blanches, outils improvisés. En apesanteur, la lutte utilise la moyenne de FOR et ADA (section 7).</p>",
         "characteristic": "for",
@@ -160,7 +160,7 @@
     {
       "name": "Esquive",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
         "characteristic": "ref",
@@ -178,7 +178,7 @@
     {
       "name": "Fouille",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>chercher méthodiquement un objet, une fuite, une preuve.</p>",
         "characteristic": "per",
@@ -196,7 +196,7 @@
     {
       "name": "Informatique",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>programmation, intrusion, gestion des greffiers (systèmes spécialisés).</p>",
         "characteristic": "int",
@@ -214,7 +214,7 @@
     {
       "name": "Mécanique",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>machines, structures, pressurisation.</p>",
         "characteristic": "int",
@@ -232,7 +232,7 @@
     {
       "name": "Robotique et télépilotage",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>drones, bras robotiques, robots de chantier.</p>",
         "characteristic": "coo",
@@ -250,7 +250,7 @@
     {
       "name": "Réacteurs et propulsion : microréacteurs à fission",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>fission, fusion, moteurs. Dangereux à rater. Spécialités : microréacteurs à fission ; nucléaire thermique ; fusion pulsée (fournaise) ; propulsion électrique à plasma.</p>",
         "characteristic": "int",
@@ -269,7 +269,7 @@
     {
       "name": "Sortie extravéhiculaire",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>travail en combinaison dans le vide, réservoirs, filins, propulseurs dorsaux.</p>",
         "characteristic": "ada",
@@ -287,7 +287,7 @@
     {
       "name": "Systèmes de survie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>air, eau, recyclage, contrôle thermique.</p>",
         "characteristic": "int",
@@ -305,7 +305,7 @@
     {
       "name": "Électronique",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>circuits, capteurs, réparation de matériel, serrures et verrous électroniques.</p>",
         "characteristic": "int",
@@ -323,7 +323,7 @@
     {
       "name": "Combinaison souple",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
         "airReserve": {
@@ -359,7 +359,7 @@
     {
       "name": "Pistolet à rivets lourd",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §4. Décision Marc 30/10/2026 -->\n<p>5 / 15 / 25 m, 20 rivets. Outil de chantier naval dont la sécurité de pression a été pontée. Recul notable ; dangereux pour les hublots et cloisons à moins de 5 m.</p>",
         "skill": "Armes de poing",
@@ -386,7 +386,7 @@
     {
       "name": "Mains nues, gantelets et bottes magnétiques",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
         "skill": "Corps-à-corps",
@@ -413,7 +413,7 @@
     {
       "name": "Kit d'ingénieur de qualité (ateliers de Vesta)",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Mécanique, Réacteurs et propulsion, Systèmes de survie. Réserve 20 h. Outillage calibré de haute précision avec analyseur acoustique de contraintes (modèle d'Ilka Moravec).</p>",
         "mass": 5.5,
@@ -434,7 +434,7 @@
     {
       "name": "Tablette durcie d'ingénieur",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Support pour greffiers et télépilotage de drones. Châssis antichoc blindé contre les radiations (fiche d'Ilka Moravec). Héberge jusqu'à 4 logiciels ou greffiers.</p>",
         "mass": 0.8,
@@ -455,7 +455,7 @@
     {
       "name": "Greffier de diagnostic « Vulcain »",
       "type": "software",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
       "system": {
         "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 d'Aide aux diagnostics de panne et aux tests prolongés de réparation. Croise en temps réel pressions, vibrations et historiques d'usure. Ne peut pas couper le réacteur en combat sans validation de l'Ingénieur.</p>",
         "category": "greffier",
@@ -474,7 +474,7 @@
     {
       "name": "Rustine",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
         "mass": 0.2,
@@ -495,7 +495,7 @@
     {
       "name": "Dosimètre actif de poignet",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
         "mass": 0.1,

@@ -3,7 +3,7 @@
   "_key": "!items!ModStirlingGen01",
   "name": "Générateur Stirling à radio-isotopes ou micro-fission",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>20 à 50 kWe. Navettes atmosphériques, petits postes fixes, grands drones ; insuffisant pour un laser de bord.</p>",
     "category": "reactor",

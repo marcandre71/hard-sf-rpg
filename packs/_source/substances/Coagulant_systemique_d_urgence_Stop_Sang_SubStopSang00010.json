@@ -3,7 +3,7 @@
   "_key": "!items!SubStopSang00010",
   "name": "Coagulant systémique d'urgence « Stop-Sang »",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Arrête l'état Saignement en 1 action, sans test de Premiers secours (utile quand on ne peut pas ouvrir la combinaison du blessé). L'injection passe par le port médical auto-obturant de la combinaison.</p>\n<p>Effets secondaires : Sans danger à la 1re dose ; une 2e dose en 24 h impose un test de CON (risque de thrombose).</p>\n<p>Légalité : [à compléter].</p>",
     "category": "medical",

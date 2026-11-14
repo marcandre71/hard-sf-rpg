@@ -3,7 +3,7 @@
   "_key": "!items!AugMembreClon010",
   "name": "Membre ou organe cloné en cuve",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Remplace un membre amputé ou supprime définitivement une séquelle organique, sans métal ni rejet.</p>\n<p>Effets secondaires : 4 à 6 semaines de culture en bioréacteur et une opération de Médecine (chirurgie).</p>\n<p>Coût : [à compléter].</p>",
     "kind": "culturedOrgan",

@@ -3,7 +3,7 @@
   "_key": "!items!9B2EFpE5Q8oteVLe",
   "name": "Famille de sociétaires",
   "type": "background",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
   "system": {
     "skillBonuses": "Sortie extravéhiculaire, Négociation, Mécanique",
     "link": "une part de risque familiale",

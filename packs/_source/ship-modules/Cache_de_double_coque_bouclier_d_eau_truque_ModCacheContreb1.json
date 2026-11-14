@@ -3,7 +3,7 @@
   "_key": "!items!ModCacheContreb1",
   "name": "Cache de double coque (bouclier d'eau truqué)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. Dissimule 3 t de contrebande dans le bouclier d'eau antiradiations : −20 aux tests de Fouille des inspecteurs de la Veille.</p>",
     "category": "cargo",

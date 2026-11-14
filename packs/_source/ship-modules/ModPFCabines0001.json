@@ -2,7 +2,7 @@
   "_id": "ModPFCabines0001",
   "name": "Passerelle, cabines et carré (4 couchettes de 2 m³)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Logement de 4 à 6 personnes (Petite Fortune).</p>",
     "category": "cabins",

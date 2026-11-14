@@ -3,7 +3,7 @@
   "_key": "!items!8Ba1A5gqqWX2rwG0",
   "name": "Sciences de la vie : exobiologie",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>spécialités : biologie ; écologie des habitats ; exobiologie.</p>",
     "characteristic": "int",

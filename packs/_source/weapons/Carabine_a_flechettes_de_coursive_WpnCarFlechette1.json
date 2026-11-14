@@ -3,7 +3,7 @@
   "_key": "!items!WpnCarFlechette1",
   "name": "Carabine à fléchettes de coursive",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §3. Décision Marc 30/10/2026 -->\n<p>25 / 60 / 120 m. Compensation par gaz, recul nul. Arme favorite des équipages de gardes du vide (vaisseaux de sauvetage) et des escortes de coffres d'hélium du Kombinat.</p>",
     "skill": "Armes d'épaule",

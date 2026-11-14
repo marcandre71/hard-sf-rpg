@@ -3,7 +3,7 @@
   "_key": "!items!SubChelateur0010",
   "name": "Chélateur d'actinides (Bleu de Prusse, DTPA)",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Traite seulement la contamination interne (poussières radioactives inhalées ou ingérées après une brèche). Il accélère l'élimination des particules et arrête donc la dose qu'elles continueraient à délivrer ; il ne retire pas la dose déjà reçue. Valeurs chiffrées et test de Médecine : [à compléter].</p>\n<p>Effets secondaires : Fatigue rénale, 1 journée de repos complet par jour de cure.</p>\n<p>Légalité : [à compléter].</p>",
     "category": "radiation",

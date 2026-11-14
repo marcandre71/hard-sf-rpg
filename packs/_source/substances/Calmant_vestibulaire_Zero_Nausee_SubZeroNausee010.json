@@ -3,7 +3,7 @@
   "_key": "!items!SubZeroNausee010",
   "name": "Calmant vestibulaire « Zéro-Nausée »",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Supprime le mal de l'espace des premiers jours et réduit de moitié la pénalité de gravité inhabituelle pour les tâches physiques (−10 devient 0 ; −20 devient −10).</p>\n<p>Effets secondaires : Légère somnolence, −10 en Vigilance et aux tests de RÉF.</p>\n<p>Légalité : [à compléter].</p>",
     "category": "gravity",

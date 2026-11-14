@@ -3,7 +3,7 @@
   "_key": "!items!ModFusionDHe3001",
   "name": "Chambre d'allumage à fusion D-He3 (avec bouclier d'ombre)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>100 MWe à 1 GWe. Alimente une fournaise et l'armement lourd ; dépend de l'hélium 3, dont le Kombinat Hélion contrôle environ 70 % (Bible §6).</p>",
     "category": "reactor",

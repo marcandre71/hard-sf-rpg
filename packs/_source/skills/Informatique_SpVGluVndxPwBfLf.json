@@ -3,7 +3,7 @@
   "_key": "!items!SpVGluVndxPwBfLf",
   "name": "Informatique",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>programmation, intrusion, gestion des greffiers (systèmes spécialisés).</p>",
     "characteristic": "int",

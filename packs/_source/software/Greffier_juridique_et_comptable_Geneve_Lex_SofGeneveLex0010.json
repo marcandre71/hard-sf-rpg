@@ -3,7 +3,7 @@
   "_key": "!items!SofGeneveLex0010",
   "name": "Greffier juridique et comptable « Genève-Lex »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur tablette. +10 d'Aide pour rédiger un contrat de la Mutuelle, vérifier une licence de masse ou contester une amende de l'Office de la Veille. Intègre la jurisprudence du Traité de Genève (1981) et de la Convention de Vesta (2166).</p>",
     "category": "greffier",

@@ -3,7 +3,7 @@
   "_key": "!items!BjXBc2mqNQXItmrt",
   "name": "Réfugié climatique",
   "type": "background",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
   "system": {
     "skillBonuses": "Survie, Tromperie, Athlétisme",
     "link": "une communauté restée sur Terre",

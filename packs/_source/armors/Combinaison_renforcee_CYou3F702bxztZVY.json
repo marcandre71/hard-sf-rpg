@@ -3,7 +3,7 @@
   "_key": "!items!CYou3F702bxztZVY",
   "name": "Combinaison renforcée",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Coque semi-rigide avec plaques thoraciques anti-micrométéorites et joints doublés ; standard des prospecteurs et des araignées de chantier.</p>",
     "protection": {
@@ -16,9 +16,15 @@
     },
     "pressurized": true,
     "breachThreshold": 8,
-    "airReserve": { "value": 10, "max": 10 },
+    "airReserve": {
+      "value": 10,
+      "max": 10
+    },
     "sealState": "intact",
-    "penalty": { "manipulation": -10, "perception": -10 },
+    "penalty": {
+      "manipulation": -10,
+      "perception": -10
+    },
     "dosimeter": true,
     "radio": true,
     "mass": 15,

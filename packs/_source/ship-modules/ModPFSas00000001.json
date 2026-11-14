@@ -2,7 +2,7 @@
   "_id": "ModPFSas00000001",
   "name": "Sas d'EVA, treuil et baie de drones",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones Crabe.</p>",
     "category": "other",

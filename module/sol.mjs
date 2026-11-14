@@ -34,6 +34,7 @@ import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
 import { ShipSheet } from "./sheets/ship-sheet.mjs";
+import { registerTypeIcons } from "./icons.mjs";
 import { registerShipPlay } from "./ships/actions.mjs";
 import { registerShipStrike } from "./ships/strike.mjs";
 
@@ -171,6 +172,7 @@ function initializeSystem() {
     label: "SOL.Sheet.Item"
   });
 
+  registerTypeIcons();
   registerItemGuard();
   registerNpcReadyMigration(SYSTEM_ID);
   registerTestScene(SYSTEM_ID);

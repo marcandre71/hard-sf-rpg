@@ -3,7 +3,7 @@
   "_key": "!items!GearManchonsPneu",
   "name": "Manchons à garrot pneumatique automatique",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En cas de « Combinaison percée » sur un bras ou une jambe, isolent le membre en 1 tour et portent le compte à rebours de 5 à 15 minutes ; le membre isolé est inutilisable tant que la rustine n'est pas posée. Masse et encombrement : [à compléter].</p>",
     "mass": 0,

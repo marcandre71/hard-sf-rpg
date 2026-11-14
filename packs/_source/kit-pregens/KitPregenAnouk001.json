@@ -82,7 +82,7 @@
     {
       "name": "Habitat tournant (station)",
       "type": "origin",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
       "system": {
         "characteristicModifiers": "ADA +10, PER +5, FOR -5, CON -5",
         "gToleranceModifier": -1,
@@ -97,7 +97,7 @@
     {
       "name": "Réfugié climatique",
       "type": "background",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
       "system": {
         "skillBonuses": "Survie, Tromperie, Athlétisme",
         "link": "une communauté restée sur Terre",
@@ -111,7 +111,7 @@
     {
       "name": "Garde ou soldat",
       "type": "profession",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
       "system": {
         "careerSkills": "Armes d'épaule, Armes de poing, Corps-à-corps, Esquive, Manœuvre en apesanteur, Vigilance, Premiers secours, Commandement",
         "description": "<p>3 à +20, 5 à +10</p>"
@@ -124,7 +124,7 @@
     {
       "name": "Armes d'épaule",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>carabines, fusils, lanceurs, outils détournés à deux mains.</p>",
         "characteristic": "coo",
@@ -142,7 +142,7 @@
     {
       "name": "Armes de poing",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
         "characteristic": "coo",
@@ -160,7 +160,7 @@
     {
       "name": "Athlétisme",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>courir, grimper, sauter, nager.</p>",
         "characteristic": "for",
@@ -178,7 +178,7 @@
     {
       "name": "Commandement",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>diriger une équipe en situation de crise.</p>",
         "characteristic": "pre",
@@ -196,7 +196,7 @@
     {
       "name": "Corps-à-corps",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>lutte, armes blanches, outils improvisés. En apesanteur, la lutte utilise la moyenne de FOR et ADA (section 7).</p>",
         "characteristic": "for",
@@ -214,7 +214,7 @@
     {
       "name": "Discrétion",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se cacher, se déplacer sans bruit, passer inaperçu.</p>",
         "characteristic": "coo",
@@ -232,7 +232,7 @@
     {
       "name": "Esquive",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
         "characteristic": "ref",
@@ -250,7 +250,7 @@
     {
       "name": "Intimidation",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>faire pression, menacer, imposer.</p>",
         "characteristic": "vol",
@@ -268,7 +268,7 @@
     {
       "name": "Manœuvre en apesanteur",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
         "characteristic": "ada",
@@ -286,7 +286,7 @@
     {
       "name": "Premiers secours",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>stabiliser, poser un garrot, traiter une décompression.</p>",
         "characteristic": "int",
@@ -304,7 +304,7 @@
     {
       "name": "Survie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>environnements planétaires extrêmes (Titan, surface martienne, glaces). Un futur Atout permettra d'utiliser CON à la place d'INT, au choix du joueur.</p>",
         "characteristic": "int",
@@ -322,7 +322,7 @@
     {
       "name": "Tromperie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>mentir, bluffer, se déguiser, se faire passer pour un autre.</p>",
         "characteristic": "pre",
@@ -340,7 +340,7 @@
     {
       "name": "Vigilance",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
         "characteristic": "per",
@@ -358,7 +358,7 @@
     {
       "name": "Combinaison souple",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
         "airReserve": {
@@ -394,7 +394,7 @@
     {
       "name": "Gilet balistique de sécurité (veste de pont)",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Porté sous ou sur les vêtements dans les habitats agités (Ganymède, Tharsis) ; aucune étanchéité au vide.</p>",
         "protection": {
@@ -429,7 +429,7 @@
     {
       "name": "Pistolet de bord 9 mm basse vélocité",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 35 / 70 m. Dotation standard des officiers de marine marchande, des rades et des syndics de la Mutuelle.</p>",
         "skill": "Armes de poing",
@@ -456,7 +456,7 @@
     {
       "name": "Matraque télescopique à inertie",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Lestée de grenaille interne amortissant le rebond en apesanteur ; arme des prévôts de station.</p>",
         "skill": "Corps-à-corps",
@@ -483,7 +483,7 @@
     {
       "name": "Mains nues, gantelets et bottes magnétiques",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
         "skill": "Corps-à-corps",
@@ -510,7 +510,7 @@
     {
       "name": "Trousse de premiers secours de coursive",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Premiers secours ; indispensable pour éviter le −20 sans matériel. Pansements compressifs, colle dermique et garrots conçus pour l'apesanteur.</p>",
         "mass": 1.5,
@@ -531,7 +531,7 @@
     {
       "name": "Rustine",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
         "mass": 0.2,
@@ -552,7 +552,7 @@
     {
       "name": "Dosimètre actif de poignet",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
         "mass": 0.1,

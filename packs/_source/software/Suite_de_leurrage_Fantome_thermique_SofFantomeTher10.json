@@ -3,7 +3,7 @@
   "_key": "!items!SofFantomeTher10",
   "name": "Suite de leurrage « Fantôme thermique »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+10 au test opposé de contre-mesures de l'Opérateur contre un missile en approche. Fonctionne seulement si le vaisseau porte le module « Suite de guerre électronique et lance-leurres » (il pilote ses leurres : paillettes radar et fusées thermiques). Son bonus se cumule avec celui du module, dans la limite générale de ±50.</p>",
     "category": "defense",

@@ -3,7 +3,7 @@
   "_key": "!items!TlnCaisseNoire10",
   "name": "Introduction à la Caisse Noire",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Pour trouver un receleur, un chantier de maquillage de transpondeur ou un vendeur d'équipement illégal dans une station majeure, un échec critique compte comme un échec simple.</p>",
     "xpCost": 15,

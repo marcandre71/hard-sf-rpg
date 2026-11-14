@@ -3,7 +3,7 @@
   "_key": "!items!ArmAttelleTuteur",
   "name": "Attelle exosquelettique médicale (« Tuteur de Puits »)",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Orthèse motorisée indispensable aux natifs de basse gravité (Ceinture, Mars) qui séjournent sur Terre (Bible §8 et §13). Permet d'évoluer à 1 g sans risque cardiaque (mouvement divisé par 2, −10 aux actions physiques). Autonomie : 12 h par batterie.</p>",
     "protection": {

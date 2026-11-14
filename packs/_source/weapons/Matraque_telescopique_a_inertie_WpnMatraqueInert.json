@@ -3,7 +3,7 @@
   "_key": "!items!WpnMatraqueInert",
   "name": "Matraque télescopique à inertie",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Lestée de grenaille interne amortissant le rebond en apesanteur ; arme des prévôts de station.</p>",
     "skill": "Corps-à-corps",

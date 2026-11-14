@@ -3,7 +3,7 @@
   "_key": "!items!ModPlasmaCargo01",
   "name": "Propulseur à plasma (cargo lent)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~3 000 à 5 000 s ; 0,01 à 0,1 milli-g. Poussée extrêmement faible : −20 au Pilote pour Changer de portée en combat. Consommation minime : fret lent, cargos qui mettent un an à rejoindre Cérès, sans équipage ou avec un équipage réduit (Bible §7).</p>",
     "category": "propulsion",

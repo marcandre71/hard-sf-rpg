@@ -3,7 +3,7 @@
   "_key": "!items!SofVulcain000010",
   "name": "Greffier de diagnostic « Vulcain »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 d'Aide aux diagnostics de panne et aux tests prolongés de réparation. Croise en temps réel pressions, vibrations et historiques d'usure. Ne peut pas couper le réacteur en combat sans validation de l'Ingénieur.</p>",
     "category": "greffier",

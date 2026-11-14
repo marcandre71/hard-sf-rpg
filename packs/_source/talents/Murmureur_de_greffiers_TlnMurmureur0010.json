@@ -3,7 +3,7 @@
   "_key": "!items!TlnMurmureur0010",
   "name": "Murmureur de greffiers",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>+10 pour diagnostiquer, reprogrammer ou contourner un greffier ; divise par deux l'intervalle de temps des tests prolongés d'Informatique.</p>",
     "xpCost": 15,

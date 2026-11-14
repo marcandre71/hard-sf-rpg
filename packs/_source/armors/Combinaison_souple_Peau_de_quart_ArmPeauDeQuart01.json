@@ -3,7 +3,7 @@
   "_key": "!items!ArmPeauDeQuart01",
   "name": "Combinaison souple « Peau de quart »",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tissu à contre-pression mécanique (Callisto, Genève) ; gants haptiques de haute précision qui annulent la pénalité de manipulation fine.</p>",
     "protection": {

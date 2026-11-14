@@ -3,7 +3,7 @@
   "_key": "!items!2AGyxvrxvoFW5YNx",
   "name": "Athlétisme",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>courir, grimper, sauter, nager.</p>",
     "characteristic": "for",

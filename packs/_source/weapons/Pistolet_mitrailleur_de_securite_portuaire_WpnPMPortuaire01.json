@@ -3,7 +3,7 @@
   "_key": "!items!WpnPMPortuaire01",
   "name": "Pistolet-mitrailleur de sécurité portuaire",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §3. Décision Marc 30/10/2026 -->\n<p>20 / 45 / 90 m. Compact, crosse repliable adaptée aux combinaisons pressurisées.</p>",
     "skill": "Armes d'épaule",

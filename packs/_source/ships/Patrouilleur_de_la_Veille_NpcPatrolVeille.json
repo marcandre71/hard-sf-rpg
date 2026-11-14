@@ -112,7 +112,7 @@
       "_id": "NpcPat0000000000",
       "name": "Moteur nucléaire thermique à l'eau (standard Mutuelle)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §8. Décision Didier/Marc 31/10/2026 : poussée 113 kN, soit 50 milli-g pour 230 t. L'Isp ne dépend pas de la poussée. Durée de poussée, accélération à vide, masse et delta-v : provisoire jusqu'à la 1.0. -->\n<p>Isp ~350 à 380 s. Décision Marc 21/10/2026. Réf. Vaisseaux v0.1 §8. Poussée 113 kN, ce qui correspond à 50 milli-g pour 230 t. Décision Didier/Marc 31/10/2026. Accélération à vide : provisoire. Durée de poussée : provisoire. Masse : provisoire. Delta-v : provisoire. Jusqu'à la 1.0.</p>",
         "category": "propulsion",
@@ -153,7 +153,7 @@
       "_id": "NpcPat0100000000",
       "name": "Cœur à fission bimodal (avec bouclier d'ombre)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
         "category": "reactor",
@@ -194,7 +194,7 @@
       "_id": "NpcPat0200000000",
       "name": "Panneaux radiateurs repliables (~50 m², prospecteur)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §4. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Repliés en une action d'Ingénieur ou d'Opérateur : on ne peut alors les toucher que par un tir visé sur un module ; ils ne dissipent plus que 1 point de chaleur par tour.</p>",
         "category": "radiators",
@@ -235,7 +235,7 @@
       "_id": "NpcPat0300000000",
       "name": "Réservoir d'eau de masse de réaction (75 t)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
         "category": "other",
@@ -276,7 +276,7 @@
       "_id": "NpcPat0400000000",
       "name": "Réservoir d'eau de masse de réaction (75 t)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 75 t d'eau (Petite Fortune en porte deux). Percé (Intégrité 0), le vaisseau perd cette masse de réaction et le delta-v associé.</p>",
         "category": "other",
@@ -317,7 +317,7 @@
       "_id": "NpcPat0500000000",
       "name": "Capteurs civils (radar, lidar, infrarouge)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Veille et prospection (Petite Fortune). Hors service : −20 à l'Opérateur et à l'Artilleur.</p>",
         "category": "sensors",
@@ -358,7 +358,7 @@
       "_id": "NpcPat0600000000",
       "name": "Antenne radio et laser de communication",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Liaison directionnelle à haut débit et radio omnidirectionnelle, soumises au délai lumière.</p>",
         "category": "communications",
@@ -399,7 +399,7 @@
       "_id": "NpcPat0700000000",
       "name": "Passerelle, cabines et carré (4 couchettes de 2 m³)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>Logement de 4 à 6 personnes (Petite Fortune).</p>",
         "category": "cabins",
@@ -441,7 +441,7 @@
       "_id": "NpcPat0800000000",
       "name": "Support vital et abri anti-éruption entouré d'eau",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Recyclage de l'air et de l'eau pour 6 personnes ; abri contre les éruptions solaires (LdR §8).</p>",
         "category": "lifeSupport",
@@ -483,7 +483,7 @@
       "_id": "NpcPat0900000000",
       "name": "Soute à minerai ou conteneurs (20 t)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Aussi sur le flanc tribord. 20 t de fret ou de carottes de forage.</p>",
         "category": "cargo",
@@ -524,7 +524,7 @@
       "_id": "NpcPat1000000000",
       "name": "Sondes et foreuses d'astéroïdes (6)",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
         "category": "other",
@@ -565,7 +565,7 @@
       "_id": "NpcPat1100000000",
       "name": "Sas d'EVA, treuil et baie de drones",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Sorties extravéhiculaires, rangement des propulseurs dorsaux, recharge de 2 drones Crabe.</p>",
         "category": "other",
@@ -606,7 +606,7 @@
       "_id": "NpcPat1200000000",
       "name": "Laser lourd à miroir de proue",
       "type": "shipModule",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
       "system": {
         "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Arme principale des patrouilleurs de la Veille et des escorteurs du Kombinat ; +10 pour toucher sur un tir visé contre les radiateurs ou les capteurs. La v0.2 indiquait 2 de chaleur par tir ; ramené à 1, conformément à la règle « +1 par tir de laser ». Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
         "category": "weapon",

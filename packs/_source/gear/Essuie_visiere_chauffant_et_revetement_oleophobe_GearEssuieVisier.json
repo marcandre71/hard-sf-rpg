@@ -3,7 +3,7 @@
   "_key": "!items!GearEssuieVisier",
   "name": "Essuie-visière chauffant et revêtement oléophobe",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Évite l'accumulation de méthane liquide sur la visière ou le masque sur Titan (sinon il faut l'essuyer toutes les deux minutes en extérieur). Masse et encombrement : [à compléter].</p>",
     "mass": 0,

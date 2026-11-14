@@ -3,7 +3,7 @@
   "_key": "!items!ohajgULUPy3jNZet",
   "name": "Corps-à-corps",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>lutte, armes blanches, outils improvisés. En apesanteur, la lutte utilise la moyenne de FOR et ADA (section 7).</p>",
     "characteristic": "for",

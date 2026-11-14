@@ -3,7 +3,7 @@
   "_key": "!items!NQgCFUvv3qsJMrRv",
   "name": "Ingénieur",
   "type": "profession",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
   "system": {
     "careerSkills": "Mécanique, Électronique, Réacteurs et propulsion, Systèmes de survie, Sortie extravéhiculaire, Informatique, Robotique et télépilotage, Fouille",
     "description": "<p>3 à +20, 5 à +10</p>"

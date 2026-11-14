@@ -3,7 +3,7 @@
   "_key": "!items!SubAmifostine010",
   "name": "Amifostine-9 (« Bleu de Callisto »)",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>\n<p>Effets secondaires : Nausées violentes immédiates, −10 aux actions pendant 4 heures et perte d'1 point d'Endurance.</p>\n<p>Légalité : [à compléter].</p>",
     "category": "radiation",

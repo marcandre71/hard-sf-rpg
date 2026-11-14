@@ -3,7 +3,7 @@
   "_key": "!items!CgO7A9Sag9vIS4I9",
   "name": "Explosifs",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>charges minières, forage, démolition, déminage, sabotage.</p>",
     "characteristic": "int",

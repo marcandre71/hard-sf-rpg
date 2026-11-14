@@ -3,7 +3,7 @@
   "_key": "!items!CoyiKFc6DXlEZZno",
   "name": "Négociation",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>marchander, conclure un contrat, arbitrer.</p>",
     "characteristic": "pre",

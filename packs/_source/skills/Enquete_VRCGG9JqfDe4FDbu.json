@@ -3,7 +3,7 @@
   "_key": "!items!VRCGG9JqfDe4FDbu",
   "name": "Enquête",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>interroger, recouper témoignages, archives et données, remonter un réseau ou une piste.</p>",
     "characteristic": "int",

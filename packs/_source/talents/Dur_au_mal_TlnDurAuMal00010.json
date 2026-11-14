@@ -3,7 +3,7 @@
   "_key": "!items!TlnDurAuMal00010",
   "name": "Dur au mal",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Quand son Endurance tombe à 0, reste conscient sans test de CON ; il est Épuisé (−20) normalement.</p>",
     "xpCost": 15,

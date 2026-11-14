@@ -3,7 +3,7 @@
   "_key": "!items!SofPareFeuKom010",
   "name": "Pare-feu cryptographique du Kombinat",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. −20 à toute tentative d'intrusion ou d'écoute électronique visant le système protégé. Chiffrement développé par le Kombinat Hélion et les plénipotentiaires.</p>",
     "category": "defense",

@@ -3,7 +3,7 @@
   "_key": "!items!SubSouffleNoir10",
   "name": "Oxygénateur sanguin perfluoré « Souffle Noir »",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Fait reculer l'Hypoxie de 2 stades. Effet éventuel sur le compte à rebours de « Combinaison percée » : [à compléter].</p>\n<p>Effets secondaires : Frissons et maux de tête violents au retour à la pression normale (−10 en PER pendant 1 heure).</p>\n<p>Légalité : [à compléter].</p>",
     "category": "medical",

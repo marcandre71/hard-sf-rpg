@@ -3,7 +3,7 @@
   "_key": "!items!xxJ2uF9LfSg2WbRy",
   "name": "Commandement",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>diriger une équipe en situation de crise.</p>",
     "characteristic": "pre",

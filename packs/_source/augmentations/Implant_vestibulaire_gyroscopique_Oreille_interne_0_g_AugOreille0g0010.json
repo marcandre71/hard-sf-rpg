@@ -3,7 +3,7 @@
   "_key": "!items!AugOreille0g0010",
   "name": "Implant vestibulaire gyroscopique « Oreille interne 0 g »",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Remplace une oreille interne lésée ; supprime le mal de l'espace et donne +10 en Manœuvre en apesanteur pour se stabiliser après une mise en rotation involontaire.</p>\n<p>Effets secondaires : Léger acouphène permanent ; un électrochoc à la tête laisse la cible Sonnée 1 tour de plus.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "prosthesis",

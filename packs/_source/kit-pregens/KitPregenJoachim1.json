@@ -82,7 +82,7 @@
     {
       "name": "Terre",
       "type": "origin",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
       "system": {
         "characteristicModifiers": "FOR +5, CON +10, ADA -10",
         "gToleranceModifier": 1,
@@ -97,7 +97,7 @@
     {
       "name": "Enfant de la Veille",
       "type": "background",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
       "system": {
         "skillBonuses": "Opérations de bord, Bureaucratie et droit, Vigilance",
         "link": "un parent officier",
@@ -111,7 +111,7 @@
     {
       "name": "Inspecteur de la Veille",
       "type": "profession",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
       "system": {
         "careerSkills": "Bureaucratie et droit, Psychologie, Fouille, Armes de poing, Opérations de bord, Intimidation, Mécanique orbitale, Vigilance",
         "description": "<p>3 à +20, 5 à +10</p>"
@@ -124,7 +124,7 @@
     {
       "name": "Armes de poing",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
         "characteristic": "coo",
@@ -142,7 +142,7 @@
     {
       "name": "Bureaucratie et droit",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>traités, règlements de la Veille, contrats de la Mutuelle, chartes des colonies.</p>",
         "characteristic": "int",
@@ -160,7 +160,7 @@
     {
       "name": "Enquête",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>interroger, recouper témoignages, archives et données, remonter un réseau ou une piste.</p>",
         "characteristic": "int",
@@ -178,7 +178,7 @@
     {
       "name": "Esquive",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
         "characteristic": "ref",
@@ -196,7 +196,7 @@
     {
       "name": "Fouille",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>chercher méthodiquement un objet, une fuite, une preuve.</p>",
         "characteristic": "per",
@@ -214,7 +214,7 @@
     {
       "name": "Intimidation",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>faire pression, menacer, imposer.</p>",
         "characteristic": "vol",
@@ -232,7 +232,7 @@
     {
       "name": "Manœuvre en apesanteur",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
         "characteristic": "ada",
@@ -250,7 +250,7 @@
     {
       "name": "Mécanique orbitale",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>calcul de trajectoires, fenêtres de lancement, rendez-vous, gestion du delta-v.</p>",
         "characteristic": "int",
@@ -268,7 +268,7 @@
     {
       "name": "Opérations de bord",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>capteurs, communications, protocoles, gestion de quart.</p>",
         "characteristic": "int",
@@ -286,7 +286,7 @@
     {
       "name": "Psychologie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>comprendre les émotions et intentions d'autrui.</p>",
         "characteristic": "per",
@@ -304,7 +304,7 @@
     {
       "name": "Vigilance",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
         "characteristic": "per",
@@ -322,7 +322,7 @@
     {
       "name": "Combinaison souple",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
         "airReserve": {
@@ -358,7 +358,7 @@
     {
       "name": "Pistolet automatique « Genève-IV »",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 30 / 60 m. Accepte aussi des munitions perforantes (hullSafe passe alors à false). Arme de service des inspecteurs de l'Office de la Veille. Poignée codée biométrique (inutilisable par un tiers sans test d'Électronique).</p>",
         "skill": "Armes de poing",
@@ -385,7 +385,7 @@
     {
       "name": "Mains nues, gantelets et bottes magnétiques",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
         "skill": "Corps-à-corps",
@@ -412,7 +412,7 @@
     {
       "name": "Registre naval et catalogue des débris de la Veille",
       "type": "software",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
       "system": {
         "description": "<!-- Réf. Logiciels v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 pour identifier la classe et l'historique officiel d'un vaisseau d'après sa signature infrarouge, ou repérer des épaves et des rochers non balisés. Doit être synchronisé en rade tous les 3 mois pour garder son bonus (les avis récents arrivent avec le délai lumière).</p>",
         "category": "utility",
@@ -431,7 +431,7 @@
     {
       "name": "Greffier juridique et comptable « Genève-Lex »",
       "type": "software",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
       "system": {
         "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur tablette. +10 d'Aide pour rédiger un contrat de la Mutuelle, vérifier une licence de masse ou contester une amende de l'Office de la Veille. Intègre la jurisprudence du Traité de Genève (1981) et de la Convention de Vesta (2166).</p>",
         "category": "greffier",
@@ -450,7 +450,7 @@
     {
       "name": "Rustine",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
         "mass": 0.2,
@@ -471,7 +471,7 @@
     {
       "name": "Dosimètre actif de poignet",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
         "mass": 0.1,

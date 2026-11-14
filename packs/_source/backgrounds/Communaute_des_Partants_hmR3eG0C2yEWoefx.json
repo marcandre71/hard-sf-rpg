@@ -3,7 +3,7 @@
   "_key": "!items!hmR3eG0C2yEWoefx",
   "name": "Communauté des Partants",
   "type": "background",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
   "system": {
     "skillBonuses": "Sciences de la vie, Psychologie, Systèmes de survie",
     "link": "un vœu prononcé",

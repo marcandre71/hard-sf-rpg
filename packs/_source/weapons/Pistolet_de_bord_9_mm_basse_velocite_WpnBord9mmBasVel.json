@@ -3,7 +3,7 @@
   "_key": "!items!WpnBord9mmBasVel",
   "name": "Pistolet de bord 9 mm basse vélocité",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 35 / 70 m. Dotation standard des officiers de marine marchande, des rades et des syndics de la Mutuelle.</p>",
     "skill": "Armes de poing",

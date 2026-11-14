@@ -3,7 +3,7 @@
   "_key": "!items!ModChimiqueLOX01",
   "name": "Propulseur chimique oxygène liquide et méthane",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Isp ~360 s ; 0,5 à 2 g sur de courtes durées. Forte poussée pour quitter un puits de gravité (Lune, Mars, Titan), mais delta-v total faible ; pas besoin de réacteur nucléaire.</p>",
     "category": "propulsion",

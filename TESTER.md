@@ -629,3 +629,20 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
    **Résultat attendu :** ce compte ne voit pas les documents du dossier MJ. Les documents joueurs du kit restent visibles, comme avant.
 4. Console (**F12**), en MJ puis en joueur.
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 31. 1.1.4 icônes et boutons d'en-tête
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.4**. Les icônes sont des SVG du système, dans `assets/icons/`. Pas de migration : une fiche déjà dans un monde garde son image. Il faut réimporter, ou créer à neuf, pour voir l'icône du type.
+
+1. Ouvrez une fiche de personnage (un prétiré, ou créez-en une). Regardez l'en-tête de la fenêtre : fermer, et les autres boutons.
+   **Résultat attendu :** les glyphes sont visibles, cyan clair, assez grands pour se lire. Le survol les éclaircit, avec un fond légèrement cyan. Plus de carrés vides.
+2. Ouvrez une fiche d'objet, par exemple une arme du compendium.
+   **Résultat attendu :** même en-tête, mêmes glyphes.
+3. Ouvrez le journal **États**, puis le compendium **Armes**, puis la fenêtre **Compendiums**.
+   **Résultat attendu :** les boutons d'en-tête de ces fenêtres montrent aussi leurs glyphes. **États** a l'icône d'état. Dans **Armes**, les entrées ont l'icône d'arme, pas le sac gris. Les blessures gardent la goutte de sang. Les trois vaisseaux gardent l'icône de vaisseau du cœur. Luciole et Crabe ont l'icône de drone.
+4. Créez un objet de chaque type : compétence, atout, origine, milieu, profession, arme, armure, équipement, augmentation, substance, blessure, séquelle, logiciel, module de vaisseau. Créez aussi un personnage et un drone.
+   **Résultat attendu :** l'image de départ est l'icône du type. Si vous choisissez une autre image dans le sélecteur avant de valider, c'est celle-là qui est gardée.
+5. Ouvrez **Kit — Prétirés**.
+   **Résultat attendu :** Joachim, Kesi, Inès, Tariq, Anouk et Bosco ont toujours leur portrait (`assets/portraits/`). Le jeton utilise la même image. Leurs objets qui étaient un sac gris ont maintenant l'icône de leur type.
+6. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

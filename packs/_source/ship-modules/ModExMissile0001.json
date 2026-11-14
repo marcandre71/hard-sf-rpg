@@ -2,7 +2,7 @@
   "_id": "ModExMissile0001",
   "name": "Casier lance-missiles (4 missiles)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. Masse du catalogue : 4 t. -->\n<p>Aussi sur un flanc. Le missile arrive au début du tour suivant (portée moyenne) ou deux tours plus tard (lointaine) ; contre-mesures de l'Opérateur ou tir de laser de défense possibles. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",

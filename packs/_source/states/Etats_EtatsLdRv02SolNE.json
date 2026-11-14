@@ -2,6 +2,7 @@
   "_id": "EtatsLdRv02SolNE",
   "_key": "!journal!EtatsLdRv02SolNE",
   "name": "États",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/state.svg",
   "pages": [
     {
       "_id": "PgAncreFlottant1",

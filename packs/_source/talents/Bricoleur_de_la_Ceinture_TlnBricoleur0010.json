@@ -3,7 +3,7 @@
   "_key": "!items!TlnBricoleur0010",
   "name": "Bricoleur de la Ceinture",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Réparation de vaisseau hors combat (Règles des vaisseaux §7 : 5 + 5 × DR par point de Pièces) : chaque point de Pièces consommé rend 5 points d'Intégrité de plus, soit 10 + 5 × DR.</p>",
     "xpCost": 15,

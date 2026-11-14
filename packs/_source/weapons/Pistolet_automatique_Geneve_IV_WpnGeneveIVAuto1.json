@@ -3,7 +3,7 @@
   "_key": "!items!WpnGeneveIVAuto1",
   "name": "Pistolet automatique « Genève-IV »",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 30 / 60 m. Accepte aussi des munitions perforantes (hullSafe passe alors à false). Arme de service des inspecteurs de l'Office de la Veille. Poignée codée biométrique (inutilisable par un tiers sans test d'Électronique).</p>",
     "skill": "Armes de poing",

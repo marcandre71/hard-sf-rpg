@@ -3,7 +3,7 @@
   "_key": "!items!ModBrasChantier1",
   "name": "Bras manipulateurs d'araignée de chantier",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026 -->\n<p>+10 en Robotique et télépilotage et en Mécanique pour l'assemblage orbital et le démantèlement d'épaves.</p>",
     "category": "other",

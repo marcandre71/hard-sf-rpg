@@ -3,7 +3,7 @@
   "_key": "!items!ModGuerreElec001",
   "name": "Suite de guerre électronique et lance-leurres",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc. +10 en Opérations de bord aux tests opposés de contre-mesures contre les missiles. Le logiciel « Fantôme thermique » s'y ajoute, dans la limite de ±50.</p>",
     "category": "sensors",

@@ -3,7 +3,7 @@
   "_key": "!items!AxDPQ0Gf5iTI0FCA",
   "name": "Conduite",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>rovers, véhicules de surface, engins de chantier, véhicules terrestres et maritimes. Note : certains engins spatiaux pourront être conçus pour se piloter aussi facilement qu'une voiture ; ce détail sera traité plus tard avec les vaisseaux.</p>",
     "characteristic": "coo",

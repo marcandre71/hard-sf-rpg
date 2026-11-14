@@ -3,7 +3,7 @@
   "_key": "!items!WpnElectroCours1",
   "name": "Électrochoc de coursive",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Portée contact à 5 m. Si au moins 1 dégât passe ou sur contact non isolé : test de CON (−10) ou cible Sonnée 1 tour. Dangereux près d'une fuite d'oxygène pur (risque d'ignition).</p>",
     "skill": "Armes de poing",

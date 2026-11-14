@@ -3,11 +3,14 @@
   "_key": "!items!D3WBdb0FTSovTUGp",
   "name": "Armure de pont",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Carapace rigide pressurisée des fusiliers de la Veille et du Kombinat. Autonomie 30 à 60 minutes (0,5 h dans FoundryVTT). Risque de surchauffe selon le LdR §8 (tests de CON) ; cadence propre à l'armure [à compléter].</p>",
     "sealState": "intact",
-    "penalty": { "manipulation": -20, "perception": -20 },
+    "penalty": {
+      "manipulation": -20,
+      "perception": -20
+    },
     "dosimeter": true,
     "radio": true,
     "mass": 28,

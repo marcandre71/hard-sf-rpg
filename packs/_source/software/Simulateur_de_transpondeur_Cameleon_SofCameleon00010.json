@@ -3,7 +3,7 @@
   "_key": "!items!SofCameleon00010",
   "name": "Simulateur de transpondeur « Caméléon »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+10 pour afficher un faux code de transpondeur civil ou maquiller la signature d'un vaisseau (Règles des vaisseaux §1). Infraction grave au Traité de Genève : immobilisation immédiate du vaisseau en cas d'inspection physique. Utilisé par la Caisse Noire.</p>",
     "category": "falsification",

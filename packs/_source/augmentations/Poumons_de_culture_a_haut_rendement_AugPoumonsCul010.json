@@ -3,7 +3,7 @@
   "_key": "!items!AugPoumonsCul010",
   "name": "Poumons de culture à haut rendement",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+1 Endurance maximale en atmosphère raréfiée et +10 aux tests contre l'Hypoxie (stades 1 à 3).</p>\n<p>Effets secondaires : Aucun ; très répandus chez les travailleurs des dômes du Compact d'Hellas.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "culturedOrgan",

@@ -3,7 +3,7 @@
   "_key": "!items!2n9NSyZ7Jt8R1422",
   "name": "Sciences physiques : planétologie",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>spécialités : physique ; chimie ; planétologie ; astronomie.</p>",
     "characteristic": "int",

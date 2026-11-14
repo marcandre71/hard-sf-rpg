@@ -3,7 +3,7 @@
   "_key": "!items!SubDecondit00010",
   "name": "Médicaments contre le déconditionnement",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Avec ce traitement, le personnage n'a pas de test mensuel de CON contre le déconditionnement (LdR §8). Ralentit la fonte osseuse et musculaire.</p>\n<p>Effets secondaires : Crampes et calculs rénaux en cas de rationnement d'eau.</p>\n<p>Légalité : [à compléter].</p>",
     "category": "gravity",

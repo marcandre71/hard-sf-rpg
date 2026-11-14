@@ -82,7 +82,7 @@
     {
       "name": "Systèmes extérieurs (Callisto, Titan)",
       "type": "origin",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
       "system": {
         "characteristicModifiers": "VOL +10, CON -5",
         "gToleranceModifier": -1,
@@ -97,7 +97,7 @@
     {
       "name": "Élite académique",
       "type": "background",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
       "system": {
         "skillBonuses": "Sciences (au choix), Langues, Persuasion",
         "link": "un mentor de Valhalla",
@@ -111,7 +111,7 @@
     {
       "name": "Médecin",
       "type": "profession",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
       "system": {
         "careerSkills": "Médecine, Premiers secours, Sciences de la vie, Psychologie, Persuasion, Systèmes de survie, Informatique, Vigilance",
         "description": "<p>3 à +20, 5 à +10</p>"
@@ -124,7 +124,7 @@
     {
       "name": "Enquête",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>interroger, recouper témoignages, archives et données, remonter un réseau ou une piste.</p>",
         "characteristic": "int",
@@ -142,7 +142,7 @@
     {
       "name": "Informatique",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>programmation, intrusion, gestion des greffiers (systèmes spécialisés).</p>",
         "characteristic": "int",
@@ -160,7 +160,7 @@
     {
       "name": "Langues",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
         "characteristic": "int",
@@ -179,7 +179,7 @@
     {
       "name": "Langues",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
         "characteristic": "int",
@@ -198,7 +198,7 @@
     {
       "name": "Manœuvre en apesanteur",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
         "characteristic": "ada",
@@ -216,7 +216,7 @@
     {
       "name": "Médecine : diagnostic et médecine générale",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>soigner et traiter. Spécialités : diagnostic et médecine générale ; chirurgie (impossible sans formation) ; médecine de l'espace et des radiations (dont la torpeur médicale).</p>",
         "characteristic": "int",
@@ -235,7 +235,7 @@
     {
       "name": "Médecine : médecine de l'espace et des radiations (dont la torpeur médicale)",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>soigner et traiter. Spécialités : diagnostic et médecine générale ; chirurgie (impossible sans formation) ; médecine de l'espace et des radiations (dont la torpeur médicale).</p>",
         "characteristic": "int",
@@ -254,7 +254,7 @@
     {
       "name": "Persuasion",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>convaincre, inspirer, séduire.</p>",
         "characteristic": "pre",
@@ -272,7 +272,7 @@
     {
       "name": "Premiers secours",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>stabiliser, poser un garrot, traiter une décompression.</p>",
         "characteristic": "int",
@@ -290,7 +290,7 @@
     {
       "name": "Psychologie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>comprendre les émotions et intentions d'autrui.</p>",
         "characteristic": "per",
@@ -308,7 +308,7 @@
     {
       "name": "Sciences de la vie : biologie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>spécialités : biologie ; écologie des habitats ; exobiologie.</p>",
         "characteristic": "int",
@@ -327,7 +327,7 @@
     {
       "name": "Systèmes de survie",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>air, eau, recyclage, contrôle thermique.</p>",
         "characteristic": "int",
@@ -345,7 +345,7 @@
     {
       "name": "Vigilance",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
         "characteristic": "per",
@@ -363,7 +363,7 @@
     {
       "name": "Combinaison souple",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
         "airReserve": {
@@ -399,7 +399,7 @@
     {
       "name": "Mains nues, gantelets et bottes magnétiques",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
         "skill": "Corps-à-corps",
@@ -426,7 +426,7 @@
     {
       "name": "Valise chirurgicale de bord (gravité zéro)",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Médecine (chirurgie), Premiers secours. Dôme opératoire transparent à aspiration laminaire qui empêche le sang de flotter en apesanteur ; requise pour opérer hors d'une infirmerie.</p>",
         "mass": 5.5,
@@ -447,7 +447,7 @@
     {
       "name": "Greffier médical de triage « Hippocrate »",
       "type": "software",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
       "system": {
         "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi en infirmerie. +10 d'Aide en Premiers secours et en diagnostic ; gère seul la surveillance des caissons de torpeur et le suivi des doses (mSv). Guide pas à pas un non-médecin en urgence, mais ne pratique aucun acte chirurgical sans opérateur humain formé.</p>",
         "category": "greffier",
@@ -466,7 +466,7 @@
     {
       "name": "Amifostine-9 (« Bleu de Callisto »)",
       "type": "substance",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
       "system": {
         "description": "<!-- Réf. Substances v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>\n<p>Effets secondaires : Nausées violentes immédiates, −10 aux actions pendant 4 heures et perte d'1 point d'Endurance.</p>\n<p>Légalité : [à compléter].</p>",
         "category": "radiation",
@@ -488,7 +488,7 @@
     {
       "name": "Oxygénateur sanguin perfluoré « Souffle Noir »",
       "type": "substance",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
       "system": {
         "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Fait reculer l'Hypoxie de 2 stades. Effet éventuel sur le compte à rebours de « Combinaison percée » : [à compléter].</p>\n<p>Effets secondaires : Frissons et maux de tête violents au retour à la pression normale (−10 en PER pendant 1 heure).</p>\n<p>Légalité : [à compléter].</p>",
         "category": "medical",
@@ -510,7 +510,7 @@
     {
       "name": "Rustine",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
         "mass": 0.2,
@@ -531,7 +531,7 @@
     {
       "name": "Dosimètre actif de poignet",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
         "mass": 0.1,

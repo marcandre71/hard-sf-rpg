@@ -3,7 +3,7 @@
   "_key": "!items!TlnSocietaire010",
   "name": "Sociétaire respecté",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Dans tout habitat ou rade de la Mutuelle : +10 en Négociation et en Persuasion pour obtenir à crédit des pièces de rechange, de l'eau de réaction ou une assistance technique.</p>",
     "xpCost": 15,

@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 1.1.4
+
+Icônes des types, et boutons d'en-tête des fiches. Décision de Marc. Pas de Relecteur. Runtime Foundry non exécuté. Séance : TESTER.md section 31.
+
+La règle `.sol-nouvelle-ere.actor button, .sol-nouvelle-ere.item button` posait `font-family: var(--sol-f-label)`. Dans Foundry v14 le bouton fermer (et les autres de l'en-tête) est lui-même une icône Font Awesome : classes `header-control fa-solid`. Cette police, plus spécifique que `.fa-solid`, remplaçait `var(--font-awesome)`. Le glyphe devenait un carré vide. La police du thème ne s'applique plus à `.fa`, `.fas`, `.fa-solid` ni `[class*="fa-"]`. Les contrôles d'en-tête reprennent `font-family: var(--font-awesome)`, poids 900, 16 px, cyan `#4cc4dc`, survol plus clair. Les journaux et la fenêtre Compendiums n'ont pas ces classes : le cœur dessine leurs boutons. Une fiche d'acteur ou d'objet ouverte depuis un compendium est une feuille du système, donc couverte.
+
+À la création, `getDefaultArtwork` et `_preCreate` posent l'icône du type si l'image est absente, ou si c'est `icons/svg/item-bag.svg` ou `icons/svg/mystery-man.svg`. Un portrait ou une image choisie reste. Le jeton d'un acteur suit la même règle, seulement quand sa texture est le visage mystère. Pas de migration des mondes déjà remplis : une fiche déjà importée garde son image.
+
+Compendiums reconstruits. Les entrées qui avaient le sac ou le visage mystère reçoivent l'icône du type. Les blessures en `icons/svg/blood.svg` et les vaisseaux en `icons/svg/ship.svg` ne changent pas. Le journal États reçoit `assets/icons/items/state.svg`. Les fichiers `assets/portraits/` ne sont pas touchés.
+
 ## 1.1.3
 
 Le bouton « Importer le kit (joueurs) » regarde le module privé `sol-kit-mj`. Décision de Marc. S'il est actif, le MJ actif importe aussi tous ses compendiums dans le dossier « Kit MJ — La Cale du quai 9 ». Les permissions ne sont pas modifiées. Un second clic ne duplique pas. Sans ce module, le kit joueurs est importé comme avant, et le message est « Kit MJ non détecté ». Aucun contenu de ce module n'est dans ce dépôt. `KIT_GM_PACKS` reste vide.

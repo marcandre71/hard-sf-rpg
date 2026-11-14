@@ -3,7 +3,7 @@
   "_key": "!items!WpnGyroVeilleur1",
   "name": "Pistolet gyrojet « Veilleur »",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>20 / 50 / 100 m. Accepte aussi des micro-fusées perforantes (hullSafe passe alors à false). Micro-fusées autopropulsées, sans recul. −10 au jet et −2 aux dégâts à bout portant (moins de 3 m, fusée non accélérée).</p>",
     "skill": "Armes de poing",

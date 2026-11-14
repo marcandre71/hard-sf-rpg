@@ -3,7 +3,7 @@
   "_key": "!items!jtAGlCWPzaNnPKh5",
   "name": "Médecin",
   "type": "profession",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
   "system": {
     "careerSkills": "Médecine, Premiers secours, Sciences de la vie, Psychologie, Persuasion, Systèmes de survie, Informatique, Vigilance",
     "description": "<p>3 à +20, 5 à +10</p>"

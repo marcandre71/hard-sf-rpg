@@ -3,7 +3,7 @@
   "_key": "!items!DrJqOQfXLk299qo4",
   "name": "Commerce",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>marchés, cours de l'eau et de l'hélium 3, changes entre les monnaies, logistique.</p>",
     "characteristic": "int",

@@ -3,7 +3,7 @@
   "_key": "!items!SofRegistreNav10",
   "name": "Registre naval et catalogue des débris de la Veille",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 pour identifier la classe et l'historique officiel d'un vaisseau d'après sa signature infrarouge, ou repérer des épaves et des rochers non balisés. Doit être synchronisé en rade tous les 3 mois pour garder son bonus (les avis récents arrivent avec le délai lumière).</p>",
     "category": "utility",

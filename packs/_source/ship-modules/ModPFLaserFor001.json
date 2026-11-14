@@ -2,7 +2,7 @@
   "_id": "ModPFLaserFor001",
   "name": "Laser de forage (outil civil)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §5. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>Portée proche au contact seulement (quelques km). Outil minier légal (Petite Fortune) ; l'utiliser contre un vaisseau est un délit grave poursuivi par la Veille. Un tir létal doit être validé par un humain (le Commandant), Règle Sereguine.</p>",
     "category": "weapon",

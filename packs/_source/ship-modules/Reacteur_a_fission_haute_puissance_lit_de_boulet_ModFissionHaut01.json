@@ -3,7 +3,7 @@
   "_key": "!items!ModFissionHaut01",
   "name": "Réacteur à fission haute puissance (lit de boulets)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026 -->\n<p>5 à 20 MWe. Cargos à plasma, stations moyennes, tourelles laser de défense.</p>",
     "category": "reactor",

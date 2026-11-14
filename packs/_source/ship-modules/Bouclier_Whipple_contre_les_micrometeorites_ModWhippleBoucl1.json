@@ -3,7 +3,7 @@
   "_key": "!items!ModWhippleBoucl1",
   "name": "Bouclier Whipple contre les micrométéorites",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Blindage espacé de la proue des prospecteurs et des cargos ; au plus +4. Intégrité propre : [à compléter].</p>",
     "category": "armor",

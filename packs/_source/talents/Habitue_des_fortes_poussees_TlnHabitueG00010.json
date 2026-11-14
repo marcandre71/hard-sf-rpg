@@ -3,7 +3,7 @@
   "_key": "!items!TlnHabitueG00010",
   "name": "Habitué des fortes poussées",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+1 définitif en Tolérance aux g.</p>",
     "xpCost": 15,

@@ -3,12 +3,18 @@
   "_key": "!items!cEJLJvHTLC8ocwlu",
   "name": "Combinaison souple",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
-    "airReserve": { "value": 8, "max": 8 },
+    "airReserve": {
+      "value": 8,
+      "max": 8
+    },
     "sealState": "intact",
-    "penalty": { "manipulation": -10, "perception": -10 },
+    "penalty": {
+      "manipulation": -10,
+      "perception": -10
+    },
     "dosimeter": true,
     "radio": true,
     "mass": 6.5,

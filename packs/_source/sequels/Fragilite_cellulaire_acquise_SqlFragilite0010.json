@@ -3,7 +3,7 @@
   "_key": "!items!SqlFragilite0010",
   "name": "Fragilité cellulaire acquise",
   "type": "sequel",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/sequel.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §4. Réf. Séquelles v0.3. Décision Marc 30/10/2026. Décision Didier/Marc 31/10/2026 : le seuil est 150 mSv, pas un calcul. -->\n<p>Pas de dé. C'est une liste : le MJ choisit la séquelle selon la dose et la situation.</p>\n<p>Le seuil de radiation est de 150 mSv. Réf. Séquelles v0.3. Texte seulement, sans nouveau champ. Traitement : Protocole Valhalla.</p>",
     "category": "radiation",

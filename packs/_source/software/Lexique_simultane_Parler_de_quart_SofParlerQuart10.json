@@ -3,7 +3,7 @@
   "_key": "!items!SofParlerQuart10",
   "name": "Lexique simultané « Parler de quart »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Permet de comprendre et de parler une langue non maîtrisée, ou le parler de quart, avec un score effectif de 40 ; −10 en Persuasion faute de nuance culturelle. Traduction vocale avec léger décalage et sous-titres projetés dans la visière.</p>",
     "category": "utility",

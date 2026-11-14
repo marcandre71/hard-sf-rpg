@@ -2,7 +2,7 @@
   "_id": "ModPFSondes00001",
   "name": "Sondes et foreuses d'astéroïdes (6)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §7. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>6 sondes de prospection ; +10 aux tests de prospection minière.</p>",
     "category": "other",

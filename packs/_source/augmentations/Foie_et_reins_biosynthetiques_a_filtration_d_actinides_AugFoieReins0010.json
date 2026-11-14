@@ -3,7 +3,7 @@
   "_key": "!items!AugFoieReins0010",
   "name": "Foie et reins biosynthétiques à filtration d'actinides",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §4. Décision Marc 30/10/2026 -->\n<p>+20 aux tests de CON contre les toxines chimiques et les métaux lourds (fuites de fluide de refroidissement, perchlorates martiens, hydrocarbures de Titan).</p>\n<p>Effets secondaires : Divise par deux la durée d'effet des stimulants et des analgésiques.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "culturedOrgan",

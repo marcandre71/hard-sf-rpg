@@ -3,7 +3,7 @@
   "_key": "!items!SofEcluse0000010",
   "name": "Greffier de support vital « Écluse »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur station. Surveille air, eau et CO2 en permanence ; +10 d'Aide pour gérer une fuite ou une contamination. Règle Sereguine (abandon d'équipage) : il ne peut pas, seul, condamner une cloison qui isole un compartiment où un signe de vie humain est détecté ; un humain doit valider.</p>",
     "category": "greffier",

@@ -3,7 +3,7 @@
   "_key": "!items!TlnChirurgien010",
   "name": "Chirurgien d'apesanteur",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Ignore les pénalités de basse gravité ou d'apesanteur lors des actes médicaux ; réduit d'un tiers le temps de guérison des blessures graves ou critiques qu'il a opérées.</p>",
     "xpCost": 15,

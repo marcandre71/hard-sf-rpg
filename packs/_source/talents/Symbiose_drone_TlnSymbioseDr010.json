@@ -3,7 +3,7 @@
   "_key": "!items!TlnSymbioseDr010",
   "name": "Symbiose drone",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Avec un drone familier (Crabe ou Luciole), peut lui ordonner une action simple en dépensant sa réaction plutôt que son action du tour.</p>",
     "xpCost": 15,

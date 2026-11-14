@@ -2,7 +2,7 @@
   "_id": "ModPFReacteur001",
   "name": "Cœur à fission bimodal (avec bouclier d'ombre)",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §3. Décision Marc 30/10/2026. Décision Marc 31/10/2026 : fusion dans l'id déjà là. -->\n<p>100 à 500 kWe. Chauffe la masse de réaction en poussée et produit l'électricité à l'arrêt (Petite Fortune : environ 100 kWe).</p>",
     "category": "reactor",

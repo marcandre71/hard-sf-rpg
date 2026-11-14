@@ -3,7 +3,7 @@
   "_key": "!items!AugCoeurLance010",
   "name": "Adaptation vasculaire aux g « Cœur de lanceur »",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §2. Décision Marc 30/10/2026 -->\n<p>+1 en Tolérance aux g (TG), sans dépasser le plafond humain.</p>\n<p>Effets secondaires : Tension artérielle élevée au repos ; suivi cardiologique annuel obligatoire.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "therapy",

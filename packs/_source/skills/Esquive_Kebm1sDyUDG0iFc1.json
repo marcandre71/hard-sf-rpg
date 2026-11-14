@@ -3,7 +3,7 @@
   "_key": "!items!Kebm1sDyUDG0iFc1",
   "name": "Esquive",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
     "characteristic": "ref",

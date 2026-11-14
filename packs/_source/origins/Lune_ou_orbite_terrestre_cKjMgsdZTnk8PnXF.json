@@ -3,7 +3,7 @@
   "_key": "!items!cKjMgsdZTnk8PnXF",
   "name": "Lune ou orbite terrestre",
   "type": "origin",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
   "system": {
     "characteristicModifiers": "COO +5, ADA +5, CON -5",
     "gToleranceModifier": 0,

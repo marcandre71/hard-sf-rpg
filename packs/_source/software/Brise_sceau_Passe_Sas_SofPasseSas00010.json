@@ -3,7 +3,7 @@
   "_key": "!items!SofPasseSas00010",
   "name": "Brise-sceau « Passe-Sas »",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Aussi sur le terminal « Décapsuleur ». +10 aux tests d'intrusion pour déverrouiller un sas, geler une alarme locale ou modifier un journal d'accès (connexion filaire requise). Laisse une signature dans le registre matériel si le test réussit avec 0 DR.</p>",
     "category": "intrusion",

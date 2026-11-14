@@ -3,7 +3,7 @@
   "_key": "!items!5AA7vsBCh9ofvTNP",
   "name": "Discrétion",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>se cacher, se déplacer sans bruit, passer inaperçu.</p>",
     "characteristic": "coo",

@@ -3,7 +3,7 @@
   "_key": "!items!SubDoubleQuart10",
   "name": "Stimulant réglementaire « Double-Quart »",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Repousse l'état Épuisé pendant un quart entier (8 h) et rend temporairement 2 points d'Endurance.</p>\n<p>Effets secondaires : À la fin des 8 h, perte de 3 points d'Endurance et obligation de dormir 10 h.</p>",
     "category": "stimulant",

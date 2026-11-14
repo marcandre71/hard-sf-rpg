@@ -3,7 +3,7 @@
   "_key": "!items!AugBrasAtelier10",
   "name": "Bras d'atelier à micro-outils intégrés",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Remplace un bras ; intègre multimètre, lampe, pince dynamométrique et embouts (compte comme une trousse d'outils correcte toujours portée, sans encombrement ; pas de bonus d'outillage, LdR : +10 seulement avec de bons outils).</p>\n<p>Effets secondaires : +2 kg ; −10 en Présence dans les milieux terriens formels ; déclenche les portiques de sécurité.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "prosthesis",

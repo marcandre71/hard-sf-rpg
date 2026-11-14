@@ -3,7 +3,7 @@
   "_key": "!items!TlnDiscipTir0010",
   "name": "Discipline de tir en coursive",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §5. Décision Marc 30/10/2026 -->\n<p>À bord d'un vaisseau ou d'un habitat, ses échecs à 3 DE ou plus et ses échecs critiques ne percent jamais par accident une cloison, une conduite vitale ou un allié engagé.</p>",
     "xpCost": 15,

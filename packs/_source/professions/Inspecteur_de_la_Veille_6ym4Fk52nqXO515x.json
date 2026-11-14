@@ -3,7 +3,7 @@
   "_key": "!items!6ym4Fk52nqXO515x",
   "name": "Inspecteur de la Veille",
   "type": "profession",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
   "system": {
     "careerSkills": "Bureaucratie et droit, Psychologie, Fouille, Armes de poing, Opérations de bord, Intimidation, Mécanique orbitale, Vigilance",
     "description": "<p>3 à +20, 5 à +10</p>"

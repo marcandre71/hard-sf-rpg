@@ -3,7 +3,7 @@
   "_key": "!items!WpnCouteauArrim1",
   "name": "Couteau d'arrimage, lame de sas en céramique",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Conçu pour trancher sangles et filins. Sur une attaque visée aux joints d'une combinaison (−20), abaisse de 2 le seuil de brèche de la cible. Sans danger pour la coque, pas pour les joints.</p>",
     "skill": "Corps-à-corps",

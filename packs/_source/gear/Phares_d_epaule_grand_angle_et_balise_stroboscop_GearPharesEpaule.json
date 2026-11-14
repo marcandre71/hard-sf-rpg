@@ -3,7 +3,7 @@
   "_key": "!items!GearPharesEpaule",
   "name": "Phares d'épaule grand angle et balise stroboscopique",
   "type": "gear",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Percent le brouillard d'hydrocarbures ou l'obscurité des habitats en panne. Masse, encombrement et réserve d'énergie : [à compléter].</p>",
     "mass": 0,

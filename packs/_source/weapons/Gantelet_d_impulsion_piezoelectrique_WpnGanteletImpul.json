@@ -3,7 +3,7 @@
   "_key": "!items!WpnGanteletImpul",
   "name": "Gantelet d'impulsion piézoélectrique",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>5 charges. Décharge cinétique au contact qui projette la cible en apesanteur (test opposé de Manœuvre en apesanteur, ou la cible est mise En vol).</p>",
     "skill": "Corps-à-corps",

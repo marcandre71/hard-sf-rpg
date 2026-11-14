@@ -3,7 +3,7 @@
   "_key": "!items!SubPoussiereTi10",
   "name": "« Poussière de Titan » (euphorisant pétrochimique)",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Rend temporairement 3 points de Sang-froid, ignore l'état Choqué et donne +10 aux tests de VOL contre la peur.</p>\n<p>Effets secondaires : −10 en COO et en PER pendant l'effet, puis perte de 2 points de Sang-froid ; fort risque d'addiction.</p>",
     "category": "stimulant",

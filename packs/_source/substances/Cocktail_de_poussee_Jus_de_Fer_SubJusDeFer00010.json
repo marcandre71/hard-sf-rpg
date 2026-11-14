@@ -3,7 +3,7 @@
   "_key": "!items!SubJusDeFer00010",
   "name": "Cocktail de poussée « Jus de Fer »",
   "type": "substance",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/substance.svg",
   "system": {
     "description": "<!-- Réf. Substances v0.3 §2. Décision Marc 30/10/2026 -->\n<p>+1 en Tolérance aux g pendant 1 heure (manœuvres de combat à forte poussée, décollages planétaires).</p>\n<p>Effets secondaires : À la fin de l'effet, perte d'1 point d'Endurance et migraines (−10 en PER pendant 1 h) ; une 2e dose en 24 h impose un test de CON (−20) sous peine de malaise cardiaque (critique chez les natifs de basse gravité).</p>\n<p>Légalité : [à compléter].</p>",
     "category": "gravity",

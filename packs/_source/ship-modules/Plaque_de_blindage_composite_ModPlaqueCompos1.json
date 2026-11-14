@@ -3,7 +3,7 @@
   "_key": "!items!ModPlaqueCompos1",
   "name": "Plaque de blindage composite",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Aussi sur un flanc ou la poupe ; impossible sur les radiateurs. Hors chantier, la plaque ne se répare qu'à la moitié de son maximum. Intégrité propre du module : [à compléter] (la v0.2 n'en donne pas).</p>",
     "category": "armor",

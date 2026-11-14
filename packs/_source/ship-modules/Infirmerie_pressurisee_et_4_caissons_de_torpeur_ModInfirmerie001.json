@@ -3,7 +3,7 @@
   "_key": "!items!ModInfirmerie001",
   "name": "Infirmerie pressurisée et 4 caissons de torpeur",
   "type": "shipModule",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/shipModule.svg",
   "system": {
     "description": "<!-- Réf. Modules v0.3 §6. Décision Marc 30/10/2026 -->\n<p>Aussi sur le flanc tribord. Compte comme de bons outils médicaux : +10 en Médecine (LdR §5) ; 4 caissons de torpeur médicale intégrés.</p>",
     "category": "lifeSupport",

@@ -3,7 +3,7 @@
   "_key": "!items!AugPoumonsRoug10",
   "name": "Lignée d'Hellas « Poumons rouges »",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §5. Décision Marc 30/10/2026 -->\n<p>+10 aux tests de CON contre l'hypoxie et le froid sec ; +1 Endurance maximale sous basse pression.</p>\n<p>Effets secondaires : Polyglobulie héréditaire (sang plus dense) : −10 aux tests de CON en cas de blessure sous forte gravité (plus de 0,8 g).</p>",
     "kind": "heritable",

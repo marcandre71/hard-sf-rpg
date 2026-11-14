@@ -3,7 +3,7 @@
   "_key": "!items!ArmCoursiveTrav1",
   "name": "Combinaison de travail de coursive",
   "type": "armor",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
   "system": {
     "description": "<!-- Réf. Armures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Bandes autoagrippantes, poches aimantées et dosimètre passif. Tenue quotidienne à bord des vaisseaux et des stations.</p>",
     "protection": {

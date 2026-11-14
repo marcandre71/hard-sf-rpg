@@ -3,7 +3,7 @@
   "_key": "!items!jLLoeAV7HmGG0OTA",
   "name": "Contrebandier",
   "type": "profession",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
   "system": {
     "careerSkills": "Pilotage, Tromperie, Commerce, Discrétion, Mécanique orbitale, Informatique, Négociation, Armes de poing",
     "description": "<p>3 à +20, 5 à +10</p>"

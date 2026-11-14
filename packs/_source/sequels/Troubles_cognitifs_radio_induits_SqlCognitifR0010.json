@@ -3,7 +3,7 @@
   "_key": "!items!SqlCognitifR0010",
   "name": "Troubles cognitifs radio-induits",
   "type": "sequel",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/sequel.svg",
   "system": {
     "description": "<!-- Réf. Blessures v0.3 §4. Décision Marc 30/10/2026. Décision Didier/Marc 31/10/2026 -->\n<p>Pas de dé. C'est une liste : le MJ choisit la séquelle selon la dose et la situation.</p>\n<p>−10 aux tests basés sur INT jusqu'à traitement. Texte de rappel seulement : pas de malus automatique.</p>",
     "category": "radiation",

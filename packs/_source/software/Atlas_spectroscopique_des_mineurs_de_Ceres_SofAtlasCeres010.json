@@ -3,7 +3,7 @@
   "_key": "!items!SofAtlasCeres010",
   "name": "Atlas spectroscopique des mineurs de Cérès",
   "type": "software",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/software.svg",
   "system": {
     "description": "<!-- Réf. Logiciels v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 pour évaluer la teneur en eau, en métaux du groupe du platine ou en terres rares d'un astéroïde prospecté. Base de données coopérative des sociétaires de la Mutuelle.</p>",
     "category": "utility",

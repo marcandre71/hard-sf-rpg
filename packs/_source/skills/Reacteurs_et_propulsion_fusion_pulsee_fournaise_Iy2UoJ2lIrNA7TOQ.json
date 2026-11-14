@@ -3,7 +3,7 @@
   "_key": "!items!Iy2UoJ2lIrNA7TOQ",
   "name": "Réacteurs et propulsion : fusion pulsée (fournaise)",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>fission, fusion, moteurs. Dangereux à rater. Spécialités : microréacteurs à fission ; nucléaire thermique ; fusion pulsée (fournaise) ; propulsion électrique à plasma.</p>",
     "characteristic": "int",

@@ -3,7 +3,7 @@
   "_key": "!items!AugMoelleOsse010",
   "name": "Réserve de moelle osseuse autologue",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Prélèvement conservé par cryogénie ; après une irradiation grave, une greffe ramène le palier Irradié à Exposé en 48 h et annule un tirage de séquelle de radiation.</p>\n<p>Effets secondaires : Il faut rejoindre la clinique dépositaire (Valhalla ou Genève) ou faire convoyer le greffon par courrier rapide.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "culturedOrgan",

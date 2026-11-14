@@ -3,7 +3,7 @@
   "_key": "!items!WpnBatonChoc0001",
   "name": "Matraque à impulsion (bâton-choc)",
   "type": "weapon",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
   "system": {
     "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>10 charges. Test de CON ou cible Sonnée 1 tour. Risque d'étincelle près d'une fuite d'oxygène pur.</p>",
     "skill": "Corps-à-corps",

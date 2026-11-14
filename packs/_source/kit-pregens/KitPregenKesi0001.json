@@ -82,7 +82,7 @@
     {
       "name": "Ceinture (Cérès, Vesta, petits habitats)",
       "type": "origin",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/origin.svg",
       "system": {
         "characteristicModifiers": "ADA +15, FOR -5, CON -5",
         "gToleranceModifier": -2,
@@ -97,7 +97,7 @@
     {
       "name": "Famille de sociétaires",
       "type": "background",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/background.svg",
       "system": {
         "skillBonuses": "Sortie extravéhiculaire, Négociation, Mécanique",
         "link": "une part de risque familiale",
@@ -111,7 +111,7 @@
     {
       "name": "Pilote",
       "type": "profession",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/profession.svg",
       "system": {
         "careerSkills": "Pilotage, Mécanique orbitale, Manœuvre en apesanteur, Opérations de bord, Vigilance, Armement de bord, Mécanique, Commandement",
         "description": "<p>3 à +20, 5 à +10</p>"
@@ -124,7 +124,7 @@
     {
       "name": "Armement de bord",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>utiliser les armes d'un vaisseau. Les règles détaillées figureront dans le futur livre de combat spatial.</p>",
         "characteristic": "per",
@@ -142,7 +142,7 @@
     {
       "name": "Armes de poing",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
         "characteristic": "coo",
@@ -160,7 +160,7 @@
     {
       "name": "Commandement",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>diriger une équipe en situation de crise.</p>",
         "characteristic": "pre",
@@ -178,7 +178,7 @@
     {
       "name": "Esquive",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
         "characteristic": "ref",
@@ -196,7 +196,7 @@
     {
       "name": "Langues",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
         "characteristic": "int",
@@ -215,7 +215,7 @@
     {
       "name": "Manœuvre en apesanteur",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
         "characteristic": "ada",
@@ -233,7 +233,7 @@
     {
       "name": "Mécanique",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>machines, structures, pressurisation.</p>",
         "characteristic": "int",
@@ -251,7 +251,7 @@
     {
       "name": "Mécanique orbitale",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>calcul de trajectoires, fenêtres de lancement, rendez-vous, gestion du delta-v.</p>",
         "characteristic": "int",
@@ -269,7 +269,7 @@
     {
       "name": "Négociation",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>marchander, conclure un contrat, arbitrer.</p>",
         "characteristic": "pre",
@@ -287,7 +287,7 @@
     {
       "name": "Opérations de bord",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>capteurs, communications, protocoles, gestion de quart.</p>",
         "characteristic": "int",
@@ -305,7 +305,7 @@
     {
       "name": "Pilotage : navettes et atterrisseurs",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>piloter un engin spatial ou atmosphérique. Spécialités : petits engins et remorqueurs (dont pousse-rochers) ; navettes et atterrisseurs ; aéronefs atmosphériques (Titan, Vénus, Mars) ; vaisseaux à fusion (impossible sans formation). Les véhicules de surface relèvent de Conduite.</p>",
         "characteristic": "coo",
@@ -324,7 +324,7 @@
     {
       "name": "Pilotage : petits engins et remorqueurs (dont pousse-rochers)",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>piloter un engin spatial ou atmosphérique. Spécialités : petits engins et remorqueurs (dont pousse-rochers) ; navettes et atterrisseurs ; aéronefs atmosphériques (Titan, Vénus, Mars) ; vaisseaux à fusion (impossible sans formation). Les véhicules de surface relèvent de Conduite.</p>",
         "characteristic": "coo",
@@ -343,7 +343,7 @@
     {
       "name": "Sortie extravéhiculaire",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>travail en combinaison dans le vide, réservoirs, filins, propulseurs dorsaux.</p>",
         "characteristic": "ada",
@@ -361,7 +361,7 @@
     {
       "name": "Vigilance",
       "type": "skill",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
       "system": {
         "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
         "characteristic": "per",
@@ -379,7 +379,7 @@
     {
       "name": "Combinaison souple",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
         "airReserve": {
@@ -415,7 +415,7 @@
     {
       "name": "Combinaison anti-G de transit (« Peau de poussée »)",
       "type": "armor",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/armor.svg",
       "system": {
         "description": "<!-- Réf. Armures v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Pantalon et gilet à compression fluidique des équipages de patrouilleurs et d'estafettes rapides. +1 en Tolérance aux g sous accélération soutenue.</p>",
         "protection": {
@@ -450,7 +450,7 @@
     {
       "name": "Pistolet de bord 9 mm basse vélocité",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 35 / 70 m. Dotation standard des officiers de marine marchande, des rades et des syndics de la Mutuelle.</p>",
         "skill": "Armes de poing",
@@ -477,7 +477,7 @@
     {
       "name": "Mains nues, gantelets et bottes magnétiques",
       "type": "weapon",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/weapon.svg",
       "system": {
         "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
         "skill": "Corps-à-corps",
@@ -504,7 +504,7 @@
     {
       "name": "PAD de poignet",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Interface personnelle, radio de proximité, télémétrie. Écran souple fixé sur le bras de la combinaison (comme celui de Vincent dans la nouvelle « Titan »). Héberge jusqu'à 2 logiciels légers.</p>",
         "mass": 0.2,
@@ -525,7 +525,7 @@
     {
       "name": "Rustine",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
         "mass": 0.2,
@@ -546,7 +546,7 @@
     {
       "name": "Dosimètre actif de poignet",
       "type": "gear",
-      "img": "icons/svg/item-bag.svg",
+      "img": "systems/sol-nouvelle-ere/assets/icons/items/gear.svg",
       "system": {
         "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
         "mass": 0.1,

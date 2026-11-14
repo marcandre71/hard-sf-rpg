@@ -3,7 +3,7 @@
   "_key": "!items!AugOsDenses00010",
   "name": "Densification osseuse induite « Os denses »",
   "type": "augmentation",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/augmentation.svg",
   "system": {
     "description": "<!-- Réf. Augmentations v0.3 §2. Décision Marc 30/10/2026 -->\n<p>+10 au test mensuel de CON contre le déconditionnement (test exigé seulement sans exercice ni médicaments, LdR §8) ; divise par deux le temps de réadaptation en changeant de gravité.</p>\n<p>Effets secondaires : Douleurs articulaires chroniques au-dessus de 0,8 g ou lors des fortes poussées.</p>\n<p>Coût : [à compléter].</p>",
     "kind": "therapy",

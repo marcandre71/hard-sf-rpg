@@ -3,7 +3,7 @@
   "_key": "!items!TlnReflexRust010",
   "name": "Réflexe de la Rustine",
   "type": "talent",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/talent.svg",
   "system": {
     "description": "<!-- Réf. Atouts v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Peut poser une rustine sur sa propre combinaison percée ou sur celle d'un allié au contact en réaction, au lieu d'une action. Sous le feu, le test simple de Survie (difficulté Normale) reste exigé ; un échec ne consomme pas la rustine.</p>",
     "xpCost": 15,

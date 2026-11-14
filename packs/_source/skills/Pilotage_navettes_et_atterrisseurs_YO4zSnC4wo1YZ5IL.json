@@ -3,7 +3,7 @@
   "_key": "!items!YO4zSnC4wo1YZ5IL",
   "name": "Pilotage : navettes et atterrisseurs",
   "type": "skill",
-  "img": "icons/svg/item-bag.svg",
+  "img": "systems/sol-nouvelle-ere/assets/icons/items/skill.svg",
   "system": {
     "description": "<p>piloter un engin spatial ou atmosphérique. Spécialités : petits engins et remorqueurs (dont pousse-rochers) ; navettes et atterrisseurs ; aéronefs atmosphériques (Titan, Vénus, Mars) ; vaisseaux à fusion (impossible sans formation). Les véhicules de surface relèvent de Conduite.</p>",
     "characteristic": "coo",
