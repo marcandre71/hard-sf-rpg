@@ -191,7 +191,8 @@
     },
     "Kit": {
       "import": "Importer le kit (joueurs)",
-      "importHint": "Cochez, puis enregistrez. Le MJ actif importe les prétirés, les plans joueurs et les documents joueurs. Un document déjà importé n'est pas recopié. Aucun document de meneur.",
+      "importHint": "Cochez, puis enregistrez. Le MJ actif importe les prétirés, les plans joueurs et les documents joueurs. Un document déjà importé n'est pas recopié. Si le module sol-kit-mj est actif, ses compendiums vont dans le dossier « Kit MJ — La Cale du quai 9 », sans droit ajouté aux joueurs. Sinon : Kit MJ non détecté.",
+      "gmAbsent": "Kit MJ non détecté.",
       "done": "Kit importé : {count} document(s) nouveau(x).",
       "failed": "L'import du kit a échoué.",
       "missingPack": "Compendium {pack} absent : cette partie du kit n'est pas importée."

@@ -616,3 +616,16 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
    **Résultat attendu :** choisir une image remplace le portrait. Annuler le laisse tel quel. La fiche ne se ferme pas.
 4. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 30. 1.1.3 détection du kit MJ
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.3**. Le module privé s'installe à part, par un ZIP. Ce dépôt public ne le contient pas.
+
+1. Monde de test, **sans** le module privé. En MJ, **Configurer les paramètres**, cochez **Importer le kit (joueurs)**, enregistrez.
+   **Résultat attendu :** les prétirés, les plans et les journaux joueurs arrivent, comme en 1.1.0. Un message dit **Kit MJ non détecté**. Il n'y a pas de dossier **Kit MJ — La Cale du quai 9**. Cochez une seconde fois : rien n'est dupliqué.
+2. Installez le module privé par son ZIP (**Modules**, installer depuis un fichier), puis activez-le. Rechargez le monde. Cochez de nouveau **Importer le kit (joueurs)**.
+   **Résultat attendu :** un dossier **Kit MJ — La Cale du quai 9** reçoit les documents du module. Le message « Kit MJ non détecté » n'apparaît pas. Cochez une seconde fois : ces documents ne sont pas dupliqués.
+3. Connectez-vous avec un compte **Joueur**, pas MJ.
+   **Résultat attendu :** ce compte ne voit pas les documents du dossier MJ. Les documents joueurs du kit restent visibles, comme avant.
+4. Console (**F12**), en MJ puis en joueur.
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

@@ -105,7 +105,7 @@ assert.deepEqual(plan.map(entry => entry.kitId), ["b"]);
 assert.equal(KIT_IMPORTS.map(entry => entry.pack).join(), "kit-pregens,kit-scenes,kit-journals");
 
 const system = readJson("system.json");
-assert.equal(system.version, "1.1.2");
+assert.equal(system.version, "1.1.3");
 for ( const name of ["kit-pregens", "kit-scenes", "kit-journals"] ) {
   assert.equal(system.packs.some(pack => pack.name === name), true, name);
 }

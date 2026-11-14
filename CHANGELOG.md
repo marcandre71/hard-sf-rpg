@@ -1,5 +1,9 @@
 # Journal des versions
 
+## 1.1.3
+
+Le bouton « Importer le kit (joueurs) » regarde le module privé `sol-kit-mj`. Décision de Marc. S'il est actif, le MJ actif importe aussi tous ses compendiums dans le dossier « Kit MJ — La Cale du quai 9 ». Les permissions ne sont pas modifiées. Un second clic ne duplique pas. Sans ce module, le kit joueurs est importé comme avant, et le message est « Kit MJ non détecté ». Aucun contenu de ce module n'est dans ce dépôt. `KIT_GM_PACKS` reste vide.
+
 ## 1.1.2
 
 Portraits des prétirés du kit. Décision de Marc. Images WebP, qualité 80, 864×1152, dans `assets/portraits/`. Chaque acteur du compendium Kit — Prétirés les utilise comme portrait et comme texture de jeton. L'import copie ces champs. Le clic sur le portrait ouvre toujours le sélecteur de fichier.
