@@ -1,5 +1,5 @@
 /**
- * Catalogue Machines. Le manifeste suit la version du système (1.1.1).
+ * Catalogue Machines. Le manifeste suit la version du système (1.1.2).
  * Le passage DataModel se fait si FOUNDRY_PATH est défini.
  * Décision Didier/Marc 31/10/2026. Réf. Équipement v0.3 §5.
  * Réf. Blessures et Séquelles v0.3 corrigée §3.
@@ -35,7 +35,7 @@ const sheet = readFileSync(new URL("../module/sheets/character-sheet.mjs", impor
 const actorSheet = readFileSync(new URL("../templates/actor/actor-sheet.hbs", import.meta.url), "utf8");
 const sol = readFileSync(new URL("../module/sol.mjs", import.meta.url), "utf8");
 
-assert.equal(system.version, "1.1.1");
+assert.equal(system.version, "1.1.2");
 assert.equal(sol.includes("// Choix technique : numéro croissant pour la mise à jour Foundry"), true);
 assert.equal(system.packs.some(pack => pack.name === "machines" && pack.type === "Actor"), true);
 

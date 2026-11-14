@@ -3,7 +3,13 @@
   "_key": "!actors!KitActTariq00001",
   "name": "Tariq Benali",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/portraits/tariq.webp",
+  "prototypeToken": {
+    "actorLink": true,
+    "texture": {
+      "src": "systems/sol-nouvelle-ere/assets/portraits/tariq.webp"
+    }
+  },
   "system": {
     "identity": {
       "birthplace": "Hellas-Centrale (Mars, Compact d'Hellas)",

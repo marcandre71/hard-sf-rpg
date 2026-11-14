@@ -49,6 +49,31 @@ for ( const actor of pregens ) {
     assert.equal(item._id.length, 16);
   }
 }
+const portraits = {
+  "Joachim Ferraz": "joachim.webp",
+  "Kesi Varga": "kesi.webp",
+  "Dr Inès Okafor-Lund": "ines.webp",
+  "Tariq Benali": "tariq.webp",
+  "Anouk Sall": "anouk.webp",
+  "Bosco": "bosco.webp"
+};
+for ( const [name, file] of Object.entries(portraits) ) {
+  const actor = pregens.find(entry => entry.name === name);
+  const src = `systems/sol-nouvelle-ere/assets/portraits/${file}`;
+  assert.equal(actor.img, src, name);
+  assert.equal(actor.prototypeToken.texture.src, src, name);
+  assert.equal(actor.prototypeToken.actorLink, true, name);
+  const disk = new URL(`../assets/portraits/${file}`, import.meta.url);
+  assert.equal(readFileSync(disk).length > 1000, true, file);
+}
+const header = readFileSync(new URL("../templates/actor/header.hbs", import.meta.url), "utf8");
+const generic = readFileSync(new URL("../templates/actor/actor-sheet.hbs", import.meta.url), "utf8");
+assert.equal(header.includes('data-edit="img"'), true);
+assert.equal(generic.includes('data-edit="img"'), true);
+const importer = readFileSync(new URL("../module/kit-import.mjs", import.meta.url), "utf8");
+assert.equal(importer.includes("toObject()"), true);
+assert.equal(importer.includes("delete next.img"), false);
+
 const joachim = pregens.find(actor => actor.name === "Joachim Ferraz");
 assert.equal(joachim.system.characteristics.con.base, 40);
 assert.equal(joachim.system.characteristics.con.origin, 10);
@@ -80,12 +105,13 @@ assert.deepEqual(plan.map(entry => entry.kitId), ["b"]);
 assert.equal(KIT_IMPORTS.map(entry => entry.pack).join(), "kit-pregens,kit-scenes,kit-journals");
 
 const system = readJson("system.json");
-assert.equal(system.version, "1.1.1");
+assert.equal(system.version, "1.1.2");
 for ( const name of ["kit-pregens", "kit-scenes", "kit-journals"] ) {
   assert.equal(system.packs.some(pack => pack.name === name), true, name);
 }
 const tester = readFileSync(new URL("../TESTER.md", import.meta.url), "utf8");
 assert.equal(tester.includes("## 27. 1.1.0 Kit joueurs"), true);
+assert.equal(tester.includes("## 29. 1.1.2 Portraits des prétirés"), true);
 const source = readFileSync(new URL("../module/kit-import.mjs", import.meta.url), "utf8");
 assert.equal(source.includes("isActiveGM"), true);
 

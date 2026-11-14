@@ -603,3 +603,16 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
    **Résultat attendu :** la copie déjà importée est encore là. Le système ne l'efface pas et ne la modifie pas. Vous pouvez la supprimer à la main si vous n'en voulez plus.
 3. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 29. 1.1.2 Portraits des prétirés
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.2**. Les six portraits sont ceux du kit, en WebP.
+
+1. Ouvrez le compendium **Kit — Prétirés**.
+   **Résultat attendu :** Joachim Ferraz, Kesi Varga, Dr Inès Okafor-Lund, Tariq Benali, Anouk Sall et Bosco ont chacun un portrait, à la place du visage mystère gris.
+2. Importez **Joachim Ferraz** dans le monde (glisser vers **Acteurs**, ou la case **Importer le kit (joueurs)**). Ouvrez la fiche.
+   **Résultat attendu :** le portrait est en haut à gauche. Le jeton, si vous le posez sur une scène, utilise la même image.
+3. Cliquez le portrait. Dans le sélecteur, choisissez une autre image, ou annulez.
+   **Résultat attendu :** choisir une image remplace le portrait. Annuler le laisse tel quel. La fiche ne se ferme pas.
+4. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

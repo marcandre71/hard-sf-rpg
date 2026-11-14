@@ -3,7 +3,13 @@
   "_key": "!actors!KitActAnouk00001",
   "name": "Anouk Sall",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/portraits/anouk.webp",
+  "prototypeToken": {
+    "actorLink": true,
+    "texture": {
+      "src": "systems/sol-nouvelle-ere/assets/portraits/anouk.webp"
+    }
+  },
   "system": {
     "identity": {
       "birthplace": "Habitat tournant Ndar, orbite lunaire [nom à valider par Marc]",

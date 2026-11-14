@@ -96,6 +96,8 @@ async function importPack(systemId, entry) {
   if ( !fresh.length ) return 0;
   const folder = await ensureFolder(entry.folder, entry.documentName);
   const data = fresh.map(({ document }) => {
+    // toObject copie le portrait (`img`) et `prototypeToken`.
+    // On ne retire que l'id du compendium.
     const next = document.toObject();
     delete next._id;
     next.folder = folder.id;

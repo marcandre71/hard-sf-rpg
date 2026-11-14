@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.1.1 : un drone obsolète retiré des catalogues.",
-  "version": "1.1.1",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.1.2 : portraits des prétirés du kit.",
+  "version": "1.1.2",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

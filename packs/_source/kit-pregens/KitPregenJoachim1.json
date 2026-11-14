@@ -3,7 +3,13 @@
   "_key": "!actors!KitActJoachim001",
   "name": "Joachim Ferraz",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/portraits/joachim.webp",
+  "prototypeToken": {
+    "actorLink": true,
+    "texture": {
+      "src": "systems/sol-nouvelle-ere/assets/portraits/joachim.webp"
+    }
+  },
   "system": {
     "identity": {
       "birthplace": "Lisbonne (Terre)",

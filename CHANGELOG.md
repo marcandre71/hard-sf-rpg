@@ -1,5 +1,9 @@
 # Journal des versions
 
+## 1.1.2
+
+Portraits des prétirés du kit. Décision de Marc. Images WebP, qualité 80, 864×1152, dans `assets/portraits/`. Chaque acteur du compendium Kit — Prétirés les utilise comme portrait et comme texture de jeton. L'import copie ces champs. Le clic sur le portrait ouvre toujours le sélecteur de fichier.
+
 ## 1.1.1
 
 Drone TATI retiré.

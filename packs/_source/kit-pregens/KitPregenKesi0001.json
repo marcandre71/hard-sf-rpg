@@ -3,7 +3,13 @@
   "_key": "!actors!KitActKesi000001",
   "name": "Kesi Varga",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/portraits/kesi.webp",
+  "prototypeToken": {
+    "actorLink": true,
+    "texture": {
+      "src": "systems/sol-nouvelle-ere/assets/portraits/kesi.webp"
+    }
+  },
   "system": {
     "identity": {
       "birthplace": "Les Tambours, Cérès (Ceinture)",

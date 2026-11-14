@@ -3,7 +3,13 @@
   "_key": "!actors!KitActInes000001",
   "name": "Dr Inès Okafor-Lund",
   "type": "character",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/portraits/ines.webp",
+  "prototypeToken": {
+    "actorLink": true,
+    "texture": {
+      "src": "systems/sol-nouvelle-ere/assets/portraits/ines.webp"
+    }
+  },
   "system": {
     "identity": {
       "birthplace": "Valhalla, Callisto (systèmes extérieurs)",

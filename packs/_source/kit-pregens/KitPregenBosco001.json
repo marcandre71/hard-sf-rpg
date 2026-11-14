@@ -3,7 +3,13 @@
   "_key": "!actors!KitActBosco00001",
   "name": "Bosco",
   "type": "synthetic",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "systems/sol-nouvelle-ere/assets/portraits/bosco.webp",
+  "prototypeToken": {
+    "actorLink": true,
+    "texture": {
+      "src": "systems/sol-nouvelle-ere/assets/portraits/bosco.webp"
+    }
+  },
   "system": {
     "characteristics": {
       "for": {
