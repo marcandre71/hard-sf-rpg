@@ -532,18 +532,18 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, ver
 
 ## 25. 1.0.1 Scène de test
 
-Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, version **1.0.2**. Ouvrez le monde en **MJ**. Un joueur ne crée pas cette scène.
+Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`. Ouvrez le monde en **MJ**. Un joueur ne crée pas cette scène.
 
 1. Prenez le ZIP :
 
    https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
    Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
-   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.2**.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.3**.
 2. Créez un monde vide, ou ouvrez-en un, connecté comme MJ. Attendez la fin du chargement.
    **Résultat attendu :** la scène active s'appelle **Scène de test**. Le fond est une couleur unie, avec une grille. Il n'y a pas d'image téléchargée. Six pions sont posés : **Humain d'essai**, **Synthétique d'essai**, **Adversaire d'essai**, **Crabe**, **Petite Fortune**, **Patrouilleur de la Veille**.
 3. Ouvrez les fiches.
-   **Résultat attendu :** l'humain porte le **Pistolet de bord 9 mm basse vélocité** (munitions **15 / 15**), la **Combinaison souple « Peau de quart »**, l'origine **Terre**, le milieu **Enfant de la Veille** et la profession **Garde ou soldat**. Ses bases, avant l'origine, sont FOR 50, CON 45, COO 50, RÉF 45, ADA 25, PER 35, INT 40, VOL 25, PRÉ 40. Avec Terre : FOR 55, CON 55, ADA 15, le reste inchangé. Formations : Armes de poing 30, Esquive 30, Corps-à-corps 20, Commandement 20, Opérations de bord 20. Le seuil affiché est 6, l'Endurance maximale 11. Ces deux chiffres ne sont pas des cases à remplir.
+   **Résultat attendu :** l'humain porte le **Pistolet de bord 9 mm basse vélocité** (munitions **15 / 15**), la **Combinaison souple « Peau de quart »**, l'origine **Terre**, le milieu **Enfant de la Veille** et la profession **Garde ou soldat**. Ses bases, avant l'origine, sont FOR 50, CON 45, COO 50, RÉF 45, ADA 25, PER 35, INT 40, VOL 25, PRÉ 40. Avec Terre : FOR 55, CON 55, ADA 15, le reste inchangé. Formations : Armes de poing 30, Esquive 30, Corps-à-corps 20, Commandement 20, Opérations de bord 20. Le seuil affiché est 6, l'Endurance maximale 11, la tolérance aux g est **4**. Ces chiffres ne sont pas des cases à remplir.
    L'adversaire a aussi l'origine **Terre**. Ses bases sont toutes à **35** (valeur moyenne choisie, un peu sous l'humain). Avec Terre : FOR 40, CON 45, ADA 25. Armes de poing est à **20**.
    Le synthétique a FOR, CON et PER à **40** (valeur moyenne choisie). Il n'a pas d'origine : le code n'en met pas sur ce type. Esquive est à **20**. Sans RÉF, le score d'Esquive affiché au jet est **20**.
    Crabe, Petite Fortune et le Patrouilleur viennent des compendiums **Machines** et **Vaisseaux**.
@@ -554,5 +554,24 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`, ver
    **Résultat attendu :** il n'y a toujours qu'une scène **Scène de test**, et un seul acteur de chaque nom.
 6. Ouvrez **Configurer les paramètres** (l'icône engrenage de la barre de gauche). Dans les réglages du système, cochez **Recréer la scène de test**, puis enregistrez.
    **Résultat attendu :** la scène est de nouveau active, avec les six pions. Les acteurs n'ont pas été dupliqués. La case se décoche. Un second pistolet n'apparaît pas sur l'humain.
+7. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 26. 1.0.3 Tolérance aux g et dose
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.0.3**. La tolérance aux g utilise la CON actuelle (après l'origine), comme le seuil et l'Endurance, puis ajoute le modificateur de l'objet Origine.
+
+1. Sur **Humain d'essai**, onglet principal, regardez la ligne **Tolérance aux g**.
+   **Résultat attendu :** **4**. La CON actuelle est 55 : 55 / 20 arrondi au supérieur fait 3, et Terre ajoute **+1**.
+2. Retirez l'objet **Terre** de la fiche, rouvrez-la.
+   **Résultat attendu :** la tolérance aux g passe à **3**. Remettez **Terre** : elle revient à **4**.
+3. Ouvrez l'objet **Ceinture (Cérès, Vesta, petits habitats)** dans le compendium Origines.
+   **Résultat attendu :** le modificateur de tolérance aux g est **−2**. Lune ou orbite terrestre est **0**, Mars **−1**, Habitat tournant **−1**, Systèmes extérieurs **−1**, Terre **+1**.
+4. Sur l'humain, case **Dose de départ (mSv)**. Elle est vide. Écrivez **80**. Laissez **Dose aiguë reçue** vide.
+   **Résultat attendu :** la ligne **Dose cumulée** dit **80**, et le palier **Sain**. La dose de départ n'a pas été recopiée dans la dose aiguë.
+5. Écrivez **200** dans **Dose aiguë reçue**.
+   **Résultat attendu :** le cumul passe à **280**, palier **Exposé**. 80 + 200, pas 80 + 80 + 200.
+6. Effacez les deux cases.
+   **Résultat attendu :** le cumul revient à **0**, palier **Sain**. Une fiche ancienne, qui n'avait pas ces cases, n'est pas forcée à 50.
 7. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

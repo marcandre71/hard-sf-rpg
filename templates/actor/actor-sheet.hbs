@@ -39,6 +39,9 @@
   </div>
   {{/if}}
   <p class="sol-seuil">{{localize "SOL.Damage.sb"}} : <strong>{{seuil}}</strong></p>
+  {{#if showGTolerance}}
+  <p class="sol-seuil">{{localize "SOL.Derived.gTolerance"}} : <strong>{{gTolerance}}</strong></p>
+  {{/if}}
   {{#if showEndurance}}
   <div class="sol-endurance-line">
     <span class="sol-lbl">{{localize "SOL.Actor.endurance"}}</span>

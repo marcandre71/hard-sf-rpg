@@ -37,7 +37,7 @@ assert.equal(stackTraining(HUMAN_SKILLS[0]), 30);
 assert.equal(stackTraining({ free: 40 }), 10);
 
 const human = castProfile("pc-human");
-const humanView = previewSheet(human.system);
+const humanView = previewSheet(human.system, 1);
 assert.equal(humanView.characteristics.for.value, 55);
 assert.equal(humanView.characteristics.con.value, 55);
 assert.equal(humanView.characteristics.ada.value, 15);
@@ -47,7 +47,7 @@ assert.equal(humanView.sb, 6);
 assert.equal(humanView.endurance, endurancePoints(55));
 assert.equal(humanView.endurance, 11);
 assert.equal(humanView.sangFroid, 5);
-assert.equal(humanView.gTolerance, 3);
+assert.equal(humanView.gTolerance, 4);
 assert.equal(TERRE_MODIFIERS.con, 10);
 
 const npc = castProfile("npc-armed");

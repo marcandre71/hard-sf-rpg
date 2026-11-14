@@ -163,6 +163,31 @@ export class PersonData extends foundry.abstract.TypeDataModel {
         hint: "SOL.Actor.enduranceHint"
       }),
 
+      // Dose. LdR v0.3 §9 : la dose de départ se note entre 50 et 500.
+      // Pas de migrateData : un diff partiel ne reçoit pas ces clés,
+      // et une fiche déjà là reste vide. On n'écrit pas 50 par défaut.
+      // La dose de départ n'est pas recopiée dans `acute`.
+      // Le cumul affiché est la somme, calculée, pas un troisième champ.
+      radiation: new SchemaField({
+        starting: numberField("SOL.Radiation.starting", {
+          initial: null,
+          nullable: true,
+          integer: true,
+          min: 50,
+          max: 500,
+          step: 1,
+          hint: "SOL.Radiation.startingHint"
+        }),
+        acute: numberField("SOL.Radiation.acute", {
+          initial: null,
+          nullable: true,
+          integer: true,
+          min: 0,
+          step: 1,
+          hint: "SOL.Radiation.acuteHint"
+        })
+      }, { label: "SOL.Radiation.label" }),
+
       // Texte libre, pas une liste ni un type d'objet.
       // Décision de Marc (étape 2) : un seul champ, pas le tableau
       // `{ name, note }` de la Fiche v0.2 §4. Réf. aussi LdR v0.2 §15.

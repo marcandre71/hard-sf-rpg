@@ -16,7 +16,7 @@ import { characteristicFieldsFor, SOL } from "../config.mjs";
 import { DRONE_CHARACTER_KEYS, FOR_CON_PER_KEYS } from "../data/actors.mjs";
 import { breachContext, stopBreachClock } from "../dice/breach-countdown.mjs";
 import { seuilFromCharacteristics } from "../dice/damage.mjs";
-import { resolveEndurance } from "../dice/derived.mjs";
+import { gTolerance, originToleranceModifier, resolveEndurance } from "../dice/derived.mjs";
 import { rollCharacteristic } from "./character-sheet.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { applyDroppedState, dragData, presentStatuses, removeStatus } from "./states.mjs";
@@ -89,6 +89,8 @@ export class GenericActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       });
       context.seuil = seuilFromCharacteristics(prepared);
       const con = prepared.con?.value;
+      context.showGTolerance = typeof con === "number";
+      context.gTolerance = gTolerance(con, originToleranceModifier(actor.items));
       const endurance = resolveEndurance(stored.endurance ?? null, con);
       context.showEndurance = endurance.max != null;
       context.enduranceCurrent = endurance.current;

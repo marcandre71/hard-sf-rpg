@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 1.0.3
+
+Branche `cursor/tg-dose-103-13b2`, depuis `main` (`3dff461`). Décision Didier, délégation v1 de Marc. Pas de Relecteur.
+
+- Tolérance aux g : CON actuelle (après origine) / 20, arrondi au supérieur, plus `gToleranceModifier` de l'objet Origine. Le champ existait déjà dans le compendium, avec le tableau du LdR v0.3 §9. Il est lu. Sans origine, +0.
+- Dose de départ : case vide par défaut, 50 à 500 si on la remplit. Dose aiguë : case vide, compte 0. Le cumul affiché est la somme, non stockée. La dose de départ n'est pas recopiée dans la dose aiguë. Pas de `migrateData` : une fiche ancienne ne reçoit pas 50.
+- Le palier affiché reprend les seuils déjà écrits pour la dose aiguë (journal États, LdR v0.2 §8). Le livre v0.3 ne donne pas une autre échelle pour la dose de toute une vie.
+- L'anglais lit `lang/fr.json`, comme le reste du système.
+- Runtime Foundry non exécuté.
+
 ## 1.0.2
 
 Branche `cursor/fiches-essai-102-13b2`, depuis `main` (`96886ae`). Décision Didier, délégation v1 de Marc, 11/11/2026. Pas de Relecteur.

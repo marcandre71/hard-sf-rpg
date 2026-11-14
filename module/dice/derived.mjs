@@ -5,6 +5,8 @@
  * Réf. LdR v0.2 §3 : Endurance = CON/5, tolérance aux g = CON/20,
  * Sang-froid = VOL/5, Seuil de blessure = (FOR + CON)/20
  * (le Seuil est dans `damage.mjs`).
+ * LdR v0.3 §3 : la tolérance aux g ajoute le modificateur d'origine.
+ * La CON est l'actuelle, après origine, comme l'Endurance et le Seuil.
  * Réf. LdR v0.2 §4 : moitié de caractéristique sans formation,
  * dans `skill-score.mjs`.
  * La dizaine du DR et du DE n'est pas un arrondi : `tens` dans
@@ -36,13 +38,88 @@ export function endurancePoints(constitution) {
 }
 
 /**
- * Tolérance aux g. Réf. LdR v0.2 §3. Pas encore un champ d'acteur.
+ * Tolérance aux g. CON actuelle / 20, arrondi au supérieur,
+ * plus le modificateur de l'objet Origine (`gToleranceModifier`).
+ * Sans origine, le modificateur est 0. Ce n'est pas un champ stocké.
+ * LdR v0.3 §3 / §9. Réf. LdR v0.2 §3.
  *
- * @param {number} constitution
+ * @param {number} constitution Actuelle, après le champ `origin`.
+ * @param {number} [originModifier]
  * @returns {number|null}
  */
-export function gTolerance(constitution) {
-  return roundUpQuotient(constitution, 20);
+export function gTolerance(constitution, originModifier = 0) {
+  const base = roundUpQuotient(constitution, 20);
+  if ( base === null ) return null;
+  const extra = Number(originModifier);
+  return base + (Number.isFinite(extra) ? Math.trunc(extra) : 0);
+}
+
+/**
+ * Modificateur lu sur l'objet Origine de la fiche. Champ déjà dans le
+ * compendium. Absent ou illisible : 0.
+ *
+ * @param {Iterable<{ type?: string, system?: { gToleranceModifier?: unknown } }>|null|undefined} items
+ * @returns {number}
+ */
+export function originToleranceModifier(items) {
+  let origin = null;
+  for ( const item of items ?? [] ) {
+    if ( item?.type === "origin" ) {
+      origin = item;
+      break;
+    }
+  }
+  const raw = origin?.system?.gToleranceModifier;
+  const number = Number(raw);
+  return Number.isFinite(number) ? Math.trunc(number) : 0;
+}
+
+/**
+ * Paliers déjà écrits pour la dose aiguë. LdR v0.2 §8, journal États.
+ * Le livre v0.3 ne donne pas une autre échelle pour la dose de toute une vie.
+ * On les applique au cumul affiché.
+ */
+export const RADIATION_TIERS = [
+  { id: "healthy", below: 250 },
+  { id: "exposed", below: 1000 },
+  { id: "irradiated", below: 3000 },
+  { id: "condemned", below: Infinity }
+];
+
+/**
+ * Dose cumulée affichée. Elle n'est pas stockée.
+ * La dose de départ n'est pas recopiée dans la dose aiguë :
+ * on les additionne une fois chacune. Une case vide compte 0.
+ * LdR v0.3 §9.
+ *
+ * @param {unknown} starting
+ * @param {unknown} acute
+ * @returns {number}
+ */
+export function cumulativeDose(starting, acute) {
+  return doseOrZero(starting) + doseOrZero(acute);
+}
+
+/**
+ * @param {unknown} dose
+ * @returns {"healthy"|"exposed"|"irradiated"|"condemned"}
+ */
+export function radiationTier(dose) {
+  const number = doseOrZero(dose);
+  if ( number < 250 ) return "healthy";
+  if ( number < 1000 ) return "exposed";
+  if ( number < 3000 ) return "irradiated";
+  return "condemned";
+}
+
+/**
+ * @param {unknown} value
+ * @returns {number}
+ */
+function doseOrZero(value) {
+  const number = Number(value);
+  if ( !Number.isFinite(number) ) return 0;
+  return Math.trunc(number);
 }
 
 /**

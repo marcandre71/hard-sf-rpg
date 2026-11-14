@@ -25,8 +25,14 @@
 import { characteristicRollLabel, SOL } from "../config.mjs";
 import { breachContext, stopBreachClock } from "../dice/breach-countdown.mjs";
 import { performRoll } from "../dice/chat.mjs";
-import { sumZoneArmour } from "../dice/damage.mjs";
-import { resolveEndurance } from "../dice/derived.mjs";
+import { seuilFromCharacteristics, sumZoneArmour } from "../dice/damage.mjs";
+import {
+  cumulativeDose,
+  gTolerance,
+  originToleranceModifier,
+  radiationTier,
+  resolveEndurance
+} from "../dice/derived.mjs";
 import { itemListActions, prepareSections } from "./item-list.mjs";
 import { editImage } from "./portrait.mjs";
 import { applyDroppedState, dragData, presentStatuses, removeStatus } from "./states.mjs";
@@ -218,6 +224,18 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       })
       : [];
     const con = actor.system.characteristics?.con?.value;
+    context.seuil = seuilFromCharacteristics(actor.system.characteristics);
+    context.showGTolerance = typeof con === "number";
+    context.gTolerance = gTolerance(con, originToleranceModifier(actor.items));
+    const radiationField = actor.system.schema.fields.radiation;
+    const radiationSource = stored.radiation ?? {};
+    context.radiationGroups = radiationField
+      ? prepareFieldGroups({ radiation: radiationField }, { radiation: radiationSource }, {
+        rootId: context.rootId
+      })
+      : [];
+    context.radiationCumulative = cumulativeDose(radiationSource.starting, radiationSource.acute);
+    context.radiationTierLabel = `SOL.Radiation.tier.${radiationTier(context.radiationCumulative)}`;
     const endurance = resolveEndurance(stored.endurance ?? null, con);
     context.showEndurance = endurance.max != null;
     context.enduranceCurrent = endurance.current;

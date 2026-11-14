@@ -7,8 +7,8 @@
  *
  * Le code ne lit pas la chaîne `characteristicModifiers` de l'origine :
  * le bonus est un champ `origin` sur la caractéristique.
- * Pas de champ Dose. Pas de champ Tolérance aux g :
- * `gTolerance` ne reçoit que la CON, pas le modificateur d'origine.
+ * Pas de champ Dose stocké sur ces fiches d'essai : la case reste vide.
+ * La tolérance aux g affichée ajoute le modificateur d'origine.
  */
 import { SOL } from "./config.mjs";
 import { seuilBlessure } from "./dice/damage.mjs";
@@ -240,12 +240,13 @@ function skillItem(skill, training) {
 
 /**
  * Dérivées par les fonctions déjà utilisées sur la fiche.
- * `gTolerance` n'inclut pas le modificateur d'origine.
+ * `originModifier` est celui de l'objet Origine (Terre : +1).
  *
  * @param {object} system
+ * @param {number} [originModifier]
  * @returns {{ characteristics: object, sb: number|null, endurance: number|null, sangFroid: number|null, gTolerance: number|null }}
  */
-export function previewSheet(system) {
+export function previewSheet(system, originModifier = 0) {
   const characteristics = structuredClone(system?.characteristics ?? {});
   // Même formule que `deriveCharacteristicValues` : base + origin + advance + temp, bornée.
   const { min, max } = SOL.characteristicValueBounds;
@@ -262,7 +263,7 @@ export function previewSheet(system) {
     sb: typeof force === "number" && typeof constitution === "number" ? seuilBlessure(force, constitution) : null,
     endurance: typeof constitution === "number" ? endurancePoints(constitution) : null,
     sangFroid: typeof volonte === "number" ? sangFroid(volonte) : null,
-    gTolerance: typeof constitution === "number" ? gTolerance(constitution) : null
+    gTolerance: typeof constitution === "number" ? gTolerance(constitution, originModifier) : null
   };
 }
 
