@@ -1,0 +1,215 @@
+{
+  "_id": "KitJrAides000000",
+  "_key": "!journal!KitJrAides000000",
+  "name": "Aides de jeu",
+  "pages": [
+    {
+      "_id": "PgKitAide0000001",
+      "name": "Sol, Nouvelle Ère — Aides de jeu",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><h1>Sol, Nouvelle Ère — Aides de jeu</h1><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000001"
+    },
+    {
+      "_id": "PgKitAide0000002",
+      "name": "A1 — Le bracelet de Pia",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>BRACELET DE TRANSIT — PLASTIQUE THERMOSOUDÉ</strong><br>LOT : HP-2187-03 / C4 / 117<br>SUJET : WEKESA P. — F — 17<br>CONTRAT : ÉTUDE CLINIQUE (EXPOSITION CONSENTIE) — RÉF. CA-VLH-4471<br>DESTINATION FINALE : PAR TRANSFERT — VOIR COURTIER<br>NE PAS RETIRER — PROPRIÉTÉ DU TRANSPORTEUR</p></blockquote><p><em>Au dos, gravé à la pointe du couteau : « ESTHER C4 ».</em></p><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000002"
+    },
+    {
+      "_id": "PgKitAide0000003",
+      "name": "A2 — Le manifeste de l'Hirondelle de Pallas",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>CAPITAINERIE DU COMPTOIR — RADE DE CÉRÈS</strong><br><strong>Manifeste d'arrivée n° RC-87-0311-09</strong><br>| | |<br>| :--- | :--- |<br>| Navire | <em>Hirondelle de Pallas</em>, cargo lent à propulsion électrique |<br>| Immatriculation | Ceinture, CC-P-2219 |<br>| Capitaine | Y. Rusu |<br>| Affréteur | M. Krol, courtier agréé (section grise, entrepôt 6) |<br>| Provenance | Habitat Saint-Brendan (Ceinture) |<br>| Équipage | 4 |<br>| Passagers | 0 |<br>| Cargaison | 8 conteneurs de transit, cargaison sèche, scellés |<br>| Berceau | Quai 9, section grise |<br>| Inspection de l'Office | Effectuée — RAS — H. Lindqvist |<br><strong>Avitaillement demandé au berceau :</strong> oxygène 1 100 kg ; eau potable 6 000 L ; filtres à CO2 : 24 cartouches.</p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000003"
+    },
+    {
+      "_id": "PgKitAide0000004",
+      "name": "A3 — L'avis de suspension de l'inspecteur Valdés",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>OFFICE DE LA VEILLE — DIRECTION DES INSPECTIONS, SHACKLETON</strong><br><strong>Décision n° INS-2187-0412 (transmise par relais, délai 22 min)</strong><br>Vu la plainte déposée le 10 mars 2187 (TUO) par un tiers ayant requis l'anonymat, pour sollicitation de rétributions indues ;<br>L'inspecteur <strong>Rurik VALDÉS</strong>, poste de la Rade de Cérès, est placé en <strong>congé administratif</strong> à compter de réception, dans l'attente de l'enquête.<br>Ses accès, son arme de service et ses dossiers en cours sont transmis à l'inspectrice adjointe <strong>Hana LINDQVIST</strong>.<br><em>Pour la Direction, le greffier d'actes Genève-Lex — validé par : [signature humaine illisible].</em></p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000004"
+    },
+    {
+      "_id": "PgKitAide0000005",
+      "name": "A4 — Un « contrat d'étude »",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>PROTOCOLE CA-VLH-4471 — CONTRAT DE PARTICIPATION VOLONTAIRE</strong><br>Le soussigné accepte de participer, pour une durée de <strong>36 mois</strong>, à une étude des effets à long terme d'une <strong>exposition contrôlée aux rayonnements ionisants</strong>.<br>En contrepartie : transport, logement, nourriture et suivi médical gratuits ; indemnité versée au terme du contrat, sous réserve d'achèvement du protocole.<br>Le participant renonce à tout recours en cas d'effets secondaires, y compris graves, irréversibles ou mortels, dont il reconnaît avoir été informé.<br>Les frais de transport, d'air et d'entretien sont avancés par le courtier et remboursés par retenue sur l'indemnité.<br><em>Signé (empreinte digitale) : …………… — Langue du participant : swahili — Langue du contrat : français juridique</em><br><em>Investigateur principal : Dr C. Asante, pour le compte d'un laboratoire associé.</em></p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000005"
+    },
+    {
+      "_id": "PgKitAide0000006",
+      "name": "A5 — Journal du greffier « Écluse » (extrait)",
+      "type": "text",
+      "sort": 600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>ÉCLUSE v7.2 — SUPPORT VITAL — HIRONDELLE DE PALLAS — JOURNAL</strong><br>J−61 06:00 Consommation O2 : 205 % de la capacité nominale du recycleur. Avertissement transmis au capitaine.<br>J−40 14:12 Température soute centrale : 34 °C. Recommandation : déploiement des radiateurs.<br>J−40 14:15 Ordre humain (affréteur, via capitaine) : radiateurs maintenus repliés. Exécuté. Objection consignée.<br>J−12 03:40 CO2 soute centrale : 1,9 %. Seuil de confort dépassé. Avertissement transmis.<br>J−2 09:00 Amarrage quai 9.<br>J−1 22:30 Révision des recycleurs par technicien externe (T. Benali, Rade-Services). Consommation signalée au technicien.<br>J 05:52 Joint du conduit de service 4-B : ouverture non autorisée. Alarme locale <strong>désactivée manuellement</strong>. Objection consignée.<br>J 06:00 Température soute centrale : 41 °C. CO2 : 2,6 %. Occupants détectés : 207.</p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000006"
+    },
+    {
+      "_id": "PgKitAide0000007",
+      "name": "A6 — Bulletin d'alerte de l'Office",
+      "type": "text",
+      "sort": 700000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p>⚠ <strong>OFFICE DE LA VEILLE — SERVICE DE MÉTÉOROLOGIE SPATIALE</strong><br><strong>ALERTE ÉRUPTION SOLAIRE — CLASSE X — DIFFUSION GÉNÉRALE CEINTURE</strong><br>Éjection observée par les sondes de l'Office il y a 41 minutes (heure d'émission).<br><strong>Arrivée prévue des particules énergétiques sur l'orbite de Cérès : dans 50 minutes.</strong><br>Durée estimée du pic : 2 heures.<br>Tout le personnel doit rejoindre les abris antiradiations. Sorties extravéhiculaires suspendues. Les autorisations de départ de la Rade sont gelées jusqu'à nouvel ordre.<br><em>Temps Universel de l'Office. Ce message est relayé automatiquement.</em></p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000007"
+    },
+    {
+      "_id": "PgKitAide0000008",
+      "name": "A7 — La réponse de Shackleton",
+      "type": "text",
+      "sort": 800000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>OFFICE DE LA VEILLE — DIRECTION DES INSPECTIONS, SHACKLETON</strong><br><strong>Accusé de réception n° AR-2187-88310</strong><br>Votre signalement a bien été reçu et enregistré.<br>Conformément au règlement des inspections, il a été transmis pour suite à donner à l'inspecteur de service du poste compétent : <strong>Rade de Cérès — Insp. adj. H. LINDQVIST</strong>.<br>Délai de traitement indicatif : 10 à 15 jours.<br><em>Ne répondez pas à ce message. Greffier d'actes Genève-Lex.</em></p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000008"
+    },
+    {
+      "_id": "PgKitAide0000009",
+      "name": "A8 — Les messages d'accroche",
+      "type": "text",
+      "sort": 900000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p><em>Quand les donner : au début de la partie, chaque joueur concerné reçoit le sien.</em></p><blockquote><p><strong>Pour Joachim — message différé, 9 jours plus tôt, émetteur : R. Valdés, Rade de Cérès</strong><br>« Viens. Je ne peux pas l'écrire. »</p></blockquote><blockquote><p><strong>Pour Kesi — message reçu hier, émetteur : M. Krol, courtier</strong><br>« Madame Varga, j'ai un remorquage court, propre et bien payé : un cargo à sortir de la Rade pour révision, dans les prochains jours. Un an de vos parts de risque, d'avance. Discrétion appréciée. Entrepôt 6, quand vous voulez. »</p></blockquote><blockquote><p><strong>Pour Inès — message reçu ce matin, émetteur : Dr C. Asante</strong><br>« Je suis à Cérès pour quelques jours. Dîne avec moi, j'ai un poste pour toi. »<br><em>Pièce jointe : réservation, restaurant Le Sel, salon des passagers de la Rade, 20 h.</em></p></blockquote><blockquote><p><strong>Pour Tariq — puce de crédit glissée dans sa poche au dernier quart, avec un mot plié</strong><br>« Pour ta discrétion. Les recycleurs du quai 9 marchent très bien. Un ami. »</p></blockquote><blockquote><p><strong>Pour Anouk — dernier message de Moussa, il y a quatre mois, relayé depuis un habitat de transit de la Ceinture</strong><br>« Cousine, le voyage est long mais ils nous nourrissent. On repart bientôt, plus loin, vers Cérès je crois. Je t'écrirai quand j'aurai mon premier salaire. »</p></blockquote><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000009"
+    },
+    {
+      "_id": "PgKitAide0000010",
+      "name": "A9 — Bienvenue sur la Rade de Cérès (prospectus)",
+      "type": "text",
+      "sort": 1000000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p><strong>RADE DE CÉRÈS — LE COMPTOIR VOUS SOUHAITE LA BIENVENUE</strong><br>Eau • azote • masse de réaction • transbordement • ravitaillement<br><strong>Section grise</strong> : pensions, entrepôts, berceaux 1 à 12. Zone franche : aucune taxe, aucune douane.<br><strong>À savoir :</strong><br>* Le Temps Universel de l'Office fait foi. Les quarts changent à 6 h, 14 h et 22 h.<br>* Munitions perforantes interdites dans toute la Rade. Munitions frangibles tolérées.<br>* En cas d'alerte éruption, rejoignez l'abri le plus proche (pictogramme ☢ bleu).<br>* Le délai lumière avec la Terre est affiché en continu sur les écrans publics.<br>* La flotte de sauvetage du Consortium de la Ceinture veille sur vous. Parts de risque en vente au bureau du syndic.<br><em>« La Charte protège le commerce. »</em></p></blockquote>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrAides000000.PgKitAide0000010"
+    }
+  ],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "journal",
+      "kitId": "KitJrAides000000"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

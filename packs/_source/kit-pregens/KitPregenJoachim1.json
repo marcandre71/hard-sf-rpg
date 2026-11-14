@@ -1,0 +1,506 @@
+{
+  "_id": "KitActJoachim001",
+  "_key": "!actors!KitActJoachim001",
+  "name": "Joachim Ferraz",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identity": {
+      "birthplace": "Lisbonne (Terre)",
+      "gravityNative": 1,
+      "age": 44
+    },
+    "characteristics": {
+      "for": {
+        "base": 35,
+        "origin": 5,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 40,
+        "origin": 10,
+        "advance": 0,
+        "temp": 0
+      },
+      "coo": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ref": {
+        "base": 40,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ada": {
+        "base": 30,
+        "origin": -10,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 50,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "int": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "vol": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "pre": {
+        "base": 25,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "radiation": {
+      "starting": 180,
+      "acute": null
+    },
+    "biography": "<!-- Kit de démarrage, partie joueur de la fiche. --><p>: qui suis-je ?</p><p><strong>Portrait.</strong> Grand, lourd, un vrai « lourd » de la Terre. Barbe grise taillée court, yeux cernés, insigne de l'Office terni à force d'être frotté. Sa combinaison est impeccable, mais en apesanteur ses mains cherchent toujours une poignée.</p><p><strong>Personnalité.</strong> Méthodique, courtois, têtu. Il croit au Traité de Genève comme d'autres croient en Dieu, et souffre de voir l'Office servir de plus en plus les puissances. Humour sec, colère froide.</p><p><strong>Motivation</strong> (pourquoi je suis dans l'espace). Prouver que l'Office protège encore les gens, et pas seulement les orbites.</p><p><strong>Complication</strong> (ce qui peut tout faire basculer). Il est en congé : il n'a aucun ordre de mission pour Cérès, et son autorité ne tient qu'à son insigne et à son aplomb.</p><p><strong>Lien</strong> (milieu). Un parent officier : sa mère, l'ancienne commandante Helena Ferraz, à la retraite à Genève, qui a encore des amis à Shackleton.</p><p><strong>Réseau</strong> (profession). L'Office : un nom à citer, un dossier à consulter, une porte qui s'entrouvre (le meneur décide si elle s'ouvre vraiment).</p><p><strong>Mes liens avec les autres personnages</strong></p><ul><li><strong>Kesi Varga</strong> : il y a trois ans, il a verbalisé la Petite Fortune pour une licence de masse périmée. Elle ne l'a pas oublié.</li><li><strong>Dr Inès Okafor-Lund</strong> : elle l'a soigné de son mal de l'espace à son arrivée sur la Rade, il y a quatre jours. Il lui doit un service.</li><li><strong>Tariq Benali</strong> : son rapport d'inspection, il y a deux ans, a fait fermer un atelier dangereux où Tariq travaillait. Tariq lui en est reconnaissant… à moitié : il a perdu son poste.</li><li><strong>Anouk Sall</strong> : elle n'aime pas l'Office. Il aime bien les gens qui disent ce qu'ils pensent.</li></ul><p><strong>Mon accroche pour ce scénario.</strong> Il y a neuf jours, son ancien binôme, l'inspecteur Rurik Valdés, en poste sur la Rade de Cérès, lui a envoyé un message de quatre mots : « Viens. Je ne peux pas l'écrire. » Depuis son arrivée, Valdés ne répond plus, et le poste d'inspection dit qu'il est « en congé administratif ».</p><p><strong>Conseil de jeu.</strong> Tu es la loi, ou du moins son souvenir. Pose des questions, exige des documents, et rappelle à tout le monde qui a le droit de décider. Mais en apesanteur, laisse les autres passer devant.</p>"
+  },
+  "items": [
+    {
+      "name": "Terre",
+      "type": "origin",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "characteristicModifiers": "FOR +5, CON +10, ADA -10",
+        "gToleranceModifier": 1,
+        "trait": "Supporte toutes les gravités du système, mais souffre du mal de l'espace les premiers jours en apesanteur.",
+        "description": "<p>1 g</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000056",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000056"
+    },
+    {
+      "name": "Enfant de la Veille",
+      "type": "background",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "skillBonuses": "Opérations de bord, Bureaucratie et droit, Vigilance",
+        "link": "un parent officier",
+        "description": "<p>3 compétences à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000057",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000057"
+    },
+    {
+      "name": "Inspecteur de la Veille",
+      "type": "profession",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "careerSkills": "Bureaucratie et droit, Psychologie, Fouille, Armes de poing, Opérations de bord, Intimidation, Mécanique orbitale, Vigilance",
+        "description": "<p>3 à +20, 5 à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000058",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000058"
+    },
+    {
+      "name": "Armes de poing",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
+        "characteristic": "coo",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000059",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000059"
+    },
+    {
+      "name": "Bureaucratie et droit",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>traités, règlements de la Veille, contrats de la Mutuelle, chartes des colonies.</p>",
+        "characteristic": "int",
+        "training": 30,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "savoirs",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000060",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000060"
+    },
+    {
+      "name": "Enquête",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>interroger, recouper témoignages, archives et données, remonter un réseau ou une piste.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000061",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000061"
+    },
+    {
+      "name": "Esquive",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
+        "characteristic": "ref",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000062",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000062"
+    },
+    {
+      "name": "Fouille",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>chercher méthodiquement un objet, une fuite, une preuve.</p>",
+        "characteristic": "per",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000063",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000063"
+    },
+    {
+      "name": "Intimidation",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>faire pression, menacer, imposer.</p>",
+        "characteristic": "vol",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000064",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000064"
+    },
+    {
+      "name": "Manœuvre en apesanteur",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
+        "characteristic": "ada",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000065",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000065"
+    },
+    {
+      "name": "Mécanique orbitale",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>calcul de trajectoires, fenêtres de lancement, rendez-vous, gestion du delta-v.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": true,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000066",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000066"
+    },
+    {
+      "name": "Opérations de bord",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>capteurs, communications, protocoles, gestion de quart.</p>",
+        "characteristic": "int",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000067",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000067"
+    },
+    {
+      "name": "Psychologie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>comprendre les émotions et intentions d'autrui.</p>",
+        "characteristic": "per",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000068",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000068"
+    },
+    {
+      "name": "Vigilance",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
+        "characteristic": "per",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000069",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000069"
+    },
+    {
+      "name": "Combinaison souple",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
+        "airReserve": {
+          "value": 8,
+          "max": 8
+        },
+        "sealState": "intact",
+        "penalty": {
+          "manipulation": -10,
+          "perception": -10
+        },
+        "dosimeter": true,
+        "radio": true,
+        "mass": 6.5,
+        "enc": 1,
+        "protection": {
+          "head": 1,
+          "torso": 1,
+          "rightArm": 1,
+          "leftArm": 1,
+          "rightLeg": 1,
+          "leftLeg": 1
+        },
+        "pressurized": true,
+        "breachThreshold": 4,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000070",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000070"
+    },
+    {
+      "name": "Pistolet automatique « Genève-IV »",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 30 / 60 m. Accepte aussi des munitions perforantes (hullSafe passe alors à false). Arme de service des inspecteurs de l'Office de la Veille. Poignée codée biométrique (inutilisable par un tiers sans test d'Électronique).</p>",
+        "skill": "Armes de poing",
+        "damage": 7,
+        "range": "short",
+        "recoil": true,
+        "ammo": {
+          "value": 18,
+          "max": 18
+        },
+        "ammoType": "frangible",
+        "burst": true,
+        "hullSafe": true,
+        "mass": 1.1,
+        "enc": 1,
+        "melee": false,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000071",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000071"
+    },
+    {
+      "name": "Mains nues, gantelets et bottes magnétiques",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
+        "skill": "Corps-à-corps",
+        "damage": 2,
+        "range": "short",
+        "recoil": false,
+        "ammo": {
+          "value": 0,
+          "max": 0
+        },
+        "ammoType": "none",
+        "burst": false,
+        "hullSafe": true,
+        "mass": 0,
+        "enc": 0,
+        "melee": true,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000072",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000072"
+    },
+    {
+      "name": "Registre naval et catalogue des débris de la Veille",
+      "type": "software",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Logiciels v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 pour identifier la classe et l'historique officiel d'un vaisseau d'après sa signature infrarouge, ou repérer des épaves et des rochers non balisés. Doit être synchronisé en rade tous les 3 mois pour garder son bonus (les avis récents arrivent avec le délai lumière).</p>",
+        "category": "utility",
+        "host": "tablet",
+        "assistedSkill": "Opérations de bord, Vigilance, Enquête",
+        "skillBonus": 10,
+        "autonomousScore": 0,
+        "sereguineLock": true,
+        "legality": "légal"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000073",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000073"
+    },
+    {
+      "name": "Greffier juridique et comptable « Genève-Lex »",
+      "type": "software",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur tablette. +10 d'Aide pour rédiger un contrat de la Mutuelle, vérifier une licence de masse ou contester une amende de l'Office de la Veille. Intègre la jurisprudence du Traité de Genève (1981) et de la Convention de Vesta (2166).</p>",
+        "category": "greffier",
+        "host": "pad",
+        "assistedSkill": "Bureaucratie et droit, Commerce",
+        "skillBonus": 10,
+        "autonomousScore": 45,
+        "sereguineLock": true,
+        "legality": "légal"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000074",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000074"
+    },
+    {
+      "name": "Rustine",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
+        "mass": 0.2,
+        "enc": 0,
+        "quantity": 3,
+        "reserve": {
+          "type": "",
+          "value": 0,
+          "max": 0
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000075",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000075"
+    },
+    {
+      "name": "Dosimètre actif de poignet",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
+        "mass": 0.1,
+        "enc": 0,
+        "quantity": 1,
+        "reserve": {
+          "type": "energy",
+          "value": 8760,
+          "max": 8760
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000076",
+      "_key": "!actors.items!KitActJoachim001.KitItem000000076"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "pregen",
+      "kitId": "KitActJoachim001"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

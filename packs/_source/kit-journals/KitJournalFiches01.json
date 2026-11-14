@@ -1,0 +1,405 @@
+{
+  "_id": "KitJrFiches00000",
+  "_key": "!journal!KitJrFiches00000",
+  "name": "Fiches de référence",
+  "pages": [
+    {
+      "_id": "PgKitFich0000001",
+      "name": "Sol, Nouvelle Ère — Fiches de référence",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><h1>Sol, Nouvelle Ère — Fiches de référence</h1><p><em>Kit de démarrage v0.1. Trois fiches à imprimer pour la table : 1. Jets et modificateurs ; 2. Combat et blessures ; 3. Environnement et vaisseau. Toutes les règles viennent du Livre de règles v0.3 (LdR) ; les numéros de section sont indiqués entre parenthèses.</em></p><p><strong>Quand s'en servir dans « La Cale du quai 9 ».</strong> Fiche 1 : dès la Partie 1 (étapes 1 à 4 du tutoriel) et pendant l'enquête. Fiche 2 : combat du Carré (Partie 1, étape 5) et abordage (Partie 3). Fiche 3 : microfuite (Partie 1), décompression et soute (Partie 3), éruption et moment de vaisseau (Partie 4). Le résumé d'une page du jet est aussi dans « Lisez-moi d'abord ».</p><p>---</p><h1>Fiche 1 : Jets et modificateurs</h1>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000001"
+    },
+    {
+      "_id": "PgKitFich0000002",
+      "name": "Le jet (§2)",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p><strong>Lance 1D100. Réussite si le résultat est inférieur ou égal au score modifié.</strong> Score = caractéristique + formation (compétence) ; ou caractéristique seule. 00 = 100.</p><ul><li><strong>Degrés (DR / DE)</strong> = dizaine du score − dizaine du dé (en valeur absolue pour un échec). <em>Exemple : score 65, dé 23 → 6 − 2 = 4 DR. Dé 87 → 8 − 6 = 2 DE.</em></li><li><strong>Critiques</strong> : 01–05 = toujours réussite critique ; 96–100 = toujours échec critique ; un double (11, 22… 99) est critique : réussite s'il est sous le score, échec sinon.</li><li><strong>Compétence non formée</strong> : on lance la caractéristique. Compétence (F) non formée : moitié de la caractéristique (arrondi supérieur). Médecine (chirurgie) et Pilotage (vaisseaux à fusion) : impossibles sans formation.</li><li><strong>Arrondis</strong> : toujours au supérieur.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000002"
+    },
+    {
+      "_id": "PgKitFich0000003",
+      "name": "Difficultés (§5)",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><table><tr><td>Très facile</td><td>Facile</td><td>Aisée</td><td>Normale</td><td>Délicate</td><td>Difficile</td><td>Très difficile</td><td>Extrême</td></tr><tr><td>+30</td><td>+20</td><td>+10</td><td>0</td><td>−10</td><td>−20</td><td>−30</td><td>−40</td></tr></table>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000003"
+    },
+    {
+      "_id": "PgKitFich0000004",
+      "name": "Modificateurs de situation (§5)",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><table><tr><td>Situation</td><td>Modificateur</td></tr><tr><td>Gravité inhabituelle (tâche physique)</td><td>−10 ; −20 si l'écart est important</td></tr><tr><td>Combinaison pressurisée (manipulation fine, perception)</td><td>−10 ; −20 si lourde ou blindée</td></tr><tr><td>Outils</td><td>+10 bons outils ; −20 sans outils adaptés</td></tr><tr><td>Temps</td><td>+10 en prenant le double du temps ; −10 dans la précipitation</td></tr><tr><td>Aide</td><td>+10 par assistant compétent (au plus +30)</td></tr><tr><td>Fatigue, hypoxie, blessures</td><td>−10 à −30 selon l'état</td></tr><tr><td>Délai de communication (conseil ou contrôle à distance)</td><td>−10 à −20</td></tr></table><p><strong>Plafond : le total de tous les modificateurs d'un jet de personnage est limité à ±50.</strong> Exception : jets de poste en combat spatial (initiative du vaisseau comprise).</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000004"
+    },
+    {
+      "_id": "PgKitFich0000005",
+      "name": "Tests opposés (§6)",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Chacun lance. Un seul réussit : il gagne. Les deux réussissent : le plus de DR gagne, puis le score le plus élevé ; scores égaux : blocage. Les deux échouent : statu quo (au profit du défenseur).</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000005"
+    },
+    {
+      "_id": "PgKitFich0000006",
+      "name": "Tests prolongés (§6)",
+      "type": "text",
+      "sort": 600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Le meneur fixe un <strong>objectif de DR</strong> et un <strong>intervalle</strong>. Chaque réussite ajoute <strong>1 + DR</strong>. Un échec fait perdre l'intervalle. Un échec à 3 DE ou plus (ou un échec critique) : complication. <em>Exemples : colmater une brèche de coque 4 DR, 1 min ; réparer un recycleur 8 DR, 30 min ; recalculer une trajectoire vers Cérès 10 DR, 1 h.</em></p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000006"
+    },
+    {
+      "_id": "PgKitFich0000007",
+      "name": "Conditions (§10)",
+      "type": "text",
+      "sort": 700000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Ancré / Flottant / En vol • Hypoxie 1 à 3 (−10 par stade, inconscience au stade 3) • Saignement (−1 Endurance par tour) • Sonné • Épuisé (−20) • Exposé, Irradié, Condamné (radiations).</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000007"
+    },
+    {
+      "_id": "PgKitFich0000008",
+      "name": "Progression (§10)",
+      "type": "text",
+      "sort": 800000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>3 à 5 XP par séance, plus 1 à 3 par objectif majeur. +5 de formation : 5 XP jusqu'à +20, 10 XP jusqu'à +40, 15 XP au-delà. +1 à une caractéristique : 5 XP (au plus +10 sur la carrière). Atout : 15 XP.</p><p>---</p><h1>Fiche 2 : Combat et blessures</h1><p><em>Le combat est rare, rapide et mortel. Il n'y a ni points de vie, ni points de destin : chaque blessure compte. Cette fiche suit l'ordre d'un tour : initiative, actions, attaque, esquive, localisation, dégâts.</em></p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000008"
+    },
+    {
+      "_id": "PgKitFich0000009",
+      "name": "1. Initiative (§7)",
+      "type": "text",
+      "sort": 900000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Un <strong>tour</strong> dure environ <strong>5 secondes</strong>. Au premier tour, chacun fait un test de <strong>Vigilance</strong>. On agit par <strong>DR décroissants</strong> (à DR égal, un critique passe devant ; puis la RÉF la plus haute, puis le score de Vigilance). Ceux qui ratent jouent ensuite, du moins de DE au plus de DE. Les personnages surpris ne jouent pas au premier tour.</p><p><strong>L'ordre est conservé</strong> aux tours suivants. Exception : un personnage qui subit une blessure grave ou pire, ou devient Sonné, passe <strong>en fin d'ordre au tour suivant</strong>. Jouer avant ne donne aucun bonus.</p><blockquote><p><em>Exemple : Anouk (Vigilance 65) fait 21 : 4 DR. Joachim (70) fait 52 : 2 DR. Un garde (50) fait 48 : 1 DR. Tariq (40) fait 63 : 2 DE. Ordre : Anouk, Joachim, le garde, Tariq.</em></p></blockquote>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000009"
+    },
+    {
+      "_id": "PgKitFich0000010",
+      "name": "2. Ton tour",
+      "type": "text",
+      "sort": 1000000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><table><tr><td>Une action</td><td>Un mouvement</td><td>Une réaction par tour</td></tr><tr><td>Attaquer, Viser, Recharger, utiliser un objet, soigner, réparer, poser une rustine</td><td>Se déplacer, se mettre à couvert, s'ancrer</td><td>Esquiver (revient au début de ton prochain tour)</td></tr></table>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000010"
+    },
+    {
+      "_id": "PgKitFich0000011",
+      "name": "3. Attaquer (§7)",
+      "type": "text",
+      "sort": 1100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Test de la compétence de l'arme (Armes de poing, Armes d'épaule, Corps-à-corps ; sans compétence : COO pour tirer, FOR au contact).</p><table><tr><td>Portée (choisie par le tireur)</td><td>Modificateur</td></tr><tr><td>Courte (jusqu'à 100 m), par défaut</td><td>0</td></tr><tr><td>Moyenne (jusqu'à 200 m)</td><td>−10</td></tr><tr><td>Longue (au-delà)</td><td>−20</td></tr></table><table><tr><td>Autres modificateurs</td><td></td></tr><tr><td>Viser (par action de visée)</td><td>+10, au plus +30</td></tr><tr><td>Cible derrière un couvert</td><td>−10 à −30</td></tr><tr><td>Cible En vol (apesanteur)</td><td>+10</td></tr><tr><td>Tir visé : torse / bras ou jambe / tête / visière</td><td>−10 / −20 / −30 / −40</td></tr></table><p><strong>Munitions</strong> : 1 par tir. <strong>Recharger</strong> : une action. Pas de rafale, pas de test de recul.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000011"
+    },
+    {
+      "_id": "PgKitFich0000012",
+      "name": "4. Esquiver (§7)",
+      "type": "text",
+      "sort": 1200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Après une <strong>attaque réussie</strong>, avant les dégâts, la cible peut esquiver : <strong>test opposé</strong> de son <strong>Esquive</strong> (ou de sa RÉF sans la compétence) contre l'attaque déjà lancée. Un seul réussit : il gagne. Les deux réussissent : DR, puis scores. Égalité parfaite ou deux échecs : <strong>pas de touche</strong>. Si l'attaque gagne, les dégâts gardent le DR de l'attaque. La réaction n'est dépensée que si le dé d'Esquive est lancé. Les drones et créatures n'esquivent pas ; un synthétique n'esquive que s'il a la compétence.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000012"
+    },
+    {
+      "_id": "PgKitFich0000013",
+      "name": "5. Localisation (§7)",
+      "type": "text",
+      "sort": 1300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Inverse les chiffres du dé d'attaque (37 → 73 ; 10 → 01 ; 00 = 100). Un tir visé touche la zone choisie.</p><table><tr><td>01–10</td><td>11–25</td><td>26–40</td><td>41–70</td><td>71–85</td><td>86–100</td></tr><tr><td>Tête</td><td>Bras droit</td><td>Bras gauche</td><td>Torse</td><td>Jambe droite</td><td>Jambe gauche</td></tr></table><p><em>Grave au bras : objet lâché (il dérive en apesanteur). Grave à la jambe : mouvement divisé par deux, impossible de s'élancer. Tête : critique = inconscience.</em></p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000013"
+    },
+    {
+      "_id": "PgKitFich0000014",
+      "name": "6. Dégâts et blessures (§7)",
+      "type": "text",
+      "sort": 1400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p><strong>Dégâts = valeur de l'arme + DR de l'attaque − armure de la zone.</strong> On n'ajoute pas la FOR. On compare au <strong>Seuil de blessure (SB)</strong> de la cible.</p><table><tr><td>Dégâts</td><td>Blessure</td><td>Effet</td></tr><tr><td>0 ou moins</td><td>aucune</td><td>secoué</td></tr><tr><td>moins que SB</td><td><strong>légère</strong></td><td>−10 aux actions qui utilisent la zone</td></tr><tr><td>SB à 2 SB − 1</td><td><strong>grave</strong></td><td>−20 ; Saignement (−1 Endurance par tour) jusqu'aux premiers secours ; test de VOL pour continuer à agir</td></tr><tr><td>2 SB à 3 SB − 1</td><td><strong>critique</strong></td><td>zone hors d'usage ; test de CON pour rester conscient ; tête ou torse : mort sans soins en quelques minutes</td></tr><tr><td>3 SB et plus</td><td><strong>mortelle</strong></td><td>mort immédiate ou en quelques tours</td></tr></table><p><strong>Brèche</strong> : si les <strong>dégâts bruts</strong> (avant armure) <strong>dépassent le seuil de brèche</strong> d'une combinaison pressurisée (souple 4, renforcée 8, armure de pont 12), elle est percée : <strong>5 minutes</strong> avant l'inconscience, mort 2 minutes plus tard. <strong>Rustine</strong> : une action ; sous le feu, test de Survie (Normal).</p><blockquote><p><em>Exemple complet : un garde tire au pistolet-mitrailleur (7) sur Kesi (SB 3, combinaison souple 1) et fait 32 sous 55 : 2 DR. Kesi esquive (60) et fait 71 : raté. On inverse 32 : 23, bras droit. Dégâts 7 + 2 − 1 = 8. 8 est entre 6 et 8 (2 SB à 3 SB − 1) : blessure critique, bras hors d'usage, test de CON. Les 9 dégâts bruts dépassent le seuil de brèche (4) : la combinaison est percée. Kesi a cinq minutes.</em></p></blockquote>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000014"
+    },
+    {
+      "_id": "PgKitFich0000015",
+      "name": "7. Soins (§7)",
+      "type": "text",
+      "sort": 1500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Premiers secours (une action) : arrête le Saignement, stabilise. Médecine : soigne une blessure grave ou critique (Difficile en apesanteur dans une coursive étroite). Chirurgie : seulement formé.</p><p>---</p><h1>Fiche 3 : Environnement et vaisseau</h1>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000015"
+    },
+    {
+      "_id": "PgKitFich0000016",
+      "name": "Le vide et la pression (§8)",
+      "type": "text",
+      "sort": 1600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><table><tr><td>Danger</td><td>Effet</td></tr><tr><td><strong>Fuite lente</strong></td><td>La pression baisse en minutes ou en heures ; l'hypoxie s'installe sans qu'on la sente (test de PER).</td></tr><tr><td><strong>Décompression rapide</strong></td><td>Tout ce qui n'est pas fixé est aspiré ; test de FOR ou de Manœuvre en apesanteur pour s'accrocher.</td></tr><tr><td><strong>Hypoxie</strong></td><td>Stade 1 : −10 ; stade 2 : −20 ; stade 3 : inconscience.</td></tr><tr><td><strong>Exposition au vide</strong></td><td>2 à 3 tours de conscience utile (test de VOL à chaque tour pour agir). Ne pas retenir son souffle : sinon blessure grave au torse. Le corps n'explose pas.</td></tr><tr><td><strong>Colmater</strong></td><td>Brèche de coque : test prolongé, 4 DR, 1 min par test (mousse et plaques : +10). Combinaison : rustine, une action.</td></tr></table>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000016"
+    },
+    {
+      "_id": "PgKitFich0000017",
+      "name": "Gravité et accélération (§8)",
+      "type": "text",
+      "sort": 1700000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><ul><li><strong>Apesanteur</strong> : on s'élance d'un appui, en ligne droite ; cible En vol : +10 pour la toucher ; s'ancrer (un mouvement) pour tirer correctement ; lutte = moyenne de FOR et ADA.</li><li><strong>Gravité inhabituelle</strong> : −10 (ou −20) aux tâches physiques hors de sa gravité natale.</li><li><strong>Accélération au-delà de la Tolérance aux g (TG)</strong> : −10 par g au-delà et un test de CON par minute (un échec fait perdre de l'Endurance). Au-delà de 6 g : couchette anti-g obligatoire.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000017"
+    },
+    {
+      "_id": "PgKitFich0000018",
+      "name": "Radiations (§8)",
+      "type": "text",
+      "sort": 1800000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><table><tr><td>Palier</td><td>Dose aiguë</td><td>Effet</td></tr><tr><td>Sain</td><td>moins de 250 mSv</td><td>aucun</td></tr><tr><td>Exposé</td><td>250 à 999 mSv</td><td>nausées, fatigue, −10 pendant quelques jours</td></tr><tr><td>Irradié</td><td>1 000 à 2 999 mSv</td><td>−20, test de CON contre les complications, soins nécessaires</td></tr><tr><td>Condamné</td><td>3 000 mSv et plus</td><td>mort probable en quelques semaines sans soins avancés ; au-delà de 6 000 mSv, mort quasi certaine</td></tr></table><p>Repères : habitat enfoui de Cérès, environ 0,4 mSv par mois ; éruption solaire sans abri, des dizaines à des milliers de mSv en quelques heures. <strong>Abri</strong> : derrière l'eau. <strong>Dose cumulée</strong> : à chaque tranche de 1 000 mSv cumulés sur la vie, le meneur choisit une séquelle (sans jet).</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000018"
+    },
+    {
+      "_id": "PgKitFich0000019",
+      "name": "Chaleur et froid (§8)",
+      "type": "text",
+      "sort": 1900000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Un vaisseau qui n'évacue plus sa chaleur devient un four : <strong>test de CON par heure</strong> (surchauffe). L'armure de pont aussi chauffe vite.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000019"
+    },
+    {
+      "_id": "PgKitFich0000020",
+      "name": "Le vaisseau : les postes (§7, « Le combat spatial »)",
+      "type": "text",
+      "sort": 2000000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p><em>Dans le scénario, le moment de vaisseau dure trois rounds à portée proche (Livret, Partie 4) : on n'y utilise ni Changer de portée ni missiles. La fiche de la Petite Fortune est à la fin des « Personnages prétirés ».</em></p><p><strong>Ordre du tour de vaisseau :</strong> Commandant → Opérateur → Navigateur → Pilote → Artilleur → Ingénieur → Médecin. Un poste par personnage. Poste vide : équipage PNJ (bleu 35, entraîné 50, vétéran 65, élite 80). <strong>Jets de poste non plafonnés.</strong></p><table><tr><td>Poste</td><td>Compétence</td><td>Action</td></tr><tr><td>Commandant</td><td>Commandement</td><td>Réussite : +10 à un poste pour ce tour. Valide les tirs létaux.</td></tr><tr><td>Opérateur</td><td>Opérations de bord</td><td>Verrouiller une cible : au-delà de la portée proche, tout tir subit −20 sauf sur elle. Contre-mesures.</td></tr><tr><td>Navigateur</td><td>Mécanique orbitale</td><td>Calculer : +10 à tous les jets du Pilote ce tour.</td></tr><tr><td>Pilote</td><td>Pilotage</td><td>Esquiver (tirs contre le vaisseau : −10 par DR, de −10 à −30) ou Changer de portée (test opposé, un cran).</td></tr><tr><td>Artilleur</td><td>Armement de bord</td><td>Tirer : dégâts = arme + DR. Tir visé : −20 section, −40 module.</td></tr><tr><td>Ingénieur</td><td>Réacteurs et propulsion, Mécanique</td><td>Pousser (+10 par DR au Pilote, au moins +10 ; +1 chaleur) ; réparation de fortune (Mécanique −20).</td></tr><tr><td>Médecin</td><td>Médecine</td><td>Soigne.</td></tr></table><p><strong>Portées</strong> : proche (moins de 1 000 km : lasers), moyenne (1 000 à 10 000 km : canon, missiles), lointaine (missiles).</p><p><strong>Dégâts de vaisseau</strong> : plaque de blindage de la section, puis module touché, puis Intégrité de la section. Critique (1D6) seulement quand une plaque, un module ou une section tombe à 0.</p><p><strong>Chaleur du réacteur (0 à 10)</strong> : +1 par Esquiver, Changer de portée ou tir de laser ; +1 par Pousser. Fin de round : −3 radiateurs intacts, −2 dégradés, −1 hors service ou repliés. <strong>À 7 et plus : −10 à tous les jets de poste.</strong> À 9 : plus de Pousser. À 10 : couper le réacteur ou laisser tourner.</p><p><strong>Traité d'Asimov</strong> : aucun greffier ne décide seul d'un tir létal ou de l'abandon d'un compartiment ; un humain identifié valide.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrFiches00000.PgKitFich0000020"
+    }
+  ],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "journal",
+      "kitId": "KitJrFiches00000"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

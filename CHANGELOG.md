@@ -1,5 +1,17 @@
 # Journal des versions
 
+## 1.1.0
+
+Branche `cursor/kit-joueur-110-13b2`, depuis `main` (`1b3559c`). Pas de Relecteur : aucun changement de DataModel, de jet ou de combat.
+
+Kit de démarrage « La Cale du quai 9 », limité à ce que les joueurs peuvent lire. Aucun livret, aucun guide du meneur, aucun plan MJ, aucun PNJ d'intrigue.
+
+- Compendium Acteurs « Kit — Prétirés » : Joachim Ferraz, Kesi Varga, Dr Inès Okafor-Lund, Tariq Benali, Anouk Sall, et Bosco. Équipement repris des catalogues existants.
+- Compendium Scènes « Kit — Plans » : cinq plans joueurs. Grille visuelle, les schémas du kit sont sans échelle.
+- Compendium Journaux « Kit — Pour les joueurs » : Introduction, Guide du joueur, Fiches de référence, aides A1 à A9, légendes des plans. Permission Observateur. Les lignes « Quand la donner » et les notes pour le meneur ont été retirées des aides.
+- Case « Importer le kit (joueurs) ». `KIT_GM_PACKS` est vide.
+- Runtime Foundry non exécuté.
+
 ## 1.0.3
 
 Branche `cursor/tg-dose-103-13b2`, depuis `main` (`3dff461`). Décision Didier, délégation v1 de Marc. Pas de Relecteur.

@@ -1,8 +1,8 @@
 {
   "id": "sol-nouvelle-ere",
   "title": "Sol, Nouvelle Ère",
-  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.0.3 : tolérance aux g avec l'origine, dose de départ.",
-  "version": "1.0.3",
+  "description": "Jeu de rôle de science-fiction réaliste (hard SF) dans le système solaire. 1.1.0 : kit de démarrage, documents et plans joueurs.",
+  "version": "1.1.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -234,6 +234,27 @@
       "path": "packs/machines",
       "type": "Actor",
       "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "kit-pregens",
+      "label": "Kit — Prétirés",
+      "path": "packs/kit-pregens",
+      "type": "Actor",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "kit-scenes",
+      "label": "Kit — Plans",
+      "path": "packs/kit-scenes",
+      "type": "Scene",
+      "system": "sol-nouvelle-ere"
+    },
+    {
+      "name": "kit-journals",
+      "label": "Kit — Pour les joueurs",
+      "path": "packs/kit-journals",
+      "type": "JournalEntry",
+      "system": "sol-nouvelle-ere"
     }
   ],
   "packFolders": [
@@ -278,6 +299,13 @@
       "sorting": "m",
       "color": "#4a5a6b",
       "packs": ["ships", "machines"],
+      "folders": []
+    },
+    {
+      "name": "Kit",
+      "sorting": "m",
+      "color": "#3d5a4c",
+      "packs": ["kit-pregens", "kit-scenes", "kit-journals"],
       "folders": []
     }
   ],

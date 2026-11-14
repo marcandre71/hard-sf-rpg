@@ -1,0 +1,587 @@
+{
+  "_id": "KitActAnouk00001",
+  "_key": "!actors!KitActAnouk00001",
+  "name": "Anouk Sall",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identity": {
+      "birthplace": "Habitat tournant Ndar, orbite lunaire [nom à valider par Marc]",
+      "gravityNative": 0.3,
+      "age": 31
+    },
+    "characteristics": {
+      "for": {
+        "base": 50,
+        "origin": -5,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 45,
+        "origin": -5,
+        "advance": 0,
+        "temp": 0
+      },
+      "coo": {
+        "base": 50,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ref": {
+        "base": 50,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ada": {
+        "base": 35,
+        "origin": 10,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 40,
+        "origin": 5,
+        "advance": 0,
+        "temp": 0
+      },
+      "int": {
+        "base": 25,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "vol": {
+        "base": 35,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "pre": {
+        "base": 25,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "radiation": {
+      "starting": 150,
+      "acute": null
+    },
+    "biography": "<!-- Kit de démarrage, partie joueur de la fiche. --><p>: qui suis-je ?</p><p><strong>Portrait.</strong> Athlétique, cicatrice au menton, cheveux courts, une veste de pont usée par-dessus sa combinaison. Elle parle bas, se place toujours dos à une cloison et regarde les mains des gens avant leur visage.</p><p><strong>Personnalité.</strong> Protectrice, directe, sarcastique, allergique à l'autorité. Elle a vu ce que la sécurité privée fait quand personne ne regarde, et elle s'est juré de ne plus jamais obéir sans comprendre.</p><p><strong>Motivation</strong> (pourquoi je suis dans l'espace). Envoyer assez d'argent à sa famille restée à Saint-Louis, au Sénégal, pour qu'elle puisse quitter la côte.</p><p><strong>Complication</strong> (ce qui peut tout faire basculer). Le Kombinat considère qu'elle a rompu son contrat avec la Garde d'Hélion. Quelqu'un, quelque part, a encore son dossier.</p><p><strong>Lien</strong> (milieu). Une communauté restée sur Terre : des cousins, des tantes, un village qui attend ses virements.</p><p><strong>Réseau</strong> (profession). [à valider par Marc : la Liste des professions ne donne pas de réseau pour « Garde ou soldat »] Proposition : anciens de la sécurité privée et gardes de quai.</p><p><strong>Mes liens avec les autres personnages</strong></p><ul><li><strong>Tariq Benali</strong> : son voisin de couchette, le seul à qui elle parle de sa famille.</li><li><strong>Kesi Varga</strong> : une amie de bar et de bagarre. Elle lui fait confiance pour la sortir de n'importe quel pétrin, en vaisseau.</li><li><strong>Dr Inès Okafor-Lund</strong> : la médecin qui lui a recousu l'arcade sans poser de questions.</li><li><strong>Joachim Ferraz</strong> : un inspecteur. Elle s'en méfie par principe, mais il paie ses verres.</li></ul><p><strong>Mon accroche pour ce scénario.</strong> Son cousin Moussa a quitté la Terre il y a huit mois, avec un « contrat d'étude, voyage payé ». Son dernier message venait d'un habitat de transit de la Ceinture, il y a quatre mois. Depuis, rien. Et Anouk a reconnu, hier, aux Quais gris, une silhouette : Dagny Holm, son ancienne sergente de la Garde d'Hélion.</p><p><strong>Conseil de jeu.</strong> Tu es la meilleure combattante de la table : vise juste, choisis ta portée, garde ta réaction pour l'Esquive. Mais tu n'es pas une brute : tu protèges. Chaque combat est un échec que tu n'as pas su éviter.</p>"
+  },
+  "items": [
+    {
+      "name": "Habitat tournant (station)",
+      "type": "origin",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "characteristicModifiers": "ADA +10, PER +5, FOR -5, CON -5",
+        "gToleranceModifier": -1,
+        "trait": "Réflexes de sécurité : +10 pour détecter une fuite ou une anomalie de pression.",
+        "description": "<p>0,3 à 0,7 g</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000001",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000001"
+    },
+    {
+      "name": "Réfugié climatique",
+      "type": "background",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "skillBonuses": "Survie, Tromperie, Athlétisme",
+        "link": "une communauté restée sur Terre",
+        "description": "<p>3 compétences à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000002",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000002"
+    },
+    {
+      "name": "Garde ou soldat",
+      "type": "profession",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "careerSkills": "Armes d'épaule, Armes de poing, Corps-à-corps, Esquive, Manœuvre en apesanteur, Vigilance, Premiers secours, Commandement",
+        "description": "<p>3 à +20, 5 à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000003",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000003"
+    },
+    {
+      "name": "Armes d'épaule",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>carabines, fusils, lanceurs, outils détournés à deux mains.</p>",
+        "characteristic": "coo",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000004",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000004"
+    },
+    {
+      "name": "Armes de poing",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
+        "characteristic": "coo",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000005",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000005"
+    },
+    {
+      "name": "Athlétisme",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>courir, grimper, sauter, nager.</p>",
+        "characteristic": "for",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000006",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000006"
+    },
+    {
+      "name": "Commandement",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>diriger une équipe en situation de crise.</p>",
+        "characteristic": "pre",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000007",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000007"
+    },
+    {
+      "name": "Corps-à-corps",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>lutte, armes blanches, outils improvisés. En apesanteur, la lutte utilise la moyenne de FOR et ADA (section 7).</p>",
+        "characteristic": "for",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000008",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000008"
+    },
+    {
+      "name": "Discrétion",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se cacher, se déplacer sans bruit, passer inaperçu.</p>",
+        "characteristic": "coo",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000009",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000009"
+    },
+    {
+      "name": "Esquive",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
+        "characteristic": "ref",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000010",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000010"
+    },
+    {
+      "name": "Intimidation",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>faire pression, menacer, imposer.</p>",
+        "characteristic": "vol",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000011",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000011"
+    },
+    {
+      "name": "Manœuvre en apesanteur",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
+        "characteristic": "ada",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000012",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000012"
+    },
+    {
+      "name": "Premiers secours",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>stabiliser, poser un garrot, traiter une décompression.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "sciences",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000013",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000013"
+    },
+    {
+      "name": "Survie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>environnements planétaires extrêmes (Titan, surface martienne, glaces). Un futur Atout permettra d'utiliser CON à la place d'INT, au choix du joueur.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000014",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000014"
+    },
+    {
+      "name": "Tromperie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>mentir, bluffer, se déguiser, se faire passer pour un autre.</p>",
+        "characteristic": "pre",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000015",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000015"
+    },
+    {
+      "name": "Vigilance",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
+        "characteristic": "per",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000016",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000016"
+    },
+    {
+      "name": "Combinaison souple",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
+        "airReserve": {
+          "value": 8,
+          "max": 8
+        },
+        "sealState": "intact",
+        "penalty": {
+          "manipulation": -10,
+          "perception": -10
+        },
+        "dosimeter": true,
+        "radio": true,
+        "mass": 6.5,
+        "enc": 1,
+        "protection": {
+          "head": 1,
+          "torso": 1,
+          "rightArm": 1,
+          "leftArm": 1,
+          "rightLeg": 1,
+          "leftLeg": 1
+        },
+        "pressurized": true,
+        "breachThreshold": 4,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000017",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000017"
+    },
+    {
+      "name": "Gilet balistique de sécurité (veste de pont)",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armures v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Porté sous ou sur les vêtements dans les habitats agités (Ganymède, Tharsis) ; aucune étanchéité au vide.</p>",
+        "protection": {
+          "head": 0,
+          "torso": 3,
+          "rightArm": 1,
+          "leftArm": 1,
+          "rightLeg": 0,
+          "leftLeg": 0
+        },
+        "pressurized": false,
+        "breachThreshold": null,
+        "airReserve": {
+          "value": 0,
+          "max": 0
+        },
+        "penalty": {
+          "manipulation": 0,
+          "perception": 0
+        },
+        "dosimeter": false,
+        "radio": false,
+        "mass": 2.8,
+        "enc": 1,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000018",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000018"
+    },
+    {
+      "name": "Pistolet de bord 9 mm basse vélocité",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §2. Décision Marc 30/10/2026 -->\n<p>15 / 35 / 70 m. Dotation standard des officiers de marine marchande, des rades et des syndics de la Mutuelle.</p>",
+        "skill": "Armes de poing",
+        "damage": 6,
+        "range": "short",
+        "recoil": true,
+        "ammo": {
+          "value": 15,
+          "max": 15
+        },
+        "ammoType": "frangible",
+        "burst": false,
+        "hullSafe": true,
+        "mass": 0.9,
+        "enc": 0.5,
+        "melee": false,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000019",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000019"
+    },
+    {
+      "name": "Matraque télescopique à inertie",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>Lestée de grenaille interne amortissant le rebond en apesanteur ; arme des prévôts de station.</p>",
+        "skill": "Corps-à-corps",
+        "damage": 5,
+        "range": "short",
+        "recoil": false,
+        "ammo": {
+          "value": 0,
+          "max": 0
+        },
+        "ammoType": "none",
+        "burst": false,
+        "hullSafe": true,
+        "mass": 0.7,
+        "enc": 0.5,
+        "melee": true,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000020",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000020"
+    },
+    {
+      "name": "Mains nues, gantelets et bottes magnétiques",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
+        "skill": "Corps-à-corps",
+        "damage": 2,
+        "range": "short",
+        "recoil": false,
+        "ammo": {
+          "value": 0,
+          "max": 0
+        },
+        "ammoType": "none",
+        "burst": false,
+        "hullSafe": true,
+        "mass": 0,
+        "enc": 0,
+        "melee": true,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000021",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000021"
+    },
+    {
+      "name": "Trousse de premiers secours de coursive",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Premiers secours ; indispensable pour éviter le −20 sans matériel. Pansements compressifs, colle dermique et garrots conçus pour l'apesanteur.</p>",
+        "mass": 1.5,
+        "enc": 0.5,
+        "quantity": 1,
+        "reserve": {
+          "type": "doses",
+          "value": 5,
+          "max": 5
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000022",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000022"
+    },
+    {
+      "name": "Rustine",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
+        "mass": 0.2,
+        "enc": 0,
+        "quantity": 3,
+        "reserve": {
+          "type": "",
+          "value": 0,
+          "max": 0
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000023",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000023"
+    },
+    {
+      "name": "Dosimètre actif de poignet",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
+        "mass": 0.1,
+        "enc": 0,
+        "quantity": 1,
+        "reserve": {
+          "type": "energy",
+          "value": 8760,
+          "max": 8760
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000024",
+      "_key": "!actors.items!KitActAnouk00001.KitItem000000024"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "pregen",
+      "kitId": "KitActAnouk00001"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

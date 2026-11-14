@@ -1,0 +1,158 @@
+{
+  "_id": "KitJrIntro000000",
+  "_key": "!journal!KitJrIntro000000",
+  "name": "Introduction à l'univers",
+  "pages": [
+    {
+      "_id": "PgKitIntr0000001",
+      "name": "Sol, Nouvelle Ère — Introduction à l'univers",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><h1>Sol, Nouvelle Ère — Introduction à l'univers</h1><p><em>Kit de démarrage v0.1 — pour les joueurs. Ce document ne contient aucun secret : vous pouvez le lire avant la première partie. Il raconte ce que sait une personne ordinaire en 2187.</em></p><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000001"
+    },
+    {
+      "_id": "PgKitIntr0000002",
+      "name": "Le jour où le ciel a failli tuer le monde",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Le 3 août 1979, un astéroïde d'une soixantaine de mètres explose au-dessus de la péninsule de Iamal, en Sibérie. Une base radar et une ville sont soufflées ; les capteurs soviétiques croient à une frappe nucléaire américaine. Pendant trente-sept minutes, le monde est au bord de la guerre. Un officier, le colonel Anatoli Sereguine, refuse de transmettre l'alerte. La guerre n'a pas lieu.</p><p>De cette peur naît une idée : <strong>le ciel peut tuer, et il faut le surveiller.</strong> En 1981, le Traité de Genève crée l'<strong>Office international de la Veille</strong>. Les grandes puissances partagent leurs radars, développent tôt la propulsion nucléaire pour dévier les astéroïdes, et ne s'arrêtent jamais d'aller dans l'espace. Le traité pose aussi le <strong>principe Sereguine</strong> : aucune machine ne décide seule d'employer une charge nucléaire ou de dévier une masse. Un humain identifié doit trancher.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000002"
+    },
+    {
+      "_id": "PgKitIntr0000003",
+      "name": "Deux siècles plus tard",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Nous sommes en <strong>2187</strong>. Neuf milliards d'humains vivent sur Terre, sept millions sur Mars, quelques millions dans la Ceinture d'astéroïdes et sur les lunes de Jupiter et de Saturne. La Terre n'est pas unifiée : ses nations et ses blocs ont emporté leurs rivalités dans l'espace.</p><p><strong>Les dates que tout le monde connaît :</strong></p><table><tr><td>Date</td><td>Événement</td></tr><tr><td>1979</td><td>L'Éclair de Iamal ; les trente-sept minutes du colonel Sereguine.</td></tr><tr><td>1981</td><td>Traité de Genève : naissance de l'Office de la Veille.</td></tr><tr><td>2004</td><td>Base lunaire permanente à Shackleton.</td></tr><tr><td>2029</td><td>Premiers humains sur Mars.</td></tr><tr><td>2077 et 2078</td><td>Une IA de défense manque de déclencher une guerre nucléaire. Le <strong>Traité d'Asimov</strong> grave les Lois d'Asimov dans le silicium : les IA, les « greffiers », sont bridées, et toute décision létale doit être validée par un humain.</td></tr><tr><td>2081</td><td>Fondation de la colonie de Cérès, pour son eau.</td></tr><tr><td>2094</td><td>Catastrophe de Pallas : 212 morts faute de secours. Naissance de la Mutuelle, ancêtre du Consortium de la Ceinture.</td></tr><tr><td>2109</td><td>Premier vaisseau à fusion pulsée : Jupiter à trois mois.</td></tr><tr><td>2161 et 2166</td><td>Crise du Remorqueur Ondine, grève générale de la Ceinture, puis Convention de Vesta : la Ceinture obtient une autonomie partielle.</td></tr><tr><td>2186</td><td>Découverte de la comète Sereguine, qui frôlera Jupiter en 2189. L'Office la dit ordinaire, belle et inoffensive.</td></tr></table>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000003"
+    },
+    {
+      "_id": "PgKitIntr0000004",
+      "name": "Les puissances du système",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><ul><li><strong>L'Office de la Veille (« l'Office »).</strong> Agence publique installée à Shackleton, sur la Lune. Ses inspecteurs surveillent le ciel et contrôlent les grandes masses en mouvement : tout ce qui peut dévier un astéroïde peut en lancer un, et chaque remorqueur minier est une arme potentielle. Les colonies y voient une tutelle.</li><li><strong>Mars</strong> est divisée. Le <strong>Compact d'Hellas</strong>, république technocratique de la plupart des cités martiennes, veut l'indépendance par l'eau et le travail acharné. Le <strong>Directoire de Tharsis</strong>, oligarchie de mégacorporations, la veut par la technologie et l'argent. Leur guerre froide se joue dans l'ombre, car un affrontement ouvert percerait les dômes des deux camps.</li><li><strong>Le Consortium de la Ceinture.</strong> Né de la Mutuelle des prospecteurs, il est devenu le quasi-gouvernement de la Ceinture : démocratique en façade, puissant, pas toujours propre. On y achète des « parts de risque » ; on y doit beaucoup.</li><li><strong>Le Kombinat Hélion</strong> vend l'hélium 3, le carburant de la fusion, et le crédit qui va avec. Sa « sécurité privée », la Garde d'Hélion, est la plus grande flotte non étatique du système.</li><li><strong>Le Collège de Valhalla</strong>, sur Callisto, est une république de savants qui vote ses priorités de recherche comme d'autres votent un budget. Sa médecine et sa science sont les meilleures du système ; on dit qu'il place le Progrès avant tout le reste.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000004"
+    },
+    {
+      "_id": "PgKitIntr0000005",
+      "name": "Vivre dans l'espace",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><ul><li><strong>La lumière est lente.</strong> Un message met de 13 à 30 minutes entre Cérès et la Terre, jusqu'à une heure et demie pour Saturne. Personne ne peut commander en temps réel : chaque capitaine, chaque juge, chaque médecin décide seul.</li><li><strong>Le vide ne pardonne pas.</strong> Une fuite de deux millimètres vide un compartiment en quelques heures. La combinaison est l'objet le plus précieux de votre vie.</li><li><strong>Le Soleil tue.</strong> Les radiations s'accumulent toute la vie. Un dosimètre ne quitte pas un spatial. Quand l'Office annonce une éruption solaire, on court aux abris, entre les réservoirs d'eau.</li><li><strong>Le corps se souvient.</strong> Les enfants nés en faible gravité, les « légers », ne peuvent pas visiter la Terre sans exosquelette. Les « lourds » de la Terre vont partout. Cette injustice physique nourrit bien des colères.</li><li><strong>Les machines obéissent, mais ne décident pas.</strong> Les greffiers aident, calculent, préviennent. Devant une décision de vie ou de mort, ils s'arrêtent et demandent un humain.</li><li><strong>Le temps.</strong> Chaque monde a son calendrier ; on se cale sur le Temps Universel de l'Office, et on vit en quarts.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000005"
+    },
+    {
+      "_id": "PgKitIntr0000006",
+      "name": "Cérès, le Comptoir",
+      "type": "text",
+      "sort": 600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Votre histoire commence sur la plus grande planète naine de la Ceinture : 940 km de glace, de roche et de sels. On y pèse trois centièmes de son poids terrien ; on vit dans des cylindres tournants, enfouis, où l'on retrouve entre 0,3 et 0,5 g. Cérès vend l'eau, l'azote et la masse de réaction à tout le système. C'est une <strong>zone franche</strong>, gouvernée de fait par le Consortium, où tout s'achète. En orbite, la <strong>Rade</strong> accueille les cargos ; dans la <strong>section grise</strong>, les contrôles s'arrêtent, les pensions sont bon marché et personne ne pose de questions.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000006"
+    },
+    {
+      "_id": "PgKitIntr0000007",
+      "name": "Ce que vous êtes",
+      "type": "text",
+      "sort": 700000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Vous êtes des gens ordinaires dans un monde dangereux : une pilote de la Ceinture, un ingénieur martien, une médecin de Callisto, un inspecteur de l'Office, une ancienne fusilière. Vous n'êtes pas des héros. Vous êtes ceux qui sont là quand il faut décider.</p><blockquote><p><em>L'humanité ne change jamais vraiment. Elle a emporté dans l'espace ses peurs et ses vices. Mais elle survit, grâce à ceux qui, un jour, refusent de répéter l'erreur.</em></p></blockquote>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrIntro000000.PgKitIntr0000007"
+    }
+  ],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "journal",
+      "kitId": "KitJrIntro000000"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

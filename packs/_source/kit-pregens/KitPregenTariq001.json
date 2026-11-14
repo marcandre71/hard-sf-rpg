@@ -1,0 +1,530 @@
+{
+  "_id": "KitActTariq00001",
+  "_key": "!actors!KitActTariq00001",
+  "name": "Tariq Benali",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identity": {
+      "birthplace": "Hellas-Centrale (Mars, Compact d'Hellas)",
+      "gravityNative": 0.38,
+      "age": 33
+    },
+    "characteristics": {
+      "for": {
+        "base": 45,
+        "origin": -5,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 45,
+        "origin": 5,
+        "advance": 0,
+        "temp": 0
+      },
+      "coo": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ref": {
+        "base": 30,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ada": {
+        "base": 35,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 40,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "int": {
+        "base": 55,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "vol": {
+        "base": 35,
+        "origin": 5,
+        "advance": 0,
+        "temp": 0
+      },
+      "pre": {
+        "base": 25,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "radiation": {
+      "starting": 260,
+      "acute": null
+    },
+    "biography": "<!-- Kit de démarrage, partie joueur de la fiche. --><p>: qui suis-je ?</p><p><strong>Portrait.</strong> Carré pour un Martien, mains couvertes de petites brûlures de soudure, moustache soignée, un chapelet de prière en vis de titane autour du poignet, un tournevis magnétique derrière l'oreille.</p><p><strong>Personnalité.</strong> Calme, ironique, pieux, économe jusqu'à l'obsession : sur Mars, on ne gaspille ni l'eau ni l'air. Il cherche encore, avec ses amis, comment trouver la direction de la prière depuis la Ceinture.</p><p><strong>Motivation</strong> (pourquoi je suis dans l'espace). Rembourser son contrat et rentrer à Hellas avant que ses enfants l'oublient.</p><p><strong>Complication</strong> (ce qui peut tout faire basculer). Il n'a pas fini de rembourser son contrat de cinq ans avec Rade-Services, une filiale du Kombinat. Un licenciement lui ferait perdre son logement et son air.</p><p><strong>Lien</strong> (milieu). Un contrat pas encore remboursé : 31 mois restent à payer.</p><p><strong>Réseau</strong> (profession). Ateliers de Vesta et mécaniciens de rade : une pièce introuvable, un plan, un collègue qui ouvre un panneau.</p><p><strong>Mes liens avec les autres personnages</strong></p><ul><li><strong>Kesi Varga</strong> : il entretient la Petite Fortune en extra. Elle le paie en retard ; il lui pardonne toujours.</li><li><strong>Anouk Sall</strong> : sa voisine de couchette à La Bouée. Ils partagent le thé et les nouvelles de la Terre et de Mars.</li><li><strong>Joachim Ferraz</strong> : le rapport de l'inspecteur a fait fermer un atelier mortel où Tariq travaillait. Il lui doit la vie, et son ancien poste.</li><li><strong>Dr Inès Okafor-Lund</strong> : il a réparé son caisson, elle soigne ses brûlures.</li></ul><p><strong>Mon accroche pour ce scénario.</strong> Au dernier quart, il a révisé les recycleurs d'air du cargo amarré au quai 9. La consommation d'oxygène correspondait à deux cents personnes, pas à un équipage de quatre. Un homme du Notaire lui a glissé une prime pour qu'il oublie. Il l'a prise.</p><p><strong>Conseil de jeu.</strong> Tu répares tout, et tu comprends avant les autres ce que disent les machines : une pression qui baisse, un radiateur replié, un recycleur saturé. Ta prime cachée est un poids : à toi de choisir quand la révéler.</p>"
+  },
+  "items": [
+    {
+      "name": "Mars",
+      "type": "origin",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "characteristicModifiers": "CON +5, VOL +5, FOR -5",
+        "gToleranceModifier": -1,
+        "trait": "Ne visite la Terre qu'avec aide médicale. Sens de la rareté : +10 en Systèmes de survie pour économiser l'eau et l'air.",
+        "description": "<p>0,38 g</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000101",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000101"
+    },
+    {
+      "name": "Ouvrier sous contrat",
+      "type": "background",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "skillBonuses": "Mécanique, Systèmes de survie, Corps-à-corps",
+        "link": "un contrat pas encore remboursé",
+        "description": "<p>3 compétences à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000102",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000102"
+    },
+    {
+      "name": "Ingénieur",
+      "type": "profession",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "careerSkills": "Mécanique, Électronique, Réacteurs et propulsion, Systèmes de survie, Sortie extravéhiculaire, Informatique, Robotique et télépilotage, Fouille",
+        "description": "<p>3 à +20, 5 à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000103",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000103"
+    },
+    {
+      "name": "Armes de poing",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>pistolets, pistolets à fléchettes, électrochocs, outils détournés à une main.</p>",
+        "characteristic": "coo",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000104",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000104"
+    },
+    {
+      "name": "Corps-à-corps",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>lutte, armes blanches, outils improvisés. En apesanteur, la lutte utilise la moyenne de FOR et ADA (section 7).</p>",
+        "characteristic": "for",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000105",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000105"
+    },
+    {
+      "name": "Esquive",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
+        "characteristic": "ref",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000106",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000106"
+    },
+    {
+      "name": "Fouille",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>chercher méthodiquement un objet, une fuite, une preuve.</p>",
+        "characteristic": "per",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000107",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000107"
+    },
+    {
+      "name": "Informatique",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>programmation, intrusion, gestion des greffiers (systèmes spécialisés).</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000108",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000108"
+    },
+    {
+      "name": "Mécanique",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>machines, structures, pressurisation.</p>",
+        "characteristic": "int",
+        "training": 40,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000109",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000109"
+    },
+    {
+      "name": "Robotique et télépilotage",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>drones, bras robotiques, robots de chantier.</p>",
+        "characteristic": "coo",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000110",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000110"
+    },
+    {
+      "name": "Réacteurs et propulsion : microréacteurs à fission",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>fission, fusion, moteurs. Dangereux à rater. Spécialités : microréacteurs à fission ; nucléaire thermique ; fusion pulsée (fournaise) ; propulsion électrique à plasma.</p>",
+        "characteristic": "int",
+        "training": 20,
+        "trainingRequired": true,
+        "perSpecialty": true,
+        "domain": "technique",
+        "untrainedAllowed": true,
+        "specialty": "microréacteurs à fission"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000111",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000111"
+    },
+    {
+      "name": "Sortie extravéhiculaire",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>travail en combinaison dans le vide, réservoirs, filins, propulseurs dorsaux.</p>",
+        "characteristic": "ada",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000112",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000112"
+    },
+    {
+      "name": "Systèmes de survie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>air, eau, recyclage, contrôle thermique.</p>",
+        "characteristic": "int",
+        "training": 30,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000113",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000113"
+    },
+    {
+      "name": "Électronique",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>circuits, capteurs, réparation de matériel, serrures et verrous électroniques.</p>",
+        "characteristic": "int",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000114",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000114"
+    },
+    {
+      "name": "Combinaison souple",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
+        "airReserve": {
+          "value": 8,
+          "max": 8
+        },
+        "sealState": "intact",
+        "penalty": {
+          "manipulation": -10,
+          "perception": -10
+        },
+        "dosimeter": true,
+        "radio": true,
+        "mass": 6.5,
+        "enc": 1,
+        "protection": {
+          "head": 1,
+          "torso": 1,
+          "rightArm": 1,
+          "leftArm": 1,
+          "rightLeg": 1,
+          "leftLeg": 1
+        },
+        "pressurized": true,
+        "breachThreshold": 4,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000115",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000115"
+    },
+    {
+      "name": "Pistolet à rivets lourd",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §4. Décision Marc 30/10/2026 -->\n<p>5 / 15 / 25 m, 20 rivets. Outil de chantier naval dont la sécurité de pression a été pontée. Recul notable ; dangereux pour les hublots et cloisons à moins de 5 m.</p>",
+        "skill": "Armes de poing",
+        "damage": 8,
+        "range": "short",
+        "recoil": true,
+        "ammo": {
+          "value": 20,
+          "max": 20
+        },
+        "ammoType": "piercing",
+        "burst": false,
+        "hullSafe": false,
+        "mass": 2.5,
+        "enc": 1,
+        "melee": false,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000116",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000116"
+    },
+    {
+      "name": "Mains nues, gantelets et bottes magnétiques",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
+        "skill": "Corps-à-corps",
+        "damage": 2,
+        "range": "short",
+        "recoil": false,
+        "ammo": {
+          "value": 0,
+          "max": 0
+        },
+        "ammoType": "none",
+        "burst": false,
+        "hullSafe": true,
+        "mass": 0,
+        "enc": 0,
+        "melee": true,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000117",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000117"
+    },
+    {
+      "name": "Kit d'ingénieur de qualité (ateliers de Vesta)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Mécanique, Réacteurs et propulsion, Systèmes de survie. Réserve 20 h. Outillage calibré de haute précision avec analyseur acoustique de contraintes (modèle d'Ilka Moravec).</p>",
+        "mass": 5.5,
+        "enc": 1.5,
+        "quantity": 1,
+        "reserve": {
+          "type": "energy",
+          "value": 20,
+          "max": 20
+        },
+        "toolBonus": 10
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000118",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000118"
+    },
+    {
+      "name": "Tablette durcie d'ingénieur",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Support pour greffiers et télépilotage de drones. Châssis antichoc blindé contre les radiations (fiche d'Ilka Moravec). Héberge jusqu'à 4 logiciels ou greffiers.</p>",
+        "mass": 0.8,
+        "enc": 0.5,
+        "quantity": 1,
+        "reserve": {
+          "type": "energy",
+          "value": 48,
+          "max": 48
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000119",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000119"
+    },
+    {
+      "name": "Greffier de diagnostic « Vulcain »",
+      "type": "software",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi sur vaisseau. +10 d'Aide aux diagnostics de panne et aux tests prolongés de réparation. Croise en temps réel pressions, vibrations et historiques d'usure. Ne peut pas couper le réacteur en combat sans validation de l'Ingénieur.</p>",
+        "category": "greffier",
+        "host": "tablet",
+        "assistedSkill": "Mécanique, Électronique, Réacteurs et propulsion",
+        "skillBonus": 10,
+        "autonomousScore": 45,
+        "sereguineLock": true,
+        "legality": "légal"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000120",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000120"
+    },
+    {
+      "name": "Rustine",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
+        "mass": 0.2,
+        "enc": 0,
+        "quantity": 3,
+        "reserve": {
+          "type": "",
+          "value": 0,
+          "max": 0
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000121",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000121"
+    },
+    {
+      "name": "Dosimètre actif de poignet",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
+        "mass": 0.1,
+        "enc": 0,
+        "quantity": 1,
+        "reserve": {
+          "type": "energy",
+          "value": 8760,
+          "max": 8760
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000122",
+      "_key": "!actors.items!KitActTariq00001.KitItem000000122"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "pregen",
+      "kitId": "KitActTariq00001"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

@@ -29,6 +29,7 @@ import { registerEndurance } from "./dice/endurance.mjs";
 import { registerItemGuard } from "./guards.mjs";
 import { registerNpcReadyMigration } from "./npc-ready-migration.mjs";
 import { registerTestScene } from "./test-scene-foundry.mjs";
+import { registerKitImport } from "./kit-import.mjs";
 import { GenericActorSheet } from "./sheets/actor-sheet.mjs";
 import { CharacterSheet } from "./sheets/character-sheet.mjs";
 import { GenericItemSheet } from "./sheets/item-sheet.mjs";
@@ -173,6 +174,7 @@ function initializeSystem() {
   registerItemGuard();
   registerNpcReadyMigration(SYSTEM_ID);
   registerTestScene(SYSTEM_ID);
+  registerKitImport(SYSTEM_ID);
   registerDamage();
   registerEsquive();
   registerEndurance();

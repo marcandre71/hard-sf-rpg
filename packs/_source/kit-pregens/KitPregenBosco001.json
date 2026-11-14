@@ -1,0 +1,177 @@
+{
+  "_id": "KitActBosco00001",
+  "_key": "!actors!KitActBosco00001",
+  "name": "Bosco",
+  "type": "synthetic",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "characteristics": {
+      "for": {
+        "base": 40,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 40,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 40,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "biography": "<p>Robot de maintenance à quatre bras, propriété de la famille Varga. Il parle peu. Face à une décision létale, il s'arrête et demande une validation humaine. Fiche optionnelle du kit, marquée à valider : le livre ne fixe pas la création d'un synthétique. FOR, CON et PER sont à 40, comme l'exemple déjà utilisé pour un synthétique d'essai.</p>"
+  },
+  "items": [
+    {
+      "name": "Esquive",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se jeter à couvert, éviter un coup ou un débris.</p>",
+        "characteristic": "ref",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000025",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000025"
+    },
+    {
+      "name": "Vigilance",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
+        "characteristic": "per",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000026",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000026"
+    },
+    {
+      "name": "Fouille",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>chercher méthodiquement un objet, une fuite, une preuve.</p>",
+        "characteristic": "per",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000027",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000027"
+    },
+    {
+      "name": "Mécanique",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>machines, structures, pressurisation.</p>",
+        "characteristic": "int",
+        "training": 40,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000028",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000028"
+    },
+    {
+      "name": "Systèmes de survie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>air, eau, recyclage, contrôle thermique.</p>",
+        "characteristic": "int",
+        "training": 40,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000029",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000029"
+    },
+    {
+      "name": "Sortie extravéhiculaire",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>travail en combinaison dans le vide, réservoirs, filins, propulseurs dorsaux.</p>",
+        "characteristic": "ada",
+        "training": 30,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000030",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000030"
+    },
+    {
+      "name": "Corps-à-corps",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>lutte, armes blanches, outils improvisés. En apesanteur, la lutte utilise la moyenne de FOR et ADA (section 7).</p>",
+        "characteristic": "for",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "combat",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000031",
+      "_key": "!actors.items!KitActBosco00001.KitItem000000031"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "pregen",
+      "kitId": "KitActBosco00001"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

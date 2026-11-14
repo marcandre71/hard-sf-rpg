@@ -1,0 +1,41 @@
+{
+  "_id": "KitScFortun00000",
+  "_key": "!scenes!KitScFortun00000",
+  "name": "La Petite Fortune",
+  "width": 2400,
+  "height": 2407,
+  "padding": 0,
+  "backgroundColor": "#0c1117",
+  "navigation": true,
+  "navName": "La Petite Fortune",
+  "tokenVision": false,
+  "background": {
+    "src": "systems/sol-nouvelle-ere/assets/kit/05-fortune.webp"
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "distance": 1,
+    "units": "m",
+    "color": "#8fa0ae",
+    "alpha": 0.35
+  },
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "scene",
+      "kitId": "KitScFortun00000",
+      "note": "Un seul plan, indiqué comme montrable aux joueurs. Schéma sans échelle."
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

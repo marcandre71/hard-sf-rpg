@@ -189,6 +189,13 @@
       "enduranceHint": "Valeur actuelle. Si elle est vide, elle est remplie au maximum (CON/5, arrondi au supérieur). Un 0 déjà écrit reste 0.",
       "enduranceMax": "Endurance maximale (CON/5)"
     },
+    "Kit": {
+      "import": "Importer le kit (joueurs)",
+      "importHint": "Cochez, puis enregistrez. Le MJ actif importe les prétirés, les plans joueurs et les documents joueurs. Un document déjà importé n'est pas recopié. Aucun document de meneur.",
+      "done": "Kit importé : {count} document(s) nouveau(x).",
+      "failed": "L'import du kit a échoué.",
+      "missingPack": "Compendium {pack} absent : cette partie du kit n'est pas importée."
+    },
     "Derived": {
       "gTolerance": "Tolérance aux g"
     },

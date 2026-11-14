@@ -12,7 +12,7 @@ const factions = docs.find(entry => entry.name === "Factions");
 const glossary = docs.find(entry => entry.name === "Glossaire");
 const system = JSON.parse(readFileSync(new URL("../system.json", import.meta.url), "utf8"));
 
-assert.equal(system.version, "1.0.3");
+assert.equal(system.version, "1.1.0");
 assert.equal(factions.pages.length, 6);
 const names = factions.pages.map(page => page.name);
 assert.deepEqual(names, [

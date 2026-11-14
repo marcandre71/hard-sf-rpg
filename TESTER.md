@@ -539,7 +539,7 @@ Cette section est pour la séance de test de la v1. Prenez le ZIP de `main`. Ouv
    https://github.com/marcandre71/hard-sf-rpg/archive/refs/heads/main.zip
 
    Le dossier décompressé s'appelle `hard-sf-rpg-main`. Renommez-le `sol-nouvelle-ere`. Fermez Foundry avant de remplacer `Data/systems/sol-nouvelle-ere`.
-   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.0.3**.
+   **Résultat attendu :** l'onglet Systèmes de jeu affiche **1.1.0**.
 2. Créez un monde vide, ou ouvrez-en un, connecté comme MJ. Attendez la fin du chargement.
    **Résultat attendu :** la scène active s'appelle **Scène de test**. Le fond est une couleur unie, avec une grille. Il n'y a pas d'image téléchargée. Six pions sont posés : **Humain d'essai**, **Synthétique d'essai**, **Adversaire d'essai**, **Crabe**, **Petite Fortune**, **Patrouilleur de la Veille**.
 3. Ouvrez les fiches.
@@ -574,4 +574,21 @@ Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, 
 6. Effacez les deux cases.
    **Résultat attendu :** le cumul revient à **0**, palier **Sain**. Une fiche ancienne, qui n'avait pas ces cases, n'est pas forcée à 50.
 7. Console (**F12**).
+   **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.
+
+## 27. 1.1.0 Kit joueurs
+
+Cette section est pour la séance de test de la v1. Le ZIP est celui de `main`, version **1.1.0**. Le kit public ne contient que ce que les joueurs peuvent lire. Il n'y a pas le livret, pas le guide du meneur, pas les plans marqués MJ, pas les PNJ de l'aventure.
+
+1. Dans les compendiums, ouvrez le dossier **Kit**.
+   **Résultat attendu :** trois compendiums : **Kit — Prétirés**, **Kit — Plans**, **Kit — Pour les joueurs**. Pas de compendium de PNJ du kit.
+2. Ouvrez **Kit — Prétirés**.
+   **Résultat attendu :** Joachim Ferraz, Kesi Varga, Dr Inès Okafor-Lund, Tariq Benali, Anouk Sall, et Bosco. Joachim a l'origine Terre, la CON de base 40 et la dose de départ 180. Il n'a pas l'armure de pont sur lui.
+3. Ouvrez **Kit — Plans**. Activez **La pension La Bouée**, puis **La Petite Fortune**.
+   **Résultat attendu :** le dessin s'affiche. Ce sont les versions joueurs. Aucun fichier dont le nom contient MJ. La grille est un repère : le texte dit que le schéma est sans échelle.
+4. Ouvrez **Kit — Pour les joueurs**, en tant que joueur (pas seulement MJ).
+   **Résultat attendu :** vous voyez l'Introduction à l'univers, le Guide du joueur, les Fiches de référence, les Aides de jeu et les Plans des joueurs. Les aides ne disent pas « Quand la donner » ni « Note pour le meneur ».
+5. En MJ, **Configurer les paramètres**, cochez **Importer le kit (joueurs)**, enregistrez.
+   **Résultat attendu :** les acteurs, les scènes et les journaux apparaissent dans le monde, dans des dossiers Kit. Cochez une seconde fois : rien n'est dupliqué. La case se décoche.
+6. Console (**F12**).
    **Résultat attendu :** pas de ligne rouge, hors l'icône manquante déjà connue.

@@ -1,0 +1,120 @@
+{
+  "_id": "KitJrPlans000000",
+  "_key": "!journal!KitJrPlans000000",
+  "name": "Plans des joueurs",
+  "pages": [
+    {
+      "_id": "PgKitPlan0000001",
+      "name": "Cérès, le Comptoir et la Rade",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Version joueurs. Schéma sans échelle. La grille de 100 px n'est pas l'échelle du lieu : les plans du kit sont des schémas sans échelle.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrPlans000000.PgKitPlan0000001"
+    },
+    {
+      "_id": "PgKitPlan0000002",
+      "name": "La Rade, section grise",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Version joueurs. Poutre d&#x27;environ 600 m. Schéma sans échelle. La grille de 100 px n'est pas l'échelle du lieu : les plans du kit sont des schémas sans échelle.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrPlans000000.PgKitPlan0000002"
+    },
+    {
+      "_id": "PgKitPlan0000003",
+      "name": "La pension La Bouée",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Un seul plan, indiqué comme montrable aux joueurs. Anneau d&#x27;environ 40 m de rayon. Schéma sans échelle. La grille de 100 px n'est pas l'échelle du lieu : les plans du kit sont des schémas sans échelle.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrPlans000000.PgKitPlan0000003"
+    },
+    {
+      "_id": "PgKitPlan0000004",
+      "name": "Hirondelle de Pallas",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Version joueurs. Cargo d&#x27;environ 70 m. Schéma sans échelle. La grille de 100 px n'est pas l'échelle du lieu : les plans du kit sont des schémas sans échelle.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrPlans000000.PgKitPlan0000004"
+    },
+    {
+      "_id": "PgKitPlan0000005",
+      "name": "La Petite Fortune",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Un seul plan, indiqué comme montrable aux joueurs. Schéma sans échelle. La grille de 100 px n'est pas l'échelle du lieu : les plans du kit sont des schémas sans échelle.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrPlans000000.PgKitPlan0000005"
+    }
+  ],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "journal",
+      "kitId": "KitJrPlans000000"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

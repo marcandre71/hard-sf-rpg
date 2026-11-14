@@ -1,0 +1,566 @@
+{
+  "_id": "KitActInes000001",
+  "_key": "!actors!KitActInes000001",
+  "name": "Dr Inès Okafor-Lund",
+  "type": "character",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identity": {
+      "birthplace": "Valhalla, Callisto (systèmes extérieurs)",
+      "gravityNative": 0.13,
+      "age": 36
+    },
+    "characteristics": {
+      "for": {
+        "base": 25,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "con": {
+        "base": 35,
+        "origin": -5,
+        "advance": 0,
+        "temp": 0
+      },
+      "coo": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ref": {
+        "base": 35,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "ada": {
+        "base": 35,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "per": {
+        "base": 45,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "int": {
+        "base": 60,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      },
+      "vol": {
+        "base": 40,
+        "origin": 10,
+        "advance": 0,
+        "temp": 0
+      },
+      "pre": {
+        "base": 35,
+        "origin": 0,
+        "advance": 0,
+        "temp": 0
+      }
+    },
+    "radiation": {
+      "starting": 420,
+      "acute": null
+    },
+    "biography": "<!-- Kit de démarrage, partie joueur de la fiche. --><p>: qui suis-je ?</p><p><strong>Portrait.</strong> Très grande et longiligne (Callisto, 0,13 g), peau sombre, tresses grises prématurées, lunettes-écran remontées sur le front. Voix douce, gestes précis, une petite cicatrice de dosimètre implanté au poignet.</p><p><strong>Personnalité.</strong> Patiente, rigoureuse, d'une franchise désarmante. Elle compte les doses, les morts et les mensonges avec la même exactitude. Elle a peur de ressembler à ceux qu'elle a quittés.</p><p><strong>Motivation</strong> (pourquoi je suis dans l'espace). Soigner ceux que personne ne compte.</p><p><strong>Complication</strong> (ce qui peut tout faire basculer). Le Collège peut révoquer sa citoyenneté et ses licences. Et, par habitude, elle envoie encore ses données médicales à son ancien mentor.</p><p><strong>Lien</strong> (milieu). Un mentor de Valhalla : le Dr Corvin Asante, qui l'a formée, puis a défendu le protocole qui l'a fait partir.</p><p><strong>Réseau</strong> (profession). Le Collège de Valhalla et les navires-hôpitaux : un avis d'expert, un lit, une analyse (au prix d'une dette).</p><p><strong>Mes liens avec les autres personnages</strong></p><ul><li><strong>Joachim Ferraz</strong> : son patient du mal de l'espace. Elle le trouve touchant et un peu naïf.</li><li><strong>Kesi Varga</strong> : sa pilote pour Vesta. Elle a déjà payé la moitié du voyage.</li><li><strong>Anouk Sall</strong> : elle lui a recousu l'arcade il y a deux semaines, sans poser de questions.</li><li><strong>Tariq Benali</strong> : il a réparé gratuitement son caisson de diagnostic. Elle soigne ses brûlures en échange.</li></ul><p><strong>Mon accroche pour ce scénario.</strong> Le Dr Corvin Asante, son mentor, lui a écrit ce matin : « Je suis à Cérès pour quelques jours. Dîne avec moi, j'ai un poste pour toi. » Il n'a pas dit ce qu'il venait faire si loin de Callisto.</p><p><strong>Conseil de jeu.</strong> Tu es la seule à pouvoir sauver un blessé grave, et la mieux placée pour comprendre ce que le Collège achète. Tu connais les radiations mieux que personne : quand le dosimètre s'affole, c'est toi qui commandes.</p>"
+  },
+  "items": [
+    {
+      "name": "Systèmes extérieurs (Callisto, Titan)",
+      "type": "origin",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "characteristicModifiers": "VOL +10, CON -5",
+        "gToleranceModifier": -1,
+        "trait": "Habitué à l'isolement : +10 pour résister au stress de la solitude. Dose cumulée de départ plus élevée.",
+        "description": "<p>0,13 à 0,14 g</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000032",
+      "_key": "!actors.items!KitActInes000001.KitItem000000032"
+    },
+    {
+      "name": "Élite académique",
+      "type": "background",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "skillBonuses": "Sciences (au choix), Langues, Persuasion",
+        "link": "un mentor de Valhalla",
+        "description": "<p>3 compétences à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000033",
+      "_key": "!actors.items!KitActInes000001.KitItem000000033"
+    },
+    {
+      "name": "Médecin",
+      "type": "profession",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "careerSkills": "Médecine, Premiers secours, Sciences de la vie, Psychologie, Persuasion, Systèmes de survie, Informatique, Vigilance",
+        "description": "<p>3 à +20, 5 à +10</p>"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000034",
+      "_key": "!actors.items!KitActInes000001.KitItem000000034"
+    },
+    {
+      "name": "Enquête",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>interroger, recouper témoignages, archives et données, remonter un réseau ou une piste.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000035",
+      "_key": "!actors.items!KitActInes000001.KitItem000000035"
+    },
+    {
+      "name": "Informatique",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>programmation, intrusion, gestion des greffiers (systèmes spécialisés).</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000036",
+      "_key": "!actors.items!KitActInes000001.KitItem000000036"
+    },
+    {
+      "name": "Langues",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": true,
+        "domain": "savoirs",
+        "untrainedAllowed": true,
+        "specialty": "anglais technique"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000037",
+      "_key": "!actors.items!KitActInes000001.KitItem000000037"
+    },
+    {
+      "name": "Langues",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>une compétence par langue (anglais technique, russe, mandarin, espagnol…) ; le parler de quart compte comme une langue.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": true,
+        "domain": "savoirs",
+        "untrainedAllowed": true,
+        "specialty": "russe"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000038",
+      "_key": "!actors.items!KitActInes000001.KitItem000000038"
+    },
+    {
+      "name": "Manœuvre en apesanteur",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>se déplacer, se battre et travailler sans gravité.</p>",
+        "characteristic": "ada",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "espace",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000039",
+      "_key": "!actors.items!KitActInes000001.KitItem000000039"
+    },
+    {
+      "name": "Médecine : diagnostic et médecine générale",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>soigner et traiter. Spécialités : diagnostic et médecine générale ; chirurgie (impossible sans formation) ; médecine de l'espace et des radiations (dont la torpeur médicale).</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": true,
+        "perSpecialty": true,
+        "domain": "sciences",
+        "untrainedAllowed": true,
+        "specialty": "diagnostic et médecine générale"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000040",
+      "_key": "!actors.items!KitActInes000001.KitItem000000040"
+    },
+    {
+      "name": "Médecine : médecine de l'espace et des radiations (dont la torpeur médicale)",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>soigner et traiter. Spécialités : diagnostic et médecine générale ; chirurgie (impossible sans formation) ; médecine de l'espace et des radiations (dont la torpeur médicale).</p>",
+        "characteristic": "int",
+        "training": 20,
+        "trainingRequired": true,
+        "perSpecialty": true,
+        "domain": "sciences",
+        "untrainedAllowed": true,
+        "specialty": "médecine de l'espace et des radiations (dont la torpeur médicale)"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000041",
+      "_key": "!actors.items!KitActInes000001.KitItem000000041"
+    },
+    {
+      "name": "Persuasion",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>convaincre, inspirer, séduire.</p>",
+        "characteristic": "pre",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000042",
+      "_key": "!actors.items!KitActInes000001.KitItem000000042"
+    },
+    {
+      "name": "Premiers secours",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>stabiliser, poser un garrot, traiter une décompression.</p>",
+        "characteristic": "int",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "sciences",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000043",
+      "_key": "!actors.items!KitActInes000001.KitItem000000043"
+    },
+    {
+      "name": "Psychologie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>comprendre les émotions et intentions d'autrui.</p>",
+        "characteristic": "per",
+        "training": 20,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "relations",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000044",
+      "_key": "!actors.items!KitActInes000001.KitItem000000044"
+    },
+    {
+      "name": "Sciences de la vie : biologie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>spécialités : biologie ; écologie des habitats ; exobiologie.</p>",
+        "characteristic": "int",
+        "training": 20,
+        "trainingRequired": true,
+        "perSpecialty": true,
+        "domain": "sciences",
+        "untrainedAllowed": true,
+        "specialty": "biologie"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000045",
+      "_key": "!actors.items!KitActInes000001.KitItem000000045"
+    },
+    {
+      "name": "Systèmes de survie",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>air, eau, recyclage, contrôle thermique.</p>",
+        "characteristic": "int",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "technique",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000046",
+      "_key": "!actors.items!KitActInes000001.KitItem000000046"
+    },
+    {
+      "name": "Vigilance",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>remarquer, surveiller, ne pas être surpris.</p>",
+        "characteristic": "per",
+        "training": 10,
+        "trainingRequired": false,
+        "perSpecialty": false,
+        "domain": "corps",
+        "untrainedAllowed": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000047",
+      "_key": "!actors.items!KitActInes000001.KitItem000000047"
+    },
+    {
+      "name": "Combinaison souple",
+      "type": "armor",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armures v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Tenue quotidienne des équipages de la Ceinture et de la Mutuelle (modèle d'Ilka Moravec). Bottes magnétiques incluses.</p>",
+        "airReserve": {
+          "value": 8,
+          "max": 8
+        },
+        "sealState": "intact",
+        "penalty": {
+          "manipulation": -10,
+          "perception": -10
+        },
+        "dosimeter": true,
+        "radio": true,
+        "mass": 6.5,
+        "enc": 1,
+        "protection": {
+          "head": 1,
+          "torso": 1,
+          "rightArm": 1,
+          "leftArm": 1,
+          "rightLeg": 1,
+          "leftLeg": 1
+        },
+        "pressurized": true,
+        "breachThreshold": 4,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000048",
+      "_key": "!actors.items!KitActInes000001.KitItem000000048"
+    },
+    {
+      "name": "Mains nues, gantelets et bottes magnétiques",
+      "type": "weapon",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Armes v0.3 §5. Décision Marc 30/10/2026 -->\n<p>En combinaison renforcée ou armure de pont, +1 dégât. En apesanteur, la lutte utilise la moyenne de FOR et d'ADA (LdR §7).</p>",
+        "skill": "Corps-à-corps",
+        "damage": 2,
+        "range": "short",
+        "recoil": false,
+        "ammo": {
+          "value": 0,
+          "max": 0
+        },
+        "ammoType": "none",
+        "burst": false,
+        "hullSafe": true,
+        "mass": 0,
+        "enc": 0,
+        "melee": true,
+        "equipped": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000049",
+      "_key": "!actors.items!KitActInes000001.KitItem000000049"
+    },
+    {
+      "name": "Valise chirurgicale de bord (gravité zéro)",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Médecine (chirurgie), Premiers secours. Dôme opératoire transparent à aspiration laminaire qui empêche le sang de flotter en apesanteur ; requise pour opérer hors d'une infirmerie.</p>",
+        "mass": 5.5,
+        "enc": 1.5,
+        "quantity": 1,
+        "reserve": {
+          "type": "doses",
+          "value": 10,
+          "max": 10
+        },
+        "toolBonus": 10
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000050",
+      "_key": "!actors.items!KitActInes000001.KitItem000000050"
+    },
+    {
+      "name": "Greffier médical de triage « Hippocrate »",
+      "type": "software",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Logiciels v0.3 §2. Décision Marc 30/10/2026 -->\n<p>Aussi en infirmerie. +10 d'Aide en Premiers secours et en diagnostic ; gère seul la surveillance des caissons de torpeur et le suivi des doses (mSv). Guide pas à pas un non-médecin en urgence, mais ne pratique aucun acte chirurgical sans opérateur humain formé.</p>",
+        "category": "greffier",
+        "host": "tablet",
+        "assistedSkill": "Premiers secours, Médecine (diagnostic)",
+        "skillBonus": 10,
+        "autonomousScore": 45,
+        "sereguineLock": true,
+        "legality": "légal"
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000051",
+      "_key": "!actors.items!KitActInes000001.KitItem000000051"
+    },
+    {
+      "name": "Amifostine-9 (« Bleu de Callisto »)",
+      "type": "substance",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Substances v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>\n<p>Effets secondaires : Nausées violentes immédiates, −10 aux actions pendant 4 heures et perte d'1 point d'Endurance.</p>\n<p>Légalité : [à compléter].</p>",
+        "category": "radiation",
+        "administration": "autoInjector",
+        "duration": "1 exposition",
+        "doses": {
+          "value": 1,
+          "max": 1
+        },
+        "effect": "<p>Injectée avant une exposition prévisible (éruption solaire annoncée, intervention en poupe), réduit de 30 % la dose aiguë reçue (au plus 300 mSv). Sans effet si elle est injectée après l'exposition.</p>",
+        "sideEffects": "<p>Nausées violentes immédiates, −10 aux actions pendant 4 heures et perte d'1 point d'Endurance.</p>",
+        "legality": ""
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000052",
+      "_key": "!actors.items!KitActInes000001.KitItem000000052"
+    },
+    {
+      "name": "Oxygénateur sanguin perfluoré « Souffle Noir »",
+      "type": "substance",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Substances v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Fait reculer l'Hypoxie de 2 stades. Effet éventuel sur le compte à rebours de « Combinaison percée » : [à compléter].</p>\n<p>Effets secondaires : Frissons et maux de tête violents au retour à la pression normale (−10 en PER pendant 1 heure).</p>\n<p>Légalité : [à compléter].</p>",
+        "category": "medical",
+        "administration": "autoInjector",
+        "duration": "15 min",
+        "doses": {
+          "value": 1,
+          "max": 1
+        },
+        "effect": "<p>Fait reculer l'Hypoxie de 2 stades. Effet éventuel sur le compte à rebours de « Combinaison percée » : [à compléter].</p>",
+        "sideEffects": "<p>Frissons et maux de tête violents au retour à la pression normale (−10 en PER pendant 1 heure).</p>",
+        "legality": ""
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000053",
+      "_key": "!actors.items!KitActInes000001.KitItem000000053"
+    },
+    {
+      "name": "Rustine",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §3. Décision Marc 30/10/2026 -->\n<p>Objet consommable, posé en une action. Aucun test au calme ; sous le feu, test simple de Survie, difficulté Normale (modifiables par le meneur). Un test raté ne consomme pas la rustine. Patch auto-vulcanisant à prise instantanée, rangé dans la poche de cuisse des combinaisons.</p>",
+        "mass": 0.2,
+        "enc": 0,
+        "quantity": 3,
+        "reserve": {
+          "type": "",
+          "value": 0,
+          "max": 0
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000054",
+      "_key": "!actors.items!KitActInes000001.KitItem000000054"
+    },
+    {
+      "name": "Dosimètre actif de poignet",
+      "type": "gear",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<!-- Réf. Équipement v0.3 §4. Décision Marc 30/10/2026 -->\n<p>Affiche le débit de dose en mSv/h et l'alerte d'éruption solaire. Vibre dès 0,1 mSv/h (seuil réglable jusqu'à 1 mSv/h) ; synchronisé avec la jauge de radiation du personnage.</p>",
+        "mass": 0.1,
+        "enc": 0,
+        "quantity": 1,
+        "reserve": {
+          "type": "energy",
+          "value": 8760,
+          "max": 8760
+        },
+        "toolBonus": 0
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "KitItem000000055",
+      "_key": "!actors.items!KitActInes000001.KitItem000000055"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "pregen",
+      "kitId": "KitActInes000001"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

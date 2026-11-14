@@ -1,0 +1,310 @@
+{
+  "_id": "KitJrJoueur00000",
+  "_key": "!journal!KitJrJoueur00000",
+  "name": "Guide du joueur",
+  "pages": [
+    {
+      "_id": "PgKitJour0000001",
+      "name": "Sol, Nouvelle Ère — Guide du joueur",
+      "type": "text",
+      "sort": 100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><h1>Sol, Nouvelle Ère — Guide du joueur</h1><p><em>Kit de démarrage v0.1 — pour les joueurs. Ce guide s'adresse à quelqu'un qui n'a jamais joué à un jeu de rôle sur table. Il ne contient aucun secret de l'aventure : vous pouvez le lire avant la partie, et le garder sous la main pendant. Règles : Livre de règles v0.3. Univers : Bible v0.6.</em></p><p>---</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000001"
+    },
+    {
+      "_id": "PgKitJour0000002",
+      "name": "Sommaire",
+      "type": "text",
+      "sort": 200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>1. Qu'est-ce qu'un jeu de rôle ? 2. Comment se passe une séance 3. Votre personnage : lire une fiche de prétiré 4. Agir et décrire 5. Lancer le D100 6. Le combat et les blessures, en mots simples 7. Le monde en quelques lignes 8. Jouer avec les autres : une même pièce de théâtre 9. Savoir-vivre et sécurité à la table 10. Bien jouer, même quand votre personnage échoue 11. Exemple de jeu commenté 12. Le joueur en une page</p><p>---</p><h1>1. Qu'est-ce qu'un jeu de rôle ?</h1><p>Un jeu de rôle, c'est <strong>une histoire que l'on raconte ensemble, autour d'une table</strong> (ou d'un écran). Chaque joueur incarne un personnage : une pilote, un ingénieur, une médecin… Un participant à part, le <strong>meneur de jeu</strong> (ou MJ), décrit le monde et joue tous les autres personnages.</p><ul><li>Il n'y a <strong>pas de plateau</strong>, pas de cartes à collectionner, pas de partie « gagnée » : on joue pour vivre une histoire.</li><li>Il n'y a <strong>pas de texte à apprendre</strong> : vous dites simplement ce que fait votre personnage, avec vos mots.</li><li>Les <strong>dés</strong> servent quand le résultat d'une action est incertain : réussir à piloter sous le feu, convaincre un garde, colmater une fuite à temps.</li><li>On ne joue pas les uns contre les autres : <strong>les joueurs forment une équipe</strong>, et le meneur n'est pas un adversaire.</li></ul><blockquote><p>💡 <strong>Si vous avez déjà joué à « faire semblant » enfant, vous savez jouer.</strong> Le jeu de rôle, c'est la même chose, avec des règles pour décider de ce qui réussit.</p></blockquote><p>---</p><h1>2. Comment se passe une séance</h1><p>Une partie d'initiation de Sol, Nouvelle Ère dure <strong>environ 4 heures</strong>, pause comprise.</p><p>1. <strong>L'accueil (15 minutes).</strong> Le meneur présente le jeu, chacun choisit un personnage prétiré et découvre sa fiche. On lit ensemble l'Introduction à l'univers. Le meneur parle aussi du ton de la partie et des outils de confort (section 9). 2. <strong>L'aventure, en plusieurs parties.</strong> Le meneur décrit une situation et demande : « Que faites-vous ? » Vous répondez, il raconte ce qui se passe, et ainsi de suite. La première scène vous apprend les règles en jouant : inutile de les connaître avant. 3. <strong>Une pause</strong> à mi-parcours. 4. <strong>Le dénouement (10 minutes).</strong> On raconte la fin, on reçoit de l'expérience (des points pour améliorer son personnage), et on dit ce qu'on a aimé.</p><blockquote><p>💡 <strong>Ce dont vous avez besoin.</strong> Votre fiche de personnage, un crayon, deux dés à dix faces (de couleurs différentes : un pour les dizaines, un pour les unités) et les Fiches de référence. Ou un ordinateur, si la partie se joue sur Foundry : le jeu y lance les dés pour vous.</p></blockquote><p>---</p><h1>3. Votre personnage : lire une fiche de prétiré</h1><p>Le kit propose cinq <strong>personnages prétirés</strong>, prêts à jouer. Chaque fiche a deux faces.</p><ul><li><strong>Le verso : qui suis-je ?</strong> Lisez-le en premier. Il dit qui est votre personnage, son caractère, ce qu'il veut (sa <strong>motivation</strong>), ce qui peut tout faire basculer (sa <strong>complication</strong>), ses liens avec les autres personnages, et son <strong>accroche</strong> : la raison pour laquelle il est mêlé à l'aventure. Un <strong>conseil de jeu</strong> termine la page.</li><li><strong>Le recto : la fiche de jeu.</strong> Tous les chiffres. Pas besoin de tout comprendre avant de commencer : on s'en sert quand le meneur le demande.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000002"
+    },
+    {
+      "_id": "PgKitJour0000003",
+      "name": "Les caractéristiques",
+      "type": "text",
+      "sort": 300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Neuf nombres de 1 à 100 décrivent le corps et l'esprit. Un humain ordinaire a entre 25 et 45 ; 80, c'est l'élite humaine.</p><table><tr><td>Abréviation</td><td>Caractéristique</td><td>Ce qu'elle mesure</td></tr><tr><td>FOR</td><td>Force</td><td>Muscles, charges, corps-à-corps</td></tr><tr><td>CON</td><td>Constitution</td><td>Endurance, résistance aux radiations et aux accélérations</td></tr><tr><td>COO</td><td>Coordination</td><td>Précision des gestes, tir, pilotage</td></tr><tr><td>RÉF</td><td>Réflexes</td><td>Vitesse de réaction, esquive</td></tr><tr><td>ADA</td><td>Adaptation spatiale</td><td>Aisance en apesanteur, sens de l'orientation en trois dimensions</td></tr><tr><td>PER</td><td>Perception</td><td>Sens, attention, lecture des instruments</td></tr><tr><td>INT</td><td>Intellect</td><td>Raisonnement, science, technique</td></tr><tr><td>VOL</td><td>Volonté</td><td>Sang-froid, résistance au stress et à la peur</td></tr><tr><td>PRÉ</td><td>Présence</td><td>Charisme, autorité, empathie</td></tr></table><blockquote><p>💡 <strong>L'Adaptation spatiale est propre à ce jeu.</strong> Une pilote née dans la Ceinture y excelle ; un inspecteur né sur Terre y est maladroit. C'est l'une des grandes différences entre les « légers » et les « lourds ».</p></blockquote>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000003"
+    },
+    {
+      "_id": "PgKitJour0000004",
+      "name": "Les compétences et la formation",
+      "type": "text",
+      "sort": 400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Une <strong>compétence</strong>, c'est un savoir-faire : Pilotage, Premiers secours, Mécanique, Persuasion… Son <strong>score</strong> se calcule ainsi :</p><blockquote><p>📏 <strong>Score de compétence = caractéristique + formation.</strong> La formation (de 0 à +60) représente l'apprentissage. Exemple : Kesi a 55 en COO et +20 en Pilotage (petits engins et remorqueurs) : son score est de <strong>75</strong>.</p></blockquote><ul><li>Les <strong>compétences formées</strong> sont dans le grand tableau de la fiche, avec leur score en gras. Ce sont vos points forts.</li><li>Les <strong>autres compétences</strong> suivent, sans formation : vous pouvez les tenter à la valeur de la caractéristique.</li><li>Une valeur suivie de <strong>½</strong> signale une compétence qui demande une formation : sans elle, on la tente à la moitié de la caractéristique. Un <strong>« — »</strong> veut dire impossible sans formation (on n'opère pas un patient au hasard).</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000004"
+    },
+    {
+      "_id": "PgKitJour0000005",
+      "name": "Les valeurs dérivées",
+      "type": "text",
+      "sort": 500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Une petite ligne sous les caractéristiques donne des valeurs calculées à partir d'elles.</p><table><tr><td>Valeur</td><td>En clair</td></tr><tr><td><strong>Seuil de blessure (SB)</strong></td><td>Votre solidité. Plus il est haut, plus il faut de dégâts pour une blessure grave.</td></tr><tr><td><strong>Tolérance aux g (TG)</strong></td><td>Le nombre de g que vous supportez sans peine sous une forte accélération.</td></tr><tr><td><strong>Endurance</strong></td><td>Votre réserve contre la fatigue, le manque d'air, le froid.</td></tr><tr><td><strong>Sang-froid</strong></td><td>Votre réserve contre le stress et les chocs émotionnels.</td></tr><tr><td><strong>Dose cumulée</strong></td><td>Les radiations reçues au cours de votre vie, en millisieverts (mSv). Elle ne redescend jamais.</td></tr><tr><td><strong>Gravité natale</strong></td><td>La gravité dans laquelle votre corps a grandi. Loin d'elle, les tâches physiques sont plus difficiles.</td></tr></table><p>Le recto donne aussi votre <strong>particularité d'origine</strong>, votre <strong>armure</strong> zone par zone, vos <strong>armes</strong> et votre <strong>équipement</strong> (la combinaison est l'objet le plus précieux de votre vie).</p><p>---</p><h1>4. Agir et décrire</h1><p>Quand le meneur demande « Que faites-vous ? », dites <strong>ce que fait votre personnage, et comment</strong>.</p><table><tr><td>Plutôt que…</td><td>Essayez…</td></tr><tr><td>« Je fais un jet de Persuasion. »</td><td>« Je pose ma tasse, je le regarde dans les yeux et je lui dis que je peux l'aider à partir d'ici. »</td></tr><tr><td>« Je cherche. »</td><td>« J'ouvre les casiers un par un et je regarde sous les couchettes. »</td></tr><tr><td>« J'attaque. »</td><td>« Je m'ancre au montant de la porte et je tire sur celui qui tient le chalumeau. »</td></tr></table><ul><li><strong>Le « comment » compte.</strong> Une bonne idée peut rendre une action plus facile (un bonus), ou même la réussir sans dé.</li><li><strong>Parlez à la première personne si vous voulez</strong> (« Je ne vous laisserai pas faire ça ! »), ou décrivez à la troisième (« Kesi serre les dents et pousse la manette »). Les deux sont bien.</li><li><strong>Posez des questions.</strong> « Est-ce qu'il y a un extincteur dans la coursive ? », « Est-ce que mon personnage connaît ce nom ? » Le meneur répond : c'est vos yeux et vos oreilles.</li><li><strong>C'est le meneur qui décide quand on lance les dés.</strong> Vous proposez une action, il dit si elle réussit d'elle-même, si elle est impossible, ou s'il faut un jet.</li></ul><p>---</p><h1>5. Lancer le D100</h1><p>Le jeu utilise un <strong>D100</strong> : deux dés à dix faces lancés ensemble, l'un pour les dizaines, l'autre pour les unités. Un 0 aux deux dés vaut <strong>100</strong>.</p><blockquote><p>📏 <strong>La règle d'or : faites moins que votre score.</strong> Si le résultat est <strong>inférieur ou égal</strong> au score, c'est une réussite. Sinon, c'est un échec.</p></blockquote><p><strong>Exemple.</strong> Tariq colmate une fuite avec sa compétence Mécanique, 95. Il lance : dizaines 4, unités 7, soit <strong>47</strong>. 47 est inférieur à 95 : réussite.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000005"
+    },
+    {
+      "_id": "PgKitJour0000006",
+      "name": "La difficulté",
+      "type": "text",
+      "sort": 600000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Le meneur peut rendre l'action plus facile ou plus difficile : de <strong>+30</strong> (Très facile) à <strong>−40</strong> (Extrême). D'autres choses comptent : de bons outils (+10), un équipier qui aide (+10), travailler en combinaison (−10), une blessure (−10 ou −20). On ajoute tout au score avant de lancer.</p><p><strong>Exemple.</strong> Kesi tente de convaincre un contrôleur de quai avec Négociation 35. Elle lui offre un service : c'est Aisé, +10. Elle doit faire <strong>45 ou moins</strong>.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000006"
+    },
+    {
+      "_id": "PgKitJour0000007",
+      "name": "Les degrés de réussite (DR)",
+      "type": "text",
+      "sort": 700000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Réussir, c'est bien ; réussir <em>très bien</em>, c'est mieux. Pour le savoir, on compare les <strong>dizaines</strong> :</p><blockquote><p>📏 <strong>DR = dizaine du score − dizaine du dé.</strong> Score 75, dé 32 : 7 − 3 = <strong>4 DR</strong>, une belle réussite. Score 75, dé 71 : 7 − 7 = <strong>0 DR</strong>, une réussite de justesse.</p></blockquote><p>En cas d'échec, on compte de même les <strong>degrés d'échec (DE)</strong> : dizaine du dé moins dizaine du score. Un petit échec (0 ou 1 DE) est sans gravité ; un gros échec (3 DE ou plus) complique les choses.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000007"
+    },
+    {
+      "_id": "PgKitJour0000008",
+      "name": "Les critiques",
+      "type": "text",
+      "sort": 800000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><ul><li><strong>01 à 05</strong> : toujours une <strong>réussite critique</strong>, quelque chose d'exceptionnel.</li><li><strong>96 à 100</strong> : toujours un <strong>échec critique</strong>, quelque chose tourne mal.</li><li><strong>Un double</strong> (11, 22, 33…) est aussi critique : réussite critique s'il est sous votre score, échec critique s'il est au-dessus.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000008"
+    },
+    {
+      "_id": "PgKitJour0000009",
+      "name": "Le test opposé",
+      "type": "text",
+      "sort": 900000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Quand votre personnage s'oppose à quelqu'un (se cacher contre chercher, mentir contre deviner), <strong>les deux lancent</strong>. Si un seul réussit, il gagne. Si les deux réussissent, le plus de DR gagne. Si les deux échouent, rien ne change.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000009"
+    },
+    {
+      "_id": "PgKitJour0000010",
+      "name": "Le test prolongé",
+      "type": "text",
+      "sort": 1000000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Pour une longue tâche (réparer, soigner, calculer une trajectoire), le meneur fixe un nombre de DR à atteindre. Chaque réussite apporte <strong>1 + ses DR</strong>. On relance jusqu'à y arriver… si on a le temps.</p><blockquote><p>💡 <strong>Vos points forts sont vraiment forts.</strong> Avec un score de 80, vous réussissez huit fois sur dix. Avec des bonus, vous pouvez dépasser 100 : vous ne ratez alors que sur 96 à 100. Choisissez des actions qui utilisent vos meilleures compétences.</p></blockquote><p>---</p><h1>6. Le combat et les blessures, en mots simples</h1><p>Dans Sol, Nouvelle Ère, <strong>le combat est rare, rapide et dangereux</strong>. Il n'y a ni points de vie ni « vie supplémentaire » : une balle peut tuer. Les personnages intelligents évitent les combats, ou les terminent vite.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000010"
+    },
+    {
+      "_id": "PgKitJour0000011",
+      "name": "Un tour de combat",
+      "type": "text",
+      "sort": 1100000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Un tour dure environ <strong>5 secondes</strong>.</p><p>1. <strong>Qui agit en premier ?</strong> Au premier tour, chacun fait un test de <strong>Vigilance</strong>. Ceux qui ont le plus de DR agissent d'abord. L'ordre reste le même ensuite. 2. <strong>À votre tour</strong>, vous avez <strong>une action</strong> (attaquer, recharger, soigner, réparer), <strong>un mouvement</strong> (vous déplacer, vous mettre à couvert, vous accrocher) et <strong>une réaction</strong> par tour (esquiver). 3. <strong>Attaquer</strong> : un test de la compétence de votre arme. Plus la cible est loin, plus c'est difficile (courte portée 0, moyenne −10, longue −20). Une cible à couvert est plus dure à toucher.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000011"
+    },
+    {
+      "_id": "PgKitJour0000012",
+      "name": "Esquiver",
+      "type": "text",
+      "sort": 1200000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><blockquote><p>📏 <strong>Quand une attaque vous touche</strong>, vous pouvez tenter un test d'<strong>Esquive</strong>, une fois par tour. C'est un test opposé contre l'attaque : si vous faites mieux que l'attaquant, il vous manque. Si vous réussissez tous les deux, on compare les DR, puis les scores ; en cas d'égalité parfaite, ou si vous ratez tous les deux, il vous manque aussi.</p></blockquote><p><strong>Exemple.</strong> Un docker frappe Kesi avec Corps-à-corps 55 et fait 31 : réussi, 2 DR. Kesi esquive avec 60 et fait 44 : réussi, 2 DR aussi. Égalité de DR : c'est le score le plus élevé qui gagne. Kesi (60) bat le docker (55) : elle esquive.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000012"
+    },
+    {
+      "_id": "PgKitJour0000013",
+      "name": "Où ça touche, et combien ça fait mal",
+      "type": "text",
+      "sort": 1300000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><ul><li><strong>La zone touchée</strong> : on inverse les chiffres du dé d'attaque. Un 34 devient 43 : le torse. Un 07 devient 70 : le torse aussi. Un 10 devient 01 : la tête.</li><li><strong>Les dégâts</strong> : la valeur de l'arme, plus les DR de l'attaque, moins l'armure de la zone touchée.</li><li><strong>La gravité</strong> : on compare les dégâts à votre <strong>Seuil de blessure (SB)</strong>.</li></ul><table><tr><td>Dégâts</td><td>Blessure</td><td>En clair</td></tr><tr><td>Moins que le SB</td><td><strong>Légère</strong></td><td>Ça fait mal : −10 aux actions qui utilisent cette partie du corps, jusqu'aux soins.</td></tr><tr><td>Du SB au double du SB (moins 1)</td><td><strong>Grave</strong></td><td>−20, vous saignez, et il faut du courage pour continuer à agir.</td></tr><tr><td>Du double au triple du SB (moins 1)</td><td><strong>Critique</strong></td><td>Le membre est hors d'usage ; vous risquez de perdre connaissance. À la tête ou au torse, la mort menace sans soins rapides.</td></tr><tr><td>Le triple du SB ou plus</td><td><strong>Mortelle</strong></td><td>La mort, tout de suite ou en quelques instants.</td></tr></table><blockquote><p>⚠ <strong>Votre combinaison, c'est votre vie.</strong> Un coup assez fort peut la percer. Vous avez alors 5 minutes pour la colmater (une rustine se pose en une action). Dans le vide, sans protection, on reste conscient 10 à 15 secondes. Pas plus.</p></blockquote><blockquote><p>💡 <strong>Le premier secours sauve des vies.</strong> Un test de Premiers secours arrête un saignement. Restez près de la médecin du groupe.</p></blockquote><p>---</p><h1>7. Le monde en quelques lignes</h1><p>Nous sommes en <strong>2187</strong>. En 1979, un astéroïde a explosé au-dessus de la Sibérie et failli déclencher une guerre nucléaire. Depuis, un organisme international, <strong>l'Office de la Veille</strong>, surveille le ciel et contrôle tout ce qui peut dévier une grande masse. L'humanité s'est répandue sur la Lune, sur Mars, dans la <strong>Ceinture d'astéroïdes</strong> et autour de Jupiter et de Saturne, avec ses nations, ses rivalités et ses injustices.</p><ul><li><strong>La lumière est lente.</strong> Un message met de 13 à 30 minutes entre Cérès et la Terre. Personne ne peut appeler à l'aide en temps réel.</li><li><strong>Le vide ne pardonne pas.</strong> Une petite fuite vide un compartiment en quelques heures.</li><li><strong>Le Soleil tue.</strong> Les radiations s'accumulent toute la vie ; on court aux abris quand une éruption est annoncée.</li><li><strong>Le corps se souvient.</strong> Les « légers » nés en faible gravité ne peuvent pas vivre sur Terre ; les « lourds » nés sur Terre vont partout.</li><li><strong>Les machines obéissent, mais ne décident pas.</strong> Les IA, les « greffiers », sont bridées : devant une décision de vie ou de mort, elles demandent un humain.</li></ul><p>Votre histoire commence à <strong>Cérès</strong>, la grande planète naine de la Ceinture, et sur sa station en orbite, <strong>la Rade</strong>. Pour en savoir plus, lisez l'<strong>Introduction à l'univers</strong> : deux pages, dix minutes, sans aucun secret.</p><blockquote><p>💡 <strong>Vous n'avez pas besoin de connaître le monde pour jouer.</strong> Votre personnage, lui, le connaît : demandez au meneur. « Est-ce que Kesi sait qui commande ce quai ? » est une excellente question.</p></blockquote><p>---</p><h1>8. Jouer avec les autres : une même pièce de théâtre</h1><p>Imaginez une pièce de théâtre sans public, jouée pour le plaisir de ceux qui la jouent. <strong>Les joueurs tiennent les rôles principaux. Le meneur tient le décor, les seconds rôles et la lumière.</strong> Personne ne connaît la fin : on l'écrit ensemble.</p><ul><li><strong>Le meneur n'est pas votre adversaire.</strong> Le monde est dangereux, et il le joue honnêtement. Mais il veut que l'histoire soit belle, et que vos personnages aient leur chance. S'il vous prévient d'un danger, écoutez-le : c'est un cadeau.</li><li><strong>Les autres joueurs sont vos partenaires de scène.</strong> Une bonne réplique en appelle une autre. Laissez-leur de la place, rebondissez sur leurs idées, impliquez leurs personnages (« Tariq, tu peux couper ce courant ? »).</li><li><strong>Vous aussi, vous tenez la pièce.</strong> Vous pouvez proposer un détail, un souvenir de votre personnage, une relation avec quelqu'un. Le meneur dira souvent oui.</li><li><strong>Votre personnage peut avoir tort, avoir peur, se disputer avec les autres.</strong> C'est du théâtre. Mais vous, joueurs, restez de la même équipe : pas de trahison qui gâcherait la soirée d'un autre joueur.</li></ul><blockquote><p>🎭 <strong>La question à se poser :</strong> « Est-ce que ce que je fais rend la scène meilleure pour toute la table ? » Si oui, foncez.</p></blockquote><p>---</p><h1>9. Savoir-vivre et sécurité à la table</h1>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000013"
+    },
+    {
+      "_id": "PgKitJour0000014",
+      "name": "Le savoir-vivre",
+      "type": "text",
+      "sort": 1400000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><ul><li><strong>Écoutez</strong> quand quelqu'un parle, joueur ou meneur. Attendez la fin de la phrase.</li><li><strong>Partagez la lumière.</strong> Si vous avez beaucoup parlé, laissez la place. Si un joueur discret n'a rien dit depuis un moment, demandez-lui ce que fait son personnage.</li><li><strong>Le meneur tranche.</strong> Si une règle fait débat, il décide pour ce soir, et on en reparle après.</li><li><strong>Les téléphones</strong> restent de côté, sauf pour la partie.</li><li><strong>Ne lisez pas les documents du meneur</strong> (le Livret de scénario, le Guide de Cérès, les plans marqués MJ) : ils contiennent les surprises de l'aventure.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000014"
+    },
+    {
+      "_id": "PgKitJour0000015",
+      "name": "La sécurité émotionnelle",
+      "type": "text",
+      "sort": 1500000,
+      "flags": {},
+      "text": {
+        "format": 1,
+        "content": "<!-- Kit de démarrage, document joueur. --><p>Les histoires de Sol, Nouvelle Ère peuvent être sombres : un monde dur, des injustices, la mort. Le meneur annonce les thèmes de l'aventure avant de commencer. Plusieurs outils permettent à chacun de passer une bonne soirée :</p><ul><li><strong>Les lignes</strong> : des thèmes que la table n'abordera pas du tout.</li><li><strong>Les voiles</strong> : des thèmes qui peuvent exister dans l'histoire, mais hors champ, sans détails.</li><li><strong>La carte X</strong> : une carte posée au milieu de la table. <strong>N'importe qui peut la toucher, à tout moment, sans avoir à expliquer pourquoi.</strong> Le meneur retire ce qui vient d'être décrit, et on continue. Sur Foundry, on convient d'un mot ou d'un signe dans le chat.</li></ul><blockquote><p>💡 <strong>Vous pouvez toujours dire « pause ».</strong> Un verre d'eau, quelques minutes, un mot au meneur en privé. Le confort de chacun passe avant l'histoire.</p></blockquote><p>---</p><h1>10. Bien jouer, même quand votre personnage échoue</h1><p>Votre personnage va rater des choses. Souvent. C'est normal, et c'est même ce qui rend une histoire intéressante : un héros qui réussit tout n'a rien à raconter.</p><ul><li><strong>Un échec fait avancer l'histoire.</strong> Le meneur ne dira pas « rien ne se passe » : il dira « tu y arrives, mais ça prend du temps », ou « non, et le garde t'a vu ». Rebondissez !</li><li><strong>Jouez la réaction de votre personnage.</strong> Il jure, il recommence, il demande de l'aide, il trouve une autre idée. Ces moments font souvent les meilleurs souvenirs.</li><li><strong>Utilisez l'équipe.</strong> Un équipier qui aide donne +10. Le meilleur plan est rarement celui d'un seul personnage.</li><li><strong>Jouez vos points forts.</strong> Regardez vos compétences formées et cherchez à les utiliser. Laissez les autres briller dans les leurs.</li><li><strong>Jouez votre verso.</strong> Votre motivation, votre complication, vos liens : ce sont des idées de scènes toutes prêtes.</li><li><strong>Soyez prudent, pas timide.</strong> Le monde est mortel : réfléchissez avant d'ouvrir le feu ou de sortir dans le vide. Mais osez agir : un personnage qui ne fait rien ne risque rien… et ne vit rien.</li><li><strong>Riez de vos malheurs.</strong> Le pire échec critique de la soirée sera l'histoire qu'on racontera la prochaine fois.</li></ul><p>---</p><h1>11. Exemple de jeu commenté</h1><p><em>Cet exemple n'est pas tiré de l'aventure du kit. Léa joue Kesi, la pilote, et Hugo joue Tariq, l'ingénieur. Ils sont dans un bar de la Rade, et un docker éméché cherche la bagarre. Les commentaires en italique expliquent ce que font les joueurs.</em></p><blockquote><p><strong>Meneur :</strong> Le docker pose sa main sur l'épaule de Tariq. « T'es le Martien qui a pris ma place sur le chantier, hein ? » Il sent l'ammoniac et l'alcool de synthèse. Que faites-vous ?<br><strong>Hugo (Tariq) :</strong> Tariq ne veut pas d'ennuis. Il se retourne lentement, les mains ouvertes, et dit : « Je ne t'ai rien pris. Je te paie un verre ? »</p></blockquote><p><em>Hugo décrit ce que fait son personnage et ce qu'il dit. Il choisit d'éviter le combat : c'est souvent le plus sage dans ce jeu.</em></p><blockquote><p><strong>Meneur :</strong> Bonne idée. C'est un test de Persuasion, et le verre offert rend ça Aisé : +10.<br><strong>Hugo :</strong> J'ai 25 en Persuasion, sans formation… 35 avec le bonus. Je lance… 47. Raté.<br><strong>Meneur :</strong> Un degré d'échec : pas de catastrophe, mais il ne se calme pas. Il te repousse contre le comptoir et lève le poing.</p></blockquote><p><em>L'échec ne bloque pas l'histoire : il la fait avancer, vers une bagarre.</em></p><blockquote><p><strong>Léa (Kesi) :</strong> Kesi se glisse entre eux. « Hé. Lui, c'est mon ingénieur. Tu le touches, tu touches ma famille. »<br><strong>Meneur :</strong> Il se tourne vers Kesi et la frappe. (Il lance.) 31 : réussi, deux degrés. Tu peux esquiver.<br><strong>Léa :</strong> J'ai 60 en Esquive. Je lance… 44. Réussi, deux degrés aussi !<br><strong>Meneur :</strong> Même nombre de degrés : le meilleur score gagne. Ton 60 bat son 55. Kesi se baisse, le poing passe au-dessus de sa tête et s'écrase contre la colonne. Il hurle de douleur.</p></blockquote><p><em>Léa connaît la règle de l'Esquive : un test opposé, utilisé comme réaction. Kesi est fragile (SB 3) : esquiver était vital.</em></p><blockquote><p><strong>Hugo :</strong> Tariq en profite. Je lui attrape le bras et je lui dis à l'oreille : « Les gardes arrivent. Tu veux finir la nuit en cellule ? » Est-ce que je peux faire un test d'Intimidation ?<br><strong>Meneur :</strong> Oui. Il a mal et il hésite : c'est Facile, +20.</p></blockquote><p><em>Hugo propose une action et demande quel test faire : c'est parfaitement normal. La bonne idée, au bon moment, vaut un gros bonus.</em></p><blockquote><p><strong>Hugo :</strong> 40 en Intimidation, 60 avec le bonus… 22 ! Quatre degrés.<br><strong>Meneur :</strong> Le docker regarde la porte, puis vous deux. Il crache par terre et sort en se tenant la main. Le barman pose deux verres devant vous. « Offerts. Mais je ne veux plus vous voir ce soir. »<br><strong>Léa :</strong> Kesi lève son verre vers Tariq. « Ma famille, j'ai dit. Ne me fais pas regretter. »</p></blockquote><p><em>Les joueurs terminent la scène en jouant leurs personnages et leur lien (« mon ingénieur », « ma famille »), tel qu'il est écrit sur leur verso.</em></p><p>---</p><h1>12. Le joueur en une page</h1><blockquote><p>🎭 <strong>On raconte une histoire ensemble.</strong> Les joueurs sont une équipe ; le meneur n'est pas un adversaire. Personne ne connaît la fin.</p></blockquote><p><strong>Votre fiche.</strong> Lisez le verso d'abord (qui je suis, ce que je veux, mon accroche). Au recto : 9 caractéristiques (FOR, CON, COO, RÉF, ADA, PER, INT, VOL, PRÉ) ; compétences : <strong>score = caractéristique + formation</strong> ; ½ = moitié de la caractéristique sans formation ; « — » = impossible.</p><p><strong>Agir.</strong> Dites ce que fait votre personnage <em>et comment</em>. Posez des questions. Le meneur décide s'il faut un jet.</p><p><strong>Le dé.</strong> Lancez 2 dés à dix faces (dizaines + unités, 00 = 100). <strong>Faites moins que votre score</strong>, après la difficulté (+30 à −40) et les bonus (outils, aide…).</p><p><strong>Les degrés.</strong> DR = dizaine du score − dizaine du dé. 01–05 : réussite critique. 96–100 : échec critique. Double sous le score : réussite critique ; au-dessus : échec critique.</p><p><strong>Opposé.</strong> Les deux lancent ; un seul réussit, il gagne ; sinon le plus de DR, puis le meilleur score.</p><p><strong>Le combat.</strong> Vigilance pour savoir qui commence. Une action, un mouvement, une réaction par tour. Portée : courte 0, moyenne −10, longue −20. Touché ? <strong>Esquive</strong> (test opposé, une fois par tour). On inverse le dé pour la zone. Dégâts = arme + DR − armure, comparés à votre <strong>SB</strong> : légère (−10), grave (−20, saignement), critique, mortelle.</p><p><strong>Le monde.</strong> 2187. La lumière est lente, le vide ne pardonne pas, le Soleil tue, le corps se souvient, les machines ne décident pas. Lisez l'Introduction à l'univers.</p><p><strong>La table.</strong> Écoutez, partagez la parole, le meneur tranche. Lignes, voiles, carte X : n'importe qui peut dire stop, sans se justifier.</p><p><strong>Bien jouer.</strong> L'échec fait avancer l'histoire. Jouez vos points forts, votre verso, et l'équipe. Prudent, pas timide.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "ownership": {
+        "default": -1
+      },
+      "_key": "!journal.pages!KitJrJoueur00000.PgKitJour0000015"
+    }
+  ],
+  "folder": null,
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "journal",
+      "kitId": "KitJrJoueur00000"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

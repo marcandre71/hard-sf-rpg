@@ -1,0 +1,41 @@
+{
+  "_id": "KitScHiron000000",
+  "_key": "!scenes!KitScHiron000000",
+  "name": "Hirondelle de Pallas",
+  "width": 2400,
+  "height": 2184,
+  "padding": 0,
+  "backgroundColor": "#0c1117",
+  "navigation": true,
+  "navName": "Hirondelle de Pallas",
+  "tokenVision": false,
+  "background": {
+    "src": "systems/sol-nouvelle-ere/assets/kit/04-hirondelle.webp"
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "distance": 1,
+    "units": "m",
+    "color": "#8fa0ae",
+    "alpha": 0.35
+  },
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "scene",
+      "kitId": "KitScHiron000000",
+      "note": "Version joueurs. Cargo d'environ 70 m. Schéma sans échelle."
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}

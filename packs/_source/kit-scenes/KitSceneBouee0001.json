@@ -1,0 +1,41 @@
+{
+  "_id": "KitScBouee000000",
+  "_key": "!scenes!KitScBouee000000",
+  "name": "La pension La Bouée",
+  "width": 2400,
+  "height": 2048,
+  "padding": 0,
+  "backgroundColor": "#0c1117",
+  "navigation": true,
+  "navName": "La pension La Bouée",
+  "tokenVision": false,
+  "background": {
+    "src": "systems/sol-nouvelle-ere/assets/kit/03-bouee.webp"
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "distance": 1,
+    "units": "m",
+    "color": "#8fa0ae",
+    "alpha": 0.35
+  },
+  "ownership": {
+    "default": 2
+  },
+  "flags": {
+    "sol-nouvelle-ere": {
+      "kit": "scene",
+      "kitId": "KitScBouee000000",
+      "note": "Un seul plan, indiqué comme montrable aux joueurs. Anneau d'environ 40 m de rayon. Schéma sans échelle."
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "sol-nouvelle-ere",
+    "systemVersion": "1.1.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": "SolNouvelleEre00"
+  }
+}
